@@ -184,38 +184,4 @@ public class xCallable<V> extends xRunnable implements Callable<V> {
 
 
 
-	// ------------------------------------------------------------------------------- //
-	// config
-
-
-
-	@Override
-	public String getTaskName() {
-		if (this.call != null) {
-			if (this.call instanceof RunnableNamed) {
-				final String taskName = ((RunnableNamed) this.call).getTaskName();
-				if (Utils.notEmpty(taskName))
-					return taskName;
-			}
-		}
-		return this.taskName;
-	}
-	@Override
-	public void setTaskName(final String taskName) {
-		this.taskName = (
-			Utils.isEmpty(taskName)
-			? null
-			: taskName
-		);
-	}
-	@Override
-	public boolean taskNameEquals(final String taskName) {
-		final String thisName = this.getTaskName();
-		if (Utils.isEmpty(taskName))
-			return Utils.isEmpty(thisName);
-		return taskName.equals(thisName);
-	}
-
-
-
 }
