@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.abstractions.xStartable;
 import com.poixson.app.xAppStep.StepType;
@@ -76,7 +77,8 @@ public abstract class xApp implements xStartable, AttachedLogger {
 	protected final HashMap<Integer, List<xAppStepDAO>> currentSteps =
 			new HashMap<Integer, List<xAppStepDAO>>();
 	protected final Object runLock = new Object();
-	protected volatile HangCatcher hangCatcher = null;
+	protected final AtomicReference<HangCatcher> hangCatcher =
+			new AtomicReference<HangCatcher>(null);
 
 	// properties
 	protected final AppProps props;
@@ -559,16 +561,16 @@ public abstract class xApp implements xStartable, AttachedLogger {
 				}
 		);
 		catcher.start();
-		this.hangCatcher = catcher;
+		this.hangCatcher.set(catcher);
 	}
 	private void resetHangCatcher() {
-		final HangCatcher catcher = this.hangCatcher;
+		final HangCatcher catcher = this.hangCatcher.get();
 		if (catcher != null) {
 			catcher.resetTimeout();
 		}
 	}
 	private void stopHangCatcher() {
-		final HangCatcher catcher = this.hangCatcher;
+		final HangCatcher catcher = this.hangCatcher.get();
 		if (catcher != null) {
 			catcher.stop();
 		}
