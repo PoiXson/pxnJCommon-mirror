@@ -2,6 +2,7 @@ package com.poixson.tools.remapped;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.utils.Utils;
@@ -9,39 +10,32 @@ import com.poixson.utils.Utils;
 
 public class xRunnable implements RunnableNamed {
 
-	public volatile String taskName = null;
+	protected final AtomicReference<String> taskName = new AtomicReference<String>(null);
+
 	public final Runnable task;
 
 
 
 	public xRunnable() {
-		this.taskName = null;
-		this.task     = null;
+		this( null, null );
 	}
 	public xRunnable(final String taskName) {
-		this(
-			taskName,
-			(Runnable) null
-		);
+		this( taskName, null );
 	}
 	public xRunnable(final xRunnable run) {
-		this(
-			run.getTaskName(),
-			run
-		);
+		this( run.getTaskName(), run );
 	}
 	public xRunnable(final Runnable run) {
-		this(
-			(String) null,
-			run
-		);
+		this( (String) null, run );
 	}
 	public xRunnable(final String taskName, final Runnable run) {
 		if (Utils.notEmpty(taskName)) {
-			this.taskName = taskName;
+			this.taskName.set(taskName);
 		} else
 		if (run instanceof RunnableNamed) {
-			this.taskName = ((RunnableNamed) run).getTaskName();
+			this.taskName.set(
+				((RunnableNamed) run).getTaskName()
+			);
 		}
 		this.task = run;
 	}
@@ -106,11 +100,11 @@ public class xRunnable implements RunnableNamed {
 					return taskName;
 			}
 		}
-		return this.taskName;
+		return this.taskName.get();
 	}
 	@Override
 	public void setTaskName(final String taskName) {
-		this.taskName = (
+		this.taskName.set(
 			Utils.isEmpty(taskName)
 			? null
 			: taskName

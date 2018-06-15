@@ -1,8 +1,7 @@
 package com.poixson.tools.remapped;
 
 import java.util.concurrent.Callable;
-
-import com.poixson.utils.Utils;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 public class xCallable<V> extends xRunnable implements Callable<V> {
@@ -11,22 +10,21 @@ public class xCallable<V> extends xRunnable implements Callable<V> {
 
 	protected final ThreadLocal<Boolean> callDepth = new ThreadLocal<Boolean>();
 
-	protected volatile V result;
-	protected volatile Exception e = null;
+	protected final AtomicReference<V> result = new AtomicReference<V>(null);
+	protected final AtomicReference<Exception> ex = new AtomicReference<Exception>(null);
 
 
 
 	public xCallable() {
 		super();
-		this.call   = null;
-		this.result = null;
+		this.call = null;
 	}
 	public void finalize() {
 		this.releaseCallDepth();
 	}
 	public xCallable(final String taskName) {
 		this(null, null, null);
-		this.taskName = taskName;
+		this.taskName.set(taskName);
 	}
 	public xCallable(final V result) {
 		this(result, null, null);
@@ -49,7 +47,7 @@ public class xCallable<V> extends xRunnable implements Callable<V> {
 		if (run != null && call != null)
 			throw new IllegalArgumentException("Cannot set runnable and callable at the same time!");
 		this.call   = call;
-		this.result = result;
+		this.result.set(result);
 	}
 
 
@@ -104,12 +102,22 @@ public class xCallable<V> extends xRunnable implements Callable<V> {
 	@Override
 	public void run() {
 		if (this.task != null) {
-			this.task.run();
+			try {
+				this.task.run();
+			} catch (Exception e) {
+				this.result.set(null);
+				this.ex.set(e);
+			}
 			return;
 		}
 		try {
 			this.checkCallDepth();
-			this.result = this.call();
+			this.result.set(
+				this.call()
+			);
+		} catch (Exception e) {
+			this.result.set(null);
+			this.ex.set(e);
 		} finally {
 			this.releaseCallDepth();
 		}
@@ -117,17 +125,28 @@ public class xCallable<V> extends xRunnable implements Callable<V> {
 	@Override
 	public V call() {
 		if (this.call != null) {
-			this.result =
-				this.call();
-			return this.result;
+			try {
+				this.result.set(
+					this.call()
+				);
+			} catch (Exception e) {
+				this.result.set(null);
+				this.ex.set(e);
+				return null;
+			}
+			return this.result.get();
 		}
 		try {
 			this.checkCallDepth();
 			this.run();
+		} catch (Exception e) {
+			this.result.set(null);
+			this.ex.set(e);
+			return null;
 		} finally {
 			this.releaseCallDepth();
 		}
-		return this.result;
+		return this.result.get();
 	}
 	private void checkCallDepth() {
 		final Boolean depth = this.callDepth.get();
@@ -151,16 +170,16 @@ public class xCallable<V> extends xRunnable implements Callable<V> {
 
 
 	public V getResult() {
-		return this.result;
+		return this.result.get();
 	}
 	public void setResult(final V result) {
-		this.result = result;
+		this.result.set(result);
 	}
 
 
 
 	public Exception getException() {
-		return this.e;
+		return this.ex.get();
 	}
 
 

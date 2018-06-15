@@ -1,6 +1,8 @@
 package com.poixson.tools.remapped;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.utils.ReflectUtils;
@@ -13,8 +15,8 @@ public class RemappedMethod<V> extends xRunnable {
 	public final Method method;
 	public final Object[] args;
 
-	protected volatile V result = null;
-	protected volatile boolean done = false;
+	protected final AtomicReference<V> result = new AtomicReference<V>(null);
+	protected final AtomicBoolean done = new AtomicBoolean(false);
 
 
 
@@ -67,26 +69,27 @@ public class RemappedMethod<V> extends xRunnable {
 	@Override
 	public void run() {
 		try {
-			this.result = (V)
-				ReflectUtils.InvokeMethod(
+			this.result.set(
+				(V)ReflectUtils.InvokeMethod(
 					this.container,
 					this.method,
 					this.args
-				);
+				)
+			);
 		} finally {
-			this.done = true;
+			this.done.set(true);
 		}
 	}
 
 
 
 	public V getResult() {
-		if ( ! this.done )
+		if ( ! this.done.get() )
 			return null;
-		return this.result;
+		return this.result.get();
 	}
 	public boolean isDone() {
-		return this.done;
+		return this.done.get();
 	}
 
 
