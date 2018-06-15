@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
@@ -146,19 +147,33 @@ public class xPluginManager<T extends xJavaPlugin> {
 
 
 
+	// ------------------------------------------------------------------------------- //
 	// logger
-	private volatile SoftReference<xLog> _log = null;
+
+
+
+	private final AtomicReference<SoftReference<xLog>> _log =
+			new AtomicReference<SoftReference<xLog>>(null);
 	public xLog log() {
-		if (this._log != null) {
-			final xLog log = this._log.get();
+		// cached logger
+		final SoftReference<xLog> ref = this._log.get();
+		if (ref != null) {
+			final xLog log = ref.get();
 			if (log != null)
 				return log;
 		}
-		final xLog log =
-			xLogRoot.get()
-				.get(LOG_NAME);
-		this._log = new SoftReference<xLog>(log);
-		return log;
+		// get logger
+		{
+			final xLog log =
+				xLogRoot.get()
+					.get(this.logName);
+			this._log.set(
+				new SoftReference<xLog>(
+					log
+				)
+			);
+			return log;
+		}
 	}
 
 

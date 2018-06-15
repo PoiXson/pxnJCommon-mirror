@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 import com.poixson.app.xVars;
@@ -581,18 +582,32 @@ public final class Utils {
 
 
 
+	// ------------------------------------------------------------------------------- //
 	// logger
-	private static volatile SoftReference<xLog> _log = null;
+
+
+
+	private static final AtomicReference<SoftReference<xLog>> _log =
+			new AtomicReference<SoftReference<xLog>>(null);
 	public static xLog log() {
-		if (_log != null) {
-			final xLog log = _log.get();
-			if (log != null) {
+		// cached logger
+		final SoftReference<xLog> ref = _log.get();
+		if (ref != null) {
+			final xLog log = ref.get();
+			if (log != null)
 				return log;
-			}
 		}
-		final xLog log = xLogRoot.get();
-		_log = new SoftReference<xLog>(log);
-		return log;
+		// get logger
+		{
+			final xLog log =
+				xLogRoot.get();
+			_log.set(
+				new SoftReference<xLog>(
+					log
+				)
+			);
+			return log;
+		}
 	}
 
 

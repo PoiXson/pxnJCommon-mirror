@@ -243,19 +243,26 @@ public class xThreadPoolTask<V> implements Future<V>, RunnableNamed {
 
 
 
-	private volatile SoftReference<xLog> _log = null;
+	private final AtomicReference<SoftReference<xLog>> _log =
+			new AtomicReference<SoftReference<xLog>>(null);
 	public xLog log() {
-		if (this._log != null) {
-			final xLog log = this._log.get();
-			if (log != null) {
+		// cached logger
+		final SoftReference<xLog> ref = this._log.get();
+		if (ref != null) {
+			final xLog log = ref.get();
+			if (log != null)
 				return log;
-			}
 		}
+		// get logger
 		{
 			final xLog log =
 				this.worker.get()
 					.log();
-			this._log = new SoftReference<xLog>(log);
+			this._log.set(
+				new SoftReference<xLog>(
+					log
+				)
+			);
 			return log;
 		}
 	}

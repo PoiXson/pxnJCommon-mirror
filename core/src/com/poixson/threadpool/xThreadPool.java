@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.abstractions.xStartable;
 import com.poixson.exceptions.ContinueException;
@@ -296,29 +297,28 @@ public abstract class xThreadPool implements xStartable {
 
 
 
-	private xLog _log = null;
+	private final AtomicReference<SoftReference<xLog>> _log =
+			new AtomicReference<SoftReference<xLog>>(null);
 	public xLog log() {
-		if (this._log == null) {
-			this._log =
+		// cached logger
+		final SoftReference<xLog> ref = this._log.get();
+		if (ref != null) {
+			final xLog log = ref.get();
+			if (log != null)
+				return log;
+		}
+		// get logger
+		{
+			final xLog log =
 				xLogRoot.get()
 					.get("th-"+this.getPoolName());
+			this._log.set(
+				new SoftReference<xLog>(
+					log
+				)
+			);
+			return log;
 		}
-		return this._log;
-	}
-
-
-
-	// cached log level
-	private volatile SoftReference<Boolean> _detail = null;
-	public boolean isDetailedLogging() {
-		if (this._detail != null) {
-			final Boolean detail = this._detail.get();
-			if (detail != null)
-				return detail.booleanValue();
-		}
-		final boolean detail = this.log().isDetailLoggable();
-		this._detail = new SoftReference<Boolean>(Boolean.valueOf(detail));
-		return detail;
 	}
 
 

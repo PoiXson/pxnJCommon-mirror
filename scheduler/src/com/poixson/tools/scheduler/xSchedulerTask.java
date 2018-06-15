@@ -8,12 +8,14 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.poixson.abstractions.xEnableable;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
+import com.poixson.logger.xLogRoot;
 import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.xTime;
@@ -403,29 +405,33 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 
 
 	// ------------------------------------------------------------------------------- //
-
-
-
 	// logger
-	private volatile SoftReference<xLog> _log = null;
-	private volatile String _className = null;
+
+
+
+	private final AtomicReference<SoftReference<xLog>> _log =
+			new AtomicReference<SoftReference<xLog>>(null);
 	public xLog log() {
-		if (this._log != null) {
-			final xLog log = this._log.get();
+		// cached logger
+		final SoftReference<xLog> ref = this._log.get();
+		if (ref != null) {
+			final xLog log = ref.get();
 			if (log != null)
 				return log;
 		}
-		if (this._className == null) {
-			this._className =
-				ReflectUtils.getClassName(
-					this.getClass()
-				);
+		// get logger
+		{
+			final String taskName = this.getTaskName();
+			final xLog log =
+				xLogRoot.get()
+					.getWeak(taskName);
+			this._log.set(
+				new SoftReference<xLog>(
+					log
+				)
+			);
+			return log;
 		}
-		final xLog log =
-			this.sched.log()
-				.getWeak(this.getTaskName());
-		this._log = new SoftReference<xLog>(log);
-		return log;
 	}
 
 

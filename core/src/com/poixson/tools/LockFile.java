@@ -10,6 +10,7 @@ import java.nio.channels.FileLock;
 import java.nio.channels.OverlappingFileLockException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
@@ -164,26 +165,36 @@ public class LockFile {
 
 
 
+	// ------------------------------------------------------------------------------- //
 	// logger
-	private volatile SoftReference<xLog> _log = null;
-	private volatile String _className = null;
+
+
+
+	private final AtomicReference<SoftReference<xLog>> _log =
+			new AtomicReference<SoftReference<xLog>>(null);
 	public xLog log() {
-		if (this._log != null) {
-			final xLog log = this._log.get();
+		// cached logger
+		final SoftReference<xLog> ref = this._log.get();
+		if (ref != null) {
+			final xLog log = ref.get();
 			if (log != null)
 				return log;
 		}
-		if (this._className == null) {
-			this._className =
+		// get logger
+		{
+			final String className =
 				ReflectUtils.getClassName(
 					this.getClass()
 				);
+			final xLog log =
+				xLogRoot.get();
+			this._log.set(
+				new SoftReference<xLog>(
+					log
+				)
+			);
+			return log;
 		}
-		final xLog log =
-			xLogRoot.get()
-				.get(this._className);
-		this._log = new SoftReference<xLog>(log);
-		return log;
 	}
 
 

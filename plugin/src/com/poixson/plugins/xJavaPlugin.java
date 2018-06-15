@@ -1,6 +1,7 @@
 package com.poixson.plugins;
 
 import java.lang.ref.SoftReference;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.poixson.exceptions.RequiredArgumentException;
@@ -142,20 +143,37 @@ public abstract class xJavaPlugin implements AttachedLogger {
 
 
 
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
 	// logger
-	private volatile SoftReference<xLog> _log = null;
-	@Override
+
+
+
+	private final AtomicReference<SoftReference<xLog>> _log =
+			new AtomicReference<SoftReference<xLog>>(null);
 	public xLog log() {
-		if (this._log != null) {
-			final xLog log = this._log.get();
+		// cached logger
+		final SoftReference<xLog> ref = this._log.get();
+		if (ref != null) {
+			final xLog log = ref.get();
 			if (log != null)
 				return log;
 		}
-		final xLog log =
-			xLogRoot.get()
-				.get("Plugin:"+this.getPluginName());
-		this._log = new SoftReference<xLog>(log);
-		return log;
+		// get logger
+		{
+			final xLog log =
+				xLogRoot.get()
+					.get("Plugin:"+this.getPluginName());
+			this._log.set(
+				new SoftReference<xLog>(
+					log
+				)
+			);
+			return log;
+		}
 	}
 
 

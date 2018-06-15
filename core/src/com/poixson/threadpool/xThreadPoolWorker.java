@@ -283,21 +283,38 @@ public class xThreadPoolWorker implements xStartable {
 
 
 
-	private volatile SoftReference<xLog> _log = null;
+	private final AtomicReference<SoftReference<xLog>> _log =
+			new AtomicReference<SoftReference<xLog>>(null);
 	public xLog log() {
-		if (this._log != null) {
-			final xLog log = this._log.get();
-			if (log != null) {
+		// cached logger
+		final SoftReference<xLog> ref = this._log.get();
+		if (ref != null) {
+			final xLog log = ref.get();
+			if (log != null)
 				return log;
-			}
 		}
-		final xLog log = (
-			this.pool.isSingleWorker()
-			? this.pool.log()
-			: this.pool.log().getWeak( "w-"+Long.toString(this.workerIndex) )
-		);
-		this._log = new SoftReference<xLog>(log);
-		return log;
+		// get logger
+		{
+			final xLog log;
+			if (this.pool.isSingleWorker()) {
+				log = this.pool.log();
+			} else {
+				log =
+					this.pool.log()
+						.getWeak(
+							(new StringBuilder())
+								.append("w-")
+								.append(this.workerIndex)
+								.toString()
+						);
+			}
+			this._log.set(
+				new SoftReference<xLog>(
+					log
+				)
+			);
+			return log;
+		}
 	}
 
 
