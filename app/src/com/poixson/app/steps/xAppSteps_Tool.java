@@ -16,7 +16,7 @@ public class xAppSteps_Tool {
 
 	// ensure not root
 	@xAppStep( Type=StepType.STARTUP, Title="Root Check", StepValue=10 )
-	public void __STARTUP_rootcheck(final xLog log) {
+	public void START_rootcheck(final xLog log) {
 		final String user = System.getProperty("user.name");
 		if ("root".equals(user)) {
 			log.warning("It is recommended to run as a non-root user");

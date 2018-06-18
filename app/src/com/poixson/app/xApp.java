@@ -650,7 +650,7 @@ public abstract class xApp implements xStartable, AttachedLogger {
 
 	// garbage collect
 	@xAppStep( Type=StepType.SHUTDOWN, Title="Garbage Collect", StepValue=10 )
-	public void __SHUTDOWN_gc(final xApp app, final xLog log) {
+	public void STOP_gc(final xApp app, final xLog log) {
 		Keeper.remove(this);
 		ThreadUtils.Sleep(50L);
 		xVars.getOriginalOut()
@@ -668,7 +668,7 @@ public abstract class xApp implements xStartable, AttachedLogger {
 
 
 	@xAppStep( Type=StepType.SHUTDOWN, Title="Exit", StepValue=1)
-	public void __SHUTDOWN_exit() {
+	public void STOP_exit() {
 		final Thread stopThread =
 			new Thread() {
 				private volatile int exitCode = 0;
