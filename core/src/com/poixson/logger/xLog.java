@@ -301,6 +301,13 @@ public class xLog implements xLogPrinter {
 			)
 		);
 	}
+	public void publish(final StringBuilder[] lines) {
+		final String[] array = new String[lines.length];
+		for (int index=0; index<lines.length; index++) {
+			array[index] = lines[index].toString();
+		}
+		this.publish(array);
+	}
 	@Override
 	public void publish(final String line) {
 		this.publish(
