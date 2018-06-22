@@ -87,7 +87,7 @@ public abstract class xApp implements xStartable, AttachedLogger {
 
 	public xApp() {
 		this._log = xLogRoot.get();
-		this.props = new AppProps(this.getClass());
+		this.props = AppProps.LoadFromClassRef( this.getClass() );
 		// debug mode
 		if (ProcUtils.isDebugWireEnabled()) {
 			xVars.setDebug(true);

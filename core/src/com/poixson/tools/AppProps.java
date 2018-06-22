@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import com.poixson.app.Failure;
+import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
@@ -27,9 +28,8 @@ public class AppProps {
 
 
 
-	// load app.properties file
-	public AppProps(final Class<?> clss) {
-		Properties props = null;
+	public static AppProps LoadFromClassRef(final Class<?> clss) {
+		final Properties props;
 		InputStream in = null;
 		try {
 			in = clss.getResourceAsStream(
@@ -51,6 +51,11 @@ public class AppProps {
 		} finally {
 			Utils.safeClose(in);
 		}
+		return new AppProps(props);
+	}
+	// load app.properties file
+	public AppProps(final Properties props) {
+		if (props == null) throw new RequiredArgumentException("props");
 		this.name      = props.getProperty("name");
 		this.title     = props.getProperty("title");
 		this.version   = props.getProperty("version");
