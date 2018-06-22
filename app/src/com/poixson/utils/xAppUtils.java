@@ -8,10 +8,22 @@ import java.util.Map.Entry;
 import com.poixson.app.xApp;
 import com.poixson.app.xVars;
 import com.poixson.logger.xLog;
+import com.poixson.logger.xLogRoot;
 
 
 public final class xAppUtils {
 	private xAppUtils() {}
+
+	public static enum AnsiColor {
+		BLACK,
+		RED,
+		GREEN,
+		YELLOW,
+		BLUE,
+		MAGENTA,
+		CYAN,
+		WHITE
+	};
 
 
 
@@ -54,6 +66,25 @@ public final class xAppUtils {
 				.append(val);
 			log.publish( str.toString() );
 		}
+	}
+
+
+
+	public static void DisplayColors() {
+		final StringBuilder[] lines = new StringBuilder[] {
+			new StringBuilder(),
+			new StringBuilder(),
+			new StringBuilder()
+		};
+		for (final AnsiColor c : AnsiColor.values()) {
+			final String str = c.toString().toLowerCase();
+			final String name = StringUtils.PadCenter(7, str, ' ');
+			lines[0].append("  @|")     .append(str).append("  ")      .append(name).append(" |@");
+			lines[2].append("  @|bg_")  .append(str).append(",black  ").append(name).append(" |@");
+			lines[1].append("  @|bold,").append(str).append("  ")      .append(name).append(" |@");
+		}
+		xLogRoot.get()
+			.publish(lines);
 	}
 
 

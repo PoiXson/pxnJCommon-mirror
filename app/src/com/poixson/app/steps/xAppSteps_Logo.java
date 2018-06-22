@@ -30,6 +30,10 @@ public class xAppSteps_Logo {
 		log.publish();
 		this.displayLegal(log);
 		log.publish();
+		if (xVars.isDebug()) {
+			xAppUtils.DisplayColors();
+			log.publish();
+		}
 		xAppUtils.DisplayStartupVars(app, log);
 		log.publish();
 		if (xVars.isDebug()) {
