@@ -43,7 +43,7 @@ public class xLog implements xLogPrinter {
 	// get logger
 	public xLog get(final String logName) {
 		if (Utils.isEmpty(logName))
-			return xLogRoot.get();
+			return xLogRoot.Get();
 		// existing logger instance
 		{
 			final xLog log = this.loggers.get(logName);

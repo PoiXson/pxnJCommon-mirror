@@ -167,8 +167,8 @@ public final class guiUtils {
 
 	// logger
 	public static xLog log() {
-		return xLogRoot.get()
-				.get(LOG_NAME);
+		return xLogRoot
+				.Get(LOG_NAME);
 	}
 
 

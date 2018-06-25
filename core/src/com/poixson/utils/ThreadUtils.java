@@ -90,7 +90,7 @@ public final class ThreadUtils {
 		if (hasDestroyJavaVM) {
 			msg.append("\n\nShould use xApp.waitUntilClosed() when main() is finished.\n");
 		}
-		xLogRoot.get()
+		xLogRoot.Get()
 			.publish(
 				msg.toString()
 			);

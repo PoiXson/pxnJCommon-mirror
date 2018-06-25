@@ -224,7 +224,7 @@ public class xPluginLoader<T extends xJavaPlugin> {
 	public xLog log() {
 		return (
 			this.manager == null
-			? xLogRoot.get()
+			? xLogRoot.Get()
 			: this.manager.log()
 		);
 	}

@@ -144,7 +144,7 @@ public class DualKeyMap<K, J, V> {
 			final Entry<K, V> entryK = itK.next();
 			final Entry<J, V> entryJ = itJ.next();
 			if ( ! entryK.getValue().equals(entryJ.getValue()) ) {
-				xLogRoot.get()
+				xLogRoot.Get()
 					.severe(
 						"Missmatched values in DualKeyMap object! [ {} : {} ] != [ {} : {} ]",
 						entryK.getKey().toString(),

@@ -164,13 +164,9 @@ public class xPluginManager<T extends xJavaPlugin> {
 		}
 		// get logger
 		{
-			final xLog log =
-				xLogRoot.get()
-					.get(this.logName);
+			final xLog log = xLogRoot.Get( this.logName );
 			this._log.set(
-				new SoftReference<xLog>(
-					log
-				)
+				new SoftReference<xLog>( log )
 			);
 			return log;
 		}

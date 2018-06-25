@@ -141,7 +141,7 @@ public final class xConfigLoaders {
 				if (cfg != null) {
 					// copy default file
 					try {
-						xLogRoot.get()
+						xLogRoot.Get()
 							.info("Creating default file: {}", fileStr);
 						ioUtils.ExportResource(
 							fileStr,
@@ -154,7 +154,7 @@ public final class xConfigLoaders {
 				}
 			}
 		} catch (Exception e) {
-			xLogRoot.get().trace(e);
+			xLogRoot.Get().trace(e);
 		}
 		return null;
 	}

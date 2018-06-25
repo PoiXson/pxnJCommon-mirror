@@ -423,7 +423,7 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 		{
 			final String taskName = this.getTaskName();
 			final xLog log =
-				xLogRoot.get()
+				xLogRoot.Get()
 					.getWeak(taskName);
 			this._log.set(
 				new SoftReference<xLog>(

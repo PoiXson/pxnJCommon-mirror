@@ -6,6 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.poixson.logger.xLog;
+import com.poixson.logger.xLogRoot;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.xTime;
 import com.poixson.utils.StringUtils;
@@ -38,7 +39,7 @@ public final class Failure {
 	}
 	public static void fail(final Throwable e, final String msg, final Object... args) {
 		failed = true;
-		final xLog log = xLog.peekRoot();
+		final xLog log = xLogRoot.Peek();
 		if (Utils.notEmpty(msg)) {
 			final String str = StringUtils.ReplaceTags(msg, args);
 			if (log == null) {

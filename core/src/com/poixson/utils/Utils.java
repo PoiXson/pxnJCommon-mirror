@@ -346,7 +346,7 @@ public final class Utils {
 
 	public static void MemoryStats() {
 		MemoryStats(
-			xLogRoot.get()
+			xLogRoot.Get()
 		);
 	}
 	public static void MemoryStats(final xLog log) {
@@ -599,8 +599,7 @@ public final class Utils {
 		}
 		// get logger
 		{
-			final xLog log =
-				xLogRoot.get();
+			final xLog log = xLogRoot.Get();
 			_log.set(
 				new SoftReference<xLog>(
 					log

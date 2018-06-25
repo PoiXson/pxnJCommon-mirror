@@ -186,8 +186,7 @@ public class LockFile {
 				ReflectUtils.getClassName(
 					this.getClass()
 				);
-			final xLog log =
-				xLogRoot.get();
+			final xLog log = xLogRoot.Get(className);
 			this._log.set(
 				new SoftReference<xLog>(
 					log

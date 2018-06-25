@@ -34,7 +34,7 @@ public class xEventListenerDAO {
 		// ensure main thread
 		if (xThreadPool_Main.get().force(this, "invoke"))
 			return;
-		xLogRoot.get()
+		xLogRoot.Get()
 			.finest(
 				"Invoking event: {}->{}",
 				this.object.getClass().getName(),

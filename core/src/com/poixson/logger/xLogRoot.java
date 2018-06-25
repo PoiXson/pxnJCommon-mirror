@@ -67,7 +67,7 @@ public class xLogRoot extends xLog {
 					new OutputStreamLineRemapper() {
 						@Override
 						public void line(final String line) {
-							xLogRoot.get()
+							xLogRoot.Get()
 								.stdout(line);
 						}
 					}
@@ -79,7 +79,7 @@ public class xLogRoot extends xLog {
 					new OutputStreamLineRemapper() {
 						@Override
 						public void line(final String line) {
-							xLogRoot.get()
+							xLogRoot.Get()
 								.stderr(line);
 						}
 					}

@@ -458,9 +458,7 @@ System.out.println("SEARCH PATH: "+FileUtils.MergePaths(path, fileName));
 		}
 		// get logger
 		{
-			final xLog log =
-				xLogRoot.get()
-					.get("LibLoader");
+			final xLog log = xLogRoot.Get("LibLoader");
 			this._log.set(
 				new SoftReference<xLog>(
 					log

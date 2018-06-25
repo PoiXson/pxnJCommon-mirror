@@ -13,13 +13,13 @@ public final class Log {
 
 	public static void trace(final Object... messages) {
 		if (enableLogging) {
-			xLogRoot.get()
+			xLogRoot.Get()
 				.trace(null, "", messages);
 		}
 	}
 	public static void trace(Supplier<String> supplier) {
 		if (enableLogging) {
-			xLogRoot.get()
+			xLogRoot.Get()
 				.trace(null, supplier.get());
 		}
 	}
@@ -28,13 +28,13 @@ public final class Log {
 
 	public static void debug(final Object... messages) {
 		if (enableLogging) {
-			xLogRoot.get()
+			xLogRoot.Get()
 				.fine("", messages);
 		}
 	}
 	public static void debug(Supplier<String> supplier) {
 		if (enableLogging) {
-			xLogRoot.get()
+			xLogRoot.Get()
 				.fine(supplier.get());
 		}
 	}
@@ -43,7 +43,7 @@ public final class Log {
 
 	public static void info(final Object... messages) {
 		if (enableLogging) {
-			xLogRoot.get()
+			xLogRoot.Get()
 				.info("", messages);
 		}
 	}
@@ -52,7 +52,7 @@ public final class Log {
 
 	public static void warn(final Object... messages) {
 		if (enableLogging) {
-			xLogRoot.get()
+			xLogRoot.Get()
 				.warning("", messages);
 		}
 	}
@@ -61,7 +61,7 @@ public final class Log {
 
 	public static void error(final Object... messages) {
 		if (enableLogging) {
-			xLogRoot.get()
+			xLogRoot.Get()
 				.severe("", messages);
 		}
 	}
@@ -69,9 +69,10 @@ public final class Log {
 
 
 	public static boolean isDebugEnabled() {
-		if (!enableLogging)
-			return false;
-		return xLogRoot.get().isDetailLoggable();
+		if (enableLogging)
+			return xLogRoot.Get()
+				.isDetailLoggable();
+		return false;
 	}
 
 

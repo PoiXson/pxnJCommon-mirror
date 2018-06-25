@@ -83,7 +83,7 @@ public final class xAppUtils {
 			lines[2].append("  @|bg_")  .append(str).append(",black  ").append(name).append(" |@");
 			lines[1].append("  @|bold,").append(str).append("  ")      .append(name).append(" |@");
 		}
-		xLogRoot.get()
+		xLogRoot.Get()
 			.publish(lines);
 	}
 

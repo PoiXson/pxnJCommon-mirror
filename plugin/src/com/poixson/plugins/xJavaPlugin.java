@@ -165,12 +165,11 @@ public abstract class xJavaPlugin implements AttachedLogger {
 		// get logger
 		{
 			final xLog log =
-				xLogRoot.get()
-					.get("Plugin:"+this.getPluginName());
+				xLogRoot.Get(
+					"Plugin:"+this.getPluginName()
+				);
 			this._log.set(
-				new SoftReference<xLog>(
-					log
-				)
+				new SoftReference<xLog>( log )
 			);
 			return log;
 		}

@@ -35,7 +35,7 @@ public class xCommandDAO extends xEventListenerDAO {
 		// ensure main thread
 		if (xThreadPool_Main.get().force(this, "invoke", line))
 			return;
-		xLogRoot.get()
+		xLogRoot.Get()
 			.finest(
 				"Invoking command: {}->{} {}",
 				super.object.getClass().getName(),

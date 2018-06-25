@@ -79,10 +79,10 @@ public final class xVars {
 			);
 		if (previous != null) {
 			if (previous.booleanValue()) {
-				xLogRoot.get()
+				xLogRoot.Get()
 					.info("Enabled debug mode");
 			} else {
-				final xLogRoot log = xLogRoot.peek();
+				final xLogRoot log = xLogRoot.Peek();
 				if (log != null) {
 					log.info("Disabled debug mode");
 				}
@@ -184,7 +184,7 @@ public final class xVars {
 	public static void setColorEnabled(final boolean enable) {
 		if (enable) {
 			if (System.console() == null) {
-				final xLogRoot log = xLogRoot.peek();
+				final xLogRoot log = xLogRoot.Peek();
 				if (log != null) {
 					log.fine("Cannot enable console color");
 				}
@@ -195,7 +195,7 @@ public final class xVars {
 				Boolean.valueOf(enable)
 			);
 		if (previous != null) {
-			final xLogRoot log = xLogRoot.peek();
+			final xLogRoot log = xLogRoot.Peek();
 			if (log != null) {
 				if (previous.booleanValue()) {
 					log.fine("Enabled console color");

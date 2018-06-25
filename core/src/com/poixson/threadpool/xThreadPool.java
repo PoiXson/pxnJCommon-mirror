@@ -310,12 +310,11 @@ public abstract class xThreadPool implements xStartable {
 		// get logger
 		{
 			final xLog log =
-				xLogRoot.get()
-					.get("th-"+this.getPoolName());
+				xLogRoot.Get(
+					"th-"+this.getPoolName()
+				);
 			this._log.set(
-				new SoftReference<xLog>(
-					log
-				)
+				new SoftReference<xLog>( log )
 			);
 			return log;
 		}

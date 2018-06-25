@@ -311,8 +311,7 @@ public class xScheduler implements xStartable {
 				return log;
 		}
 		final xLog log =
-			xLogRoot.get()
-				.get(LOG_NAME)
+			xLogRoot.Get(LOG_NAME)
 				.getWeak(this.getName());
 		this._log = new SoftReference<xLog>(log);
 		return log;

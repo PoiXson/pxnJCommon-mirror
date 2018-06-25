@@ -55,18 +55,17 @@ public class slf4jLoggerFactory implements ILoggerFactory {
 	public static xLog getLog(final String name) {
 		final xLog log;
 		if (Utils.isEmpty(name)) {
-			log = xLogRoot.get()
-					.get(LOG_NAME);
+			log = xLogRoot.Get(LOG_NAME);
 		} else
 		if (name.startsWith("org.xeustechnologies.jcl.")) {
-			log = xLogRoot.get()
-					.get("jcl");
+			log = xLogRoot.Get("jcl");
 		} else {
-			log = xLogRoot.get()
-					.get(LOG_NAME).get(name);
+			log = xLogRoot
+					.Get(LOG_NAME)
+						.get(name);
 		}
 		// disable logging if not detail mode
-		if ( ! xLogRoot.get().isDetailLoggable() ) {
+		if ( ! xLogRoot.Get().isDetailLoggable() ) {
 			log.setLevel(xLevel.WARNING);
 		}
 		return log;

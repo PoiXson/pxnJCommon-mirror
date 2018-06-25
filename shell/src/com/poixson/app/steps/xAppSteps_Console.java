@@ -198,7 +198,7 @@ public class xAppSteps_Console implements xConsole {
 		}
 		currentThread.setName(THREAD_NAME);
 		if (xVars.isDebug()) {
-			xLogRoot.get()
+			xLogRoot.Get()
 				.detail("Starting console input thread..");
 		}
 		final LineReader read = getReader();
@@ -218,8 +218,7 @@ public class xAppSteps_Console implements xConsole {
 				break READER_LOOP;
 			} catch (Exception e) {
 				this.resetReadCool();
-				xLogRoot.get()
-					.trace(e);
+				xLogRoot.Get().trace(e);
 				try {
 					Thread.sleep(100L);
 				} catch (InterruptedException ignore) {
@@ -233,12 +232,12 @@ public class xAppSteps_Console implements xConsole {
 			if (Utils.notBlank(line)) {
 				final xCommandHandler handler = ShellUtils.GetCommandHandler();
 				if (handler == null) {
-					xLogRoot.get().warning("No command handler set!");
+					xLogRoot.Get().warning("No command handler set!");
 				}
 				final boolean result =
 					handler.process(line);
 				if ( ! result ) {
-					xLogRoot.get().warning("Unknown command:", line);
+					xLogRoot.Get().warning("Unknown command:", line);
 				}
 			}
 		} // end READER_LOOP
@@ -249,8 +248,7 @@ public class xAppSteps_Console implements xConsole {
 		xVars.setConsole(null);
 		this.running.set(false);
 		this.thread.set(null);
-		xLogRoot.get()
-			.finest("Stopped console input thread");
+		xLogRoot.Get().finest("Stopped console input thread");
 		final PrintStream out = xVars.getOriginalOut();
 		out.flush();
 		// save command history
@@ -262,8 +260,7 @@ public class xAppSteps_Console implements xConsole {
 						((DefaultHistory) hist)
 							.save();
 					} catch (IOException e) {
-						xLogRoot.get()
-							.trace(e);
+						xLogRoot.Get().trace(e);
 					}
 				}
 			}

@@ -68,7 +68,7 @@ public class TriggerClock extends xSchedulerTrigger {
 			final long untilNext = time - now;
 			if (0 - untilNext > grace) {
 //TODO: what should we do here?
-xLogRoot.get().warning("Skipping old scheduled clock trigger..");
+xLogRoot.Get().warning("Skipping old scheduled clock trigger..");
 				this.setDisabled();
 				return Long.MIN_VALUE;
 			}

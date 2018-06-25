@@ -31,7 +31,7 @@ public class xCommandHandler extends xHandler<xCommand> {
 		final int count =
 			super.register(objects);
 		if (count > 0) {
-			xLogRoot.get()
+			xLogRoot.Get()
 				.fine("Found {} commands", count);
 		}
 		return count;
