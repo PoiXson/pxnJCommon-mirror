@@ -25,7 +25,7 @@ public class xLogRoot extends xLog {
 
 
 	// get root logger
-	public static xLogRoot get() {
+	public static xLogRoot Get() {
 		// existing root logger
 		{
 			final xLogRoot log = root.get();
@@ -49,7 +49,7 @@ public class xLogRoot extends xLog {
 		return Get()
 				.get(logName);
 	}
-	public static xLogRoot peek() {
+	public static xLogRoot Peek() {
 		return root.get();
 	}
 
