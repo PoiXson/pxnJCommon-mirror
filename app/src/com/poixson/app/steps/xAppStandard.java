@@ -3,6 +3,7 @@ package com.poixson.app.steps;
 import com.poixson.app.xApp;
 import com.poixson.app.xAppStep;
 import com.poixson.app.xAppStep.StepType;
+import com.poixson.logger.xLog;
 import com.poixson.tools.xTime;
 import com.poixson.tools.xTimeU;
 import com.poixson.utils.Utils;
@@ -44,12 +45,18 @@ public abstract class xAppStandard extends xApp {
 
 
 
-//TODO: move this to xVars?
-//	// sync clock
-//	@xAppStep( Type=StepType.STARTUP, Title="Sync Clock", StepValue=85 )
-//	public void START_clock() {
-//		xClock.get(true);
-//	}
+	// ensure not root
+	@xAppStep( Type=StepType.START, Title="Root Check", StepValue=10 )
+	public void _START_rootcheck(final xLog log) {
+		final String user = System.getProperty("user.name");
+		if ("root".equals(user)) {
+			log.warning("It is recommended to run as a non-root user");
+		} else
+		if ("administrator".equalsIgnoreCase(user)
+		|| "admin".equalsIgnoreCase(user)) {
+			log.warning("It is recommended to run as a non-administrator user");
+		}
+	}
 
 
 
