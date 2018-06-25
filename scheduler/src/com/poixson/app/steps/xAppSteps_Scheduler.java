@@ -12,8 +12,8 @@ public class xAppSteps_Scheduler {
 
 //TODO: make this unnecessary
 //	// start scheduler
-//	@xAppStep( Type=StepType.STARTUP, Title="Scheduler", StepValue=150 )
-//	public void START_scheduler() {
+//	@xAppStep( Type=StepType.START, Title="Scheduler", StepValue=150 )
+//	public void _START_scheduler() {
 //TODO:
 //		// start main scheduler
 //		final xScheduler sched = xScheduler.getMainSched();
@@ -32,8 +32,8 @@ public class xAppSteps_Scheduler {
 
 
 //	// stop schedulers
-//	@xAppStep( Type=StepType.SHUTDOWN, Title="Schedulers", StepValue=150 )
-//	public void STOP_scheduler() {
+//	@xAppStep( Type=StepType.STOP, Title="Schedulers", StepValue=150 )
+//	public void _STOP_scheduler() {
 //		// stop ticker
 //		final xTicker ticker = xTicker.get();
 //		ticker.Stop();

@@ -18,8 +18,8 @@ public class xAppSteps_LockFile {
 
 
 	// lock file
-	@xAppStep( Type=StepType.STARTUP, Title="Lock File", StepValue=70 )
-	public void START_lockfile(final xApp app) {
+	@xAppStep( Type=StepType.START, Title="Lock File", StepValue=70 )
+	public void _START_lockfile(final xApp app) {
 		final String filename = app.getName()+".lock";
 		final LockFile lock = LockFile.get(filename);
 		if ( ! lock.acquire() )
@@ -34,8 +34,8 @@ public class xAppSteps_LockFile {
 
 
 	// release lock file
-	@xAppStep( Type=StepType.SHUTDOWN, Title="Lock File", StepValue=20 )
-	public void STOP_lockfile(final xApp app, final xLog log) {
+	@xAppStep( Type=StepType.STOP, Title="Lock File", StepValue=20 )
+	public void _STOP_lockfile(final xApp app, final xLog log) {
 		final String filename = app.getName()+".lock";
 		LockFile.getRelease(filename);
 	}

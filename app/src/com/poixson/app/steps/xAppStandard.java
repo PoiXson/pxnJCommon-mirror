@@ -61,8 +61,8 @@ public abstract class xAppStandard extends xApp {
 
 
 	// start time
-	@xAppStep( Type=StepType.STARTUP, Title="Startup Time", StepValue=200 )
-	public void START_uptime() {
+	@xAppStep( Type=StepType.START, Title="Startup Time", StepValue=200 )
+	public void _START_uptime() {
 		this.startTime
 			.set( Utils.getSystemMillis(), xTimeU.MS )
 			.lock();
@@ -76,8 +76,8 @@ public abstract class xAppStandard extends xApp {
 
 
 //	// stop thread pools
-//	@xAppStep( Type=StepType.SHUTDOWN, Title="Thread Pools", StepValue=100 )
-//	public void STOP_threadpools(final xLog log) {
+//	@xAppStep( Type=StepType.STOP, Title="Thread Pools", StepValue=100 )
+//	public void _STOP_threadpools(final xLog log) {
 //TODO:
 //		xThreadPool.StopAll();
 //	}
@@ -85,8 +85,8 @@ public abstract class xAppStandard extends xApp {
 
 
 //	// display uptime
-//	@xAppStep( Type=StepType.SHUTDOWN, Title="Uptime", StepValue=60 )
-//	public void STOP_uptime(final xLog log) {
+//	@xAppStep( Type=StepType.STOP, Title="Uptime", StepValue=60 )
+//	public void _STOP_uptime(final xLog log) {
 //TODO: display total time running
 //	}
 

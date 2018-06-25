@@ -25,8 +25,8 @@ public class xAppSteps_Plugins {
 
 
 
-	@xAppStep( Type=StepType.STARTUP, Title="Plugins", StepValue=400 )
-	public void __STARTUP_plugins(final xApp app) {
+	@xAppStep( Type=StepType.START, Title="Plugins", StepValue=400 )
+	public void _START_plugins(final xApp app) {
 		this.manager.start();
 	}
 
@@ -38,8 +38,8 @@ public class xAppSteps_Plugins {
 
 
 	// stop console input
-	@xAppStep( Type=StepType.SHUTDOWN, Title="Plugins", StepValue=400)
-	public void __SHUTDOWN_plugins() {
+	@xAppStep( Type=StepType.STOP, Title="Plugins", StepValue=400)
+	public void _STOP_plugins() {
 		this.manager.stop();
 	}
 

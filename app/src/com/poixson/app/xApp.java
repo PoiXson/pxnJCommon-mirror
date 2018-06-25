@@ -34,11 +34,11 @@ import com.poixson.utils.Utils;
 
 /*
  * Startup sequence
- *   10  prevent root        - xAppSteps_Tool
+ *   10  prevent root        - xAppStandard
  *   50  load configs        - xAppSteps_Config
  *   70  lock file           - xAppSteps_LockFile
  *   80  display logo        - xAppSteps_Logo
- *   85  sync clock          - xAppStandard
+ *   85  sync clock          - xAppSteps_Clock
  *  100  prepare commands    - xCommandHandler
  *  105  start console input - xAppSteps_Console
  *  200  startup time        - xAppStandard
@@ -649,8 +649,8 @@ public abstract class xApp implements xStartable, AttachedLogger {
 
 
 	// garbage collect
-	@xAppStep( Type=StepType.SHUTDOWN, Title="Garbage Collect", StepValue=10 )
-	public void STOP_gc(final xApp app, final xLog log) {
+	@xAppStep( Type=StepType.STOP, Title="Garbage Collect", StepValue=10 )
+	public void _STOP_gc(final xApp app, final xLog log) {
 		Keeper.remove(this);
 		ThreadUtils.Sleep(50L);
 		xVars.getOriginalOut()
@@ -667,8 +667,8 @@ public abstract class xApp implements xStartable, AttachedLogger {
 
 
 
-	@xAppStep( Type=StepType.SHUTDOWN, Title="Exit", StepValue=1)
-	public void STOP_exit() {
+	@xAppStep( Type=StepType.STOP, Title="Exit", StepValue=1)
+	public void _STOP_exit() {
 		final Thread stopThread =
 			new Thread() {
 				private volatile int exitCode = 0;

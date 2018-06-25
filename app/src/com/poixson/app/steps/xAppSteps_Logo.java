@@ -23,8 +23,8 @@ public class xAppSteps_Logo {
 
 
 	// display logo
-	@xAppStep( Type=StepType.STARTUP, Title="Display Logo", StepValue=80 )
-	public void START_display_logo(final xApp app, final xLog log) {
+	@xAppStep( Type=StepType.START, Title="Display Logo", StepValue=80 )
+	public void _START_display_logo(final xApp app, final xLog log) {
 		log.publish();
 		this.displayLogo(app, log);
 		log.publish();
