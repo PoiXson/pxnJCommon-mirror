@@ -41,12 +41,6 @@ public class xLog implements xLogPrinter {
 
 
 	// get logger
-	public static xLog getRoot() {
-		return xLogRoot.get();
-	}
-	public static xLog peekRoot() {
-		return xLogRoot.peek();
-	}
 	public xLog get(final String logName) {
 		if (Utils.isEmpty(logName))
 			return xLogRoot.get();

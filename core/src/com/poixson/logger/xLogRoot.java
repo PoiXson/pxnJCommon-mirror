@@ -45,6 +45,10 @@ public class xLogRoot extends xLog {
 			return log;
 		}
 	}
+	public static xLog Get(final String logName) {
+		return Get()
+				.get(logName);
+	}
 	public static xLogRoot peek() {
 		return root.get();
 	}
