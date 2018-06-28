@@ -274,138 +274,68 @@ public class StringUtils extends StringAdvUtils {
 
 	public static String TrimToNull(final String str, final String...strip) {
 		final String result =
-			doTrim(
-				true, true,
-				str,
-				false,
-				strip
-			);
-		return (
-			Utils.isEmpty(result)
-			? null
-			: result
-		);
+			doTrim( true, true, str, false, strip );
+		return ( Utils.isEmpty(result) ? null : result );
 	}
 
 
 
-	// trim from string
+	// trim front/end
 	public static String Trim(final String str, final char...strip) {
-		return
-			doTrim(
-				true, true,
-				str,
-				false,
-				strip
-			);
+		//             front end        case
+		return doTrim( true, true, str, false, strip );
 	}
-	public static String TrimFront(final String str, final char...strip) {
-		return
-			doTrim(
-				true, false,
-				str,
-				false,
-				strip
-			);
-	}
-	public static String TrimEnd(final String str, final char...strip) {
-		return
-			doTrim(
-				false, true,
-				str,
-				false,
-				strip
-			);
-	}
-
-
-
 	public static String iTrim(final String str, final char...strip) {
-		return
-			doTrim(
-				true, true,
-				str,
-				true,
-				strip
-			);
+		//             front end        case
+		return doTrim( true, true, str, true, strip );
+	}
+	public static String Trim(final String str, final String...strip) {
+		//             front end        case
+		return doTrim( true, true, str, false, strip );
+	}
+	public static String iTrim(final String str, final String...strip) {
+		//             front end        case
+		return doTrim( true, true, str, true, strip );
+	}
+
+
+
+	// trim front
+	public static String TrimFront(final String str, final char...strip) {
+		//             front end        case
+		return doTrim( true, false, str, false, strip );
 	}
 	public static String iTrimFront(final String str, final char...strip) {
-		return
-			doTrim(
-				true, false,
-				str,
-				true,
-				strip
-			);
-	}
-	public static String iTrimEnd(final String str, final char...strip) {
-		return
-			doTrim(
-				false, true,
-				str,
-				true,
-				strip
-			);
-	}
-
-
-
-	public static String Trim(final String str, final String...strip) {
-		return
-			doTrim(
-				true, true,
-				str,
-				false,
-				strip
-			);
+		//             front end        case
+		return doTrim( true, false, str, true, strip );
 	}
 	public static String TrimFront(final String str, final String...strip) {
-		return
-			doTrim(
-				true, false,
-				str,
-				false,
-				strip
-			);
-	}
-	public static String TrimEnd(final String str, final String...strip) {
-		return
-			doTrim(
-				false, true,
-				str,
-				false,
-				strip
-			);
-	}
-
-
-
-	public static String iTrim(final String str, final String...strip) {
-		return
-			doTrim(
-				true, true,
-				str,
-				true,
-				strip
-			);
+		//             front end        case
+		return doTrim( true, false, str, false, strip );
 	}
 	public static String iTrimFront(final String str, final String...strip) {
-		return
-			doTrim(
-				true, false,
-				str,
-				true,
-				strip
-			);
+		//             front end        case
+		return doTrim( true, false, str, true, strip );
+	}
+
+
+
+	// trim end
+	public static String TrimEnd(final String str, final char...strip) {
+		//             front end        case
+		return doTrim( false, true, str, false, strip );
+	}
+	public static String iTrimEnd(final String str, final char...strip) {
+		//             front end        case
+		return doTrim( false, true, str, true, strip );
+	}
+	public static String TrimEnd(final String str, final String...strip) {
+		//             front end        case
+		return doTrim( false, true, str, false, strip );
 	}
 	public static String iTrimEnd(final String str, final String...strip) {
-		return
-			doTrim(
-				false, true,
-				str,
-				true,
-				strip
-			);
+		//             front end        case
+		return doTrim( false, true, str, true, strip );
 	}
 
 
@@ -416,6 +346,7 @@ public class StringUtils extends StringAdvUtils {
 			final boolean trimFront, final boolean trimEnd,
 			final String str, final boolean caseInsensitive,
 			final char...strip) {
+if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMENT");
 		if (!trimFront && !trimEnd) return str;
 		if (Utils.isEmpty(str))     return str;
 		if (Utils.isEmpty(strip))   return str;
@@ -454,11 +385,18 @@ public class StringUtils extends StringAdvUtils {
 		if (Utils.isEmpty(str))     return str;
 		if (Utils.isEmpty(strip))   return str;
 		final int stripCount = strip.length;
+		String array[] = new String[stripCount];
 		final int[] stripLen = new int[stripCount];
 		for (int i = 0; i < stripCount; i++) {
+			array[i] = (
+				caseInsensitive
+				? strip[i].toLowerCase()
+				: strip[i]
+			);
 			stripLen[i] = strip[i].length();
 		}
 		String out = str;
+		String low = str.toLowerCase();
 		boolean changed = true;
 		OUTER_LOOP:
 		while (changed) {
@@ -467,14 +405,16 @@ public class StringUtils extends StringAdvUtils {
 			for (int index = 0; index < stripCount; index++) {
 				if (stripLen[index] == 0) continue INNER_LOOP;
 				if (trimFront) {
-					while (out.startsWith(strip[index])) {
+					while (low.startsWith( array[index] )) {
 						out = out.substring(stripLen[index]);
+						low = low.substring(stripLen[index]);
 						changed = true;
 					}
 				}
 				if (trimEnd) {
-					while (out.endsWith(strip[index])) {
+					while (low.endsWith( array[index].toLowerCase() )) {
 						out = out.substring(0, out.length() - stripLen[index]);
+						low = low.substring(0, low.length() - stripLen[index]);
 						changed = true;
 					}
 				}
