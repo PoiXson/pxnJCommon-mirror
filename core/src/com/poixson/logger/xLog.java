@@ -28,7 +28,8 @@ public class xLog implements xLogPrinter {
 	protected final xLog   parent;
 	protected final AtomicReference<xLevel> level =
 			new AtomicReference<xLevel>(null);
-	protected volatile SoftReference<String[]> cachedNameTree = null;
+	protected final AtomicReference<SoftReference<String[]>> cachedNameTree =
+			new AtomicReference<SoftReference<String[]>>(null);
 
 	// handlers
 	private final CopyOnWriteArrayList<xLogPrinter> printers =
@@ -150,7 +151,7 @@ public class xLog implements xLogPrinter {
 			return new String[0];
 		// cached name tree
 		{
-			final SoftReference<String[]> soft = this.cachedNameTree;
+			final SoftReference<String[]> soft = this.cachedNameTree.get();
 			if (soft != null) {
 				final String[] list = soft.get();
 				if (list != null)
@@ -162,7 +163,9 @@ public class xLog implements xLogPrinter {
 			final List<String> list = new ArrayList<String>();
 			this.buildNameTree(list);
 			final String[] result = list.toArray(new String[0]);
-			this.cachedNameTree = new SoftReference<String[]>(result);
+			this.cachedNameTree.set(
+				new SoftReference<String[]>(result)
+			);
 			return result;
 		}
 	}
