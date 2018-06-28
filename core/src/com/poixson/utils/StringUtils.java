@@ -277,6 +277,7 @@ public class StringUtils extends StringAdvUtils {
 			doTrim(
 				true, true,
 				str,
+				false,
 				strip
 			);
 		return (
@@ -294,6 +295,7 @@ public class StringUtils extends StringAdvUtils {
 			doTrim(
 				true, true,
 				str,
+				false,
 				strip
 			);
 	}
@@ -302,6 +304,7 @@ public class StringUtils extends StringAdvUtils {
 			doTrim(
 				true, false,
 				str,
+				false,
 				strip
 			);
 	}
@@ -310,6 +313,37 @@ public class StringUtils extends StringAdvUtils {
 			doTrim(
 				false, true,
 				str,
+				false,
+				strip
+			);
+	}
+
+
+
+	public static String iTrim(final String str, final char...strip) {
+		return
+			doTrim(
+				true, true,
+				str,
+				true,
+				strip
+			);
+	}
+	public static String iTrimFront(final String str, final char...strip) {
+		return
+			doTrim(
+				true, false,
+				str,
+				true,
+				strip
+			);
+	}
+	public static String iTrimEnd(final String str, final char...strip) {
+		return
+			doTrim(
+				false, true,
+				str,
+				true,
 				strip
 			);
 	}
@@ -321,6 +355,7 @@ public class StringUtils extends StringAdvUtils {
 			doTrim(
 				true, true,
 				str,
+				false,
 				strip
 			);
 	}
@@ -329,6 +364,7 @@ public class StringUtils extends StringAdvUtils {
 			doTrim(
 				true, false,
 				str,
+				false,
 				strip
 			);
 	}
@@ -337,6 +373,37 @@ public class StringUtils extends StringAdvUtils {
 			doTrim(
 				false, true,
 				str,
+				false,
+				strip
+			);
+	}
+
+
+
+	public static String iTrim(final String str, final String...strip) {
+		return
+			doTrim(
+				true, true,
+				str,
+				true,
+				strip
+			);
+	}
+	public static String iTrimFront(final String str, final String...strip) {
+		return
+			doTrim(
+				true, false,
+				str,
+				true,
+				strip
+			);
+	}
+	public static String iTrimEnd(final String str, final String...strip) {
+		return
+			doTrim(
+				false, true,
+				str,
+				true,
 				strip
 			);
 	}
@@ -347,7 +414,8 @@ public class StringUtils extends StringAdvUtils {
 //track trim length rather than modifying the string every loop
 	private static String doTrim(
 			final boolean trimFront, final boolean trimEnd,
-			final String str, final char...strip) {
+			final String str, final boolean caseInsensitive,
+			final char...strip) {
 		if (!trimFront && !trimEnd) return str;
 		if (Utils.isEmpty(str))     return str;
 		if (Utils.isEmpty(strip))   return str;
@@ -380,7 +448,8 @@ public class StringUtils extends StringAdvUtils {
 	}
 	private static String doTrim(
 			final boolean trimFront, final boolean trimEnd,
-			final String str, final String...strip) {
+			final String str, final boolean caseInsensitive,
+			final String...strip) {
 		if (!trimFront && !trimEnd) return str;
 		if (Utils.isEmpty(str))     return str;
 		if (Utils.isEmpty(strip))   return str;
