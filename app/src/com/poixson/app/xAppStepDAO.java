@@ -67,20 +67,20 @@ public class xAppStepDAO implements RunnableNamed {
 
 
 
-	public boolean isType(final StepType type) {
-		if (type == null)
-			return false;
-		return type.equals(this.type);
+	// ------------------------------------------------------------------------------- //
+	// run the step
+
+
+
+	@Override
+	public void run() {
+		if (Failure.hasFailed()) return;
+		try {
+			this.invoke();
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
+		}
 	}
-
-
-
-	public boolean isStepValue(final int stepValue) {
-		return (this.stepValue == stepValue);
-	}
-
-
-
 	public void invoke() throws ReflectiveOperationException, RuntimeException {
 		final String stepStr =
 			StringUtils.MergeStrings(
@@ -91,7 +91,6 @@ public class xAppStepDAO implements RunnableNamed {
 			);
 		final xLog log = this.app.log()
 				.getWeak(stepStr);
-		log.finer("Invoking step @|white,bold {}|@: {}", this.stepValue, this.name);
 		final Thread currentThread = Thread.currentThread();
 		final String originalThreadName = currentThread.getName();
 		currentThread.setName(stepStr);
@@ -124,15 +123,6 @@ public class xAppStepDAO implements RunnableNamed {
 			currentThread.setName(originalThreadName);
 		}
 	}
-	@Override
-	public void run() {
-		if (Failure.hasFailed()) return;
-		try {
-			this.invoke();
-		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException(e);
-		}
-	}
 
 
 
@@ -155,6 +145,22 @@ public class xAppStepDAO implements RunnableNamed {
 		if (Utils.isEmpty(name))
 			return false;
 		return name.equals(this.getTaskName());
+	}
+
+
+
+	// startup/shutdown type
+	public boolean isType(final StepType type) {
+		if (type == null)
+			return false;
+		return type.equals(this.type);
+	}
+
+
+
+	// step value
+	public boolean isStepValue(final int stepValue) {
+		return (this.stepValue == stepValue);
 	}
 
 
