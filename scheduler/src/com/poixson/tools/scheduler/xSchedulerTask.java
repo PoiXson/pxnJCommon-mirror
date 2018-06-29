@@ -327,13 +327,14 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 	@Override
 	public void setTaskName(final String taskName) {
 		super.setTaskName(taskName);
+		this._log.set(null);
 		final xRunnable run = this.run;
 		if (run != null) {
 			run.setTaskName(taskName);
 		}
 	}
 	public xSchedulerTask setName(final String taskName) {
-		this.setName(taskName);
+		this.setTaskName(taskName);
 		return this;
 	}
 	@Override

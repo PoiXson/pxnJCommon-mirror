@@ -57,7 +57,7 @@ public class RemappedMethod<V> extends xRunnable {
 		// static or instance class
 		this.setTaskName(
 			Utils.isEmpty(taskName)
-			? method.getName()
+			? method.getName()+"()"
 			: taskName
 		);
 	}

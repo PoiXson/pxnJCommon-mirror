@@ -32,7 +32,7 @@ public class xAppStepDAO implements RunnableNamed {
 		if (anno      == null) throw new RequiredArgumentException("annotation");
 		this.type = anno.Type();
 		this.stepValue = (
-			StepType.STARTUP.equals(anno.Type())
+			StepType.START.equals(anno.Type())
 			? anno.StepValue()
 			: 0 - Math.abs( anno.StepValue() )
 		);
@@ -42,7 +42,7 @@ public class xAppStepDAO implements RunnableNamed {
 		this.anno      = anno;
 		{
 			String name = method.getName();
-			name = StringUtils.Trim(
+			name = StringUtils.iTrimFront(
 				name,
 				"_",
 				"startup",
@@ -136,6 +136,12 @@ public class xAppStepDAO implements RunnableNamed {
 
 
 
+	// ------------------------------------------------------------------------------- //
+	// config
+
+
+
+	// step name
 	@Override
 	public String getTaskName() {
 		return this.name;

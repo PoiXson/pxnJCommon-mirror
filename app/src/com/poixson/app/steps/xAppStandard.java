@@ -16,6 +16,7 @@ public abstract class xAppStandard extends xApp {
 
 
 	public xAppStandard() {
+		super();
 	}
 
 
@@ -47,7 +48,7 @@ public abstract class xAppStandard extends xApp {
 
 	// ensure not root
 	@xAppStep( Type=StepType.START, Title="Root Check", StepValue=10 )
-	public void _START_rootcheck(final xLog log) {
+	public void _START_root_check(final xLog log) {
 		final String user = System.getProperty("user.name");
 		if ("root".equals(user)) {
 			log.warning("It is recommended to run as a non-root user");

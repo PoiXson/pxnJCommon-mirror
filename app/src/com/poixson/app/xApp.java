@@ -1,5 +1,6 @@
 package com.poixson.app;
 
+import java.lang.ref.SoftReference;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -24,7 +26,6 @@ import com.poixson.tools.HangCatcher;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.xTime;
 import com.poixson.tools.comparators.IntComparator;
-import com.poixson.tools.remapped.xRunnable;
 import com.poixson.utils.FileUtils;
 import com.poixson.utils.ProcUtils;
 import com.poixson.utils.StringUtils;
@@ -34,11 +35,11 @@ import com.poixson.utils.Utils;
 
 /*
  * Startup sequence
- *   10  prevent root        - xAppStandard
+ *   10  prevent root        - xAppSteps_Tool
  *   50  load configs        - xAppSteps_Config
  *   70  lock file           - xAppSteps_LockFile
  *   80  display logo        - xAppSteps_Logo
- *   85  sync clock          - xAppSteps_Clock
+ *   85  sync clock          - xAppStandard
  *  100  prepare commands    - xCommandHandler
  *  105  start console input - xAppSteps_Console
  *  200  startup time        - xAppStandard
