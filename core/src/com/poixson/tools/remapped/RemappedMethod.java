@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
+import com.poixson.tools.byref.StringRef;
 import com.poixson.utils.ReflectUtils;
 import com.poixson.utils.Utils;
 
@@ -54,10 +55,9 @@ public class RemappedMethod<V> extends xRunnable {
 		this.container = container;
 		this.method    = method;
 		this.args      = args;
-		// static or instance class
 		this.setTaskName(
 			Utils.isEmpty(taskName)
-			? method.getName()+"()"
+			? this.getFullName()
 			: taskName
 		);
 	}
@@ -79,6 +79,18 @@ public class RemappedMethod<V> extends xRunnable {
 		} finally {
 			this.done.set(true);
 		}
+	}
+
+
+
+	public String getFullName() {
+		return
+			(new StringBuilder())
+				.append( StringRef.getNew( this.container.getClass().getName() ).peekLastPart('.') )
+				.append("->")
+				.append( this.method.getName())
+				.append("()")
+				.toString();
 	}
 
 
