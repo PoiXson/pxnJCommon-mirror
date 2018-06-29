@@ -1,13 +1,15 @@
 package com.poixson.tools.scheduler;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import com.poixson.abstractions.xEnableable;
 
 
 public abstract class xSchedulerTrigger implements xEnableable {
 
 	// trigger config
-	private volatile boolean enabled   = true;
-	private volatile boolean repeating = true;
+	private final AtomicBoolean enabled   = new AtomicBoolean(true);
+	private final AtomicBoolean repeating = new AtomicBoolean(true);
 
 
 
@@ -34,7 +36,7 @@ public abstract class xSchedulerTrigger implements xEnableable {
 	// trigger enabled
 	@Override
 	public boolean isEnabled() {
-		return this.enabled;
+		return this.enabled.get();
 	}
 	@Override
 	public boolean notEnabled() {
@@ -51,7 +53,7 @@ public abstract class xSchedulerTrigger implements xEnableable {
 	}
 	@Override
 	public void setEnabled(final boolean enabled) {
-		this.enabled = enabled;
+		this.enabled.set(enabled);
 	}
 
 	public xSchedulerTrigger enable() {
@@ -69,7 +71,7 @@ public abstract class xSchedulerTrigger implements xEnableable {
 
 	// repeating trigger
 	public boolean isRepeating() {
-		return this.repeating;
+		return this.repeating.get();
 	}
 	public boolean notRepeating() {
 		return ! this.isRepeating();
@@ -85,7 +87,7 @@ public abstract class xSchedulerTrigger implements xEnableable {
 		this.setRepeat(false);
 	}
 	public void setRepeat(final boolean repeating) {
-		this.repeating = repeating;
+		this.repeating.set(repeating);
 	}
 
 	public xSchedulerTrigger repeat() {

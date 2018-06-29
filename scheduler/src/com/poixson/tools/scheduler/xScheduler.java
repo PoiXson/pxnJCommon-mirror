@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.abstractions.xStartable;
 import com.poixson.logger.xLog;
@@ -34,13 +35,13 @@ public class xScheduler implements xStartable {
 	// manager thread
 	private final Thread thread;
 	private final AtomicBoolean running = new AtomicBoolean(false);
-	private volatile boolean stopping = false;
+	private final AtomicBoolean stopping = new AtomicBoolean(false);
 
 	// manager thread sleep
 	private final xTime threadSleepTime = xTime.getNew("5s");
 	private final double threadSleepInhibitPercent = 0.95;
-	private volatile boolean sleeping = false;
-	private volatile boolean changes  = false;
+	private final AtomicBoolean sleeping = new AtomicBoolean(false);
+	private final AtomicBoolean changes  = new AtomicBoolean(false);
 
 
 
@@ -91,13 +92,13 @@ public class xScheduler implements xStartable {
 
 	@Override
 	public void start() {
-		if (this.stopping)    throw new RuntimeException("Scheduler already stopping");
-		if (this.isRunning()) throw new RuntimeException("Scheduler already running");
+		if (this.stopping.get()) throw new RuntimeException("Scheduler already stopping");
+		if (this.running.get())  throw new RuntimeException("Scheduler already running");
 		this.thread.start();
 	}
 	@Override
 	public void stop() {
-		this.stopping = true;
+		this.stopping.set(true);
 		this.wakeManager();
 	}
 
@@ -107,29 +108,31 @@ public class xScheduler implements xStartable {
 	// manager loop
 	@Override
 	public void run() {
-		if (this.stopping)
+		if (this.stopping.get())
 			return;
-		if (!this.running.compareAndSet(false, true))
+		if ( ! this.running.compareAndSet(false, true) )
 			return;
 		this.log().fine("Starting schedule manager..");
 		final long threadSleep = this.threadSleepTime.getMS();
 		final Set<xSchedulerTask> finishedTasks = new HashSet<xSchedulerTask>();
+		OUTER_LOOP:
 		while (true) {
-			if (this.stopping || !this.isRunning())
-				break;
+			if ( this.stopping.get() || ! this.running.get() )
+				break OUTER_LOOP;
 			long sleep = threadSleep;
 			finishedTasks.clear();
 			// check task triggers
 			{
 				final Iterator<xSchedulerTask> it = this.tasks.iterator();
-				this.changes = false;
+				this.changes.set(false);
 				final long now = getClockMillis();
+				INNER_LOOP:
 				while (it.hasNext()) {
 					final xSchedulerTask task = it.next();
 					final long untilNext = task.untilSoonestTrigger(now);
 					// disabled
 					if (untilNext == Long.MIN_VALUE)
-						continue;
+						continue INNER_LOOP;
 					// trigger now
 					if (untilNext <= 0L) {
 						// clear thread interrupt
@@ -141,8 +144,8 @@ public class xScheduler implements xStartable {
 						}
 						// running again soon
 						if (task.untilSoonestTrigger(now) < 0L) {
-							this.changes = true;
-							continue;
+							this.changes.set(true);
+							continue INNER_LOOP;
 						}
 					}
 					if (untilNext < sleep) {
@@ -153,15 +156,16 @@ public class xScheduler implements xStartable {
 			// remove finished tasks
 			if (!finishedTasks.isEmpty()) {
 				final Iterator<xSchedulerTask> it = finishedTasks.iterator();
+				//REMOVE_LOOP:
 				while (it.hasNext()) {
 					final xSchedulerTask task = it.next();
 					task.unregister();
 					this.tasks.remove(task);
-				}
+				} // end REMOVE_LOOP
 			}
 			// no sleep needed
-			if (this.changes || sleep <= 0L)
-				continue;
+			if (this.changes.get() || sleep <= 0L)
+				continue OUTER_LOOP;
 			// calculate sleep
 			final long sleepLess = (
 				sleep <= threadSleep
@@ -169,8 +173,8 @@ public class xScheduler implements xStartable {
 				: threadSleep
 			);
 			// no sleep needed
-			if (this.changes || sleep <= 0L)
-				continue;
+			if (this.changes.get() || sleep <= 0L)
+				continue OUTER_LOOP;
 			// log sleep time
 			if (this.isDetailedLogging()) {
 				final double sleepLessSec = ((double)sleepLess) / 1000.0;
@@ -180,21 +184,21 @@ public class xScheduler implements xStartable {
 				);
 			}
 			// sleep until next check
-			this.sleeping = true;
-			if (!this.changes) {
+			this.sleeping.set(true);
+			if ( ! this.changes.get() ) {
 				ThreadUtils.Sleep(sleepLess);
 			}
-			this.sleeping = false;
-		}
+			this.sleeping.set(false);
+		} // end OUTER_LOOP
 		finishedTasks.clear();
 		log().fine("Stopped scheduler manager thread");
-		this.stopping = true;
+		this.stopping.set(true);
 		this.running.set(false);
 		Keeper.remove(this);
 	}
 	public void wakeManager() {
-		this.changes = true;
-		if (this.sleeping) {
+		this.changes.set(true);
+		if (this.sleeping.get()) {
 			try {
 				this.thread.interrupt();
 			} catch (Exception ignore) {}
@@ -205,13 +209,13 @@ public class xScheduler implements xStartable {
 
 	@Override
 	public boolean isRunning() {
-		if (this.stopping)
+		if (this.stopping.get())
 			return false;
 		return this.running.get();
 	}
 	@Override
 	public boolean isStopping() {
-		return this.stopping;
+		return this.stopping.get();
 	}
 
 
@@ -280,56 +284,96 @@ public class xScheduler implements xStartable {
 
 
 	// ------------------------------------------------------------------------------- //
+	// clock
 
 
 
-	private static volatile SoftReference<xClock> _clock = null;
+	private static final AtomicReference<SoftReference<xClock>> _clock =
+			new AtomicReference<SoftReference<xClock>>(null);
 
 	public static long getClockMillis() {
-		return getClock()
-				.millis();
+		return getClock().millis();
 	}
 	public static xClock getClock() {
-		if (_clock != null) {
-			final xClock clock = _clock.get();
+		// cached clock
+		final SoftReference<xClock> ref = _clock.get();
+		if (ref != null) {
+			final xClock clock = ref.get();
 			if (clock != null)
 				return clock;
 		}
-		final xClock clock = xClock.get(false);
-		_clock = new SoftReference<xClock>(clock);
-		return clock;
+		// get clock
+		{
+			final xClock clock = xClock.get(false);
+			_clock.set(
+				new SoftReference<xClock>(
+					clock
+				)
+			);
+			return clock;
+		}
 	}
 
 
 
+	// ------------------------------------------------------------------------------- //
 	// logger
-	private volatile SoftReference<xLog> _log = null;
+
+
+
+	private final AtomicReference<SoftReference<xLog>> _log =
+			new AtomicReference<SoftReference<xLog>>(null);
+
 	public xLog log() {
-		if (this._log != null) {
-			final xLog log = this._log.get();
+		// cached logger
+		final SoftReference<xLog> ref = this._log.get();
+		if (ref != null) {
+			final xLog log = ref.get();
 			if (log != null)
 				return log;
 		}
-		final xLog log =
+		// get logger
+		{
+			final xLog log = this._log();
+			this._log.set(
+				new SoftReference<xLog>(
+					log
+				)
+			);
+			return log;
+		}
+	}
+	protected xLog _log() {
+		return
 			xLogRoot.Get(LOG_NAME)
 				.getWeak(this.getName());
-		this._log = new SoftReference<xLog>(log);
-		return log;
 	}
 
 
 
 	// cached log level
-	private volatile SoftReference<Boolean> _detail = null;
+	private final AtomicReference<SoftReference<Boolean>> _detail =
+			new AtomicReference<SoftReference<Boolean>>(null);
+
 	public boolean isDetailedLogging() {
-		if (this._detail != null) {
-			final Boolean detail = this._detail.get();
+		// cached value
+		final SoftReference<Boolean> ref = this._detail.get();
+		if (ref != null) {
+			final Boolean detail = ref.get();
 			if (detail != null)
 				return detail.booleanValue();
 		}
-		final boolean detail = this.log().isDetailLoggable();
-		this._detail = new SoftReference<Boolean>(Boolean.valueOf(detail));
-		return detail;
+		// get log level
+		{
+			final boolean detail =
+				this.log().isDetailLoggable();
+			this._detail.set(
+				new SoftReference<Boolean>(
+					Boolean.valueOf( detail )
+				)
+			);
+			return detail;
+		}
 	}
 
 

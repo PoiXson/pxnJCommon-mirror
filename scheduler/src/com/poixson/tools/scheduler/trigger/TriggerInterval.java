@@ -1,6 +1,7 @@
 package com.poixson.tools.scheduler.trigger;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.tools.xTime;
@@ -11,7 +12,7 @@ public class TriggerInterval extends xSchedulerTrigger {
 
 	private final xTime delay    = xTime.getNew();
 	private final xTime interval = xTime.getNew();
-	private volatile long last = Long.MIN_VALUE;
+	private final AtomicLong last = new AtomicLong( Long.MIN_VALUE );
 
 	private final Object updateLock = new Object();
 
@@ -89,11 +90,13 @@ public class TriggerInterval extends xSchedulerTrigger {
 			}
 			// first calculations
 			{
-				final long last     = this.last;
+				final long last     = this.last.get();
 				final long delay    = this.delay.getMS();
 				final long interval = this.interval.getMS();
 				if (last == Long.MIN_VALUE) {
-					this.last = (now + delay) - interval;
+					this.last.set(
+						(now + delay) - interval
+					);
 				}
 			}
 		}
@@ -107,7 +110,7 @@ public class TriggerInterval extends xSchedulerTrigger {
 			if (this.notEnabled())
 				return Long.MIN_VALUE;
 			// calculate time until next trigger
-			final long last     = this.last;
+			final long last     = this.last.get();
 			final long interval = this.interval.getMS();
 			final long sinceLast = now - last;
 			final long untilNext = interval - sinceLast;
@@ -118,7 +121,9 @@ public class TriggerInterval extends xSchedulerTrigger {
 					((long) Math.floor(
 						((double)sinceLast) / ((double)interval)
 					)) * interval;
-				this.last = last + add;
+				this.last.set(
+					last + add
+				);
 				return 0L;
 			}
 			// sleep time

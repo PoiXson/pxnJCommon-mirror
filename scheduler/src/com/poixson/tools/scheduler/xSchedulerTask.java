@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
@@ -20,7 +21,6 @@ import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.xTime;
 import com.poixson.tools.remapped.xRunnable;
-import com.poixson.utils.ReflectUtils;
 import com.poixson.utils.Utils;
 
 
@@ -32,10 +32,12 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 	private final int taskIndex;
 
 	// task config
-	private volatile boolean enabled   = true;
+	private final AtomicBoolean enabled = new AtomicBoolean(true);
 
-	private volatile xRunnable   run  = null;
-	private volatile xThreadPool pool = null;
+	private final AtomicReference<xRunnable> run =
+			new AtomicReference<xRunnable>(null);
+	private final AtomicReference<xThreadPool> pool =
+			new AtomicReference<xThreadPool>(null);
 
 	// triggers
 	private final Set<xSchedulerTrigger> triggers =
@@ -135,7 +137,7 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 	@Override
 	public void run() {
 		if (this.run != null) {
-			final xRunnable run = this.run;
+			final xRunnable run = this.run.get();
 			if (run != null) {
 				run.run();
 				return;
@@ -250,7 +252,7 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 	// task enabled
 	@Override
 	public boolean isEnabled() {
-		if (!this.enabled)
+		if ( ! this.enabled.get() )
 			return false;
 		final Iterator<xSchedulerTrigger> it = this.triggers.iterator();
 		while (it.hasNext()) {
@@ -274,7 +276,7 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 	}
 	@Override
 	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+		this.enabled.set(enabled);
 	}
 
 
@@ -296,10 +298,12 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 
 	// runnable
 	public xRunnable getRunnable() {
-		return this.run;
+		return this.run.get();
 	}
 	public xSchedulerTask setRunnable(final Runnable run) {
-		this.run = xRunnable.cast(run);
+		this.run.set(
+			xRunnable.cast(run)
+		);
 		return this;
 	}
 
@@ -309,7 +313,7 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 	@Override
 	public String getTaskName() {
 		if (this.run != null) {
-			final xRunnable run = this.run;
+			final xRunnable run = this.run.get();
 			if (run != null) {
 				final String runTaskName = run.getTaskName();
 				if (Utils.notEmpty(runTaskName)) {
@@ -328,7 +332,7 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 	public void setTaskName(final String taskName) {
 		super.setTaskName(taskName);
 		this._log.set(null);
-		final xRunnable run = this.run;
+		final xRunnable run = this.run.get();
 		if (run != null) {
 			run.setTaskName(taskName);
 		}
@@ -339,7 +343,7 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 	}
 	@Override
 	public boolean taskNameEquals(final String taskName) {
-		final xRunnable run = this.run;
+		final xRunnable run = this.run.get();
 		if (run != null) {
 			final String runTaskName = run.getTaskName();
 			if (Utils.isEmpty(runTaskName))
@@ -353,22 +357,15 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 
 	// thread pool
 	public xThreadPool getThreadPool() {
-		final xThreadPool pool = this.pool;
+		final xThreadPool pool = this.pool.get();
 		return (
 			pool == null
 			? xThreadPool_Main.get()
 			: pool
 		);
 	}
-//TODO: remove this?
-//	public xSchedulerTask setThreadPool(final String poolName) {
-//		return
-//			this.setThreadPool(
-//				xThreadPoolFactory.get(poolName)
-//			);
-//	}
 	public xSchedulerTask setThreadPool(final xThreadPool pool) {
-		this.pool = pool;
+		this.pool.set(pool);
 		return this;
 	}
 
@@ -412,6 +409,7 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 
 	private final AtomicReference<SoftReference<xLog>> _log =
 			new AtomicReference<SoftReference<xLog>>(null);
+
 	public xLog log() {
 		// cached logger
 		final SoftReference<xLog> ref = this._log.get();

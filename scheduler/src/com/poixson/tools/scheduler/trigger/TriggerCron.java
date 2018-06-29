@@ -2,6 +2,8 @@ package com.poixson.tools.scheduler.trigger;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.quartz.CronExpression;
 import org.quartz.impl.triggers.CronTriggerImpl;
@@ -21,9 +23,10 @@ import com.poixson.tools.scheduler.xSchedulerTrigger;
 */
 public class TriggerCron extends xSchedulerTrigger {
 
-	private volatile CronTriggerImpl trigger = null;
+	private final AtomicReference<CronTriggerImpl> trigger =
+			new AtomicReference<CronTriggerImpl>(null);
 
-	private volatile long next = Long.MIN_VALUE;
+	private final AtomicLong next = new AtomicLong( Long.MIN_VALUE );
 
 	private final Object updateLock = new Object();
 
@@ -52,7 +55,7 @@ public class TriggerCron extends xSchedulerTrigger {
 	public void update(final long now) {
 		if (this.trigger == null) throw new RequiredArgumentException("CronTrigger");
 		synchronized(this.updateLock) {
-			final CronTriggerImpl trigger = this.trigger;
+			final CronTriggerImpl trigger = this.trigger.get();
 			if (trigger == null) throw new RequiredArgumentException("CronTrigger");
 			// calculate time until next trigger
 			final Date nowDate = new Date(now);
@@ -61,7 +64,9 @@ public class TriggerCron extends xSchedulerTrigger {
 				this.setDisabled();
 				return;
 			}
-			this.next = nextDate.getTime();
+			this.next.set(
+				nextDate.getTime()
+			);
 		}
 	}
 
@@ -72,11 +77,11 @@ public class TriggerCron extends xSchedulerTrigger {
 		if (this.notEnabled())
 			return Long.MIN_VALUE;
 		synchronized(this.updateLock) {
-			if (this.next == Long.MIN_VALUE)
+			final long next = this.next.get();
+			if (next == Long.MIN_VALUE)
 				this.update(now);
 			if (this.notEnabled())
 				return Long.MIN_VALUE;
-			final long next = this.next;
 			final long untilNext = next - now;
 			if (untilNext <= 0L) {
 				this.update(now + 1L);
@@ -95,7 +100,7 @@ public class TriggerCron extends xSchedulerTrigger {
 		if (express == null) throw new RequiredArgumentException("expression");
 		final CronTriggerImpl trigger = new CronTriggerImpl();
 		trigger.setCronExpression(express);
-		this.trigger = trigger;
+		this.trigger.set(trigger);
 		return this;
 	}
 

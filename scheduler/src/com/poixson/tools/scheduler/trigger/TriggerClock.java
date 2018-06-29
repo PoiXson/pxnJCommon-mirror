@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLogRoot;
@@ -19,7 +20,7 @@ public class TriggerClock extends xSchedulerTrigger {
 	public static final String DEFAULT_DATE_FORMAT = "yy/MM/dd HH:mm:ss";
 	public static final long  DEFAULT_GRACE_TIME  = 1000L;
 
-	private volatile Date date = null;
+	private final AtomicReference<Date> date = new AtomicReference<Date>(null);
 	private final xTime grace = xTime.getNew();
 
 	private final Object updateLock = new Object();
@@ -60,7 +61,7 @@ public class TriggerClock extends xSchedulerTrigger {
 			return Long.MIN_VALUE;
 		if (this.date == null) throw new RequiredArgumentException("date");
 		synchronized(this.updateLock) {
-			final Date date = this.date;
+			final Date date = this.date.get();
 			if (date == null) throw new RequiredArgumentException("date");
 			final long time = date.getTime();
 			final long grace = this.getGraceTime();
@@ -106,7 +107,7 @@ xLogRoot.Get().warning("Skipping old scheduled clock trigger..");
 	}
 	public TriggerClock setDate(final Date date) {
 		if (date == null) throw new RequiredArgumentException("date");
-		this.date = date;
+		this.date.set(date);
 		return this;
 	}
 
