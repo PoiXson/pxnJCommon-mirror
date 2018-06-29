@@ -154,6 +154,7 @@ public class xPluginManager<T extends xJavaPlugin> {
 
 	private final AtomicReference<SoftReference<xLog>> _log =
 			new AtomicReference<SoftReference<xLog>>(null);
+
 	public xLog log() {
 		// cached logger
 		final SoftReference<xLog> ref = this._log.get();

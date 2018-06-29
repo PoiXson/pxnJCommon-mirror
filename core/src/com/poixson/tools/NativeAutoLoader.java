@@ -448,6 +448,7 @@ System.out.println("SEARCH PATH: "+FileUtils.MergePaths(path, fileName));
 
 	private final AtomicReference<SoftReference<xLog>> _log =
 			new AtomicReference<SoftReference<xLog>>(null);
+
 	public xLog log() {
 		// cached logger
 		final SoftReference<xLog> ref = this._log.get();

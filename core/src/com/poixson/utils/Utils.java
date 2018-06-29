@@ -589,6 +589,7 @@ public final class Utils {
 
 	private static final AtomicReference<SoftReference<xLog>> _log =
 			new AtomicReference<SoftReference<xLog>>(null);
+
 	public static xLog log() {
 		// cached logger
 		final SoftReference<xLog> ref = _log.get();

@@ -755,6 +755,7 @@ public abstract class xApp implements xStartable, AttachedLogger {
 
 	private final AtomicReference<SoftReference<xLog>> _log =
 			new AtomicReference<SoftReference<xLog>>(null);
+
 	@Override
 	public xLog log() {
 		// cached logger

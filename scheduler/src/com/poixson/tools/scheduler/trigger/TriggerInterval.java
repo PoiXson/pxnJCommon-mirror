@@ -175,56 +175,28 @@ public class TriggerInterval extends xSchedulerTrigger {
 
 
 	public TriggerInterval enable() {
-		return (
-			super.enable() == null
-			? null
-			: this
-		);
+		return ( super.enable() == null ? null : this );
 	}
 	public TriggerInterval disable() {
-		return (
-			super.disable() == null
-			? null
-			: this
-		);
+		return ( super.disable() == null ? null : this );
 	}
 	public TriggerInterval enable(final boolean enabled) {
-		return (
-			super.enable(enabled) == null
-			? null
-			: this
-		);
+		return ( super.enable(enabled) == null ? null : this );
 	}
 
 
 
 	public TriggerInterval repeat() {
-		return (
-			super.repeat() == null
-			? null
-			: this
-		);
+		return ( super.repeat() == null ? null : this );
 	}
 	public TriggerInterval noRepeat() {
-		return (
-			super.noRepeat() == null
-			? null
-			: this
-		);
+		return ( super.noRepeat() == null ? null : this );
 	}
 	public TriggerInterval runOnce() {
-		return (
-			super.runOnce() == null
-			? null
-			: this
-		);
+		return ( super.runOnce() == null ? null : this );
 	}
 	public TriggerInterval repeat(final boolean repeating) {
-		return (
-			super.repeat(repeating) == null
-			? null
-			: this
-		);
+		return ( super.repeat(repeating) == null ? null : this );
 	}
 
 
