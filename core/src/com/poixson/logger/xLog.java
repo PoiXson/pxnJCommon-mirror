@@ -350,7 +350,7 @@ public class xLog implements xLogPrinter {
 
 
 	// title
-	public void title(final String... lines) {
+	public void title(final String[] lines) {
 		this.publish(
 			new xLogRecord_Msg(
 				this,

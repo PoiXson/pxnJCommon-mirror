@@ -289,10 +289,18 @@ public abstract class xApp implements xStartable, AttachedLogger {
 		this.stopHangCatcher();
 		final int state = this.state.get();
 		if (state == STATE_RUNNING) {
-			this.log().title("{} is ready!", this.getTitle());
+			this.log()
+				.title(
+					new String[] { "{} is ready!" },
+					this.getTitle()
+				);
 		} else
 		if (state == STATE_OFF) {
-			this.log().title("Finished stopping {}", this.getTitle());
+			this.log()
+				.title(
+					new String[] { "Finished stopping {}" },
+					this.getTitle()
+				);
 			// restart
 			if (this.restartAfterUnloaded.get()) {
 				this.start();
