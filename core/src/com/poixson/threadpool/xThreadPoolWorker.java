@@ -8,39 +8,45 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.poixson.abstractions.xStartable;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
+import com.poixson.logger.xLogRoot;
 import com.poixson.tools.CoolDown;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.ThreadUtils;
+import com.poixson.utils.Utils;
 
 
 public class xThreadPoolWorker implements xStartable {
 
-	public static final long DEFAULT_WAIT_FOR_START = 500L;
+	public static final long DEFAULT_WORKER_START_WAIT      = 500L;
 
 	protected final xThreadPool pool;
 	protected final AtomicReference<Thread> thread =
 			new AtomicReference<Thread>(null);
 
+	protected final String workerNameCustom;
+	protected       String workerNameCached = null;
+
+	// state
+	protected final AtomicBoolean running  = new AtomicBoolean(false);
+	protected final AtomicBoolean active   = new AtomicBoolean(false);
+	protected final AtomicBoolean stopping = new AtomicBoolean(false);
+
+	// stats
 	protected final long workerIndex;
-
-	// worker state
-	protected final AtomicBoolean running = new AtomicBoolean(false);
-	protected volatile boolean active   = false;
-	protected volatile boolean stopping = false;
-
 	protected final AtomicLong runCount = new AtomicLong(0L);
 
 
 
 	public xThreadPoolWorker(final xThreadPool pool) {
-		this(
-			pool,
-			null
-		);
+		this(pool, null, null);
 	}
 	public xThreadPoolWorker(final xThreadPool pool, final Thread thread) {
+		this(pool, thread, null);
+	}
+	public xThreadPoolWorker(final xThreadPool pool, final Thread thread, final String workerName) {
 		if (pool == null) throw new RequiredArgumentException("pool");
 		this.pool = pool;
+		this.workerNameCustom = workerName;
 		this.workerIndex = pool.getNextWorkerIndex();
 		if (thread != null) {
 			this.thread.set(thread);
@@ -51,7 +57,7 @@ public class xThreadPoolWorker implements xStartable {
 
 
 	// ------------------------------------------------------------------------------- //
-	// run loop
+	// start/stop worker
 
 
 
@@ -59,21 +65,21 @@ public class xThreadPoolWorker implements xStartable {
 	public void start() {
 		if (this.isRunning())
 			return;
-		if ( ! this.getThread().isAlive() ) {
+		try {
 			this.getThread()
 				.start();
-		}
+		} catch (IllegalThreadStateException ignore) {}
 	}
 	public void startAndWait() {
 		this.start();
-		this.waitForStart(DEFAULT_WAIT_FOR_START);
+		this.waitForStart(DEFAULT_WORKER_START_WAIT);
 	}
 	public void startAndWait(final long timeout) {
 		this.start();
 		this.waitForStart(timeout);
 	}
 	public void waitForStart() {
-		this.waitForStart(DEFAULT_WAIT_FOR_START);
+		this.waitForStart(DEFAULT_WORKER_START_WAIT);
 	}
 	public void waitForStart(final long timeout) {
 		// wait for worker to start
@@ -100,13 +106,19 @@ public class xThreadPoolWorker implements xStartable {
 
 	@Override
 	public void stop() {
-		this.stopping = true;
+		this.stopping.set(true);
 	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// run loop
 
 
 
 	@Override
 	public void run() {
+		if (this.stopping.get()) throw new IllegalStateException("Worker cannot run again, already stopped");
 		if (this.running.get()) return;
 		this.pool.registerWorker(this);
 		if ( ! this.running.compareAndSet(false, true) ) {
@@ -115,56 +127,159 @@ public class xThreadPoolWorker implements xStartable {
 			} catch (RuntimeException ignore) {}
 			throw new RuntimeException("Thread pool worker already running!");
 		}
-		if (this.stopping) throw new IllegalStateException("Worker cannot run again, already stopped");
+		if (this.stopping.get()) throw new IllegalStateException("Worker cannot run again, already stopped");
+		// validate thread
 		if (this.thread.get() == null) {
 			final Thread thread = Thread.currentThread();
 			if (this.thread.compareAndSet(null, thread)) {
 				this.configureThread(thread);
 			}
 		}
+		// is correct thread
 		if ( ! this.thread.get().equals(Thread.currentThread()) )
 			throw new IllegalStateException("Invalid thread state!");
 		try {
-			// worker run loop
-			OUTER_LOOP:
+			WORKER_LOOP:
 			while (true) {
 				if (this.pool.isStopping())
-					break OUTER_LOOP;
+					break WORKER_LOOP;
 				// get task from queues
 				try {
-					final xThreadPoolTask<?> task =
+					final xThreadPoolTask task =
 						this.pool.grabNextTask();
 					// run the task
 					if (task != null) {
 						this.runTask(task);
 						this.runCount.incrementAndGet();
-						continue OUTER_LOOP;
+						continue WORKER_LOOP;
 					}
 				} catch (InterruptedException e) {
 					this.log().trace(e);
 					break;
 				}
-				// idle
-				this.log()
-					.detail("Idle thread..");
-			} // end OUTER_LOOP
+//TODO:
+//				// idle
+//				if ( ! this.keepAlive.get() ) {
+//				}
+				this.log().detail("Idle thread..");
+			} // end WORKER_LOOP
 		} finally {
-			this.stopping = true;
+			this.stopping.set(true);
 			this.pool.unregisterWorker(this);
 			this.running.set(false);
 		}
 	}
-	protected void runTask(final xThreadPoolTask<?> task) {
+	protected void runTask(final xThreadPoolTask task) {
 		if (task == null) throw new RequiredArgumentException("task");
-		this.active = true;
-		task.setWorker(this);
-		task.run();
-		this.active = false;
+		try {
+			this.active.set(true);
+			task.setWorker(this);
+			task.run();
+		} finally {
+			this.active.set(false);
+		}
 		if (task.hasException()) {
-			this.log()
-				.trace(task.getException());
+			this.log().trace( task.getException() );
 		}
 	}
+
+
+
+	public void join(final long timeout)
+			throws InterruptedException {
+		final Thread thread = this.thread.get();
+		if (thread == null)
+			return;
+		if (timeout > 0L) {
+			thread.join(timeout);
+		} else {
+			thread.join();
+		}
+	}
+	public void join() throws InterruptedException {
+		this.join(0L);
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// state
+
+
+
+	@Override
+	public boolean isRunning() {
+		return this.running.get();
+	}
+	public boolean isActive() {
+		return this.active.get();
+	}
+	@Override
+	public boolean isStopping() {
+		return this.stopping.get();
+	}
+
+
+
+	public boolean isThread(final Thread match) {
+		if (match == null)
+			return false;
+		return match.equals( this.thread.get() );
+	}
+	public boolean isCurrentThread() {
+		return Thread.currentThread()
+				.equals( this.thread.get() );
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// config
+
+
+
+	public String getWorkerName() {
+		// cached name
+		{
+			final String name = this.workerNameCached;
+			if (Utils.notEmpty(name))
+				return name;
+		}
+		// custom name
+		if (Utils.notEmpty(this.workerNameCustom)) {
+			this.workerNameCached = this.workerNameCustom;
+			return this.workerNameCustom;
+		}
+		// generate name
+		{
+			final String name =
+				StringUtils.ReplaceTags(
+					"{}-w{}",
+					this.pool.getPoolName(),
+					this.workerIndex
+			);
+			this.workerNameCached = name;
+			return name;
+		}
+	}
+
+
+
+	public void setPriority(final int priority) {
+		final Thread thread = this.thread.get();
+		if (thread == null) throw new NullPointerException();
+		thread.setPriority(priority);
+	}
+
+
+
+//TODO:
+//	public boolean keepAlive() {
+//		return this.keepAlive.get();
+//	}
+//	public boolean keepAlive(final boolean enable) {
+//		return this.keepAlive.getAndSet(enable);
+//	}
 
 
 
@@ -193,74 +308,21 @@ public class xThreadPoolWorker implements xStartable {
 		}
 	}
 	protected void configureThread(final Thread thread) {
-		thread.setDaemon(false);
-		thread.setPriority(this.pool.getThreadPriority());
-		thread.setName(this.getNameFormatted());
-	}
-
-
-
-	public void join(final long timeout)
-			throws InterruptedException {
-		final Thread thread = this.thread.get();
-		if (thread == null)
-			return;
-		if (timeout > 0L) {
-			thread.join(timeout);
-		} else {
-			thread.join();
-		}
-	}
-	public void join() throws InterruptedException {
-		this.join(0L);
+		try {
+			thread.setName(this.getWorkerName());
+		} catch (Exception ignore) {}
+		try {
+			thread.setDaemon(false);
+		} catch (Exception ignore) {}
+		try {
+			thread.setPriority(this.pool.getThreadPriority());
+		} catch (Exception ignore) {}
 	}
 
 
 
 	// ------------------------------------------------------------------------------- //
-	// worker state
-
-
-
-	public boolean isRunning() {
-		return this.running.get();
-	}
-	public boolean isActive() {
-		return this.active;
-	}
-	public boolean isStopping() {
-		return this.stopping;
-	}
-
-
-
-	public boolean isThread(final Thread match) {
-		if (match == null)
-			return false;
-		return match.equals(this.getThread());
-	}
-	public boolean isCurrentThread() {
-		return
-			this.isThread(
-				Thread.currentThread()
-			);
-	}
-
-
-
-	// ------------------------------------------------------------------------------- //
-	// config
-
-
-
-	public String getNameFormatted() {
-		return
-			StringUtils.ReplaceTags(
-				"{}-w{}",
-				this.pool.getPoolName(),
-				this.workerIndex
-			);
-	}
+	// stats
 
 
 
@@ -270,10 +332,8 @@ public class xThreadPoolWorker implements xStartable {
 
 
 
-	public void setPriority(final int priority) {
-		final Thread thread = this.thread.get();
-		if (thread == null) throw new NullPointerException();
-		thread.setPriority(priority);
+	public long getRunCount() {
+		return this.runCount.get();
 	}
 
 
@@ -285,6 +345,7 @@ public class xThreadPoolWorker implements xStartable {
 
 	private final AtomicReference<SoftReference<xLog>> _log =
 			new AtomicReference<SoftReference<xLog>>(null);
+
 	public xLog log() {
 		// cached logger
 		final SoftReference<xLog> ref = this._log.get();
@@ -296,18 +357,7 @@ public class xThreadPoolWorker implements xStartable {
 		// get logger
 		{
 			final xLog log;
-			if (this.pool.isSingleWorker()) {
-				log = this.pool.log();
-			} else {
-				log =
-					this.pool.log()
-						.getWeak(
-							(new StringBuilder())
-								.append("w-")
-								.append(this.workerIndex)
-								.toString()
-						);
-			}
+			log = this._log();
 			this._log.set(
 				new SoftReference<xLog>(
 					log
@@ -315,6 +365,15 @@ public class xThreadPoolWorker implements xStartable {
 			);
 			return log;
 		}
+	}
+	protected xLog _log() {
+		final String poolName = this.pool.poolName;
+		final String workerName = this.getWorkerName();
+		if (poolName.equalsIgnoreCase(workerName))
+			return this.pool.log();
+		return
+			xLogRoot.Get()
+				.getWeak( this.getWorkerName() );
 	}
 
 

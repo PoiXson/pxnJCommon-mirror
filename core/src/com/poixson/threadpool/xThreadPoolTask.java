@@ -1,13 +1,8 @@
 package com.poixson.threadpool;
 
 import java.lang.ref.SoftReference;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
@@ -17,129 +12,73 @@ import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
-public class xThreadPoolTask<V> implements Future<V>, RunnableNamed {
+public class xThreadPoolTask implements Runnable {
 
-	private final xThreadPool pool;
-	private final String taskName;
-
-	private final    long taskIndex;
-	private volatile long runIndex;
-
-	private final FutureTask<V> future;
-	private volatile Exception ex = null;
+	protected final xThreadPool pool;
+	protected final AtomicReference<String> taskName =
+			new AtomicReference<String>(null);
+	protected final Runnable run;
+	protected final long taskIndex;
 
 	// state
-	private final AtomicBoolean running = new AtomicBoolean(false);
+	protected final AtomicLong runIndex = new AtomicLong(0);
+	protected final AtomicBoolean running = new AtomicBoolean(false);
+	protected final AtomicReference<Exception> ex =
+			new AtomicReference<Exception>(null);
 
 	// worker owning this task
-	private final AtomicReference<xThreadPoolWorker> worker =
+	protected final AtomicReference<xThreadPoolWorker> worker =
 			new AtomicReference<xThreadPoolWorker>(null);
 
 
 
-	public xThreadPoolTask(final xThreadPool pool, final Callable<V> call) {
-		this(
-			pool,
-			call,
-			RunnableNamed.GetName(call)
-		);
+	public xThreadPoolTask(final xThreadPool pool, final Runnable run) {
+		this(null, pool, run);
 	}
-	public xThreadPoolTask(final xThreadPool pool,
-			final Callable<V> call, final String taskName) {
-		this(
-			pool,
-			new FutureTask<V>(call),
-			taskName
-		);
-	}
-	public xThreadPoolTask(final xThreadPool pool,
-			final FutureTask<V> future, final String taskName) {
-		if (pool   == null) throw new RequiredArgumentException("pool");
-		if (future == null) throw new RequiredArgumentException("future");
-		this.pool   = pool;
-		this.future = future;
+	public xThreadPoolTask(final String taskName,
+			final xThreadPool pool, final Runnable run) {
+		if (pool == null) throw new RequiredArgumentException("pool");
+		if (run  == null) throw new RequiredArgumentException("run");
+		this.pool = pool;
+		this.run  = run;
+		if (Utils.notEmpty(taskName)) {
+			this.taskName.set(taskName);
+		} else {
+			final String name = RunnableNamed.GetName(run);
+			if (Utils.notEmpty(name))
+				this.taskName.set(name);
+		}
 		this.taskIndex = this.pool.getNextTaskIndex();
-		this.taskName = ( Utils.isEmpty(taskName) ? null : taskName );
 	}
 
 
 
-	// run the task
+	// ------------------------------------------------------------------------------- //
+	// run task
+
+
+
 	@Override
 	public void run() {
-		if (this.future.isCancelled())
-			return;
 		if ( ! this.running.compareAndSet(false, true) )
 			throw new IllegalStateException("Task already running");
 		final Thread currentThread = Thread.currentThread();
 		final String originalThreadName = currentThread.getName();
-		final xLog log = this.log();
 		try {
-			if (this.future.isCancelled()) return;
-			if (this.future.isDone()) throw new IllegalStateException("Task already done");
 			// set thread name
-			{
-				final StringBuilder str = new StringBuilder();
-				if (Utils.isEmpty(this.taskName)) {
-					str.append("Task")
-						.append(this.taskIndex);
-				} else {
-					str.append(this.taskName);
-				}
-				final String threadName = str.toString();
-				currentThread.setName(threadName);
-				log.finest("Running task:", threadName);
-			}
+			currentThread.setName( this.getTaskName() );
+			this.worker.get().log()
+				.finest("Running task:", taskName);
 			// run the task
-			try {
-				this.future.run();
-				this.future.get();
-			} catch (Exception e) {
-				this.ex = e;
-				this.future.cancel(false);
-			}
+			this.run.run();
+		} catch (Exception e) {
+			this.ex.set(e);
 		} finally {
 			// finished task
 			this.running.set(false);
 			// restore thread name
 			currentThread.setName(originalThreadName);
 		}
-	}
-
-
-
-	// ------------------------------------------------------------------------------- //
-	// get result
-
-
-
-	@Override
-	public V get() throws InterruptedException, ExecutionException {
-		if (this.ex != null)
-			throw new ExecutionException(this.ex);
-		final Future<V> future = this.future;
-		if (future == null)
-			return null;
-		return future.get();
-	}
-	@Override
-	public V get(final long timeout, final TimeUnit unit)
-			throws InterruptedException, ExecutionException, TimeoutException {
-		if (this.ex != null)
-			throw new ExecutionException(this.ex);
-		final Future<V> future = this.future;
-		if (future == null)
-			return null;
-		return future.get(timeout, unit);
-	}
-
-
-
-	public boolean hasException() {
-		return (this.ex != null);
-	}
-	public Exception getException() {
-		return this.ex;
 	}
 
 
@@ -152,28 +91,25 @@ public class xThreadPoolTask<V> implements Future<V>, RunnableNamed {
 	public boolean isRunning() {
 		return this.running.get();
 	}
-	@Override
 	public boolean isDone() {
-		return this.future
-				.isDone();
-	}
-
-
-
-	public boolean cancel() {
-		return this.cancel(false);
-	}
-	@Override
-	public boolean cancel(boolean mayInterruptIfRunning) {
-		return this.future
-				.cancel(mayInterruptIfRunning);
-	}
-	@Override
-	public boolean isCancelled() {
-		if (this.ex != null)
+		final long index = this.runIndex.get();
+		if (index <= 0)
+			return false;
+		if (index == 1) {
+			if (this.running.get())
+				return false;
 			return true;
-		return this.future
-				.isCancelled();
+		}
+		return true;
+	}
+
+
+
+	public boolean hasException() {
+		return (this.ex.get() != null);
+	}
+	public Exception getException() {
+		return this.ex.get();
 	}
 
 
@@ -183,29 +119,41 @@ public class xThreadPoolTask<V> implements Future<V>, RunnableNamed {
 
 
 
-	@Override
 	public String getTaskName() {
-		return this.taskName;
+		final String name = this.taskName.get();
+		if (Utils.notEmpty(name))
+			return name;
+		return
+			(new StringBuilder())
+				.append("Task")
+				.append(this.taskIndex)
+				.toString();
 	}
-	@Override
-	public void setTaskName(final String name) {
-		throw new UnsupportedOperationException("Cannot change task name!");
+	public void setTaskName(final String taskName) {
+		this.taskName.set(taskName);
+		this._log.set(null);
 	}
-	@Override
-	public boolean taskNameEquals(final String name) {
-		if (Utils.isEmpty(name))
-			return false;
-		return name.equals(this.getTaskName());
+	public boolean taskNameEquals(final String taskName) {
+		if (Utils.isEmpty(taskName))
+			return Utils.isEmpty(this.taskName.get());
+		return taskName.equals(this.taskName.get());
 	}
 
 
 
+	public xThreadPool getPool() {
+		return this.pool;
+	}
+
+
+
+	// worker running this task
 	public xThreadPoolWorker getWorker() {
 		final xThreadPoolWorker worker = this.worker.get();
 		if (worker == null) {
 			throw new NullPointerException(
 				StringUtils.ReplaceTags(
-					"Task doesn't have a worker set! This should be handled by the thread pool!",
+					"Task '{}' doesn't have a worker set! This should be handled by the thread pool!",
 					this.getTaskName()
 				)
 			);
@@ -214,18 +162,14 @@ public class xThreadPoolTask<V> implements Future<V>, RunnableNamed {
 	}
 	public void setWorker(final xThreadPoolWorker worker) {
 		if (worker == null) throw new RequiredArgumentException("worker");
-		if ( ! this.worker.compareAndSet(null, worker))
+		if ( ! this.worker.compareAndSet(null, worker) )
 			throw new RuntimeException("worker already set!");
 	}
 
 
 
-	public Future<V> getFuture() {
-		return this.future;
-	}
-	public xThreadPool getPool() {
-		return this.pool;
-	}
+	// ------------------------------------------------------------------------------- //
+	// stats
 
 
 
@@ -233,7 +177,7 @@ public class xThreadPoolTask<V> implements Future<V>, RunnableNamed {
 		return this.taskIndex;
 	}
 	public long getRunIndex() {
-		return this.runIndex;
+		return this.runIndex.get();
 	}
 
 
@@ -245,6 +189,7 @@ public class xThreadPoolTask<V> implements Future<V>, RunnableNamed {
 
 	private final AtomicReference<SoftReference<xLog>> _log =
 			new AtomicReference<SoftReference<xLog>>(null);
+
 	public xLog log() {
 		// cached logger
 		final SoftReference<xLog> ref = this._log.get();
@@ -255,9 +200,7 @@ public class xThreadPoolTask<V> implements Future<V>, RunnableNamed {
 		}
 		// get logger
 		{
-			final xLog log =
-				this.worker.get()
-					.log();
+			final xLog log = this._log();
 			this._log.set(
 				new SoftReference<xLog>(
 					log
@@ -265,6 +208,12 @@ public class xThreadPoolTask<V> implements Future<V>, RunnableNamed {
 			);
 			return log;
 		}
+	}
+	protected xLog _log() {
+		return
+			this.worker.get()
+				.log()
+				.get( this.getTaskName() );
 	}
 
 

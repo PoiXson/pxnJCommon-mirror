@@ -2,7 +2,13 @@ package com.poixson.threadpool.types;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.poixson.app.xVars;
+import com.poixson.logger.xLevel;
+import com.poixson.logger.xLog;
+import com.poixson.logger.xLogRoot;
 import com.poixson.threadpool.xThreadPool;
+import com.poixson.threadpool.xThreadPoolWorker;
+import com.poixson.utils.ThreadUtils;
 
 
 public class xThreadPool_Main extends xThreadPool_SingleWorker {
@@ -41,12 +47,77 @@ public class xThreadPool_Main extends xThreadPool_SingleWorker {
 
 	protected xThreadPool_Main() {
 		super(MAIN_POOL_NAME);
+		this.keepOneAlive.set(true);
+		this.imposeMain.set(false);
 	}
 
 
 
 	// ------------------------------------------------------------------------------- //
-	// which thread
+	// start/stop
+
+
+
+	// start blocking
+	@Override
+	public void run() {
+		if (stoppingAll.get()) return;
+		this.start();
+		{
+			final xThreadPoolWorker worker =
+				new xThreadPoolWorker(
+					this,
+					Thread.currentThread(),
+					MAIN_POOL_NAME
+				);
+			this.registerWorker(worker);
+			if (worker.isRunning())
+				throw new RuntimeException("Single thread pool worker is already active");
+			worker.run();
+		}
+		xLogRoot.Get()
+			.publish(
+				( xVars.isDebug() ? xLevel.WARNING : xLevel.INFO ),
+				"Main thread returning.."
+			);
+		ThreadUtils.Sleep(100L);
+		if (this.isMainPool()) {
+			System.exit(1);
+		}
+	}
+
+
+
+	@Override
+	protected void startNewWorkerIfNeededAndAble() {
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// config
+
+
+
+	@Override
+	public boolean keepOneAlive() {
+		return true;
+	}
+	@Override
+	public void setKeepOneAlive(final boolean keepOne) {
+		throw new UnsupportedOperationException();
+	}
+
+
+
+	@Override
+	public boolean isImposeMainPool() {
+		return false;
+	}
+	@Override
+	public void setImposeMainPool(final boolean impose) {
+		throw new UnsupportedOperationException();
+	}
 
 
 
@@ -54,29 +125,17 @@ public class xThreadPool_Main extends xThreadPool_SingleWorker {
 	public boolean isMainPool() {
 		return true;
 	}
-	@Override
-	public boolean isEventDispatchPool() {
-		return false;
-	}
-
-
-
-	@Override
-	public boolean imposeMainPool() {
-		return false;
-	}
-	@Override
-	public void setImposeMainPool() {
-		throw new UnsupportedOperationException();
-	}
-	public void disableImposeMainPool() {
-		throw new UnsupportedOperationException();
-	}
 
 
 
 	// ------------------------------------------------------------------------------- //
-	// stats
+	// logger
+
+
+
+	protected xLog _log() {
+		return xLogRoot.Get( "thpool-"+MAIN_POOL_NAME );
+	}
 
 
 

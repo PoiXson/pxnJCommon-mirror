@@ -28,8 +28,15 @@ public class xThreadPool_GUI extends xThreadPool_SingleWorker {
 		// new instance
 		{
 			final xThreadPool_GUI pool = new xThreadPool_GUI();
-			if (instance.compareAndSet(null, pool))
+			if (instance.compareAndSet(null, pool)) {
+				final xThreadPool existing =
+					pools.putIfAbsent(DISPATCH_POOL_NAME, pool);
+				if (existing != null) {
+					instance.set( (xThreadPool_GUI) existing );
+					return (xThreadPool_GUI) existing;
+				}
 				return pool;
+			}
 			return instance.get();
 		}
 	}
@@ -38,6 +45,10 @@ public class xThreadPool_GUI extends xThreadPool_SingleWorker {
 
 	protected xThreadPool_GUI() {
 		super(DISPATCH_POOL_NAME);
+		this.imposeMain.set(false);
+		this.keepOneAlive.set(false);
+		this.imposeMain.set(false);
+		this.allowNewThreads.set(false);
 	}
 
 
@@ -51,18 +62,63 @@ public class xThreadPool_GUI extends xThreadPool_SingleWorker {
 
 	@Override
 	protected void startNewWorkerIfNeededAndAble() {
-		xThreadPoolWorker worker = this.worker.get();
-		if (worker == null) {
-			try {
-				worker = new xThreadPool_GUI_Worker(this);
-				if ( ! this.worker.compareAndSet(null, worker) )
-					worker = this.worker.get();
-			} catch (RuntimeException ignore) {}
+		if (xThreadPool.stoppingAll.get() || this.stopping.get()) return;
+		{
+			final xThreadPoolWorker existing = this.worker.get();
+			if (existing == null) {
+				// new worker
+				final xThreadPoolWorker worker =
+					new xThreadPoolWorker_GUI(this);
+				this.worker.compareAndSet(null, worker);
+			}
 		}
-		if (worker == null) throw new NullPointerException();
+		// start event dispatch thread
 		SwingUtilities.invokeLater(
 			this.worker.get()
 		);
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// config
+
+
+
+	@Override
+	public boolean keepOneAlive() {
+		return false;
+	}
+	@Override
+	public void setKeepOneAlive(final boolean keepOne) {
+		throw new UnsupportedOperationException();
+	}
+
+
+
+	@Override
+	public boolean isImposeMainPool() {
+		return false;
+	}
+	@Override
+	public void setImposeMainPool(final boolean impose) {
+		throw new UnsupportedOperationException();
+	}
+
+
+
+	public boolean allowNewThreads() {
+		return false;
+	}
+	public void setManualThread(final boolean manual) {
+		throw new UnsupportedOperationException();
+	}
+
+
+
+	@Override
+	public boolean isEventDispatchPool() {
+		return true;
 	}
 
 
@@ -72,9 +128,9 @@ public class xThreadPool_GUI extends xThreadPool_SingleWorker {
 
 
 
-	protected class xThreadPool_GUI_Worker extends xThreadPoolWorker {
+	protected class xThreadPoolWorker_GUI extends xThreadPoolWorker {
 
-		public xThreadPool_GUI_Worker(final xThreadPool pool) {
+		public xThreadPoolWorker_GUI(final xThreadPool pool) {
 			super(pool);
 			pool.registerWorker(this);
 		}
@@ -92,8 +148,8 @@ public class xThreadPool_GUI extends xThreadPool_SingleWorker {
 
 		@Override
 		public void run() {
-			if ( ! this.running.get() )
-				this.running.set(true);
+			if (stoppingAll.get() || this.stopping.get()) return;
+			this.running.set(true);
 			{
 				final Thread thread = this.thread.get();
 				if (thread == null) {
@@ -107,12 +163,13 @@ public class xThreadPool_GUI extends xThreadPool_SingleWorker {
 			}
 			// get task from queues
 			try {
-				final xThreadPoolTask<?> task =
+				final xThreadPoolTask task =
 					this.pool.grabNextTask();
 				// run the task
 				if (task != null) {
 					this.runTask(task);
 					this.runCount.incrementAndGet();
+					// run more tasks
 					SwingUtilities.invokeLater(this);
 					return;
 				}
@@ -122,26 +179,13 @@ public class xThreadPool_GUI extends xThreadPool_SingleWorker {
 			}
 			// idle
 			this.log().detail("Idle thread..");
-			if (this.stopping)
+			if (this.stopping.get()) {
 				this.running.set(false);
+			} else {
+				this.log().detail("Idle..");
+			}
 		}
 
-	}
-
-
-
-	// ------------------------------------------------------------------------------- //
-	// which thread
-
-
-
-	@Override
-	public boolean isMainPool() {
-		return true;
-	}
-	@Override
-	public boolean isEventDispatchPool() {
-		return false;
 	}
 
 

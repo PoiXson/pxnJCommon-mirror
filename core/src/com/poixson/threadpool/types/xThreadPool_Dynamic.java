@@ -7,7 +7,7 @@ public class xThreadPool_Dynamic extends xThreadPool_MultiWorkers {
 
 	public static xThreadPool_Dynamic get() {
 //TODO:
-return null;
+throw new UnsupportedOperationException("UNFINISHED");
 	}
 
 
@@ -15,9 +15,6 @@ return null;
 	protected xThreadPool_Dynamic(final String poolName) {
 		super(poolName);
 	}
-
-
-
 
 
 
