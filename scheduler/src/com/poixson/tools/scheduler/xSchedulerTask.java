@@ -49,7 +49,7 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 	// wait functions
 	private final ReentrantLock waitForNextRunStart_Lock     = new ReentrantLock();
 	private final ReentrantLock waitForNextRunCompleted_Lock = new ReentrantLock();
-	private final Condition waitForNextRunStart =     this.waitForNextRunStart_Lock.newCondition();
+	private final Condition waitForNextRunStart     = this.waitForNextRunStart_Lock.newCondition();
 	private final Condition waitForNextRunCompleted = this.waitForNextRunCompleted_Lock.newCondition();
 
 

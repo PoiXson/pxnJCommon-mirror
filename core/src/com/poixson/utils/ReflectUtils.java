@@ -13,6 +13,8 @@ public final class ReflectUtils {
 
 
 	public static String getClassName(final Class<?> clss) {
+		if (clss == null)
+			return null;
 		return clss.getSimpleName();
 	}
 
@@ -67,6 +69,8 @@ public final class ReflectUtils {
 
 
 	public static Class<?>[] ArgsToClasses(final Object...args) {
+		if (Utils.isEmpty(args))
+			return null;
 		Class<?>[] classes = new Class[args.length];
 		for (int i=0; i<args.length; i++) {
 			classes[i] = args[i].getClass();

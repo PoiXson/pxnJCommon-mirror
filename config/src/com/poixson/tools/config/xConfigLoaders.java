@@ -142,7 +142,7 @@ public final class xConfigLoaders {
 					// copy default file
 					try {
 						xLogRoot.Get()
-							.info("Creating default file: {}", fileStr);
+							.info("Creating default file:", fileStr);
 						ioUtils.ExportResource(
 							fileStr,
 							ioUtils.OpenResource(cfgClass, fileStr)

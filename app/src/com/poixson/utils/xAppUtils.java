@@ -37,7 +37,7 @@ public final class xAppUtils {
 		result.put( "Current dir", System.getProperty("user.dir")       );
 		result.put( "java home",   System.getProperty("java.home")      );
 		if (xVars.isDebug())
-			result.put("Debug", "true");
+			result.put("Debug Mode", "");
 		return result;
 //TODO:
 //		if (Utils.notEmpty(args)) {

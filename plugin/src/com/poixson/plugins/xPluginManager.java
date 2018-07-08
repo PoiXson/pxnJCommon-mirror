@@ -294,7 +294,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 		final T existing =
 			this.plugins.putIfAbsent(pluginName, plugin);
 		if (existing != null) {
-			this.log().warning("Plugin already loaded: {}", pluginName);
+			this.log().warning("Plugin already loaded:", pluginName);
 			return false;
 		}
 		return true;

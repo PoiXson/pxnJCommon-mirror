@@ -44,10 +44,10 @@ import com.poixson.utils.Utils;
  *  105  start console input - xAppSteps_Console
  *  200  startup time        - xAppStandard
  *  400  load plugins        - xPluginManager
- *  405  start plugins       - xPluginManager
+ *  400  start plugins       - xPluginManager
  *
  * Shutdown sequence
- *  405  stop plugins        - xPluginManager
+ *  400  stop plugins        - xPluginManager
  *  400  unload plugins      - xPluginManager
  *  150  stop schedulers     - xAppSteps_Scheduler
  *  105  stop console input  - xAppSteps_Console
