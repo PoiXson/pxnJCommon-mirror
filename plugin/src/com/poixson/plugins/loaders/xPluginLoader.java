@@ -1,112 +1,220 @@
 package com.poixson.plugins.loaders;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Map;
-import java.util.jar.JarFile;
 
 import org.xeustechnologies.jcl.JarClassLoader;
-import org.xeustechnologies.jcl.context.DefaultContextLoader;
-import org.xeustechnologies.jcl.context.JclContext;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
-import com.poixson.logger.xLogRoot;
+import com.poixson.plugins.xJavaPlugin;
+import com.poixson.plugins.xPluginDefines;
+import com.poixson.plugins.xPluginManager;
+import com.poixson.plugins.xPluginYML;
 import com.poixson.utils.ConfigUtils;
 import com.poixson.utils.Utils;
-import com.poixson.utils.ioUtils;
 
 
-public class xPluginLoader<T extends xJavaPlugin> {
+public abstract class xPluginLoader<T extends xJavaPlugin> implements Runnable {
 
 	protected final xPluginManager<T> manager;
 
-	private volatile String pluginMainClassKey = null;
+	protected final String mainClassKey;
 
 
 
-	public xPluginLoader(final xPluginManager<T> manager) {
+	public xPluginLoader(final xPluginManager<T> manager, final String mainClassKey) {
 		if (manager == null) throw new RequiredArgumentException("manager");
 		this.manager = manager;
-		final JarClassLoader jcl = new JarClassLoader();
-		final DefaultContextLoader context = new DefaultContextLoader(jcl);
-		context.loadContext();
+		this.mainClassKey = (
+			Utils.isEmpty(mainClassKey)
+			? xPluginDefines.DEFAULT_PLUGIN_CLASS_KEY
+			: mainClassKey
+		);
 	}
 
 
 
-	protected xPluginYML LoadPluginYML(final File file) {
-		if (file == null)   throw new RequiredArgumentException("file");
-		if (!file.exists()) throw new RuntimeException("Plugin file not found: "+file.getPath());
-		JarFile jarFile = null;
-		InputStream in  = null;
-		xPluginYML yml  = null;
-		try {
-			jarFile = new JarFile(file);
-			in = ioUtils.OpenFileFromJar(
-				jarFile,
-				"plugin.yml"
-			);
-			if (in == null)
-				throw new IOException("Failed to load plugin.yml from: "+file.getName());
-			final Map<String, Object> datamap =
-				ConfigUtils.LoadYamlFromStream(in);
-			if (datamap == null)
-				throw new IOException("Failed to load yaml from jar file: "+file.getName());
-			yml = new xPluginYML(
-				datamap,
-				this.pluginMainClassKey
-			);
-		} catch (IOException e) {
-			this.log().trace(e);
+	// ------------------------------------------------------------------------------- //
+	// load plugin
+
+
+
+	protected abstract int load();
+
+
+
+	@Override
+	public void run() {
+		final int count = this.load();
+		if (count > 0) {
+			this.log()
+				.info(
+					"Found [ {} ] plugin{}",
+					count,
+					(count == 1 ? "" : "s")
+				);
+		}
+	}
+
+
+
+	// load plugin jar file
+	protected T loadJarFile(final File file) {
+		if (file == null) throw new RequiredArgumentException("file");
+		if ( ! file.exists() ) {
+			this.log().warning("Plugin file not found:", file.getPath());
 			return null;
+		}
+		final String jarFileStr = file.getName();
+		final String resFileStr = xPluginDefines.PLUGIN_YML_FILE;
+		// jar class loader
+		this.log().finest("Loading plugin jar:", file.getName());
+		final JarClassLoader jcl = new JarClassLoader();
+		try {
+			jcl.add(
+				new FileInputStream(file)
+			);
+			//jcl.add( file.toURI().toURL() );
+		} catch (IOException e) {
+			this.log().trace(e, "Failed to load plugin jar file");
+			return null;
+		}
+		// load plugin.yml file
+		final xPluginYML yml =
+			this.loadPluginYML(
+				jcl,
+				jarFileStr,
+				resFileStr
+			);
+		if (yml == null)
+			return null;
+		// load plugin instance
+		final T plugin =
+			this.loadPluginClass(
+				jcl,
+				yml
+			);
+		if (plugin == null)
+			return null;
+		return plugin;
+	}
+
+
+
+	// load plugin.yml file
+	protected xPluginYML loadPluginYML(final JarClassLoader jcl,
+			final String jarFileStr, final String resFileStr) {
+		if (jcl == null) throw new RequiredArgumentException("jcl");
+		if (Utils.isEmpty(jarFileStr)) throw new RequiredArgumentException("jarFileStr");
+		if (Utils.isEmpty(resFileStr)) throw new RequiredArgumentException("resFileStr");
+		InputStream in = null;
+		try {
+			in = jcl.getResourceAsStream(resFileStr);
 		} finally {
 			Utils.safeClose(in);
-			Utils.safeClose(jarFile);
 		}
+		if (in == null) {
+			this.log().warning("Failed to load yaml file {} from jar:", resFileStr, jarFileStr);
+			return null;
+		}
+		final Map<String, Object> datamap = ConfigUtils.LoadYamlFromStream(in);
+		if (datamap == null) {
+			this.log().warning("Failed to parse yaml file {} from jar:", resFileStr, jarFileStr);
+			return null;
+		}
+		final xPluginYML yml =
+			new xPluginYML(
+				datamap,
+				this.mainClassKey
+			);
 		// validate yml key values
 		if (Utils.isEmpty(yml.getPluginName())) {
-			this.log()
-				.warning(
-					"Plugin name not set in plugin.yml: {}",
-					file.getName()
-				);
+			this.log().warning("Plugin name not set in {} of {}", resFileStr, jarFileStr);
 			return null;
 		}
 		if (Utils.isEmpty(yml.getMainClass())) {
-			this.log()
-				.warning(
-					"'{}' not set in plugin.yml: {}",
-					this.pluginMainClassKey,
-					file.getName()
-				);
+			this.log().warning("'{}' not set in {} of {}", this.mainClassKey, resFileStr, jarFileStr);
 			return null;
 		}
 		return yml;
 	}
-	protected T LoadPluginClass(final File file, final xPluginYML yml) {
-		if (file == null)   throw new RequiredArgumentException("file");
-		if (yml  == null)   throw new RequiredArgumentException("yml");
-		if (!file.exists()) throw new RuntimeException("Plugin file not found: "+file.getPath());
-		this.log()
-			.info(
-				"Loading plugin: {} {}",
-				yml.getPluginName(),
-				yml.getPluginVersion()
-			);
+
+
+
+	// load plugin instance
+	protected T loadPluginClass(final JarClassLoader jcl, final xPluginYML yml) {
+		if (jcl == null) throw new RequiredArgumentException("jcl");
+		if (yml == null) throw new RequiredArgumentException("yml");
+		final String pluginName = yml.getPluginName();
+		this.log().info("Loading plugin:", yml.getPluginTitle());
 		// check plugin already loaded
-		if (this.manager != null) {
-			if ( this.manager.isPluginLoaded(yml.getPluginName()) ) {
-				this.log()
-					.warning("Plugin already loaded: {}", yml.getPluginName());
-				return null;
-			}
+		if ( this.manager.isPluginLoaded(pluginName) ) {
+			this.log().warning("Plugin already loaded:", pluginName);
+			return null;
 		}
+		// find plugin class
+		final String classStr = yml.getMainClass();
+		if (Utils.isEmpty(classStr))
+			return null;
+		// load plugin class
+		Class<T> clss = null;
+		try {
+			this.log().finest("Attempting to load plugin main class:", classStr);
+			clss = this.castPluginClass(
+				jcl.loadClass(classStr)
+			);
+		} catch (ClassNotFoundException e) {
+			this.log().trace(e);
+		}
+		if (clss == null)
+			return null;
+		// get plugin class constructor
+		Constructor<T> construct = null;
+		try {
+			construct = clss.getConstructor();
+		} catch (NoSuchMethodException e) {
+			this.log().trace(e);
+		} catch (SecurityException e) {
+			this.log().trace(e);
+		}
+		if (construct == null)
+			return null;
+		// new plugin class instance
+		T plugin = null;
+		try {
+			plugin = construct.newInstance();
+		} catch (InstantiationException e) {
+			this.log().trace(e);
+		} catch (IllegalAccessException e) {
+			this.log().trace(e);
+		} catch (IllegalArgumentException e) {
+			this.log().trace(e);
+		} catch (InvocationTargetException e) {
+			this.log().trace(e);
+		}
+		if (plugin == null)
+			return null;
+		if (plugin.isFailed())
+			return null;
+		plugin.setVars(
+			jcl,
+			this.manager,
+			yml
+		);
+		// register with plugin manager
+		this.manager.register(plugin);
+		return plugin;
+	}
+	@SuppressWarnings("unchecked")
+	protected Class<T> castPluginClass(final Class<?> clss) {
+		return (Class<T>) clss;
+	}
 //TODO: plugins can depend on other plugins
 //		// check required libraries
 //		final Set<String> required;
@@ -121,112 +229,17 @@ public class xPluginLoader<T extends xJavaPlugin> {
 //			for (final String libPath : required) {
 //				if (!Utils.isLibAvailable(libPath)) {
 //					this.log()
-//						.fatal("Plugin requires library: {}", libPath);
+//						.fatal("Plugin requires library:", libPath);
 //					return null;
 //				}
 //			}
 //		}
-		final String mainClassStr = yml.getMainClass();
-		if (Utils.isBlank(mainClassStr))
-			return null;
-		final String classStr = (
-			mainClassStr.endsWith(".class")
-			? mainClassStr.substring(0, mainClassStr.length() - 6)
-			: mainClassStr
-		);
-		// load plugin class
-		final Class<T> clss;
-		try {
-			final JarClassLoader jcl = this.getJarClassLoader();
-			final URL url = file.toURI().toURL();
-			this.log()
-				.detail("Adding to class-loader: {}", file.getName());
-			jcl.add(url);
-			this.log().detail("Attempting to load plugin main class: {}", classStr);
-			clss = this.CastClass(
-				jcl.loadClass(classStr)
-			);
-		} catch (ClassNotFoundException e) {
-			this.log().trace(e);
-			return null;
-		} catch (MalformedURLException e) {
-			this.log().trace(e);
-			return null;
-		}
-		// get plugin class constructor
-		final Constructor<T> construct;
-		try {
-			construct = clss.getConstructor();
-		} catch (NoSuchMethodException | SecurityException e) {
-			this.log().trace(e);
-			return null;
-		}
-		// new plugin class instance
-		final T plugin;
-		try {
-			plugin = construct.newInstance();
-		} catch (InstantiationException | IllegalAccessException
-		| IllegalArgumentException | InvocationTargetException e) {
-			this.log().trace(e);
-			return null;
-		}
-		plugin.init(this.manager, yml);
-		// register with manager
-		if (this.manager != null) {
-			this.manager.register(plugin);
-		}
-		return plugin;
-	}
-	@SuppressWarnings("unchecked")
-	protected Class<T> CastClass(final Class<?> clss) {
-		return (Class<T>) clss;
-	}
-
-
-
-	public JarClassLoader getJarClassLoader() {
-		return JclContext.get();
-	}
-	public JarClassLoader getJarClassLoader(final String group) {
-		return JclContext.get(group);
-	}
-//TODO: default to isolated class loaders?
-/*
-	// get jar class loader
-	protected JarClassLoader getJarClassLoader() {
-		// independent
-		if(INDEPENDENT_CLASS_LOADERS)
-			return new JarClassLoader();
-		// shared context
-		if(this.jcl == null) {
-			synchronized(this.jclLock) {
-				if(this.jcl == null) {
-					this.jcl = new JarClassLoader();
-					final DefaultContextLoader context = new DefaultContextLoader(this.jcl);
-					context.loadContext();
-				}
-			}
-		}
-		return this.jcl;
-	}
-*/
-
-
-
-	public xPluginLoader<T> setPluginMainClassKey(final String key) {
-		this.pluginMainClassKey = key;
-		return this;
-	}
 
 
 
 	// logger
 	public xLog log() {
-		return (
-			this.manager == null
-			? xLogRoot.Get()
-			: this.manager.log()
-		);
+		return this.manager.log();
 	}
 
 

@@ -11,6 +11,7 @@ public final class xPluginDefines {
 
 	public static final String DEFAULT_PLUGINS_DIR      = "plugins/";
 	public static final String DEFAULT_PLUGIN_CLASS_KEY = "Main Class";
+	public static final String PLUGIN_YML_FILE          = "plugin.yml";
 
 	// plugin.yml keys
 	public static final String PLUGIN_YML_NAME        = "Plugin Name";
