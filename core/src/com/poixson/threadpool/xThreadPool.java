@@ -1,6 +1,7 @@
 package com.poixson.threadpool;
 
 import java.lang.ref.SoftReference;
+import java.rmi.UnexpectedException;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -475,6 +476,18 @@ public abstract class xThreadPool implements xStartable {
 				TaskPriority.NOW,
 				args
 			);
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// throw exception if not in expected thread
+
+
+
+	public void threadOrException() throws UnexpectedException {
+		if ( ! this.isCurrentThread() )
+			throw new RuntimeException();
 	}
 
 
