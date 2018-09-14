@@ -148,8 +148,9 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 				final T plugin = this.findNextToRun(xPluginState.INIT);
 				if (plugin == null)
 					break INIT_BLOCK;
+				final xLog log = plugin.log();
 				try {
-					this.log().finest("Init plugin:", plugin.getPluginName());
+					log.finest("Init plugin:", plugin.getPluginName());
 					plugin.init();
 					if (plugin.notFailed()) {
 						if (plugin.setState( null, xPluginState.INIT )) {
@@ -160,12 +161,12 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 				} catch (Exception e) {
 					final xPluginState previousState =
 						plugin.setState(xPluginState.FAILED);
-					this.log().trace(e);
+					log.trace(e);
 					if ( ! xPluginState.FAILED.equals(previousState) ) {
 						try {
 							plugin.failed();
 						} catch (Exception e2) {
-							this.log().trace(e2);
+							log.trace(e2);
 						}
 					}
 				} // end catch e
@@ -179,8 +180,9 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 				final T plugin = this.findNextToRun(xPluginState.START);
 				if (plugin == null)
 					break START_BLOCK;
+				final xLog log = plugin.log();
 				try {
-					this.log().finest("Start plugin:", plugin.getPluginName());
+					log.finest("Starting plugin:", plugin.getPluginName());
 					if (plugin.setState( xPluginState.INIT, xPluginState.START)) {
 						plugin.start();
 						if (plugin.notFailed()) {
@@ -190,12 +192,12 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 				} catch (Exception e) {
 					final xPluginState previousState =
 						plugin.setState(xPluginState.FAILED);
-					this.log().trace(e);
+					log.trace(e);
 					if ( ! xPluginState.FAILED.equals(previousState) ) {
 						try {
 							plugin.failed();
 						} catch (Exception e2) {
-							this.log().trace(e2);
+							log.trace(e2);
 						}
 					}
 				} // end catch e
@@ -293,7 +295,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 		final T existing =
 			this.plugins.putIfAbsent(pluginName, plugin);
 		if (existing != null) {
-			this.log().warning("Plugin already loaded:", pluginName);
+			plugin.log().warning("Plugin already loaded:", pluginName);
 			return false;
 		}
 		return true;
