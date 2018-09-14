@@ -113,7 +113,10 @@ public abstract class xWindow extends JFrame implements Closeable, AttachedLogge
 			return;
 		// close window
 		this.log().fine("Closing window:", this.getWindowKey());
+		this.doClose();
 		this.dispose();
+	}
+	protected void doClose() {
 	}
 	public boolean isClosing() {
 		return this.closing.get();
