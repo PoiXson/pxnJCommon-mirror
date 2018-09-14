@@ -41,21 +41,25 @@ public abstract class xJavaPlugin implements xStartable, AttachedLogger {
 
 
 
+	// load/unload
 	public void init() {}
 	public void unload() {}
 
 
+	// start/stop
 	@Override
 	public void start() {}
 	@Override
 	public void stop() {}
 
 
-	public void failed() {}
-
-
+	// run loop
 	@Override
 	public void run() {}
+
+
+	// failed
+	public void failed() {}
 
 
 
