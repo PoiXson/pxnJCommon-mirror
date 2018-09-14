@@ -108,8 +108,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 					this.log().warning("No plugins found to load");
 				} else {
 					this.log().info( "Loading [ {} ] plugin{}..", count, (count == 1 ? "" : "s") );
-					xThreadPool_Main.get()
-						.runTaskLater("init plugins", this);
+					this.queueRun("Init-Plugins");
 				}
 			}
 		} // end sync
@@ -171,7 +170,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 					}
 				} // end catch e
 				// queue run again
-				this.queueRun("init plugins");
+				this.queueRun("Start-Plugins");
 				return;
 			}
 			// start next plugin
@@ -201,7 +200,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 					}
 				} // end catch e
 				// queue run again
-				this.queueRun("start plugins");
+				this.queueRun("Finished-Loading-Plugins");
 				return;
 			}
 			// finished loading plugins
