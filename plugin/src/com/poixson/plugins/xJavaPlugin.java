@@ -12,6 +12,8 @@ import com.poixson.logger.xLog;
 import com.poixson.logger.xLogRoot;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.remapped.RemappedMethod;
+import com.poixson.utils.StringUtils;
+import com.poixson.utils.Utils;
 
 
 public abstract class xJavaPlugin implements xStartable, AttachedLogger {
@@ -126,16 +128,17 @@ public abstract class xJavaPlugin implements xStartable, AttachedLogger {
 		// has already failed
 		if (xPluginState.FAILED.equals(previousState))
 			return false;
+		final String pluginName = this.getPluginNameSafe();
 		// fail the plugin
 		this.log()
 			.severe(
 				"Plugin {} has failed!",
-				this.getPluginName(),
+				pluginName,
 				msg
 			);
 		xThreadPool_Main.get()
 			.runTaskLater(
-				"fail plugin "+this.getPluginName(),
+				"fail plugin "+pluginName,
 				new RemappedMethod<Object>(this, "fail")
 			);
 		final xThreadPool_Main pool = xThreadPool_Main.get();
@@ -143,12 +146,12 @@ public abstract class xJavaPlugin implements xStartable, AttachedLogger {
 			switch (previousState) {
 			case RUNNING:
 				pool.runTaskLater(
-					"stop plugin "+this.getPluginName(),
+					"stop plugin "+pluginName,
 					new RemappedMethod<Object>(this, "stop")
 				);
 			case INIT:
 				pool.runTaskLater(
-					"unload plugin "+this.getPluginName(),
+					"unload plugin "+pluginName,
 					new RemappedMethod<Object>(this, "unload")
 				);
 			default:
@@ -177,6 +180,26 @@ public abstract class xJavaPlugin implements xStartable, AttachedLogger {
 		final xPluginYML yml = this.yml.get();
 		if (yml == null) throw new RuntimeException("yml not set!");
 		return yml.getPluginName();
+	}
+	public String getPluginNameSafe() {
+		try {
+		final String name = this.getPluginName();
+		if (Utils.notEmpty(name))
+			return name;
+		} catch (RuntimeException ignore) {}
+		{
+			final String className =
+				StringUtils.PeekLastPart(
+					this.getClass().getName(),
+					'.'
+				);
+			if (Utils.isEmpty(className)) throw new RuntimeException("Failed to detect window class name");
+			return
+				(new StringBuilder())
+					.append("Plugin:")
+					.append(className)
+					.toString();
+		}
 	}
 
 
@@ -290,7 +313,7 @@ public abstract class xJavaPlugin implements xStartable, AttachedLogger {
 	protected xLog _log() {
 		return
 			xLogRoot.Get(
-				"Plugin:"+this.getPluginName()
+				"Plugin:"+this.getPluginNameSafe()
 			);
 	}
 
