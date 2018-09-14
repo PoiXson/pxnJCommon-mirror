@@ -251,7 +251,7 @@ public abstract class xThreadPool implements xStartable {
 		// run now as current thread
 		if (TaskPriority.NOW.equals(pr)) {
 			// delay this if manual workers only
-			if (this.allowNewThreads()) {
+			if (this.isAllowNewThreads()) {
 				final xThreadPoolWorker worker = this.getCurrentWorker();
 				if (worker != null) {
 					task.setWorker(worker);
@@ -580,11 +580,20 @@ public abstract class xThreadPool implements xStartable {
 
 
 	// allow/disable creating new worker threads
-	public boolean allowNewThreads() {
+	public boolean isAllowNewThreads() {
 		return this.allowNewThreads.get();
 	}
-	public void setManualThread(final boolean manual) {
-		this.allowNewThreads.set(manual);
+	public boolean isManualNewThreads() {
+		return ! this.isAllowNewThreads();
+	}
+	public void setAllowNewThreads(final boolean allow) {
+		this.allowNewThreads.set(allow);
+	}
+	public void setAllowNewThreads() {
+		this.setAllowNewThreads(true);
+	}
+	public void setManualNewThreads() {
+		this.setAllowNewThreads(false);
 	}
 
 

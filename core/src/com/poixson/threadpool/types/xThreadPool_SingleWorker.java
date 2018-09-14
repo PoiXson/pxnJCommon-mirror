@@ -42,7 +42,7 @@ public abstract class xThreadPool_SingleWorker extends xThreadPool {
 		// existing worker
 		if (this.worker.get() != null)
 			return;
-		if ( ! this.allowNewThreads() )
+		if (this.isManualNewThreads())
 			return;
 		// new worker
 		{

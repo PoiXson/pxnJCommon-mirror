@@ -107,10 +107,24 @@ public class xThreadPool_GUI extends xThreadPool_SingleWorker {
 
 
 
-	public boolean allowNewThreads() {
+	@Override
+	public boolean isAllowNewThreads() {
 		return false;
 	}
-	public void setManualThread(final boolean manual) {
+	@Override
+	public boolean isManualNewThreads() {
+		return true;
+	}
+	@Override
+	public void setAllowNewThreads(final boolean allow) {
+		throw new UnsupportedOperationException();
+	}
+	@Override
+	public void setAllowNewThreads() {
+		throw new UnsupportedOperationException();
+	}
+	@Override
+	public void setManualNewThreads() {
 		throw new UnsupportedOperationException();
 	}
 

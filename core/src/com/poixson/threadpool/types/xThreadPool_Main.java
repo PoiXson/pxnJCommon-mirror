@@ -49,6 +49,7 @@ public class xThreadPool_Main extends xThreadPool_SingleWorker {
 		super(MAIN_POOL_NAME);
 		this.keepOneAlive.set(true);
 		this.imposeMain.set(false);
+		this.allowNewThreads.set(false);
 	}
 
 
