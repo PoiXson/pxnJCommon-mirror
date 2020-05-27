@@ -20,7 +20,7 @@
 			"GroupId": "org.quartz-scheduler",
 			"ArtifactId": "quartz",
 			"Name": "Quartz",
-			"Version": "3.3.9"
+			"Version": "2.3.2"
 		}
 	}
 }
