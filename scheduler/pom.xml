@@ -1,4 +1,4 @@
-<!-- Generated on: May 27, 2020 00:26 UTC -->
+<!-- Generated on: May 27, 2020 06:39 UTC -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -9,7 +9,7 @@
 	<groupId>com.poixson</groupId>
 	<version>4.0.0</version>
 	<packaging>jar</packaging>
-	<url>http://poixson.com</url>
+	<url>https://poixson.com</url>
 	<scm>
 		<url>https://git.poixson.com/summary/pxn!pxnCommon.git</url>
 		<connection>scm:git:https://lorenzop@git.poixson.com/r/pxn/pxnCommon.git</connection>
@@ -21,7 +21,7 @@
 	</issueManagement>
 	<organization>
 		<name>PoiXson</name>
-		<url>http://poixson.com</url>
+		<url>https://poixson.com</url>
 	</organization>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

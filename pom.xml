@@ -6,13 +6,13 @@
 	<name>pxnCommon</name>
 	<artifactId>common</artifactId>
 	<groupId>com.poixson</groupId>
-	<version>3.6.2</version>
+	<version>4.0.0</version>
 	<packaging>pom</packaging>
 	<url>http://poixson.com</url>
 	<scm>
-		<url>https://github.com/GrowControl/pxnCommon</url>
-		<connection>scm:git:https://github.com/GrowControl/pxnCommon.git</connection>
-		<developerConnection>scm:git:git@github.com:GrowControl/pxnCommon.git</developerConnection>
+		<url>https://git.poixson.com/summary/pxn!pxnCommon.git</url>
+		<connection>scm:git:https://lorenzop@git.poixson.com/r/pxn/pxnCommon.git</connection>
+		<developerConnection>scm:git:ssh://lorenzop@git.poixson.com/pxn/pxnCommon.git</developerConnection>
 	</scm>
 	<ciManagement>
 		<url>ci.poixson.com</url>
@@ -23,8 +23,8 @@
 		<url>http://poixson.com</url>
 	</organization>
 	<issueManagement>
-		<url>https://github.com/GrowControl/pxnCommon/issues</url>
-		<system>github</system>
+		<url>https://git.poixson.com/tickets/pxn!pxnCommon.git</url>
+		<system>pxnhub</system>
 	</issueManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
