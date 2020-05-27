@@ -1,7 +1,6 @@
 package com.poixson.tools.abstractions;
 
 import java.util.Iterator;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.poixson.exceptions.RequiredArgumentException;
@@ -9,7 +8,7 @@ import com.poixson.exceptions.RequiredArgumentException;
 
 public class RunnableMultiplier implements Runnable {
 
-	private final Set<Runnable> runs = new CopyOnWriteArraySet<Runnable>();
+	private final CopyOnWriteArraySet<Runnable> runnables = new CopyOnWriteArraySet<Runnable>();
 
 
 
@@ -21,14 +20,21 @@ public class RunnableMultiplier implements Runnable {
 
 	public void add(final Runnable run) {
 		if (run == null) throw new RequiredArgumentException("run");
-		this.runs.add(run);
+		this.runnables.add(run);
+	}
+	public void remove(final Runnable run) {
+		if (run == null) throw new RequiredArgumentException("run");
+		this.runnables.remove(run);
+	}
+	public void clear() {
+		this.runnables.clear();
 	}
 
 
 
 	@Override
 	public void run() {
-		final Iterator<Runnable> it = this.runs.iterator();
+		final Iterator<Runnable> it = this.runnables.iterator();
 		while (it.hasNext()) {
 			final Runnable run = it.next();
 			run.run();
