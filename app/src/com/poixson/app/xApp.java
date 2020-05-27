@@ -63,11 +63,6 @@ public abstract class xApp implements xStartable, AttachedLogger {
 	protected static final CopyOnWriteArraySet<xApp> apps =
 			new CopyOnWriteArraySet<xApp>();
 
-	// app state
-	protected static final int STATE_OFF     = 0;
-	protected static final int STATE_START   = 1;
-	protected static final int STATE_STOP    = Integer.MIN_VALUE;
-	protected static final int STATE_RUNNING = Integer.MAX_VALUE;
 
 	// current steps
 	protected final AtomicInteger state = new AtomicInteger(0);
