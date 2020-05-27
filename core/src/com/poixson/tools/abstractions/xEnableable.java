@@ -1,4 +1,4 @@
-package com.poixson.abstractions;
+package com.poixson.tools.abstractions;
 
 
 public interface xEnableable {
