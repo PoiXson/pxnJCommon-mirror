@@ -35,7 +35,7 @@ public final class StringUtils {
 
 
 	// object to string
-	public static String CastString(final Object obj) {
+	public static String ToString(final Object obj) {
 		// null
 		if (obj == null)
 			return null;
@@ -50,7 +50,7 @@ public final class StringUtils {
 				count++;
 				result
 					.append('{')
-					.append( CastString(o) )
+					.append( ToString(o) )
 					.append('}');
 			}
 			return result.toString();
@@ -567,7 +567,7 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 		String[] addStrings = new String[ addThis.length ];
 		int index = 0;
 		for (final Object obj : addThis) {
-			addStrings[index] = CastString(obj);
+			addStrings[index] = ToString(obj);
 			index++;
 		}
 		return MergeStrings(delim, addStrings);
@@ -577,7 +577,7 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 		String[] addStrings = new String[ addThis.length ];
 		int index = 0;
 		for (final Object obj : addThis) {
-			addStrings[index] = CastString(obj);
+			addStrings[index] = ToString(obj);
 			index++;
 		}
 		return MergeStrings(delim, addStrings);
@@ -938,7 +938,7 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 			final String str = (
 				obj == null
 				? "<null>"
-				: CastString(obj)
+				: ToString(obj)
 			);
 			// {#}
 			{
@@ -997,7 +997,7 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 			final String str = (
 				args[argIndex] == null
 				? "<null>"
-				: CastString(args[argIndex])
+				: ToString(args[argIndex])
 			);
 			// {#} - all instances
 			{
@@ -1086,7 +1086,7 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 			final String str = (
 				obj == null
 				? "<null>"
-				: CastString(obj)
+				: ToString(obj)
 			);
 			// {key}
 			{
@@ -1141,7 +1141,7 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 			final String str = (
 				obj == null
 				? "<null>"
-				: CastString(obj)
+				: ToString(obj)
 			);
 			// {key}
 			{
