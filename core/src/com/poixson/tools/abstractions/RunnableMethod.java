@@ -10,7 +10,7 @@ import com.poixson.utils.ReflectUtils;
 import com.poixson.utils.Utils;
 
 
-public class RemappedMethod<V> extends xRunnable {
+public class RunnableMethod<V> extends xRunnable {
 
 	public final Object container;
 	public final Method method;
@@ -21,7 +21,7 @@ public class RemappedMethod<V> extends xRunnable {
 
 
 
-	public RemappedMethod(final Object container,
+	public RunnableMethod(final Object container,
 			final String methodName, final Object...args) {
 		this(
 			null,
@@ -30,7 +30,7 @@ public class RemappedMethod<V> extends xRunnable {
 			args
 		);
 	}
-	public RemappedMethod(final Object container,
+	public RunnableMethod(final Object container,
 			final Method methodName, final Object...args) {
 		this(
 			null,
@@ -39,7 +39,7 @@ public class RemappedMethod<V> extends xRunnable {
 			args
 		);
 	}
-	public RemappedMethod(final String taskName, final Object container,
+	public RunnableMethod(final String taskName, final Object container,
 			final String methodName, final Object...args) {
 		this(
 			taskName,
@@ -48,7 +48,7 @@ public class RemappedMethod<V> extends xRunnable {
 			args
 		);
 	}
-	public RemappedMethod(final String taskName, final Object container,
+	public RunnableMethod(final String taskName, final Object container,
 			final Method method, final Object...args) {
 		if (container == null) throw new RequiredArgumentException("container");
 		if (method == null)    throw new RequiredArgumentException("method");
