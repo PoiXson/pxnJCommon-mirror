@@ -14,8 +14,8 @@ import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.tools.Keeper;
 
 
-public class StringUtils extends StringAdvUtils {
-	StringUtils() {}
+public final class StringUtils {
+	private StringUtils() {}
 	static { Keeper.add(new StringUtils()); }
 
 
@@ -31,49 +31,8 @@ public class StringUtils extends StringAdvUtils {
 
 
 
-	// decode string
-	public static String decode(final String raw) {
-		return decode(
-			raw,
-			null,
-			null
-		);
-	}
-	public static String decodeDef(final String raw, final String defaultStr) {
-		return
-			decode(
-				raw,
-				defaultStr,
-				null
-			);
-	}
-	public static String decodeCh(final String raw, final String charset) {
-		return
-			decode(
-				raw,
-				null,
-				charset
-			);
-	}
-	public static String decode(final String raw, final String defaultStr, final String charset) {
-		if (charset == null) {
-			return
-				decode(
-					raw,
-					defaultStr,
-					DEFAULT_CHARSET.name()
-				);
-		}
-		try {
-			return URLDecoder.decode(raw, charset);
-		} catch (UnsupportedEncodingException ignore) {}
-		return defaultStr;
-	}
-
-
-
 	// object to string
-	public static String toString(final Object obj) {
+	public static String CastString(final Object obj) {
 		// null
 		if (obj == null)
 			return null;
@@ -88,7 +47,7 @@ public class StringUtils extends StringAdvUtils {
 				count++;
 				result
 					.append('{')
-					.append( toString(o) )
+					.append( CastString(o) )
 					.append('}');
 			}
 			return result.toString();
@@ -127,6 +86,33 @@ public class StringUtils extends StringAdvUtils {
 		final StringWriter writer = new StringWriter(256);
 		e.printStackTrace(new PrintWriter(writer));
 		return writer.toString().trim();
+	}
+
+
+
+	// decode string
+	public static String decode(final String raw) {
+		return decode(raw, null, null);
+	}
+	public static String decodeDef(final String raw, final String defaultStr) {
+		return decode(raw, defaultStr, null);
+	}
+	public static String decodeCh(final String raw, final String charset) {
+		return decode(raw, null, charset);
+	}
+	public static String decode(final String raw, final String defaultStr, final String charset) {
+		if (charset == null) {
+			return
+				decode(
+					raw,
+					defaultStr,
+					DEFAULT_CHARSET.name()
+				);
+		}
+		try {
+			return URLDecoder.decode(raw, charset);
+		} catch (UnsupportedEncodingException ignore) {}
+		return defaultStr;
 	}
 
 
@@ -522,13 +508,6 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 	public static int IndexOf(final String string, final char...delims) {
 		return IndexOf(string, 0, delims);
 	}
-	public static int LastIndexOf(final String string, final int fromIndex, final char...delims) {
-//TODO:
-		throw new UnsupportedOperationException("UNFINISHED");
-	}
-	public static int LastIndexOf(final String string, final char...delims) {
-		return LastIndexOf(string, 0, delims);
-	}
 
 
 
@@ -556,13 +535,6 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 	}
 	public static int IndexOf(final String string, final String...delims) {
 		return IndexOf(string, 0, delims);
-	}
-	public static int LastIndexOf(final String string, final int fromIndex, final String...delims) {
-//TODO:
-		throw new UnsupportedOperationException("UNFINISHED");
-	}
-	public static int LastIndexOf(final String string, final String...delims) {
-		return LastIndexOf(string, 0, delims);
 	}
 
 
@@ -607,6 +579,11 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 			: pos
 		);
 	}
+
+
+	// ------------------------------------------------------------------------------- //
+	// string parts
+
 
 
 	// get first part (many delims)
