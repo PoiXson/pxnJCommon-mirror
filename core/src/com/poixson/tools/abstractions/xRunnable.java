@@ -2,31 +2,40 @@ package com.poixson.tools.abstractions;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
+import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
 public class xRunnable implements RunnableNamed {
 
+	public final Runnable task;
+
 	protected final AtomicReference<String> taskName = new AtomicReference<String>(null);
 
-	public final Runnable task;
+	protected final AtomicLong    runCount = new AtomicLong(0);
+	protected final AtomicInteger active   = new AtomicInteger(0);
 
 
 
 	public xRunnable() {
-		this( null, null );
+		this(null, null);
 	}
 	public xRunnable(final String taskName) {
-		this( taskName, null );
+		this(taskName, null);
 	}
 	public xRunnable(final xRunnable run) {
-		this( run.getTaskName(), run );
+		this(
+			run.getTaskName(),
+			run
+		);
 	}
 	public xRunnable(final Runnable run) {
-		this( (String) null, run );
+		this(null, run);
 	}
 	public xRunnable(final String taskName, final Runnable run) {
 		if (Utils.notEmpty(taskName)) {
@@ -81,13 +90,30 @@ public class xRunnable implements RunnableNamed {
 	public void run() {
 		final Runnable task = this.task;
 		if (task == null) throw new RequiredArgumentException("task");
-		task.run();
+		this.runCount.getAndIncrement();
+		this.active.getAndIncrement();
+		try {
+			task.run();
+		} finally {
+			this.active.getAndDecrement();
+		}
+	}
+	public void runOnce() {
+		final Runnable task = this.task;
+		if (task == null) throw new RequiredArgumentException("task");
+		if (!this.runCount.compareAndSet(0, 1))
+			return;
+		this.active.getAndIncrement();
+		try {
+			task.run();
+		} finally {
+			this.active.getAndDecrement();
+		}
 	}
 
 
 
 	// ------------------------------------------------------------------------------- //
-	// config
 
 
 
@@ -103,19 +129,37 @@ public class xRunnable implements RunnableNamed {
 		return this.taskName.get();
 	}
 	@Override
-	public void setTaskName(final String taskName) {
-		this.taskName.set(
-			Utils.isEmpty(taskName)
-			? null
-			: taskName
-		);
+	public void setTaskName(final String name) {
+		if (Utils.isEmpty(name)) {
+			this.taskName.set(null);
+		} else {
+			this.taskName.set(name);
+		}
 	}
 	@Override
-	public boolean taskNameEquals(final String taskName) {
-		final String thisName = this.getTaskName();
-		if (Utils.isEmpty(taskName))
-			return Utils.isEmpty(thisName);
-		return taskName.equals(thisName);
+	public boolean taskNameEquals(final String matchName) {
+		return StringUtils.StrEqualsExact(this.getTaskName(), matchName);
+	}
+
+
+
+	public boolean hasRun() {
+		return (this.runCount.get() > 0);
+	}
+	public boolean notRun() {
+		return (this.runCount.get() == 0);
+	}
+
+
+
+	public boolean isActive() {
+		return (this.active.get() > 0);
+	}
+	public boolean notActive() {
+		return (this.active.get() == 0);
+	}
+	public int getActive() {
+		return this.active.get();
 	}
 
 
