@@ -7,6 +7,7 @@ public interface xCloseable extends Closeable {
 
 
 	public boolean isClosed();
+	public boolean notClosed();
 
 
 }

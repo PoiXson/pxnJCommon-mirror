@@ -7,12 +7,6 @@ public interface RunnableNamed extends Runnable {
 
 
 
-	public String getTaskName();
-	public void setTaskName(final String name);
-	public boolean taskNameEquals(final String name);
-
-
-
 	public static String GetName(final Runnable run) {
 		if (run == null)
 			return null;
@@ -27,6 +21,12 @@ public interface RunnableNamed extends Runnable {
 			return ((RunnableNamed) call).getTaskName();
 		return null;
 	}
+
+
+
+	public String getTaskName();
+	public void setTaskName(final String name);
+	public boolean taskNameEquals(final String name);
 
 
 
