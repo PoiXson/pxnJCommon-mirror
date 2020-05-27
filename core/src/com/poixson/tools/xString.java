@@ -6,8 +6,6 @@ import com.poixson.utils.Utils;
 public class xString {
 
 	protected String data  = null;
-	protected String next  = null;
-	protected String delim = null;
 
 
 
@@ -207,63 +205,6 @@ public class xString {
 			this.data = StringUtils.PadCenter(width, data, padding);
 		}
 		return this;
-	}
-
-
-
-	// ------------------------------------------------------------------------------- //
-	// parser
-
-
-
-	public xString delim(final String delimStr) {
-		this.delim = (
-			Utils.isEmpty(delimStr)
-			? null
-			: delimStr
-		);
-		return this;
-	}
-	public String delim() {
-		return this.delim;
-	}
-
-
-
-	public boolean hasNext() {
-		if (this.isEmpty())
-			return false;
-		final String dlm = this.delim;
-		if (Utils.isEmpty(dlm))
-			return false;
-		String data = this.data.trim();
-		while (data.startsWith(dlm)) {
-			data = data.substring(dlm.length()).trim();
-		}
-		if (data.isEmpty()) {
-			this.data = "";
-			return false;
-		}
-		// find next delim
-		final int pos = data.indexOf(dlm);
-		if (pos == -1) {
-			this.next = data;
-			this.data = "";
-		} else {
-			this.next = data.substring(0, pos);
-			this.data = data.substring(pos + dlm.length());
-		}
-		return true;
-	}
-	public String part() {
-		return this.next;
-	}
-	public String getNext() {
-		return (
-			this.hasNext()
-			? this.part()
-			: null
-		);
 	}
 
 
