@@ -2,7 +2,7 @@
 	"Name": "pxnCommon-Core",
 	"ArtifactId": "common-core",
 	"GroupId": "com.poixson",
-	"Version": "3.6.2",
+	"Version": "4.0.0",
 	"URL": "http://poixson.com",
 	"Hub-Path": "https://git.poixson.com/summary/pxn!pxnCommon.git",
 	"SCM-Path": "https://lorenzop@git.poixson.com/r/pxn/pxnCommon.git",

@@ -2,7 +2,7 @@
 	"Name": "pxnCommon-Shell",
 	"ArtifactId": "common-shell",
 	"GroupId": "com.poixson",
-	"Version": "3.6.2",
+	"Version": "4.0.0",
 	"URL": "http://poixson.com",
 	"Hub-Path": "https://git.poixson.com/summary/pxn!pxnCommon.git",
 	"SCM-Path": "https://lorenzop@git.poixson.com/r/pxn/pxnCommon.git",
@@ -14,13 +14,13 @@
 			"GroupId": "com.poixson",
 			"ArtifactId": "common-core",
 			"Name": "pxnCommon-Core",
-			"Version": "3.6.2"
+			"Version": "4.0.0"
 		},
 		"pxnCommon-App": {
 			"GroupId": "com.poixson",
 			"ArtifactId": "common-app",
 			"Name": "pxnCommon-App",
-			"Version": "3.6.2"
+			"Version": "4.0.0"
 		},
 		"jLine": {
 			"GroupId": "org.jline",
