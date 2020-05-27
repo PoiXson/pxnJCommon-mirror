@@ -1,4 +1,4 @@
-package com.poixson.tools.remapped;
+package com.poixson.tools.abstractions;
 
 import java.util.Iterator;
 import java.util.Set;
