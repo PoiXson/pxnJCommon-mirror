@@ -20,7 +20,7 @@
 			"GroupId": "org.slf4j",
 			"ArtifactId": "slf4j-api",
 			"Name": "slf4j",
-			"Version": "1.7.25"
+			"Version": "1.7.30"
 		}
 	}
 }
