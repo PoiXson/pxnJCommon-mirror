@@ -3,6 +3,7 @@ package com.poixson.tools;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
+
 public class xString {
 
 	protected String data  = null;
@@ -18,11 +19,14 @@ public class xString {
 	public static xString getNew(final Object obj) {
 		return new xString(obj);
 	}
+
+
+
 	public xString(final String data) {
 		this.data = data;
 	}
 	public xString(final Object obj) {
-		this.data = StringUtils.toString(obj);
+		this.data = StringUtils.CastString(obj);
 	}
 
 
@@ -143,17 +147,11 @@ public class xString {
 			return -1;
 		return StringUtils.IndexOf(data, fromIndex, delims);
 	}
-	public int lastIndexOf(final String...delims) {
+	public int indexOfLast(final String...delims) {
 		final String data = this.data;
 		if (data == null)
 			return -1;
-		return StringUtils.LastIndexOf(data, delims);
-	}
-	public int lastIndexOf(final int fromIndex, final String...delims) {
-		final String data = this.data;
-		if (data == null)
-			return -1;
-		return StringUtils.LastIndexOf(data, fromIndex, delims);
+		return StringUtils.IndexOfLast(data, delims);
 	}
 
 
