@@ -3,9 +3,9 @@ package com.poixson.app;
 import com.poixson.tools.Keeper;
 
 
-public final class appDefines {
-	private appDefines() {}
-	static { Keeper.add(new appDefines()); }
+public final class xAppDefines {
+	private xAppDefines() {}
+	static { Keeper.add(new xAppDefines()); }
 
 
 
