@@ -1,3 +1,4 @@
+/*
 package com.poixson.exceptions;
 
 import com.poixson.utils.StringUtils;
@@ -27,3 +28,4 @@ public class MismatchedVersionException extends Exception {
 
 
 }
+*/

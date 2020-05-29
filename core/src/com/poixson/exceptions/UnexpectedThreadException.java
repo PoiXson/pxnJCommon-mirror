@@ -1,3 +1,4 @@
+/*
 package com.poixson.exceptions;
 
 
@@ -12,3 +13,4 @@ public class UnexpectedThreadException extends RuntimeException {
 
 
 }
+*/
