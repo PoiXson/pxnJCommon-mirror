@@ -13,13 +13,11 @@
 		"pxnCommon-Core": {
 			"GroupId": "com.poixson",
 			"ArtifactId": "common-core",
-			"Name": "pxnCommon-Core",
 			"Version": "4.0.0"
 		},
 		"pxnCommon-Config": {
 			"GroupId": "com.poixson",
 			"ArtifactId": "common-config",
-			"Name": "pxnCommon-Config",
 			"Version": "4.0.0"
 		},
 		"jcl": {
@@ -27,10 +25,9 @@
 			"ArtifactId": "jcl-core",
 			"Version": "2.8"
 		},
-		"snakeyaml": {
+		"SnakeYAML": {
 			"GroupId": "org.yaml",
 			"ArtifactId": "snakeyaml",
-			"Name": "SnakeYAML",
 			"Version": "1.26"
 		}
 	}

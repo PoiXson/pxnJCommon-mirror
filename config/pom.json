@@ -13,13 +13,11 @@
 		"pxnCommon-Core": {
 			"GroupId": "com.poixson",
 			"ArtifactId": "common-core",
-			"Name": "pxnCommon-Core",
 			"Version": "4.0.0"
 		},
-		"snakeyaml": {
+		"SnakeYAML": {
 			"GroupId": "org.yaml",
 			"ArtifactId": "snakeyaml",
-			"Name": "SnakeYAML",
 			"Version": "1.26"
 		}
 	}

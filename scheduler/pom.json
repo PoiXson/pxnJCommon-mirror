@@ -13,13 +13,11 @@
 		"pxnCommon-Core": {
 			"GroupId": "com.poixson",
 			"ArtifactId": "common-core",
-			"Name": "pxnCommon-Core",
 			"Version": "4.0.0"
 		},
 		"Quartz": {
 			"GroupId": "org.quartz-scheduler",
 			"ArtifactId": "quartz",
-			"Name": "Quartz",
 			"Version": "2.3.2"
 		}
 	}

@@ -13,25 +13,21 @@
 		"pxnCommon-Core": {
 			"GroupId": "com.poixson",
 			"ArtifactId": "common-core",
-			"Name": "pxnCommon-Core",
 			"Version": "4.0.0"
 		},
 		"pxnCommon-App": {
 			"GroupId": "com.poixson",
 			"ArtifactId": "common-app",
-			"Name": "pxnCommon-App",
 			"Version": "4.0.0"
 		},
 		"jLine": {
 			"GroupId": "org.jline",
 			"ArtifactId": "jline",
-			"Name": "jLine",
 			"Version": "3.15.0"
 		},
 		"jAnsi": {
 			"GroupId": "org.fusesource.jansi",
 			"ArtifactId": "jansi",
-			"Name": "jAnsi",
 			"Version": "1.18"
 		}
 	}

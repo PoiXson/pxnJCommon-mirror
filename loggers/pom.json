@@ -13,13 +13,11 @@
 		"pxnCommon-Core": {
 			"GroupId": "com.poixson",
 			"ArtifactId": "common-core",
-			"Name": "pxnCommon-Core",
 			"Version": "4.0.0"
 		},
 		"slf4j": {
 			"GroupId": "org.slf4j",
 			"ArtifactId": "slf4j-api",
-			"Name": "slf4j",
 			"Version": "1.7.30"
 		}
 	}
