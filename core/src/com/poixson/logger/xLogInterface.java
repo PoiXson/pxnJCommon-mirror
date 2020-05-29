@@ -1,4 +1,4 @@
-package com.poixson.logger.printers;
+package com.poixson.logger;
 
 import java.io.IOException;
 
@@ -7,7 +7,7 @@ import com.poixson.logger.formatters.xLogFormatter;
 import com.poixson.logger.records.xLogRecord;
 
 
-public interface xLogPrinter {
+public interface xLogInterface {
 
 
 	public void publish(final xLogRecord record) throws IOException;
