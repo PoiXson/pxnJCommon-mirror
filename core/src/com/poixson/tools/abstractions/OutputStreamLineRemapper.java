@@ -1,4 +1,4 @@
-package com.poixson.tools.remapped;
+package com.poixson.tools.abstractions;
 
 import java.io.IOException;
 import java.io.OutputStream;

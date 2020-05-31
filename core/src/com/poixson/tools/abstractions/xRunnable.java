@@ -29,10 +29,7 @@ public class xRunnable implements RunnableNamed {
 		this(taskName, null);
 	}
 	public xRunnable(final xRunnable run) {
-		this(
-			run.getTaskName(),
-			run
-		);
+		this(run.getTaskName(), run);
 	}
 	public xRunnable(final Runnable run) {
 		this(null, run);
