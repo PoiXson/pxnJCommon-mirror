@@ -29,15 +29,11 @@ public final class ReflectUtils {
 			? (Class<?>) container
 			: container.getClass()
 		);
-		if (clss == null) return null;
+		if (clss == null)
+			return null;
 		try {
-			return
-				clss.getMethod(
-					methodName,
-					ArgsToClasses(args)
-				);
-		} catch (NoSuchMethodException
-				| SecurityException e) {
+			return clss.getMethod( methodName, ArgsToClasses(args) );
+		} catch (NoSuchMethodException | SecurityException e) {
 			throw new IllegalArgumentException("Invalid method: "+methodName, e);
 		}
 	}
@@ -54,11 +50,7 @@ public final class ReflectUtils {
 		if (container == null) throw new IllegalArgumentException("container");
 		if (method == null)    throw new IllegalArgumentException("method");
 		try {
-			return
-				method.invoke(
-					container,
-					args
-				);
+			return method.invoke(container, args);
 		} catch (IllegalAccessException
 				| IllegalArgumentException
 				| InvocationTargetException e) {
@@ -71,7 +63,7 @@ public final class ReflectUtils {
 	public static Class<?>[] ArgsToClasses(final Object...args) {
 		if (Utils.isEmpty(args))
 			return null;
-		Class<?>[] classes = new Class[args.length];
+		final Class<?>[] classes = new Class[args.length];
 		for (int i=0; i<args.length; i++) {
 			classes[i] = args[i].getClass();
 		}

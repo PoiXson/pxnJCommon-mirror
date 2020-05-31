@@ -112,7 +112,7 @@ public final class NumberUtils {
 
 
 	// parse number
-	public static Integer toInteger(final String value) {
+	public static Integer ToInteger(final String value) {
 		if (Utils.isEmpty(value))
 			return null;
 		try {
@@ -120,7 +120,7 @@ public final class NumberUtils {
 		} catch (NumberFormatException ignore) {}
 		return null;
 	}
-	public static int toInteger(final String value, final int def) {
+	public static int ToInteger(final String value, final int def) {
 		try {
 			return Integer.parseInt(value);
 		} catch (NumberFormatException ignore) {}
@@ -128,7 +128,7 @@ public final class NumberUtils {
 	}
 
 	// parse byte
-	public static Byte toByte(final String value) {
+	public static Byte ToByte(final String value) {
 		if (Utils.isEmpty(value))
 			return null;
 		try {
@@ -136,7 +136,7 @@ public final class NumberUtils {
 		} catch (NumberFormatException ignore) {}
 		return null;
 	}
-	public static byte toByte(final String value, final byte def) {
+	public static byte ToByte(final String value, final byte def) {
 		try {
 			return Byte.parseByte(value);
 		} catch (NumberFormatException ignore) {}
@@ -144,7 +144,7 @@ public final class NumberUtils {
 	}
 
 	// parse short
-	public static Short toShort(final String value) {
+	public static Short ToShort(final String value) {
 		if (Utils.isEmpty(value))
 			return null;
 		try {
@@ -152,7 +152,7 @@ public final class NumberUtils {
 		} catch (NumberFormatException ignore) {}
 		return null;
 	}
-	public static short toShort(final String value, final short def) {
+	public static short ToShort(final String value, final short def) {
 		try {
 			return Short.parseShort(value);
 		} catch (NumberFormatException ignore) {}
@@ -160,7 +160,7 @@ public final class NumberUtils {
 	}
 
 	// parse long
-	public static Long toLong(final String value) {
+	public static Long ToLong(final String value) {
 		if (Utils.isEmpty(value))
 			return null;
 		try {
@@ -168,7 +168,7 @@ public final class NumberUtils {
 		} catch (NumberFormatException ignore) {}
 		return null;
 	}
-	public static long toLong(final String value, final long def) {
+	public static long ToLong(final String value, final long def) {
 		try {
 			return Long.parseLong(value);
 		} catch (NumberFormatException ignore) {}
@@ -176,7 +176,7 @@ public final class NumberUtils {
 	}
 
 	// parse double
-	public static Double toDouble(final String value) {
+	public static Double ToDouble(final String value) {
 		if (Utils.isEmpty(value))
 			return null;
 		try {
@@ -184,7 +184,7 @@ public final class NumberUtils {
 		} catch (NumberFormatException ignore) {}
 		return null;
 	}
-	public static double toDouble(final String value, final double def) {
+	public static double ToDouble(final String value, final double def) {
 		try {
 			return Double.parseDouble(value);
 		} catch (NumberFormatException ignore) {}
@@ -192,7 +192,7 @@ public final class NumberUtils {
 	}
 
 	// parse float
-	public static Float toFloat(final String value) {
+	public static Float ToFloat(final String value) {
 		if (Utils.isEmpty(value))
 			return null;
 		try {
@@ -200,7 +200,7 @@ public final class NumberUtils {
 		} catch (NumberFormatException ignore) {}
 		return null;
 	}
-	public static float toFloat(final String value, final float def) {
+	public static float ToFloat(final String value, final float def) {
 		try {
 			return Float.parseFloat(value);
 		} catch (NumberFormatException ignore) {}
@@ -208,7 +208,7 @@ public final class NumberUtils {
 	}
 
 	// parse boolean
-	public static Boolean toBoolean(final String value) {
+	public static Boolean ToBoolean(final String value) {
 		if (Utils.isEmpty(value))
 			return null;
 		final String val = value.trim().toLowerCase();
@@ -231,8 +231,8 @@ public final class NumberUtils {
 		}
 		return null;
 	}
-	public static boolean toBoolean(final String value, final boolean def) {
-		final Boolean bool = toBoolean(value);
+	public static boolean ToBoolean(final String value, final boolean def) {
+		final Boolean bool = ToBoolean(value);
 		if (bool == null)
 			return def;
 		return bool.booleanValue();
@@ -241,14 +241,14 @@ public final class NumberUtils {
 
 
 	// is number
-	public static boolean isNumeric(final String value) {
+	public static boolean IsNumeric(final String value) {
 		if (Utils.isEmpty(value))
 			return false;
-		return (toLong(value) != null);
+		return (ToLong(value) != null);
 	}
 	// is boolean
-	public static boolean isBoolean(final String value) {
-		return (toBoolean(value) != null);
+	public static boolean IsBoolean(final String value) {
+		return (ToBoolean(value) != null);
 	}
 
 
@@ -370,29 +370,29 @@ public final class NumberUtils {
 
 
 	// is within range
-	public static boolean isMinMax(final int value, final int min, final int max) {
+	public static boolean IsMinMax(final int value, final int min, final int max) {
 		return (value == MinMax(value, min, max));
 	}
-	public static boolean isMinMax(final byte value, final byte min, final byte max) {
+	public static boolean IsMinMax(final byte value, final byte min, final byte max) {
 		return (value == MinMax(value, min, max));
 	}
-	public static boolean isMinMax(final short value, final short min, final short max) {
+	public static boolean IsMinMax(final short value, final short min, final short max) {
 		return (value == MinMax(value, min, max));
 	}
-	public static boolean isMinMax(final long value, final long min, final long max) {
+	public static boolean IsMinMax(final long value, final long min, final long max) {
 		return (value == MinMax(value, min, max));
 	}
-	public static boolean isMinMax(final double value, final double min, final double max) {
+	public static boolean IsMinMax(final double value, final double min, final double max) {
 		return (value == MinMax(value, min, max));
 	}
-	public static boolean isMinMax(final float value, final float min, final float max) {
+	public static boolean IsMinMax(final float value, final float min, final float max) {
 		return (value == MinMax(value, min, max));
 	}
 
 
 
 	// random number
-	public static int getRandom(final int minNumber, final int maxNumber) {
+	public static int GetRandom(final int minNumber, final int maxNumber) {
 		final Random gen = new Random(Utils.getSystemMillis());
 		return gen.nextInt(maxNumber - minNumber) + minNumber;
 	}
@@ -409,7 +409,7 @@ public final class NumberUtils {
 		}
 		int newNumber;
 		for (int i=0; i<100; i++) {
-			newNumber = getRandom(minNumber, maxNumber);
+			newNumber = GetRandom(minNumber, maxNumber);
 			if (newNumber != oldNumber) return newNumber;
 		}
 		throw new IllegalAccessError("Failed to generate a random number");
