@@ -1,7 +1,10 @@
 package com.poixson.tools;
 
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 public class xThreadFactory implements ThreadFactory {
@@ -9,9 +12,12 @@ public class xThreadFactory implements ThreadFactory {
 	protected final String  name;
 	protected final ThreadGroup group;
 	protected final boolean daemon;
-	protected volatile int  priority;
+	protected final AtomicInteger priority = new AtomicInteger(Thread.NORM_PRIORITY);
 
-	protected final AtomicInteger count = new AtomicInteger(0);
+	protected final CopyOnWriteArraySet<Thread> threads = new CopyOnWriteArraySet<Thread>();
+	protected final AtomicLong threadIndexCount = new AtomicLong(0L);
+
+	protected final CoolDown cool = new CoolDown();
 
 
 
@@ -33,39 +39,49 @@ public class xThreadFactory implements ThreadFactory {
 		this.name     = name;
 		this.group    = group;
 		this.daemon   = daemon;
-		this.priority = priority;
+		this.priority.set(priority);
+		this.cool.setDuration(1000L);
 	}
 
 
 
 	@Override
 	public Thread newThread(final Runnable run) {
-		if (this.count.get() > Integer.MAX_VALUE - 100)
-			throw new IllegalStateException("ThreadFactory count overflow!");
-		final int id = this.count.incrementAndGet();
+		this.cleanupThreads();
+		final long index = this.getNextThreadIndex();
 		final Thread thread = new Thread(this.group, run);
-		thread.setPriority(this.priority);
+		thread.setPriority(this.priority.get());
 		thread.setDaemon(this.daemon);
 		thread.setName(
-			(new StringBuilder())
-				.append(this.name)
-				.append(':')
-				.append(id)
-				.toString()
+			(new StringBuilder()).append(this.name).append(':').append(index).toString()
 		);
 		return thread;
 	}
 
 
 
-	public void setPriority(final int priority) {
-		if (priority > this.priority) {
-			this.group.setMaxPriority(priority);
+	public void cleanupThreads() {
+		if (!this.cool.runAgain()) return;
+		final Iterator<Thread> it = this.threads.iterator();
+		while (it.hasNext()) {
+			final Thread thread = it.next();
+			if (!thread.isAlive()) {
+				this.threads.remove(thread);
+			}
 		}
-		this.priority = priority;
-		if (priority < this.group.getMaxPriority()) {
-			this.group.setMaxPriority(priority);
-		}
+	}
+
+
+
+	public void setPriority(final int value) {
+		this.priority.set(value);
+		this.group.setMaxPriority(value);
+	}
+
+
+
+	public long getNextThreadIndex() {
+		return this.threadIndexCount.incrementAndGet();
 	}
 
 
