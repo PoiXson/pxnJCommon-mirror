@@ -3,7 +3,6 @@ package com.poixson.utils;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.poixson.app.xVars;
 import com.poixson.logger.xLogRoot;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.xTime;
@@ -33,10 +32,10 @@ public final class ThreadUtils {
 
 
 	// list running thread names
-	public static String[] getThreadNames() {
-		return getThreadNames(true);
+	public static String[] GetThreadNames() {
+		return GetThreadNames(true);
 	}
-	public static String[] getThreadNames(final boolean includeDaemon) {
+	public static String[] GetThreadNames(final boolean includeDaemon) {
 		final Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
 		if (threadSet.isEmpty())
 			return null;
@@ -65,15 +64,16 @@ public final class ThreadUtils {
 		return list.toArray(new String[0]);
 	}
 	public static int CountStillRunning() {
-		final String[] threadNames = getThreadNames(false);
+		final String[] threadNames = GetThreadNames(false);
 		if (threadNames == null)
 			return -1;
 		return threadNames.length;
 	}
 	// display threads still running
 	public static void DisplayStillRunning() {
-		if (xVars.notDebug()) return;
-		final String[] threadNames = getThreadNames(false);
+//TODO
+//		if (xVars.notDebug()) return;
+		final String[] threadNames = GetThreadNames(false);
 		// no threads still running
 		if (Utils.isEmpty(threadNames)) return;
 		// build message
@@ -91,9 +91,7 @@ public final class ThreadUtils {
 			msg.append("\n\nShould use xApp.waitUntilClosed() when main() is finished.\n");
 		}
 		xLogRoot.Get()
-			.publish(
-				msg.toString()
-			);
+			.warning( msg.toString() );
 	}
 
 
@@ -106,15 +104,11 @@ public final class ThreadUtils {
 		} catch (InterruptedException ignore) {}
 	}
 	public static void Sleep(final String time) {
-		Sleep(
-			xTime.getNew(time)
-		);
+		Sleep( xTime.getNew(time) );
 	}
 	public static void Sleep(final xTime time) {
 		if (time == null) return;
-		Sleep(
-			time.getMS()
-		);
+		Sleep( time.getMS() );
 	}
 
 
