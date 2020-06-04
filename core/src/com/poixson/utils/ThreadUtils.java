@@ -119,4 +119,13 @@ public final class ThreadUtils {
 
 
 
+	public static int getSystemCores() {
+		return Runtime.getRuntime().availableProcessors();
+	}
+	public static int getSystemCoresPlus(final int add) {
+		return getSystemCores() + add;
+	}
+
+
+
 }
