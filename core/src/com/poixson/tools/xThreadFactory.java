@@ -1,4 +1,4 @@
-package com.poixson.utils;
+package com.poixson.tools;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
