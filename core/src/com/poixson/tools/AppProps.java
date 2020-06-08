@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.poixson.app.Failure;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
@@ -28,7 +27,7 @@ public class AppProps {
 
 
 
-	public static AppProps LoadFromClassRef(final Class<?> clss) {
+	public static AppProps LoadFromClassRef(final Class<?> clss) throws IOException {
 		final Properties props;
 		InputStream in = null;
 		try {
@@ -36,7 +35,7 @@ public class AppProps {
 				StringUtils.ForceStarts("/", PROPS_FILE)
 			);
 			if (in == null) {
-				throw new RuntimeException(
+				throw new IOException(
 					StringUtils.ReplaceTags(
 						"Failed to load {} resource from jar",
 						PROPS_FILE
@@ -45,9 +44,6 @@ public class AppProps {
 			}
 			props = new Properties();
 			props.load(in);
-		} catch (IOException e) {
-			Failure.fail(e);
-			throw new RuntimeException(e);
 		} finally {
 			Utils.safeClose(in);
 		}
