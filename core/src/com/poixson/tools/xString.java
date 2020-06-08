@@ -26,7 +26,7 @@ public class xString {
 		this.data = data;
 	}
 	public xString(final Object obj) {
-		this.data = StringUtils.CastString(obj);
+		this.data = StringUtils.ToString(obj);
 	}
 
 
@@ -65,7 +65,7 @@ public class xString {
 	public xString remove(final String...strip) {
 		final String data = this.data;
 		if (data != null) {
-			this.data = StringUtils.RemoveFromStr(
+			this.data = StringUtils.RemoveFromString(
 				data,
 				strip
 			);
@@ -176,24 +176,24 @@ public class xString {
 	public xString replaceWith(final String replaceWhat, final String[] withWhat) {
 		final String data = this.data;
 		if (data != null) {
-			this.data = StringUtils.ReplaceWith(replaceWhat, withWhat, data);
+			this.data = StringUtils.ReplaceWith(data, replaceWhat, withWhat);
 		}
 		return this;
 	}
 
 
 
-	public xString pad(final int width, final char padding) {
-		final String data = this.data;
-		if (data != null) {
-			this.data = StringUtils.Pad(width, data, padding);
-		}
-		return this;
-	}
 	public xString padFront(final int width, final char padding) {
 		final String data = this.data;
 		if (data != null) {
 			this.data = StringUtils.PadFront(width, data, padding);
+		}
+		return this;
+	}
+	public xString padEnd(final int width, final char padding) {
+		final String data = this.data;
+		if (data != null) {
+			this.data = StringUtils.PadEnd(width, data, padding);
 		}
 		return this;
 	}
