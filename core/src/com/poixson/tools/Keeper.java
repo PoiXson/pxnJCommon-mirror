@@ -18,13 +18,13 @@ public class Keeper {
 
 
 	public static Keeper get() {
-		if (instance.get() != null)
-			return instance.get();
-		// new instance
-		final Keeper keeper = new Keeper();
-		if (!instance.compareAndSet(null, keeper))
-			return instance.get();
-		return keeper;
+		if (instance.get() == null) {
+			// new instance
+			final Keeper keeper = new Keeper();
+			if (instance.compareAndSet(null, keeper))
+				return keeper;
+		}
+		return instance.get();
 	}
 
 
