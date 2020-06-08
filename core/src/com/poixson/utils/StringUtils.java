@@ -8,9 +8,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import com.poixson.exceptions.RequiredArgumentException;
@@ -169,40 +169,20 @@ public final class StringUtils {
 	public static String[] SplitLines(final String lines[]) {
 		if (Utils.isEmpty(lines))
 			return null;
-		int multiline = 0;
-		{
-			int index = 0;
-			for (final String line : lines) {
-				index++;
-				if (line.contains("\n")) {
-					multiline = index;
-					break;
+		final List<String> result = new ArrayList<String>(lines.length);
+		for (final String line : lines) {
+			if (!line.contains("\n")) {
+				result.add(line);
+				continue;
+			}
+			final String[] split = line.split("\n");
+			if (Utils.notEmpty(split)) {
+				for (final String str : split) {
+					result.add(str);
 				}
 			}
 		}
-		if (multiline > 0)
-			return lines;
-		{
-			final List<String> result = new ArrayList<String>(lines.length + 1);
-			int index = 0;
-			for (final String line : lines) {
-				index++;
-				if (index == multiline ||
-				(index > multiline && line.contains("\n")) ) {
-					final String trimLine = Trim(line, "\n");
-					for (final String splitLine : trimLine.split("\n")) {
-						result.add(
-							splitLine.replace("\r",  "")
-						);
-					}
-				} else {
-					result.add(
-						line.replace("\r",  "")
-					);
-				}
-			}
-			return result.toArray(new String[0]);
-		}
+		return result.toArray(new String[0]);
 	}
 
 
@@ -263,20 +243,6 @@ public final class StringUtils {
 
 
 	// string equals
-	public static boolean StrEqualsExact(final String a, final String b) {
-		if (a == null && b == null)
-			return true;
-		if (a == null || b == null)
-			return false;
-		return a.equals(b);
-	}
-	public static boolean StrEqualsExactIgnoreCase(final String a, final String b) {
-		if (a == null && b == null)
-			return true;
-		if (a == null || b == null)
-			return false;
-		return a.equalsIgnoreCase(b);
-	}
 	public static boolean StrEquals(final String a, final String b) {
 		final boolean aEmpty = Utils.isEmpty(a);
 		final boolean bEmpty = Utils.isEmpty(b);
@@ -291,6 +257,20 @@ public final class StringUtils {
 		if (aEmpty || bEmpty) return false;
 		return a.equalsIgnoreCase(b);
 	}
+	public static boolean StrEqualsExact(final String a, final String b) {
+		if (a == null && b == null)
+			return true;
+		if (a == null || b == null)
+			return false;
+		return a.equals(b);
+	}
+	public static boolean StrEqualsExactIgnoreCase(final String a, final String b) {
+		if (a == null && b == null)
+			return true;
+		if (a == null || b == null)
+			return false;
+		return a.equalsIgnoreCase(b);
+	}
 
 
 
@@ -300,157 +280,200 @@ public final class StringUtils {
 
 
 	public static String TrimToNull(final String str, final String...strip) {
-		final String result =
-			doTrim( true, true, str, false, strip );
-		return ( Utils.isEmpty(result) ? null : result );
+		if (Utils.isEmpty(str)) return null;
+		//                            front end   case
+		final String result = doTrim( true, true, false, str, strip );
+		if (Utils.isEmpty(result)) return null;
+		return result;
+	}
+	public static String TrimToNull(final String str, final char...strip) {
+		if (Utils.isEmpty(str)) return null;
+		//                            front end   case
+		final String result = doTrim( true, true, false, str, strip );
+		if (Utils.isEmpty(result)) return null;
+		return result;
 	}
 
 
 
 	// trim front/end
 	public static String Trim(final String str, final char...strip) {
-		//             front end        case
-		return doTrim( true, true, str, false, strip );
+		//             front end   case
+		return doTrim( true, true, false, str, strip );
 	}
 	public static String iTrim(final String str, final char...strip) {
-		//             front end        case
-		return doTrim( true, true, str, true, strip );
+		//             front end   case
+		return doTrim( true, true, true, str, strip );
 	}
 	public static String Trim(final String str, final String...strip) {
-		//             front end        case
-		return doTrim( true, true, str, false, strip );
+		//             front end   case
+		return doTrim( true, true, false, str, strip );
 	}
 	public static String iTrim(final String str, final String...strip) {
-		//             front end        case
-		return doTrim( true, true, str, true, strip );
+		//             front end   case
+		return doTrim( true, true, true, str, strip );
 	}
 
 
 
 	// trim front
 	public static String TrimFront(final String str, final char...strip) {
-		//             front end        case
-		return doTrim( true, false, str, false, strip );
+		//             front end    case
+		return doTrim( true, false, false, str, strip );
 	}
 	public static String iTrimFront(final String str, final char...strip) {
-		//             front end        case
-		return doTrim( true, false, str, true, strip );
+		//             front end    case
+		return doTrim( true, false, true, str, strip );
 	}
 	public static String TrimFront(final String str, final String...strip) {
-		//             front end        case
-		return doTrim( true, false, str, false, strip );
+		//             front end    case
+		return doTrim( true, false, false, str, strip );
 	}
 	public static String iTrimFront(final String str, final String...strip) {
-		//             front end        case
-		return doTrim( true, false, str, true, strip );
+		//             front end    case
+		return doTrim( true, false, true, str, strip );
 	}
 
 
 
 	// trim end
 	public static String TrimEnd(final String str, final char...strip) {
-		//             front end        case
-		return doTrim( false, true, str, false, strip );
+		//             front end    case
+		return doTrim( false, true, false, str, strip );
 	}
 	public static String iTrimEnd(final String str, final char...strip) {
-		//             front end        case
-		return doTrim( false, true, str, true, strip );
+		//             front end    case
+		return doTrim( false, true, true, str, strip );
 	}
 	public static String TrimEnd(final String str, final String...strip) {
-		//             front end        case
-		return doTrim( false, true, str, false, strip );
+		//             front end    case
+		return doTrim( false, true, false, str, strip );
 	}
 	public static String iTrimEnd(final String str, final String...strip) {
-		//             front end        case
-		return doTrim( false, true, str, true, strip );
+		//             front end    case
+		return doTrim( false, true, true, str, strip );
 	}
 
 
 
-//TODO: this could use further optimizations
-//track trim length rather than modifying the string every loop
 	private static String doTrim(
 			final boolean trimFront, final boolean trimEnd,
-			final String str, final boolean caseInsensitive,
-			final char...strip) {
-if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMENT");
+			final boolean ignoreCase,
+			final String str, final char...strip) {
 		if (!trimFront && !trimEnd) return str;
 		if (Utils.isEmpty(str))     return str;
 		if (Utils.isEmpty(strip))   return str;
 		final int stripCount = strip.length;
-		String out = str;
-		int size = str.length();
+		final char[] stripChars;
+		final String strPrep;
+		if (ignoreCase) {
+			stripChars = new char[stripCount];
+			for (int i=0; i<stripCount; i++) {
+				stripChars[i] = Character.toLowerCase(strip[i]);
+			}
+			strPrep = str.toLowerCase();
+		} else {
+			stripChars = strip;
+			strPrep = str;
+		}
+		final int size = str.length();
+		int leftIndex  = 0;
+		int rightIndex = 0;
 		boolean changed = true;
+		//CHANGE_LOOP:
 		while (changed) {
 			changed = false;
-			for (int index = 0; index < stripCount; index++) {
+			//STRIP_LOOP:
+			for (int index=0; index<stripCount; index++) {
 				if (trimFront) {
-					while (out.charAt(0) == strip[index]) {
-						out = out.substring(1);
-						size--;
+					INNER_LOOP_FRONT:
+					while (true) {
+						if (leftIndex + rightIndex >= size)
+							return "";
+						if (strPrep.charAt(leftIndex) != stripChars[index])
+							break INNER_LOOP_FRONT;
+						leftIndex++;
 						changed = true;
 					}
 				}
 				if (trimEnd) {
-					while (out.charAt(size - 1) == strip[index]) {
-						size--;
-						out = out.substring(0, size);
+					INNER_LOOP_END:
+					while (true) {
+						if (leftIndex + rightIndex >= size)
+							return "";
+						if (strPrep.charAt(size-(rightIndex+1)) != stripChars[index])
+							break INNER_LOOP_END;
+						rightIndex++;
 						changed = true;
 					}
 				}
-			}
-			if (size <= 0)
-				break;
-		}
-		return out;
+			} // end STRIP_LOOP
+		} // end CHANGE_LOOP
+		return str.substring( leftIndex, size - rightIndex );
 	}
 	private static String doTrim(
 			final boolean trimFront, final boolean trimEnd,
-			final String str, final boolean caseInsensitive,
-			final String...strip) {
+			final boolean ignoreCase,
+			final String str, final String...strip) {
 		if (!trimFront && !trimEnd) return str;
 		if (Utils.isEmpty(str))     return str;
 		if (Utils.isEmpty(strip))   return str;
 		final int stripCount = strip.length;
-		String array[] = new String[stripCount];
+		final String[] stripStrings;
+		final String strPrep;
 		final int[] stripLen = new int[stripCount];
-		for (int i = 0; i < stripCount; i++) {
-			array[i] = (
-				caseInsensitive
-				? strip[i].toLowerCase()
-				: strip[i]
-			);
-			stripLen[i] = strip[i].length();
+		if (ignoreCase) {
+			stripStrings = new String[stripCount];
+			for (int i=0; i<stripCount; i++) {
+				stripStrings[i] = strip[i].toLowerCase();
+				stripLen[i] = stripStrings[i].length();
+			}
+			strPrep = str.toLowerCase();
+		} else {
+			stripStrings = strip;
+			for (int i=0; i<stripCount; i++) {
+				stripLen[i] = stripStrings[i].length();
+			}
+			strPrep = str;
 		}
-		String out = str;
-		String low = str.toLowerCase();
+		final int size = str.length();
+		int leftIndex  = 0;
+		int rightIndex = 0;
 		boolean changed = true;
-		OUTER_LOOP:
+		//CHANGE_LOOP:
 		while (changed) {
 			changed = false;
-			INNER_LOOP:
-			for (int index = 0; index < stripCount; index++) {
-				if (stripLen[index] == 0) continue INNER_LOOP;
+			//STRIP_LOOP:
+			for (int index=0; index<stripCount; index++) {
 				if (trimFront) {
-					while (low.startsWith( array[index] )) {
-						out = out.substring(stripLen[index]);
-						low = low.substring(stripLen[index]);
+					INNER_LOOP_FRONT:
+					while (true) {
+						if (leftIndex + rightIndex >= size)
+							return "";
+						if (!strPrep.substring(leftIndex, leftIndex + stripLen[index]).equals(stripStrings[index]))
+							break INNER_LOOP_FRONT;
+						leftIndex += stripLen[index];
 						changed = true;
 					}
 				}
 				if (trimEnd) {
-					while (low.endsWith( array[index].toLowerCase() )) {
-						out = out.substring(0, out.length() - stripLen[index]);
-						low = low.substring(0, low.length() - stripLen[index]);
+					INNER_LOOP_END:
+					while (true) {
+						if (leftIndex + rightIndex >= size)
+							return "";
+						final int pos = size - (rightIndex + stripLen[index]);
+						if (pos < 0)
+							break INNER_LOOP_END;
+						if (leftIndex + rightIndex + stripLen[index] > size) break INNER_LOOP_END;
+						if (!strPrep.substring( pos, pos + stripLen[index]).equals(stripStrings[index]))
+							break INNER_LOOP_END;
+						rightIndex += stripLen[index];
 						changed = true;
 					}
 				}
-			}
-			if (out.length() == 0) {
-				break OUTER_LOOP;
-			}
-		}
-		return out;
+			} // end STRIP_LOOP
+		} // end CHANGE_LOOP
+		return str.substring( leftIndex, size - rightIndex );
 	}
 
 
@@ -460,13 +483,21 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 
 
 
-	public static String RemoveFromStr(final String str, final String...strip) {
+	public static String RemoveFromString(final String str, final String...strip) {
+		if (Utils.isEmpty(str))   return str;
 		if (Utils.isEmpty(strip)) return str;
-		String dat = str;
-		for (final String s : strip) {
-			dat = dat.replace(s, "");
+		String result = str;
+		boolean changed = true;
+		while (changed) {
+			changed = false;
+			for (final String s : strip) {
+				if (result.contains(s)) {
+					result = result.replace(s, "");
+					changed = true;
+				}
+			}
 		}
-		return dat;
+		return result;
 	}
 
 
@@ -496,23 +527,31 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 
 
 
-	public static String ForceUnique(final String match, final Set<String> existing) {
+	// increment and append string_# until unique
+	public static String ForceUnique(final String match, final Collection<String> existing) {
 		if (Utils.isEmpty(match)) throw new RequiredArgumentException("match");
 		if (existing == null)     throw new RequiredArgumentException("existing");
 		// already unique
-		if (existing.isEmpty())        return match;
-		if (!existing.contains(match)) return match;
+		if (existing.isEmpty()) {
+			existing.add(match);
+			return match;
+		}
+		if (!existing.contains(match)) {
+			existing.add(match);
+			return match;
+		}
 		int i = 0;
 		while (true) {
 			i++;
-			final String dat =
+			final String str =
 				(new StringBuilder())
 					.append(match)
 					.append("_")
 					.append(i)
 					.toString();
-			if (!existing.contains(dat)) {
-				return dat;
+			if (!existing.contains(str)) {
+				existing.add(str);
+				return str;
 			}
 		}
 	}
@@ -548,12 +587,12 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 		boolean first = true;
 		for (final String line : addThis) {
 			if (Utils.isEmpty(line)) continue;
-			if (!first)
+			if (!first) {
 				buf.append(delim);
+			}
 			buf.append(line);
-			if (first) {
-				if (buf.length() > 0)
-					first = false;
+			if (first && buf.length() > 0) {
+				first = false;
 			}
 		}
 		return buf.toString();
@@ -585,31 +624,9 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 
 
 
-	/**
-	 * Generate a random string hash.
-	 * @param length Number of characters to generate
-	 * @return The generated hash string
-	 */
-	public static String RandomString(final int length) {
-		if (length < 1) return null;
-		final StringBuilder buf = new StringBuilder(length);
-		while (buf.length() < length) {
-			final String str = UUID.randomUUID().toString();
-			if (str == null) throw new RequiredArgumentException("str");
-			buf.append(str);
-		}
-		return
-			buf.toString()
-				.substring(
-					0,
-					NumberUtils.MinMax(length, 0, buf.length())
-				);
-	}
-
-
-
 	// generate regex from string with wildcard *
 	public static String WildcardToRegex(final String wildcard) {
+		if (Utils.isEmpty(wildcard)) return wildcard;
 		final StringBuilder buf = new StringBuilder(wildcard.length());
 		buf.append('^');
 		final int len = wildcard.length();
@@ -796,33 +813,76 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 
 
 	// replace with array
-	public static String ReplaceWith(final String replaceWhat, final String[] withWhat, final String data) {
+	public static String ReplaceWith(final String data,
+			final String replaceWhat, final String[] withWhat) {
+		if (Utils.isEmpty(data))        return data;
 		if (Utils.isEmpty(replaceWhat)) return data;
 		if (Utils.isEmpty(withWhat))    return data;
-		if (Utils.isEmpty(data))        return data;
-		final StringBuilder buf = new StringBuilder();
+		final StringBuilder result = new StringBuilder();
 		final int count = withWhat.length;
 		int currentPos = 0;
 		for (int i = 0; i < count; i++) {
-			final int thisPos = data.indexOf("?", currentPos);
+			final int thisPos = data.indexOf(replaceWhat, currentPos);
 			if (thisPos > 0) {
-				buf.append(data.substring(currentPos, thisPos));
-				buf.append(withWhat[i]);
-				currentPos = thisPos + 1;
+				result.append(data.substring(currentPos, thisPos));
+				result.append(withWhat[i]);
+				currentPos = thisPos + replaceWhat.length();
 			}
 		}
 		if (data.length() > currentPos) {
-			buf.append(
+			result.append(
 				data.substring(currentPos)
 			);
 		}
-		return buf.toString();
+		return result.toString();
+	}
+
+
+
+	public static String ReplaceEnd(final String data,
+			final char replaceWhat, final char replaceWith) {
+		if (Utils.isEmpty(data))        return data;
+		if (Utils.isEmpty(replaceWhat)) return data;
+		if (Utils.isEmpty(replaceWith)) return data;
+		final int size = data.length();
+		int index = 0;
+		while (true) {
+			final char chr = data.charAt((size - index) - 1);
+			if (chr != replaceWhat)
+				return data.substring(0, size - index) + Repeat(index, replaceWith);
+			index++;
+			if (size == index)
+				return Repeat(size, replaceWith);
+		}
 	}
 
 
 
 	// ------------------------------------------------------------------------------- //
 	// generate string
+
+
+
+	/**
+	 * Generate a random string hash.
+	 * @param length Number of characters to generate
+	 * @return The generated hash string
+	 */
+	public static String RandomString(final int length) {
+		if (length < 1) return null;
+		final StringBuilder buf = new StringBuilder(length);
+		while (buf.length() < length) {
+			final String str = UUID.randomUUID().toString();
+			if (str == null) throw new RequiredArgumentException("str");
+			buf.append(str);
+		}
+		return
+			buf.toString()
+				.substring(
+					0,
+					NumberUtils.MinMax(length, 0, buf.length())
+				);
+	}
 
 
 
@@ -833,31 +893,31 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 	public static String Repeat(final int count, final String str, final String delim) {
 		if (Utils.isEmpty(str)) throw new RequiredArgumentException("str");
 		if (count < 1) return "";
-		final StringBuilder buf = new StringBuilder();
+		final StringBuilder result = new StringBuilder();
 		// repeat string
 		if (Utils.isEmpty(delim)) {
 			for (int i = 0; i < count; i++) {
-				buf.append(str);
+				result.append(str);
 			}
 		} else {
 			// repeat string with delim
 			boolean b = false;
 			for (int i = 0; i < count; i++) {
-				if (b) buf.append(delim);
+				if (b) result.append(delim);
 				b = true;
-				buf.append(str);
+				result.append(str);
 			}
 		}
-		return buf.toString();
+		return result.toString();
 	}
 	public static String Repeat(final int count, final char chr) {
 		if (count < 1) return "";
-		final StringBuilder buf = new StringBuilder();
+		final StringBuilder result = new StringBuilder();
 		// repeat string
 		for (int i = 0; i < count; i++) {
-			buf.append(chr);
+			result.append(chr);
 		}
-		return buf.toString();
+		return result.toString();
 	}
 
 
@@ -867,9 +927,6 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 
 
 
-	public static String Pad(final int width, final String text, final char padding) {
-		return PadEnd(width, text, padding);
-	}
 	public static String PadFront(final int width, final String text, final char padding) {
 		if (width < 1) return null;
 		final int count = width - text.length();
@@ -907,17 +964,18 @@ if (caseInsensitive) throw new UnsupportedOperationException("UNFINISHED ARGUMEN
 
 
 
-	public static String Pad(final int width, final int value) {
-		return Pad(       width, Integer.toString(value), '0' );
-	}
 	public static String PadFront(final int width, final int value) {
 		return PadFront(  width, Integer.toString(value), '0' );
 	}
 	public static String PadEnd(final int width, final int value) {
 		return PadEnd(    width, Integer.toString(value), '0' );
 	}
-	public static String PadCenter(final int width, final int value) {
-		return PadCenter( width, Integer.toString(value), '0' );
+
+	public static String PadFront(final int width, final long value) {
+		return PadFront(  width, Long.toString(value), '0' );
+	}
+	public static String PadEnd(final int width, final long value) {
+		return PadEnd(    width, Long.toString(value), '0' );
 	}
 
 
