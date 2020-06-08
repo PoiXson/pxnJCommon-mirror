@@ -1134,7 +1134,7 @@ public final class StringUtils {
 
 
 	// replace {key} tags
-	public static String ReplaceTagKeys(final String msg, final Map<String, Object> args) {
+	public static String ReplaceTags(final String msg, final Map<String, Object> args) {
 		if (Utils.isEmpty(msg))  return msg;
 		if (Utils.isEmpty(args)) return msg;
 		final StringBuilder result = new StringBuilder(msg);
@@ -1189,7 +1189,7 @@ public final class StringUtils {
 
 
 	// replace {key} tags (in multiple lines)
-	public static String[] ReplaceTagKeys(final String[] msgs, final Map<String, Object> args) {
+	public static String[] ReplaceTags(final String[] msgs, final Map<String, Object> args) {
 		if (Utils.isEmpty(msgs)) return msgs;
 		if (Utils.isEmpty(args)) return msgs;
 		String[] result = Arrays.copyOf(msgs, msgs.length);
