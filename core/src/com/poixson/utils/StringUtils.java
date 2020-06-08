@@ -212,7 +212,7 @@ public final class StringUtils {
 
 
 
-	public static boolean isAlpha(final String str) {
+	public static boolean IsAlpha(final String str) {
 		if (str == null) return false;
 		int sz = str.length();
 		for (int i = 0; i < sz; i++) {
@@ -222,7 +222,7 @@ public final class StringUtils {
 		}
 		return true;
 	}
-	public static boolean isAlphaSpace(final String str) {
+	public static boolean IsAlphaSpace(final String str) {
 		if (str == null) return false;
 		int sz = str.length();
 		for (int i = 0; i < sz; i++) {
@@ -235,7 +235,7 @@ public final class StringUtils {
 		}
 		return true;
 	}
-	public static boolean isAlphaNum(final String str) {
+	public static boolean IsAlphaNum(final String str) {
 		if (str == null) return false;
 		int sz = str.length();
 		for (int i = 0; i < sz; i++) {
@@ -246,7 +246,7 @@ public final class StringUtils {
 		}
 		return true;
 	}
-	public static boolean isAlphaNumSpace(final String str) {
+	public static boolean IsAlphaNumSpace(final String str) {
 		if (str == null) return false;
 		int sz = str.length();
 		for (int i = 0; i < sz; i++) {
