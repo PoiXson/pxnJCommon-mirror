@@ -1,11 +1,14 @@
 package com.poixson.utils;
 
+import java.awt.EventQueue;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.poixson.logger.xLogRoot;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.xTime;
+import com.poixson.tools.abstractions.xCallable;
 
 
 public final class ThreadUtils {
@@ -92,6 +95,28 @@ public final class ThreadUtils {
 		}
 		xLogRoot.Get()
 			.warning( msg.toString() );
+	}
+
+
+
+	public static Thread getDispatchThreadSafe() {
+		try {
+			return getDispatchThread();
+		} catch (InvocationTargetException ignore) {
+		} catch (InterruptedException ignore) {
+		}
+		return null;
+	}
+	public static Thread getDispatchThread()
+			throws InvocationTargetException, InterruptedException {
+		final xCallable<Thread> call = new xCallable<Thread>() {
+			@Override
+			public Thread call() throws Exception {
+				return Thread.currentThread();
+			}
+		};
+		EventQueue.invokeAndWait(call);
+		return call.getResult();
 	}
 
 
