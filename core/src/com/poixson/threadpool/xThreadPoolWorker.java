@@ -5,11 +5,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.poixson.abstractions.xStartable;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.logger.xLogRoot;
 import com.poixson.tools.CoolDown;
+import com.poixson.tools.abstractions.xStartable;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.Utils;
@@ -17,37 +17,32 @@ import com.poixson.utils.Utils;
 
 public class xThreadPoolWorker implements xStartable {
 
-	public static final long DEFAULT_WORKER_START_WAIT      = 500L;
+	public static final long WORKER_START_TIMEOUT = 500L;
 
 	protected final xThreadPool pool;
-	protected final AtomicReference<Thread> thread =
-			new AtomicReference<Thread>(null);
+	protected final AtomicReference<Thread> thread = new AtomicReference<Thread>(null);
 
-	protected final String workerNameCustom;
-	protected       String workerNameCached = null;
+	protected final long workerIndex;
+	protected final String workerName;
+	protected final AtomicReference<String> workerNameCached = new AtomicReference<String>(null);
 
 	// state
 	protected final AtomicBoolean running  = new AtomicBoolean(false);
 	protected final AtomicBoolean active   = new AtomicBoolean(false);
 	protected final AtomicBoolean stopping = new AtomicBoolean(false);
 
+	protected final AtomicBoolean keepAlive = new AtomicBoolean(false);
+
 	// stats
-	protected final long workerIndex;
 	protected final AtomicLong runCount = new AtomicLong(0L);
 
 
 
-	public xThreadPoolWorker(final xThreadPool pool) {
-		this(pool, null, null);
-	}
-	public xThreadPoolWorker(final xThreadPool pool, final Thread thread) {
-		this(pool, thread, null);
-	}
 	public xThreadPoolWorker(final xThreadPool pool, final Thread thread, final String workerName) {
 		if (pool == null) throw new RequiredArgumentException("pool");
 		this.pool = pool;
-		this.workerNameCustom = workerName;
 		this.workerIndex = pool.getNextWorkerIndex();
+		this.workerName = workerName;
 		if (thread != null) {
 			this.thread.set(thread);
 			this.configureThread(thread);
@@ -63,23 +58,17 @@ public class xThreadPoolWorker implements xStartable {
 
 	@Override
 	public void start() {
-		if (this.isRunning())
-			return;
+		if (this.isRunning()) return;
 		try {
-			this.getThread()
-				.start();
+			final Thread thread = this.getThread();
+			thread.start();
 		} catch (IllegalThreadStateException ignore) {}
 	}
-	public void startAndWait() {
-		this.start();
-		this.waitForStart(DEFAULT_WORKER_START_WAIT);
-	}
-	public void startAndWait(final long timeout) {
-		this.start();
-		this.waitForStart(timeout);
-	}
+
+
+
 	public void waitForStart() {
-		this.waitForStart(DEFAULT_WORKER_START_WAIT);
+		this.waitForStart(WORKER_START_TIMEOUT);
 	}
 	public void waitForStart(final long timeout) {
 		// wait for worker to start
@@ -93,9 +82,10 @@ public class xThreadPoolWorker implements xStartable {
 			if (cool == null) {
 				cool = CoolDown.getNew(timeout);
 				cool.resetRun();
-			} else {
-				if (cool.runAgain())
-					break;
+			} else
+			if (cool.runAgain()) {
+				this.log().warning("Timeout waiting for thread pool to start");
+				break;
 			}
 			sleep += 5L;
 			ThreadUtils.Sleep(sleep);
@@ -118,75 +108,106 @@ public class xThreadPoolWorker implements xStartable {
 
 	@Override
 	public void run() {
-		if (this.stopping.get()) throw new IllegalStateException("Worker cannot run again, already stopped");
-		if (this.running.get()) return;
-		this.pool.registerWorker(this);
-		if ( ! this.running.compareAndSet(false, true) ) {
-			try {
-				this.pool.unregisterWorker(this);
-			} catch (RuntimeException ignore) {}
-			throw new RuntimeException("Thread pool worker already running!");
+		if (this.isStopping()) return;
+		if (!this.running.compareAndSet(false, true))
+			throw new RuntimeException("Thread pool worker already running: "+this.getWorkerName());
+		if (this.isStopping()) {
+			this.running.set(false);
+			return;
 		}
-		if (this.stopping.get()) throw new IllegalStateException("Worker cannot run again, already stopped");
-		// validate thread
 		if (this.thread.get() == null) {
 			final Thread thread = Thread.currentThread();
 			if (this.thread.compareAndSet(null, thread)) {
 				this.configureThread(thread);
 			}
 		}
-		// is correct thread
 		if ( ! this.thread.get().equals(Thread.currentThread()) )
 			throw new IllegalStateException("Invalid thread state!");
 		try {
 			WORKER_LOOP:
 			while (true) {
-				if (this.pool.isStopping())
+				if (this.isStopping())
 					break WORKER_LOOP;
 				// get task from queues
+				final xThreadPoolTask task;
 				try {
-					final xThreadPoolTask task =
-						this.pool.grabNextTask();
-					// run the task
-					if (task != null) {
-						this.runTask(task);
-						this.runCount.incrementAndGet();
-						continue WORKER_LOOP;
-					}
-				} catch (InterruptedException e) {
-					this.log().trace(e);
-					break;
+					task = this.pool.grabNextTask();
+				} catch (InterruptedException ignore) {
+					continue WORKER_LOOP;
 				}
-//TODO:
-//				// idle
-//				if ( ! this.keepAlive.get() ) {
-//				}
+				// run the task
+				if (task != null) {
+					final long runIndex = this.runCount.incrementAndGet();
+					this.runTask(task, runIndex);
+					continue WORKER_LOOP;
+				}
+				// idle worker
 				this.log().detail("Idle thread..");
+//TODO: idle thread may stop
 			} // end WORKER_LOOP
 		} finally {
 			this.stopping.set(true);
-			this.pool.unregisterWorker(this);
 			this.running.set(false);
+			this.pool.unregisterWorker(this);
 		}
 	}
-	protected void runTask(final xThreadPoolTask task) {
+	protected void runTask(final xThreadPoolTask task, final long runIndex) {
 		if (task == null) throw new RequiredArgumentException("task");
+		this.active.set(true);
 		try {
-			this.active.set(true);
 			task.setWorker(this);
+			task.setRunIndex(runIndex);
 			task.run();
 		} finally {
 			this.active.set(false);
 		}
 		if (task.hasException()) {
-			this.log().trace( task.getException() );
+			this.log().trace(task.e());
 		}
 	}
 
 
 
-	public void join(final long timeout)
-			throws InterruptedException {
+	// ------------------------------------------------------------------------------- //
+	// thread
+
+
+
+	protected Thread getThread() {
+		if (this.thread.get() == null) {
+			final Thread thread = this.newThread();
+			if (this.thread.compareAndSet(null, thread)) {
+				this.log().finer("New worker thread..");
+				this.configureThread(thread);
+				return thread;
+			}
+		}
+		return this.thread.get();
+	}
+	protected Thread newThread() {
+		return new Thread(this);
+	}
+	public void setThread(final Thread thread) {
+		if ( ! this.thread.compareAndSet(null, thread) ) {
+			final String threadName = this.thread.get().getName();
+			throw new RuntimeException("Worker thread already set: "+threadName);
+		}
+	}
+	public void configureThread(final Thread thread) {
+		try {
+			thread.setName(this.getWorkerName());
+		} catch (Exception ignore) {}
+		try {
+			thread.setDaemon(false);
+		} catch (Exception ignore) {}
+		try {
+			thread.setPriority(this.pool.getThreadPriority());
+		} catch (Exception ignore) {}
+	}
+
+
+
+	public void join(final long timeout) throws InterruptedException {
 		final Thread thread = this.thread.get();
 		if (thread == null)
 			return;
@@ -202,7 +223,7 @@ public class xThreadPoolWorker implements xStartable {
 
 
 
-	// ------------------------------------------------------------------------------- //
+	// ----------------------------------------------------------)--------------------- //
 	// state
 
 
@@ -216,107 +237,22 @@ public class xThreadPoolWorker implements xStartable {
 	}
 	@Override
 	public boolean isStopping() {
+		if (this.pool.isStopping())
+			return true;
 		return this.stopping.get();
 	}
 
 
 
 	public boolean isThread(final Thread match) {
-		if (match == null)
-			return false;
-		return match.equals( this.thread.get() );
+		final Thread thread = this.thread.get();
+		if (thread == null) return false;
+		return thread.equals( match );
 	}
 	public boolean isCurrentThread() {
-		return Thread.currentThread()
-				.equals( this.thread.get() );
-	}
-
-
-
-	// ------------------------------------------------------------------------------- //
-	// config
-
-
-
-	public String getWorkerName() {
-		// cached name
-		{
-			final String name = this.workerNameCached;
-			if (Utils.notEmpty(name))
-				return name;
-		}
-		// custom name
-		if (Utils.notEmpty(this.workerNameCustom)) {
-			this.workerNameCached = this.workerNameCustom;
-			return this.workerNameCustom;
-		}
-		// generate name
-		{
-			final String name =
-				StringUtils.ReplaceTags(
-					"{}-w{}",
-					this.pool.getPoolName(),
-					this.workerIndex
-			);
-			this.workerNameCached = name;
-			return name;
-		}
-	}
-
-
-
-	public void setPriority(final int priority) {
 		final Thread thread = this.thread.get();
-		if (thread == null) throw new NullPointerException();
-		thread.setPriority(priority);
-	}
-
-
-
-//TODO:
-//	public boolean keepAlive() {
-//		return this.keepAlive.get();
-//	}
-//	public boolean keepAlive(final boolean enable) {
-//		return this.keepAlive.getAndSet(enable);
-//	}
-
-
-
-	public Thread getThread() {
-		// existing thread
-		{
-			final Thread thread = this.thread.get();
-			if (thread != null)
-				return thread;
-		}
-		// new thread
-		{
-			final Thread thread = new Thread(this);
-			if ( ! this.thread.compareAndSet(null, thread) )
-				return this.thread.get();
-			this.configureThread(thread);
-			this.log()
-				.finer("New worker thread..");
-			return thread;
-		}
-	}
-	public void setThread(final Thread thread) {
-		if ( ! this.thread.compareAndSet(null, thread) ) {
-			final String threadName = this.thread.get().getName();
-			throw new RuntimeException("Worker thread already set: "+threadName);
-		}
-	}
-	protected void configureThread(final Thread thread) {
-		try {
-			thread.setName(this.getWorkerName());
-		} catch (Exception ignore) {}
-		try {
-			thread.setDaemon(false);
-		} catch (Exception ignore) {}
-		try {
-			thread.setPriority(this.pool.getThreadPriority());
-		} catch (Exception ignore) {}
+		if (thread == null) return false;
+		return thread.equals( Thread.currentThread() );
 	}
 
 
@@ -339,6 +275,49 @@ public class xThreadPoolWorker implements xStartable {
 
 
 	// ------------------------------------------------------------------------------- //
+	// config
+
+
+
+	public String getWorkerName() {
+		// custom name
+		if (Utils.notEmpty(this.workerName)) {
+			return this.workerName;
+		}
+		// generated name
+		if (this.workerNameCached.get() == null) {
+			final String name =
+				StringUtils.ReplaceTags(
+					"{}-w{}",
+					this.pool.getPoolName(),
+					this.workerIndex
+				);
+			this.workerNameCached.set(name);
+		}
+		return this.workerNameCached.get();
+	}
+
+
+
+	public void setPriority(final int priority) {
+		final Thread thread = this.thread.get();
+		if (thread != null) {
+			thread.setPriority(priority);
+		}
+	}
+
+
+
+	public boolean isKeepAlive() {
+		return this.keepAlive.get();
+	}
+	public void setKeepAlive(final boolean enable) {
+		this.keepAlive.set(enable);
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
 	// logger
 
 
@@ -356,12 +335,9 @@ public class xThreadPoolWorker implements xStartable {
 		}
 		// get logger
 		{
-			final xLog log;
-			log = this._log();
+			final xLog log = this._log();
 			this._log.set(
-				new SoftReference<xLog>(
-					log
-				)
+				new SoftReference<xLog>( log )
 			);
 			return log;
 		}
@@ -371,9 +347,7 @@ public class xThreadPoolWorker implements xStartable {
 		final String workerName = this.getWorkerName();
 		if (poolName.equalsIgnoreCase(workerName))
 			return this.pool.log();
-		return
-			xLogRoot.Get()
-				.getWeak( this.getWorkerName() );
+		return xLogRoot.Get().getWeak(workerName);
 	}
 
 

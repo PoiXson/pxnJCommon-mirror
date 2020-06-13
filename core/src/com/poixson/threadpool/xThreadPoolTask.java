@@ -7,47 +7,34 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
-import com.poixson.tools.remapped.RunnableNamed;
-import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
+import com.poixson.tools.abstractions.xRunnable;
 
 
-public class xThreadPoolTask implements Runnable {
+public class xThreadPoolTask extends xRunnable {
 
 	protected final xThreadPool pool;
-	protected final AtomicReference<String> taskName =
-			new AtomicReference<String>(null);
-	protected final Runnable run;
-	protected final long taskIndex;
-
-	// state
-	protected final AtomicLong runIndex = new AtomicLong(0);
-	protected final AtomicBoolean running = new AtomicBoolean(false);
-	protected final AtomicReference<Exception> ex =
-			new AtomicReference<Exception>(null);
-
 	// worker owning this task
 	protected final AtomicReference<xThreadPoolWorker> worker =
 			new AtomicReference<xThreadPoolWorker>(null);
 
+	// state
+	protected final AtomicBoolean active = new AtomicBoolean(false);
+
+	public final long taskIndex;
+	protected final AtomicLong runIndex = new AtomicLong(-1L);
+
+	// task exception
+	protected final AtomicReference<Exception> e = new AtomicReference<Exception>(null);
 
 
-	public xThreadPoolTask(final xThreadPool pool, final Runnable run) {
-		this(null, pool, run);
+
+	public xThreadPoolTask(final xThreadPool pool, final String taskName) {
+		this(pool, taskName, null);
 	}
-	public xThreadPoolTask(final String taskName,
-			final xThreadPool pool, final Runnable run) {
-		if (pool == null) throw new RequiredArgumentException("pool");
-		if (run  == null) throw new RequiredArgumentException("run");
+	public xThreadPoolTask(final xThreadPool pool, final String taskName,
+			final Runnable run) {
+		super(taskName, run);
 		this.pool = pool;
-		this.run  = run;
-		if (Utils.notEmpty(taskName)) {
-			this.taskName.set(taskName);
-		} else {
-			final String name = RunnableNamed.GetName(run);
-			if (Utils.notEmpty(name))
-				this.taskName.set(name);
-		}
 		this.taskIndex = this.pool.getNextTaskIndex();
 	}
 
@@ -58,126 +45,90 @@ public class xThreadPoolTask implements Runnable {
 
 
 
-	@Override
-	public void run() {
-		if ( ! this.running.compareAndSet(false, true) )
-			throw new IllegalStateException("Task already running");
-		final Thread currentThread = Thread.currentThread();
-		final String originalThreadName = currentThread.getName();
+	public void runTask() {
+		if (!this.active.compareAndSet(false, true))
+			throw new IllegalStateException("Task already running: "+this.getTaskName());
+		this.log().finest("Running task:", this.getTaskName());
 		try {
-			// set thread name
-			currentThread.setName( this.getTaskName() );
-			this.worker.get().log()
-				.finest("Running task:", taskName);
-			// run the task
-			this.run.run();
+			this.run();
 		} catch (Exception e) {
-			this.ex.set(e);
+			this.setException(e);
 		} finally {
-			// finished task
-			this.running.set(false);
-			// restore thread name
-			currentThread.setName(originalThreadName);
+			this.active.set(false);
 		}
 	}
 
 
 
 	// ------------------------------------------------------------------------------- //
-	// task state
+	// state
 
 
 
-	public boolean isRunning() {
-		return this.running.get();
+	@Override
+	public boolean isActive() {
+		return this.active.get();
 	}
-	public boolean isDone() {
-		final long index = this.runIndex.get();
-		if (index <= 0)
-			return false;
-		if (index == 1) {
-			if (this.running.get())
-				return false;
-			return true;
-		}
-		return true;
+	@Override
+	public boolean notActive() {
+		return ! this.active.get();
+	}
+	@Override
+	public int getActive() {
+		return (this.isActive() ? 1 : 0);
 	}
 
 
 
-	public boolean hasException() {
-		return (this.ex.get() != null);
-	}
-	public Exception getException() {
-		return this.ex.get();
-	}
-
-
-
-	// ------------------------------------------------------------------------------- //
-	// config
-
-
-
-	public String getTaskName() {
-		final String name = this.taskName.get();
-		if (Utils.notEmpty(name))
-			return name;
-		return
-			(new StringBuilder())
-				.append("Task")
-				.append(this.taskIndex)
-				.toString();
-	}
-	public void setTaskName(final String taskName) {
-		this.taskName.set(taskName);
-		this._log.set(null);
-	}
-	public boolean taskNameEquals(final String taskName) {
-		if (Utils.isEmpty(taskName))
-			return Utils.isEmpty(this.taskName.get());
-		return taskName.equals(this.taskName.get());
-	}
-
-
-
-	public xThreadPool getPool() {
-		return this.pool;
-	}
-
-
-
-	// worker running this task
 	public xThreadPoolWorker getWorker() {
 		final xThreadPoolWorker worker = this.worker.get();
-		if (worker == null) {
-			throw new NullPointerException(
-				StringUtils.ReplaceTags(
-					"Task '{}' doesn't have a worker set! This should be handled by the thread pool!",
-					this.getTaskName()
-				)
-			);
-		}
+		if (worker == null)
+			throw new RuntimeException("Worker not registered for task: "+this.getTaskName());
 		return worker;
 	}
 	public void setWorker(final xThreadPoolWorker worker) {
 		if (worker == null) throw new RequiredArgumentException("worker");
-		if ( ! this.worker.compareAndSet(null, worker) )
-			throw new RuntimeException("worker already set!");
+		if (!this.worker.compareAndSet(null, worker)) {
+			if (!worker.equals(this.worker.get()))
+				throw new RuntimeException("Task worker already registered: "+this.worker.get().getWorkerName());
+		}
 	}
-
-
-
-	// ------------------------------------------------------------------------------- //
-	// stats
 
 
 
 	public long getTaskIndex() {
 		return this.taskIndex;
 	}
+
+
+
 	public long getRunIndex() {
 		return this.runIndex.get();
+	}
+	public void setRunIndex(final long index) {
+		this.runIndex.set(index);
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// task exception
+
+
+
+	public Exception e() {
+		return this.e.get();
+	}
+	public void setException(final Exception e) {
+		if (e != null) {
+			final Exception existing = this.e.getAndSet(e);
+			if (existing != null) {
+				this.log().trace(existing, "Task has multiple exceptions");
+			}
+		}
+	}
+	public boolean hasException() {
+		return (this.e.get() != null);
 	}
 
 
@@ -202,18 +153,16 @@ public class xThreadPoolTask implements Runnable {
 		{
 			final xLog log = this._log();
 			this._log.set(
-				new SoftReference<xLog>(
-					log
-				)
+				new SoftReference<xLog>( log )
 			);
 			return log;
 		}
 	}
 	protected xLog _log() {
+		final xThreadPoolWorker worker = this.worker.get();
 		return
-			this.worker.get()
-				.log()
-				.get( this.getTaskName() );
+			(worker == null ? this.pool.log() : worker.log())
+			.get( this.getTaskName() );
 	}
 
 
