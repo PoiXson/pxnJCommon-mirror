@@ -1,15 +1,17 @@
-package com.poixson.logger.printers;
+package com.poixson.logger.handlers;
 
-import java.io.IOException;
-
-
-public class xLogPrinter_File extends xLogPrinterBasic {
+import java.io.File;
 
 
+public class xLogHandler_File extends xLogHandler {
 
-	public xLogPrinter_File() {
+	public final File file;
+
+
+
+	public xLogHandler_File(final File file) {
 		super();
-throw new UnsupportedOperationException();
+		this.file = file;
 	}
 
 
@@ -20,18 +22,27 @@ throw new UnsupportedOperationException();
 
 
 	@Override
-	protected void doPublish(final String[] lines) throws IOException {
-//TODO:
-	}
-	protected void doPublish(final String line) throws IOException {
-//TODO:
+	public void publish(final String line) {
+//TODO
+throw new RuntimeException("UNFINISHED CODE");
 	}
 
 
 
 	@Override
 	public void flush() {
-//TODO:
+//TODO
+throw new RuntimeException("UNFINISHED CODE");
+	}
+	@Override
+	public void clearScreen() {
+//TODO: sync
+		this.publish();
+		this.publish();
+		this.publish();
+	}
+	@Override
+	public void beep() {
 	}
 
 
