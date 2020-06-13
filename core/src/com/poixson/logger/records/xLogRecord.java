@@ -7,7 +7,8 @@ public interface xLogRecord {
 
 
 	public String[] getLines();
-	public xLevel getLevel();
+	public xLevel   getLevel();
+	public long     getTimestamp();
 
 	public boolean isEmpty();
 	public boolean notEmpty();

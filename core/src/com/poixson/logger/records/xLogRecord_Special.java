@@ -11,6 +11,7 @@ public class xLogRecord_Special implements xLogRecord {
 		CLEAR_LINE,
 		BEEP
 	};
+
 	protected SpecialType type;
 
 
@@ -26,10 +27,6 @@ public class xLogRecord_Special implements xLogRecord {
 	public String[] getLines() {
 		return null;
 	}
-	@Override
-	public xLevel getLevel() {
-		return null;
-	}
 
 
 
@@ -40,6 +37,20 @@ public class xLogRecord_Special implements xLogRecord {
 	@Override
 	public boolean notEmpty() {
 		return false;
+	}
+
+
+
+	@Override
+	public xLevel getLevel() {
+		return null;
+	}
+
+
+
+	@Override
+	public long getTimestamp() {
+		return 0L;
 	}
 
 
