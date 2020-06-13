@@ -1,107 +1,74 @@
 package com.poixson.logger;
 
-import java.io.Serializable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.utils.NumberUtils;
-import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
-public class xLevel implements Serializable {
-	private static final long serialVersionUID = 1L;
+public enum xLevel {
+	OFF     ('x',  "off",    Integer.MAX_VALUE),
+	ALL     ('a',  "all",    Integer.MIN_VALUE),
+	TITLE   ('t',  "title",  9000),
+	DETAIL  ('d',  "detail",  100),
+	FINEST  ('1',  "finest",  200),
+	FINER   ('2',  "finer",   300),
+	FINE    ('3',  "fine",    400),
+	INFO    ('i',  "info",    500),
+	STATS   ('s',  "stats",   600),
+	WARNING ('w',  "warning", 700),
+	NOTICE  ('n',  "notice",  800),
+	SEVERE  ('s',  "severe",  900),
+	FATAL   ('f',  "fatal",  1000);
 
-	private static final List<xLevel> knownLevels = new CopyOnWriteArrayList<xLevel>();
-	private static volatile int minValue = 0;
-	private static volatile int maxValue = 0;
-
-	public static final transient xLevel OFF     = new xLevel("OF", "OFF",     Integer.MAX_VALUE);
-	public static final transient xLevel STDERR  = new xLevel("ER", "ERR",     9000);
-	public static final transient xLevel STDOUT  = new xLevel("OT", "OUT",     8000);
-	public static final transient xLevel TITLE   = new xLevel("TT", "TITLE",   7000);
-	public static final transient xLevel FATAL   = new xLevel("FA", "FATAL",   2000);
-	public static final transient xLevel SEVERE  = new xLevel("SV", "SEVERE",  1000);
-	public static final transient xLevel NOTICE  = new xLevel("NT", "NOTICE",  900);
-	public static final transient xLevel WARNING = new xLevel("WN", "WARNING", 800);
-	public static final transient xLevel INFO    = new xLevel("IN", "INFO",    700);
-	public static final transient xLevel STATS   = new xLevel("ST", "STATS",   600);
-	public static final transient xLevel FINE    = new xLevel("FI", "FINE",    500);
-	public static final transient xLevel FINER   = new xLevel("FR", "FINER",   400);
-	public static final transient xLevel FINEST  = new xLevel("FT", "FINEST",  300);
-	public static final transient xLevel DETAIL  = new xLevel("DE", "DETAIL",  100);
-	public static final transient xLevel ALL     = new xLevel("AL", "ALL",     Integer.MIN_VALUE);
-
-	public static final xLevel DEFAULT = xLevel.FINEST;
-
+	public final char   chr;
 	public final String name;
-	public final String shortName;
 	public final int    value;
 
-
-
-	private xLevel(final String shortName, final String name, final int value) {
-		if (Utils.isEmpty(name))      throw new RequiredArgumentException("name");
-		if (Utils.isEmpty(shortName)) throw new RequiredArgumentException("shortName");
-		this.name      = name.toUpperCase();
-		this.shortName = shortName.toUpperCase();
-		this.value     = value;
-		if (value != Integer.MIN_VALUE && value < minValue) minValue = value;
-		if (value != Integer.MAX_VALUE && value > maxValue) maxValue = value;
-		// validate unique
-		if ( ! knownLevels.isEmpty()) {
-			final Iterator<xLevel> it = knownLevels.iterator();
-			while (it.hasNext()) {
-				final xLevel level = it.next();
-				// duplicate name
-				if (name.equals(level.name))
-					throw new RuntimeException("Duplicate xLevel named: "+name);
-				// duplicate short-name
-				if (shortName.equals(level.shortName)) {
-					throw new RuntimeException(
-						StringUtils.ReplaceTags(
-							"Duplicate xLevel short-name: {} - {}",
-							shortName,
-							name
-						)
-					);
-				}
-				// duplicate value
-				if (value == level.value) {
-					throw new RuntimeException(
-						StringUtils.ReplaceTags(
-							"Duplicate xLevel value: {} - {}",
-							value,
-							name
-						)
-					);
-				}
-			}
+	private static final CopyOnWriteArrayList<xLevel> xlevels =
+			new CopyOnWriteArrayList<xLevel>() {
+		private static final long serialVersionUID = 1L;
+		{
+			add( xLevel.OFF     );
+			add( xLevel.ALL     );
+			add( xLevel.TITLE   );
+			add( xLevel.DETAIL  );
+			add( xLevel.FINEST  );
+			add( xLevel.FINER   );
+			add( xLevel.FINE    );
+			add( xLevel.INFO    );
+			add( xLevel.STATS   );
+			add( xLevel.WARNING );
+			add( xLevel.NOTICE  );
+			add( xLevel.SEVERE  );
+			add( xLevel.FATAL   );
 		}
-		knownLevels.add(this);
+	};
+
+
+
+	private xLevel(final char chr, final String name, final int value) {
+		this.chr   = chr;
+		this.name  = name;
+		this.value = value;
 	}
-	@Override
-	public Object clone() {
-		return this;
-	}
 
 
 
-	public static xLevel[] getKnownLevels() {
-		return knownLevels.toArray(new xLevel[0]);
+	public static xLevel[] getLevels() {
+		return xlevels.toArray(new xLevel[0]);
 	}
 	public static xLevel FindLevel(final String name) {
 		if (Utils.isEmpty(name)) return null;
-		if (NumberUtils.isNumeric(name)) {
-			return FindLevel(NumberUtils.toInteger(name));
+		if (NumberUtils.IsNumeric(name)) {
+			return FindLevel(NumberUtils.ToInteger(name));
 		}
-		final String nameStr = name.toUpperCase();
-		for (final xLevel level : knownLevels) {
-			if (nameStr.equalsIgnoreCase(level.name)) {
+		final Iterator<xLevel> it = xlevels.iterator();
+		while (it.hasNext()) {
+			final xLevel level = it.next();
+			if (name.equalsIgnoreCase(level.name))
 				return level;
-			}
 		}
 		return null;
 	}
@@ -110,21 +77,20 @@ public class xLevel implements Serializable {
 		final int val = value.intValue();
 		if (val == xLevel.ALL.value) return xLevel.ALL;
 		if (val == xLevel.OFF.value) return xLevel.OFF;
-		xLevel level = xLevel.OFF;
+		xLevel found = xLevel.OFF;
 		int offset = xLevel.OFF.value;
-		for (final xLevel lvl : knownLevels) {
-			if (level.equals(xLevel.OFF) || level.equals(xLevel.ALL))
-				continue;
+		final Iterator<xLevel> it = xlevels.iterator();
+		while (it.hasNext()) {
+			final xLevel lvl = it.next();
+			if (xLevel.OFF.equals(lvl)) continue;
+			if (xLevel.ALL.equals(lvl)) continue;
 			if (val < lvl.value) continue;
 			if (val - lvl.value < offset) {
 				offset = val - lvl.value;
-				level = lvl;
+				found = lvl;
 			}
 		}
-		if (level == null) {
-			return xLevel.OFF;
-		}
-		return level;
+		return found;
 	}
 	public static xLevel parse(final String value) {
 		return FindLevel(value);
@@ -135,12 +101,15 @@ public class xLevel implements Serializable {
 	public boolean isLoggable(final xLevel level) {
 		if (level == null) return false;
 		// off (disabled)
-		if (this.value == xLevel.OFF.value) return false;
+		if (this.value == xLevel.OFF.value)
+			return false;
 		// all (forced)
-		if (this.value == xLevel.ALL.value) return true;
+		if (this.value == xLevel.ALL.value)
+			return true;
 		// check level
-		if (level.value == xLevel.ALL.value) return true;
-		return this.value <= level.value;
+		if (level.value == xLevel.ALL.value)
+			return true;
+		return (this.value <= level.value);
 	}
 	public boolean notLoggable(final xLevel level) {
 		if (level == null) return false;
@@ -156,12 +125,13 @@ public class xLevel implements Serializable {
 
 
 
-	// to java level
-	public java.util.logging.Level getJavaLevel() {
-		return java.util.logging.Level.parse(
-			Integer.toString(this.value)
-		);
-	}
+//TODO: is this needed?
+//	// to java level
+//	public java.util.logging.Level getJavaLevel() {
+//		return java.util.logging.Level.parse(
+//			Integer.toString(this.value)
+//		);
+//	}
 
 
 
