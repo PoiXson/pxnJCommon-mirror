@@ -219,10 +219,7 @@ public class xClock {
 
 
 	public String getTimeServer() {
-		if (Utils.isEmpty(this.timeserver)) {
-			return DEFAULT_TIMESERVER;
-		}
-		return this.timeserver;
+		return Utils.ifEmpty(this.timeserver, DEFAULT_TIMESERVER);
 	}
 	public void setTimeServer(final String host) {
 		this.timeserver = host;

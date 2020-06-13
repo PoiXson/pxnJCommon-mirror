@@ -17,11 +17,7 @@ public class StringParts extends xString {
 
 
 	public xString delim(final String delimStr) {
-		this.delim = (
-			Utils.isEmpty(delimStr)
-			? null
-			: delimStr
-		);
+		this.delim = Utils.ifEmpty(delimStr, null);
 		return this;
 	}
 	public String delim() {

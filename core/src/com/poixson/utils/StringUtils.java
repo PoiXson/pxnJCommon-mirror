@@ -566,7 +566,7 @@ public final class StringUtils {
 	// add strings with delimiter
 	public static String MergeStrings(final String delim, final String... addThis) {
 		if (Utils.isEmpty(addThis)) throw new RequiredArgumentException("addThis");
-		final String dlm = (Utils.isEmpty(delim) ? null : delim);
+		final String dlm = Utils.ifEmpty(delim, null);
 		final StringBuilder buf = new StringBuilder();
 		boolean b = false;
 		for (final String line : addThis) {

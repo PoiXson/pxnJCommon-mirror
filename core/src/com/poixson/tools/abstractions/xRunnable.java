@@ -127,11 +127,7 @@ public class xRunnable implements RunnableNamed {
 	}
 	@Override
 	public void setTaskName(final String name) {
-		if (Utils.isEmpty(name)) {
-			this.taskName.set(null);
-		} else {
-			this.taskName.set(name);
-		}
+		this.taskName.set(Utils.ifEmpty(name, null));
 	}
 	@Override
 	public boolean taskNameEquals(final String matchName) {

@@ -344,11 +344,7 @@ System.out.println("SEARCH PATH: "+FileUtils.MergePaths(path, fileName));
 	// extracted library path
 	public String getLocalLibPath() {
 		final String path = this.localPath;
-		return (
-			Utils.isEmpty(path)
-			? "."
-			: path
-		);
+		return Utils.ifEmpty(path, ".");
 	}
 	public NativeAutoLoader setLocalLibPath(final String path) {
 		if (!StringUtils.StrEqualsExact(this.localPath, path)) {

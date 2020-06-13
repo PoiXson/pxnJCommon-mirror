@@ -31,11 +31,7 @@ public abstract class xPluginLoader<T extends xJavaPlugin> implements Runnable {
 	public xPluginLoader(final xPluginManager<T> manager, final String mainClassKey) {
 		if (manager == null) throw new RequiredArgumentException("manager");
 		this.manager = manager;
-		this.mainClassKey = (
-			Utils.isEmpty(mainClassKey)
-			? xPluginDefines.DEFAULT_PLUGIN_CLASS_KEY
-			: mainClassKey
-		);
+		this.mainClassKey = Utils.ifEmpty(mainClassKey, xPluginDefines.DEFAULT_PLUGIN_CLASS_KEY);
 	}
 
 

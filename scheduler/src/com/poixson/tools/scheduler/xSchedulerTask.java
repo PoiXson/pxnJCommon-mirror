@@ -322,11 +322,7 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 			}
 		}
 		final String taskName = super.getTaskName();
-		return (
-			Utils.isEmpty(taskName)
-			? "task"+Integer.toString(this.taskIndex)
-			: taskName
-		);
+		return Utils.ifEmpty(taskName, "task"+Integer.toString(this.taskIndex));
 	}
 	@Override
 	public void setTaskName(final String taskName) {

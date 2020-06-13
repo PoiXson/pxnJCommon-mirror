@@ -157,11 +157,7 @@ public class AsciiArtBuilder {
 	// default background color
 	public String getBgColor() {
 		final String bgColor = this.bgColor;
-		return (
-			Utils.isEmpty(bgColor)
-			? null
-			: bgColor
-		);
+		return Utils.ifEmpty(bgColor, null);
 	}
 	public AsciiArtBuilder setBgColor(final String bgColor) {
 		this.bgColor = StringUtils.ForceStarts("bg_", bgColor);

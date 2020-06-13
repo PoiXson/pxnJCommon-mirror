@@ -22,11 +22,7 @@ public class xCommandDAO extends xEventListenerDAO {
 		super(object, method);
 		if (Utils.isEmpty(name)) throw new RequiredArgumentException("name");
 		this.name = name;
-		this.aliases = (
-			Utils.isEmpty(aliases)
-			? null
-			: aliases
-		);
+		this.aliases = Utils.ifEmpty(aliases, null);
 	}
 
 
