@@ -9,24 +9,23 @@ import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.xThreadPoolWorker;
 import com.poixson.utils.NumberUtils;
+import com.poixson.utils.StringUtils;
 import com.poixson.utils.ThreadUtils;
 
 
-public abstract class xThreadPool_MultiWorkers extends xThreadPool {
+public abstract class xThreadPool_Multi extends xThreadPool {
 
-	protected final CopyOnWriteArraySet<xThreadPoolWorker> workers =
-			new CopyOnWriteArraySet<xThreadPoolWorker>();
-
-	protected final AtomicInteger maxWorkers =
-			new AtomicInteger(GLOBAL_MAX_WORKERS);
+	protected final CopyOnWriteArraySet<xThreadPoolWorker> workers = new CopyOnWriteArraySet<xThreadPoolWorker>();
+	protected final AtomicInteger maxWorkers = new AtomicInteger(0);
 
 	// stats
 	protected final AtomicLong workerIndexCount = new AtomicLong(0L);
 
 
 
-	protected xThreadPool_MultiWorkers(final String poolName) {
+	public xThreadPool_Multi(final String poolName) {
 		super(poolName);
+		this.maxWorkers.set(ThreadUtils.getSystemCoresPlus(1));
 	}
 
 
@@ -36,49 +35,73 @@ public abstract class xThreadPool_MultiWorkers extends xThreadPool {
 
 
 
+	// start with current thread
 	@Override
-	public void stop() {
-		if (this.stopping.get()) return;
-		super.stop();
-		// stop workers
-		OUTER_LOOP:
-		for (int i=0; i<3; i++) {
-			if (i > 0)
-				ThreadUtils.Sleep(20L);
-			if (this.workers.isEmpty())
-				break OUTER_LOOP;
-			final Iterator<xThreadPoolWorker> it = this.workers.iterator();
-			//WORKER_LOOP:
-			while (it.hasNext()) {
-				final xThreadPoolWorker worker = it.next();
-				worker.stop();
-			} // end WORKER_LOOP
-		} // end OUTER_LOOP
+	public void go() {
+		if (!this.okStart()) return;
+		if (!this.running.compareAndSet(false, true))
+			return;
+		final xThreadPoolWorker worker =
+			new xThreadPoolWorker(
+				this,
+				Thread.currentThread(),
+				this.getPoolName()
+			);
+		this.workers.add(worker);
+		worker.run();
 	}
+
+
+
+//TODO
+//	@Override
+//	public void waitForStop() {
+//	}
 
 
 
 	@Override
 	protected void startNewWorkerIfNeededAndAble() {
-		if (stoppingAll.get() || this.stopping.get()) return;
-		// new worker
+		if (this.isStopping()) return;
+		if (!this.isRunning()) return;
+throw new RuntimeException("UNFINISHED CODE");
 //TODO:
 //use xThreadFactory
 	}
 
 
 
+	// ------------------------------------------------------------------------------- //
+	// workers
+
+
+
 	@Override
-	public void registerWorker(final xThreadPoolWorker worker) {
-		if (worker == null) throw new RequiredArgumentException("worker");
-		this.workers.add(worker);
+	public xThreadPoolWorker[] getWorkers() {
+		return this.workers.toArray(new xThreadPoolWorker[0]);
 	}
+
+
+
 	@Override
-	public void unregisterWorker(final xThreadPoolWorker worker) {
-		if (worker == null) throw new RequiredArgumentException("worker");
-		this.workers.remove(worker);
-		// ensure it's stopping
-		worker.stop();
+	protected void stopWorkers() {
+		boolean changed = true;
+		//CHANGED_LOOP:
+		while (changed) {
+			changed = false;
+			final Iterator<xThreadPoolWorker> it = this.workers.iterator();
+			//WORKERS_LOOP:
+			while (it.hasNext()) {
+				final xThreadPoolWorker worker= it.next();
+				if (!worker.isStopping()) {
+					worker.stop();
+					changed = true;
+				}
+			} // end WORKERS_LOOP
+			if (changed) {
+				ThreadUtils.Sleep(10L);
+			}
+		} // end CHANGED_LOOP
 	}
 
 
@@ -112,9 +135,18 @@ public abstract class xThreadPool_MultiWorkers extends xThreadPool {
 				break OUTER_LOOP;
 		} // end OUTER_LOOP
 	}
+
+
+
 	@Override
-	public void joinWorkers() {
-		this.joinWorkers(0L);
+	public void unregisterWorker(final xThreadPoolWorker worker) {
+		if (worker == null) throw new RequiredArgumentException("worker");
+		if (!this.workers.remove(worker)) {
+			throw new RuntimeException(
+				StringUtils.ReplaceTags("Cannot unregister worker not owned by pool:",
+					this.getPoolName(), worker.getWorkerName())
+			);
+		}
 	}
 
 
@@ -126,8 +158,14 @@ public abstract class xThreadPool_MultiWorkers extends xThreadPool {
 
 	@Override
 	public boolean isRunning() {
+		if (!super.isRunning())
+			return false;
 		return (this.workers.size() > 0);
 	}
+
+
+
+	// active workers
 	@Override
 	public int getActiveCount() {
 		int count = 0;
@@ -141,19 +179,55 @@ public abstract class xThreadPool_MultiWorkers extends xThreadPool {
 
 
 
+	// next worker index
 	@Override
-	public xThreadPoolWorker getCurrentWorker() {
-		if (this.workers.isEmpty())
-			return null;
+	public long getNextWorkerIndex() {
+		return this.workerIndexCount
+				.incrementAndGet();
+	}
+
+
+
+	@Override
+	public xThreadPoolWorker getCurrentThreadWorker() {
+		if (this.workers.isEmpty()) return null;
 		final Thread current = Thread.currentThread();
-		final Iterator<xThreadPoolWorker> it =
-			this.workers.iterator();
+		final Iterator<xThreadPoolWorker> it = this.workers.iterator();
 		while (it.hasNext()) {
 			final xThreadPoolWorker worker = it.next();
 			if (worker.isThread(current))
 				return worker;
 		}
 		return null;
+	}
+	@Override
+	public boolean isCurrentThread() {
+		if (this.workers.isEmpty()) return false;
+		final Thread current = Thread.currentThread();
+		final Iterator<xThreadPoolWorker> it = this.workers.iterator();
+		while (it.hasNext()) {
+			final xThreadPoolWorker worker = it.next();
+			if (worker.isThread(current))
+				return true;
+		}
+		return false;
+	}
+
+
+
+	@Override
+	public int getWorkerCount() {
+		return this.workers.size();
+	}
+	@Override
+	public int getActiveWorkerCount() {
+//TODO
+return 0;
+	}
+	@Override
+	public int getInactiveWorkerCount() {
+//TODO
+return 0;
 	}
 
 
@@ -164,15 +238,17 @@ public abstract class xThreadPool_MultiWorkers extends xThreadPool {
 
 
 	// pool size
+	@Override
 	public int getMaxWorkers() {
 		return this.maxWorkers.get();
 	}
+	@Override
 	public void setMaxWorkers(final int maxWorkers) {
 		this.maxWorkers.set(
 			NumberUtils.MinMax(
 				maxWorkers,
 				0,
-				GLOBAL_MAX_WORKERS
+				xThreadPool.HARD_MAX_WORKERS
 			)
 		);
 	}
@@ -183,41 +259,13 @@ public abstract class xThreadPool_MultiWorkers extends xThreadPool {
 	@Override
 	public void setThreadPriority(final int priority) {
 		super.setThreadPriority(priority);
+//TODO
+//		this.threadFactory.setPriority(priority);
 		ThreadUtils.Sleep(10L);
 		final Iterator<xThreadPoolWorker> it = this.workers.iterator();
 		while (it.hasNext()) {
 			it.next().setPriority(priority);
 		}
-	}
-
-
-
-//TODO:
-//	@Override
-//	public boolean keepAlive(final boolean enable) {
-//		final boolean previous =
-//			super.keepAlive(enable);
-//		{
-//			final Iterator<xThreadPoolWorker> it = this.workers.iterator();
-//			while (it.hasNext()) {
-//				final xThreadPoolWorker worker = it.next();
-//				worker.keepAlive(enable);
-//			}
-//		}
-//		return previous;
-//	}
-
-
-
-	// ------------------------------------------------------------------------------- //
-	// stats
-
-
-
-	@Override
-	public long getNextWorkerIndex() {
-		return this.workerIndexCount
-				.incrementAndGet();
 	}
 
 

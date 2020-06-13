@@ -5,16 +5,17 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.xThreadPoolWorker;
+import com.poixson.utils.StringUtils;
 
 
-public abstract class xThreadPool_SingleWorker extends xThreadPool {
+public abstract class xThreadPool_Single extends xThreadPool {
 
 	protected final AtomicReference<xThreadPoolWorker> worker =
 			new AtomicReference<xThreadPoolWorker>(null);
 
 
 
-	protected xThreadPool_SingleWorker(final String poolName) {
+	public xThreadPool_Single(final String poolName) {
 		super(poolName);
 	}
 
@@ -25,30 +26,57 @@ public abstract class xThreadPool_SingleWorker extends xThreadPool {
 
 
 
+	// start with current thread
 	@Override
-	public void stop() {
-		if (this.stopping.get()) return;
-		super.stop();
-		xThreadPoolWorker worker = this.worker.get();
-		if (worker != null)
-			worker.stop();
+	public void go() {
+		if (!this.okStart()) return;
+		if (!this.running.compareAndSet(false, true))
+			return;
+		if (this.worker.get() == null) {
+			final xThreadPoolWorker worker =
+				new xThreadPoolWorker(
+					this,
+					Thread.currentThread(),
+					this.getPoolName()
+				);
+			if (this.worker.compareAndSet(null, worker)) {
+				worker.run();
+			}
+		}
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// workers
+
+
+
+	@Override
+	public xThreadPoolWorker[] getWorkers() {
+		final xThreadPoolWorker worker = this.worker.get();
+		if (worker == null)
+			return new xThreadPoolWorker[0];
+		return new xThreadPoolWorker[] { worker };
 	}
 
 
 
 	@Override
 	protected void startNewWorkerIfNeededAndAble() {
-		if (stoppingAll.get() || this.stopping.get()) return;
-		// existing worker
-		if (this.worker.get() != null)
-			return;
-		if (this.isManualNewThreads())
-			return;
-		// new worker
-		{
-			final xThreadPoolWorker worker = new xThreadPoolWorker(this);
+		if (this.isStopping()) return;
+		if (!this.isRunning()) return;
+		if (this.worker.get() == null) {
+			// new worker
+			final xThreadPoolWorker worker =
+				new xThreadPoolWorker(
+					this,
+					(Thread) null,
+					this.getPoolName()
+				);
 			if (this.worker.compareAndSet(null, worker)) {
-				worker.startAndWait();
+				worker.start();
+				worker.waitForStart();
 			}
 		}
 	}
@@ -56,18 +84,24 @@ public abstract class xThreadPool_SingleWorker extends xThreadPool {
 
 
 	@Override
-	public void registerWorker(final xThreadPoolWorker worker) {
-		if (worker == null) throw new RequiredArgumentException("worker");
-		if ( ! this.worker.compareAndSet(null, worker) ) {
-			if ( ! worker.equals(this.worker.get()) )
-				throw new RuntimeException("Single thread pool is already registered");
+	protected void stopWorkers() {
+		final xThreadPoolWorker worker = this.worker.get();
+		if (worker != null) {
+			worker.stop();
 		}
 	}
+
+
+
 	@Override
 	public void unregisterWorker(final xThreadPoolWorker worker) {
 		if (worker == null) throw new RequiredArgumentException("worker");
-		if ( ! this.worker.compareAndSet(worker, null) )
-			throw new RuntimeException("Invalid worker to unregister!");
+		if (!this.worker.compareAndSet(worker, null)) {
+			throw new RuntimeException(
+				StringUtils.ReplaceTags("Cannot unregister worker not owned by pool: ",
+					this.getPoolName(), worker.getWorkerName())
+			);
+		}
 		// ensure it's stopping
 		worker.stop();
 	}
@@ -85,10 +119,6 @@ public abstract class xThreadPool_SingleWorker extends xThreadPool {
 			this.log().trace(e);
 		}
 	}
-	@Override
-	public void joinWorkers() {
-		this.joinWorkers(0L);
-	}
 
 
 
@@ -99,38 +129,77 @@ public abstract class xThreadPool_SingleWorker extends xThreadPool {
 
 	@Override
 	public boolean isRunning() {
-		final xThreadPoolWorker worker = this.worker.get();
-		if (worker == null)
+		if (!super.isRunning())
 			return false;
-		return worker.isRunning();
+		return (this.worker.get() != null);
 	}
+
+
+
+	// active workers
 	@Override
 	public int getActiveCount() {
 		final xThreadPoolWorker worker = this.worker.get();
-		if (worker == null)    return 0;
-		if (worker.isActive()) return 1;
+		if (worker != null) {
+			if (worker.isActive())
+				return 1;
+		}
 		return 0;
 	}
 
 
 
+	// next worker index
 	@Override
-	public xThreadPoolWorker getCurrentWorker() {
+	public long getNextWorkerIndex() {
+		return 0L;
+	}
+
+
+
+	@Override
+	public xThreadPoolWorker getCurrentThreadWorker() {
 		final xThreadPoolWorker worker = this.worker.get();
-		if (worker == null)
-			return null;
-		return (
-			worker.isCurrentThread()
-			? worker
-			: null
-		);
+		if (worker != null) {
+			if (worker.isCurrentThread())
+				return worker;
+		}
+		return null;
 	}
 	@Override
 	public boolean isCurrentThread() {
 		final xThreadPoolWorker worker = this.worker.get();
+		if (worker != null) {
+			return worker.isCurrentThread();
+		}
+		return false;
+	}
+
+
+
+	@Override
+	public int getWorkerCount() {
+		if (this.worker.get() == null)
+			return 0;
+		return 1;
+	}
+	@Override
+	public int getActiveWorkerCount() {
+		final xThreadPoolWorker worker = this.worker.get();
 		if (worker == null)
-			return false;
-		return worker.isCurrentThread();
+			return 0;
+		if (worker.isActive())
+			return 1;
+		return 0;
+	}
+	@Override
+	public int getInactiveWorkerCount() {
+		final xThreadPoolWorker worker = this.worker.get();
+		if (worker == null)
+			return 0;
+		if (worker.isActive())
+			return 0;
+		return 1;
 	}
 
 
@@ -160,20 +229,6 @@ public abstract class xThreadPool_SingleWorker extends xThreadPool {
 		if (worker != null) {
 			worker.setPriority(priority);
 		}
-	}
-
-
-
-	// ------------------------------------------------------------------------------- //
-	// stats
-
-
-
-	@Override
-	public long getNextWorkerIndex() {
-		if (this.worker.get() != null)
-			throw new RuntimeException("Single worker already loaded!");
-		return 1L;
 	}
 
 
