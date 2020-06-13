@@ -195,7 +195,7 @@ public class ShellArgs {
 
 
 
-	public String getFlag(final String... keys) {
+	public String getFlag(final String...keys) {
 		for (final String k : keys) {
 			final String val = this.getFlag_Single(k);
 			if (val != null) {
@@ -219,7 +219,7 @@ public class ShellArgs {
 
 
 
-	public boolean getFlagBool(final boolean defaultValue, final String... keys) {
+	public boolean getFlagBool(final boolean defaultValue, final String...keys) {
 		for (final String k : keys) {
 			final Boolean val = this.getFlagBoolean_Single(k);
 			if (val != null) {
@@ -228,7 +228,7 @@ public class ShellArgs {
 		}
 		return defaultValue;
 	}
-	public Boolean getFlagBoolean(final String... keys) {
+	public Boolean getFlagBoolean(final String...keys) {
 		for (final String k : keys) {
 			final Boolean val = this.getFlagBoolean_Single(k);
 			if (val != null) {
@@ -253,7 +253,7 @@ public class ShellArgs {
 
 
 
-	public boolean hasFlag(final String... keys) {
+	public boolean hasFlag(final String...keys) {
 		for (final String k : keys) {
 			final boolean exists = this.hasFlag_Single(k);
 			if (exists) {

@@ -47,9 +47,8 @@ public class xFont {
 
 
 	public Font getFont(final String format) {
-		if (Utils.isEmpty(format)) {
+		if (Utils.isEmpty(format))
 			return this.getFont();
-		}
 		final xFont font = new xFont(this);
 		font.apply(format);
 		return font.getFont();

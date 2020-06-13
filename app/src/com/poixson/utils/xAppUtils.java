@@ -46,10 +46,8 @@ public final class xAppUtils {
 //		}
 	}
 	public static void DisplayStartupVars(final xApp app, final xLog log) {
-		final Map<String, String> varsMap =
-			getStartupVars(app);
-		final Iterator<Entry<String, String>> it =
-			varsMap.entrySet().iterator();
+		final Map<String, String> varsMap = getStartupVars(app);
+		final Iterator<Entry<String, String>> it = varsMap.entrySet().iterator();
 		final int maxLineSize =
 			StringUtils.FindLongestLine(
 				varsMap.keySet().toArray(new String[0])

@@ -83,7 +83,7 @@ public class xTime {
 		return xunit.convertTo( this.value.get() );
 	}
 	public long get(final TimeUnit unit) {
-		if (unit == null) throw new RequiredArgumentException("unit");
+		if (unit == null)  throw new RequiredArgumentException("unit");
 		final xTimeU xunit = xTimeU.GetUnit(unit);
 		if (xunit == null) throw new RuntimeException("Unknown time unit: "+unit.toString());
 		return xunit.convertTo( this.value.get() );
@@ -109,23 +109,23 @@ public class xTime {
 	}
 	public xTime set(final long value, final TimeUnit unit) {
 		if (this.locked.get()) throw new UnmodifiableObjectException();
-		if (unit == null) throw new RequiredArgumentException("unit");
+		if (unit == null)      throw new RequiredArgumentException("unit");
 		final xTimeU xunit = xTimeU.GetUnit(unit);
-		if (xunit == null) throw new RuntimeException("Unknown time unit: "+unit.toString());
+		if (xunit == null)     throw new RuntimeException("Unknown time unit: "+unit.toString());
 		this.value.set( xunit.convertTo(value) );
 		return this;
 	}
 	public xTime set(final String val) {
-		if (this.locked.get()) throw new UnmodifiableObjectException();
+		if (this.locked.get())  throw new UnmodifiableObjectException();
 		if (Utils.isEmpty(val)) throw new RequiredArgumentException("val");
 		final Long value = parseToLong(val);
-		if (value == null) throw new RuntimeException("Invalid value: "+val);
+		if (value == null)      throw new RuntimeException("Invalid value: "+val);
 		this.value.set( value.longValue() );
 		return this;
 	}
 	public xTime set(final xTime time) {
 		if (this.locked.get()) throw new UnmodifiableObjectException();
-		if (time == null) throw new RequiredArgumentException("time");
+		if (time == null)      throw new RequiredArgumentException("time");
 		this.value.set( time.getMS() );
 		return this;
 	}
@@ -143,26 +143,26 @@ public class xTime {
 	// add time
 	public void add(final long val, final xTimeU xunit) {
 		if (this.locked.get()) throw new UnmodifiableObjectException();
-		if (xunit == null) throw new RequiredArgumentException("unit");
+		if (xunit == null)     throw new RequiredArgumentException("unit");
 		this.value.addAndGet( xunit.convertTo(val) );
 	}
 	public void add(final long val, final TimeUnit unit) {
 		if (this.locked.get()) throw new UnmodifiableObjectException();
-		if (unit == null) throw new RequiredArgumentException("unit");
+		if (unit == null)      throw new RequiredArgumentException("unit");
 		final xTimeU xunit = xTimeU.GetUnit(unit);
-		if (xunit == null) throw new RuntimeException("Unknown time unit: "+unit.toString());
+		if (xunit == null)     throw new RuntimeException("Unknown time unit: "+unit.toString());
 		this.value.addAndGet( xunit.convertTo(val) );
 	}
 	public void add(final String val) {
-		if (this.locked.get()) throw new UnmodifiableObjectException();
+		if (this.locked.get())  throw new UnmodifiableObjectException();
 		if (Utils.isEmpty(val)) throw new RequiredArgumentException("val");
 		final Long value = parseToLong(val);
-		if (value == null) throw new RuntimeException("Invalid value: "+val);
+		if (value == null)      throw new RuntimeException("Invalid value: "+val);
 		this.value.addAndGet( value.longValue() );
 	}
 	public void add(final xTime time) {
 		if (this.locked.get()) throw new UnmodifiableObjectException();
-		if (time == null) throw new RequiredArgumentException("time");
+		if (time == null)      throw new RequiredArgumentException("time");
 		this.value.addAndGet( time.getMS() );
 	}
 

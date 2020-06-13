@@ -11,7 +11,7 @@ public final class Log {
 
 
 
-	public static void trace(final Object... messages) {
+	public static void trace(final Object...messages) {
 		if (enableLogging) {
 			xLogRoot.Get()
 				.trace(null, "", messages);
@@ -26,7 +26,7 @@ public final class Log {
 
 
 
-	public static void debug(final Object... messages) {
+	public static void debug(final Object...messages) {
 		if (enableLogging) {
 			xLogRoot.Get()
 				.fine("", messages);
@@ -41,7 +41,7 @@ public final class Log {
 
 
 
-	public static void info(final Object... messages) {
+	public static void info(final Object...messages) {
 		if (enableLogging) {
 			xLogRoot.Get()
 				.info("", messages);
@@ -50,7 +50,7 @@ public final class Log {
 
 
 
-	public static void warn(final Object... messages) {
+	public static void warn(final Object...messages) {
 		if (enableLogging) {
 			xLogRoot.Get()
 				.warning("", messages);
@@ -59,7 +59,7 @@ public final class Log {
 
 
 
-	public static void error(final Object... messages) {
+	public static void error(final Object...messages) {
 		if (enableLogging) {
 			xLogRoot.Get()
 				.severe("", messages);

@@ -47,52 +47,38 @@ public final class NumberUtils {
 
 
 	public static boolean EqualsExact(final Integer a, final Integer b) {
-		if (a == null && b == null)
-			return true;
-		if (a == null || b == null)
-			return false;
+		if (a == null && b == null) return true;
+		if (a == null || b == null) return false;
 		return a.intValue() == b.intValue();
 	}
 	public static boolean EqualsExact(final Boolean a, final Boolean b) {
-		if (a == null && b == null)
-			return true;
-		if (a == null || b == null)
-			return false;
+		if (a == null && b == null) return true;
+		if (a == null || b == null) return false;
 		return ( a.booleanValue() == b.booleanValue() );
 	}
 	public static boolean EqualsExact(final Byte a, final Byte b) {
-		if (a == null && b == null)
-			return true;
-		if (a == null || b == null)
-			return false;
+		if (a == null && b == null) return true;
+		if (a == null || b == null) return false;
 		return ( a.byteValue() == b.byteValue() );
 	}
 	public static boolean EqualsExact(final Short a, final Short b) {
-		if (a == null && b == null)
-			return true;
-		if (a == null || b == null)
-			return false;
+		if (a == null && b == null) return true;
+		if (a == null || b == null) return false;
 		return ( a.shortValue() == b.shortValue() );
 	}
 	public static boolean EqualsExact(final Long a, final Long b) {
-		if (a == null && b == null)
-			return true;
-		if (a == null || b == null)
-			return false;
+		if (a == null && b == null) return true;
+		if (a == null || b == null) return false;
 		return ( a.longValue() == b.longValue() );
 	}
 	public static boolean EqualsExact(final Double a, final Double b) {
-		if (a == null && b == null)
-			return true;
-		if (a == null || b == null)
-			return false;
+		if (a == null && b == null) return true;
+		if (a == null || b == null) return false;
 		return ( a.doubleValue() == b.doubleValue() );
 	}
 	public static boolean EqualsExact(final Float a, final Float b) {
-		if (a == null && b == null)
-			return true;
-		if (a == null || b == null)
-			return false;
+		if (a == null && b == null) return true;
+		if (a == null || b == null) return false;
 		return ( a.floatValue() == b.floatValue() );
 	}
 
@@ -113,8 +99,7 @@ public final class NumberUtils {
 
 	// parse number
 	public static Integer ToInteger(final String value) {
-		if (Utils.isEmpty(value))
-			return null;
+		if (Utils.isEmpty(value)) return null;
 		try {
 			return new Integer(Integer.parseInt(value));
 		} catch (NumberFormatException ignore) {}
@@ -129,8 +114,7 @@ public final class NumberUtils {
 
 	// parse byte
 	public static Byte ToByte(final String value) {
-		if (Utils.isEmpty(value))
-			return null;
+		if (Utils.isEmpty(value)) return null;
 		try {
 			return new Byte(Byte.parseByte(value));
 		} catch (NumberFormatException ignore) {}
@@ -145,8 +129,7 @@ public final class NumberUtils {
 
 	// parse short
 	public static Short ToShort(final String value) {
-		if (Utils.isEmpty(value))
-			return null;
+		if (Utils.isEmpty(value)) return null;
 		try {
 			return new Short(Short.parseShort(value));
 		} catch (NumberFormatException ignore) {}
@@ -161,8 +144,7 @@ public final class NumberUtils {
 
 	// parse long
 	public static Long ToLong(final String value) {
-		if (Utils.isEmpty(value))
-			return null;
+		if (Utils.isEmpty(value)) return null;
 		try {
 			return new Long(Long.parseLong(value));
 		} catch (NumberFormatException ignore) {}
@@ -177,8 +159,7 @@ public final class NumberUtils {
 
 	// parse double
 	public static Double ToDouble(final String value) {
-		if (Utils.isEmpty(value))
-			return null;
+		if (Utils.isEmpty(value)) return null;
 		try {
 			return new Double(Double.parseDouble(value));
 		} catch (NumberFormatException ignore) {}
@@ -193,8 +174,7 @@ public final class NumberUtils {
 
 	// parse float
 	public static Float ToFloat(final String value) {
-		if (Utils.isEmpty(value))
-			return null;
+		if (Utils.isEmpty(value)) return null;
 		try {
 			return new Float(Float.parseFloat(value));
 		} catch (NumberFormatException ignore) {}
@@ -209,8 +189,7 @@ public final class NumberUtils {
 
 	// parse boolean
 	public static Boolean ToBoolean(final String value) {
-		if (Utils.isEmpty(value))
-			return null;
+		if (Utils.isEmpty(value)) return null;
 		final String val = value.trim().toLowerCase();
 		for (final String v : TRUE_VALUES) {
 			if (val.equals(v))
@@ -233,8 +212,7 @@ public final class NumberUtils {
 	}
 	public static boolean ToBoolean(final String value, final boolean def) {
 		final Boolean bool = ToBoolean(value);
-		if (bool == null)
-			return def;
+		if (bool == null) return def;
 		return bool.booleanValue();
 	}
 
@@ -242,8 +220,7 @@ public final class NumberUtils {
 
 	// is number
 	public static boolean IsNumeric(final String value) {
-		if (Utils.isEmpty(value))
-			return false;
+		if (Utils.isEmpty(value)) return false;
 		return (ToLong(value) != null);
 	}
 	// is boolean
@@ -283,48 +260,30 @@ public final class NumberUtils {
 
 	public static int Round(final int value, final int product) {
 		return (int)
-			Round(
-				(double) value,
-				(double) product
-			);
+			Round( (double) value, (double) product );
 	}
 	public static int Floor(final int value, final int product) {
 		return (int)
-			Floor(
-				(double) value,
-				(double) product
-			);
+			Floor( (double) value, (double) product );
 	}
 	public static int Ceil(final int value, final int product) {
 		return (int)
-			Ceil(
-				(double) value,
-				(double) product
-			);
+			Ceil( (double) value, (double) product );
 	}
 
 
 
 	public static long Round(final long value, final int product) {
 		return (long)
-			Round(
-				(double) value,
-				(double) product
-			);
+			Round( (double) value, (double) product );
 	}
 	public static long Floor(final long value, final int product) {
 		return (long)
-			Floor(
-				(double) value,
-				(double) product
-			);
+			Floor( (double) value, (double) product );
 	}
 	public static long Ceil(final long value, final int product) {
 		return (long)
-			Ceil(
-				(double) value,
-				(double) product
-			);
+			Ceil( (double) value, (double) product );
 	}
 
 

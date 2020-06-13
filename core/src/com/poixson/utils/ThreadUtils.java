@@ -40,8 +40,7 @@ public final class ThreadUtils {
 	}
 	public static String[] GetThreadNames(final boolean includeDaemon) {
 		final Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-		if (threadSet.isEmpty())
-			return null;
+		if (threadSet.isEmpty()) return null;
 		final Set<String> list = new HashSet<String>();
 		THREAD_LOOP:
 		for (final Thread thread : threadSet) {

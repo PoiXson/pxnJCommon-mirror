@@ -430,8 +430,7 @@ public class xAppSteps_Console implements xConsole {
 	}
 	@Override
 	public void doBeep() {
-		final boolean isread =
-			this.waitReadCool();
+		final boolean isread = this.waitReadCool();
 		try {
 			if (isread) {
 				getReader().callWidget(LineReader.BEEP);

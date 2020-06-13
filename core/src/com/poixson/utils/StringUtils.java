@@ -159,16 +159,14 @@ public final class StringUtils {
 
 
 	public static String[] StringToArray(final String str) {
-		if (Utils.isEmpty(str))
-			return null;
+		if (Utils.isEmpty(str)) return null;
 		return new String[] { str };
 	}
 
 
 
 	public static String[] SplitLines(final String lines[]) {
-		if (Utils.isEmpty(lines))
-			return null;
+		if (Utils.isEmpty(lines)) return null;
 		final List<String> result = new ArrayList<String>(lines.length);
 		for (final String line : lines) {
 			if (!line.contains("\n")) {
@@ -564,7 +562,7 @@ public final class StringUtils {
 
 
 	// add strings with delimiter
-	public static String MergeStrings(final String delim, final String... addThis) {
+	public static String MergeStrings(final String delim, final String...addThis) {
 		if (Utils.isEmpty(addThis)) throw new RequiredArgumentException("addThis");
 		final String dlm = Utils.ifEmpty(delim, null);
 		final StringBuilder buf = new StringBuilder();
@@ -581,7 +579,7 @@ public final class StringUtils {
 		}
 		return buf.toString();
 	}
-	public static String MergeStrings(final char delim, final String... addThis) {
+	public static String MergeStrings(final char delim, final String...addThis) {
 		if (Utils.isEmpty(addThis)) throw new RequiredArgumentException("addThis");
 		final StringBuilder buf = new StringBuilder();
 		boolean first = true;
@@ -601,7 +599,7 @@ public final class StringUtils {
 
 
 	// add objects to string with delimiter
-	public static String MergeObjects(final String delim, final Object... addThis) {
+	public static String MergeObjects(final String delim, final Object...addThis) {
 		if (Utils.isEmpty(addThis)) throw new RequiredArgumentException("addThis");
 		String[] addStrings = new String[ addThis.length ];
 		int index = 0;
@@ -611,7 +609,7 @@ public final class StringUtils {
 		}
 		return MergeStrings(delim, addStrings);
 	}
-	public static String MergeObjects(final char delim, final Object... addThis) {
+	public static String MergeObjects(final char delim, final Object...addThis) {
 		if (Utils.isEmpty(addThis)) throw new RequiredArgumentException("addThis");
 		String[] addStrings = new String[ addThis.length ];
 		int index = 0;
@@ -670,8 +668,7 @@ public final class StringUtils {
 
 	// index of (many delims)
 	public static int IndexOf(final String string, final int fromIndex, final char...delims) {
-		if (Utils.isEmpty(string))
-			return -1;
+		if (Utils.isEmpty(string)) return -1;
 		int pos = Integer.MAX_VALUE;
 		for (final char delim : delims) {
 			final int p = string.indexOf(delim, fromIndex);
@@ -684,11 +681,7 @@ public final class StringUtils {
 					return 0;
 			}
 		}
-		return (
-			pos == Integer.MAX_VALUE
-			? -1
-			: pos
-		);
+		return (pos == Integer.MAX_VALUE ? -1 : pos);
 	}
 	public static int IndexOf(final String string, final char...delims) {
 		return IndexOf(string, 0, delims);
@@ -697,8 +690,7 @@ public final class StringUtils {
 
 
 	public static int IndexOf(final String string, final int fromIndex, final String...delims) {
-		if (Utils.isEmpty(string))
-			return -1;
+		if (Utils.isEmpty(string)) return -1;
 		int pos = Integer.MAX_VALUE;
 		for (final String delim : delims) {
 			if (Utils.isEmpty(delim)) continue;
@@ -712,11 +704,7 @@ public final class StringUtils {
 					return 0;
 			}
 		}
-		return (
-			pos == Integer.MAX_VALUE
-			? -1
-			: pos
-		);
+		return (pos == Integer.MAX_VALUE ? -1 : pos);
 	}
 	public static int IndexOf(final String string, final String...delims) {
 		return IndexOf(string, 0, delims);
@@ -726,8 +714,7 @@ public final class StringUtils {
 
 	// last index of (many delims)
 	public static int IndexOfLast(final String string, final char...delims) {
-		if (Utils.isEmpty(string))
-			return -1;
+		if (Utils.isEmpty(string)) return -1;
 		int pos = Integer.MIN_VALUE;
 		for (final char delim : delims) {
 			final int p = string.lastIndexOf(delim);
@@ -738,15 +725,10 @@ public final class StringUtils {
 				pos = p;
 			}
 		}
-		return (
-			pos == Integer.MIN_VALUE
-			? -1
-			: pos
-		);
+		return (pos == Integer.MIN_VALUE ? -1 : pos);
 	}
 	public static int IndexOfLast(final String string, final String...delims) {
-		if (Utils.isEmpty(string))
-			return -1;
+		if (Utils.isEmpty(string)) return -1;
 		int pos = Integer.MIN_VALUE;
 		for (final String delim : delims) {
 			if (Utils.isEmpty(delim)) continue;
@@ -758,18 +740,13 @@ public final class StringUtils {
 				pos = p;
 			}
 		}
-		return (
-			pos == Integer.MIN_VALUE
-			? -1
-			: pos
-		);
+		return (pos == Integer.MIN_VALUE ? -1 : pos);
 	}
 
 
 	// find longest line
 	public static int FindLongestLine(final String[] lines) {
-		if (Utils.isEmpty(lines))
-			return -1;
+		if (Utils.isEmpty(lines)) return -1;
 		int len = 0;
 		for (final String line : lines) {
 			if (line == null) continue;
@@ -986,7 +963,7 @@ public final class StringUtils {
 
 
 	// replace {} or {#} tags
-	public static String ReplaceTags(final String msg, final Object... args) {
+	public static String ReplaceTags(final String msg, final Object...args) {
 		if (Utils.isEmpty(msg))  return msg;
 		if (Utils.isEmpty(args)) return msg;
 		final StringBuilder result = new StringBuilder(msg);
@@ -1045,7 +1022,7 @@ public final class StringUtils {
 
 
 	// replace {} or {#} tags (in multiple lines)
-	public static String[] ReplaceTags(final String[] msgs, final Object... args) {
+	public static String[] ReplaceTags(final String[] msgs, final Object...args) {
 		if (Utils.isEmpty(msgs)) return msgs;
 		if (Utils.isEmpty(args)) return msgs;
 		String[] result = Arrays.copyOf(msgs, msgs.length);

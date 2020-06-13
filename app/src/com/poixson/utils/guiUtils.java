@@ -167,8 +167,7 @@ public final class guiUtils {
 
 	// logger
 	public static xLog log() {
-		return xLogRoot
-				.Get(LOG_NAME);
+		return xLogRoot.Get(LOG_NAME);
 	}
 
 

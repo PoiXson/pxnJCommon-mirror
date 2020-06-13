@@ -61,8 +61,7 @@ public final class ReflectUtils {
 
 
 	public static Class<?>[] ArgsToClasses(final Object...args) {
-		if (Utils.isEmpty(args))
-			return null;
+		if (Utils.isEmpty(args)) return null;
 		final Class<?>[] classes = new Class[args.length];
 		for (int i=0; i<args.length; i++) {
 			classes[i] = args[i].getClass();
