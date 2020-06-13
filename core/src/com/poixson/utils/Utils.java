@@ -34,6 +34,11 @@ public final class Utils {
 			return false;
 		return (value.length() > 0);
 	}
+	public static String ifEmpty(final String value, final String def) {
+		if (isEmpty(value))
+			return def;
+		return value;
+	}
 
 
 
@@ -47,6 +52,20 @@ public final class Utils {
 		if (array == null)
 			return false;
 		return (array.length > 0);
+	}
+	public static String[] ifEmpty(final String[] array, final String[] def) {
+		if (isEmpty(array))
+			return def;
+		return array;
+	}
+
+
+
+	// object
+	public static <T extends Object> T ifEmpty(final T obj, final T def) {
+		if (obj == null)
+			return def;
+		return obj;
 	}
 
 
@@ -62,6 +81,11 @@ public final class Utils {
 			return false;
 		return (array.length > 0);
 	}
+	public static <T extends Object> T[] ifEmpty(final T[] array, final T[] def) {
+		if (isEmpty(array))
+			return def;
+		return array;
+	}
 
 
 
@@ -75,6 +99,11 @@ public final class Utils {
 		if (collect == null)
 			return false;
 		return (collect.size() > 0);
+	}
+	public static Collection<?> ifEmpty(final Collection<?> collect, final Collection<?> def) {
+		if (isEmpty(collect))
+			return def;
+		return collect;
 	}
 
 
@@ -90,6 +119,20 @@ public final class Utils {
 			return false;
 		return (map.size() > 0);
 	}
+	public static Map<?, ?> ifEmpty(final Map<?, ?> map, final Map<?, ?> def) {
+		if (isEmpty(map))
+			return def;
+		return map;
+	}
+
+
+
+	// byte
+	public static Byte ifEmpty(final Byte byt, final Byte def) {
+		if (byt == null)
+			return def;
+		return byt;
+	}
 
 
 
@@ -103,6 +146,20 @@ public final class Utils {
 		if (bytes == null)
 			return false;
 		return (bytes.length > 0);
+	}
+	public static byte[] ifEmpty(final byte[] bytes, final byte[] def) {
+		if (isEmpty(bytes))
+			return def;
+		return bytes;
+	}
+
+
+
+	// char
+	public static char ifEmpty(final char chr, final char def) {
+		if (chr == 0)
+			return def;
+		return chr;
 	}
 
 
@@ -118,6 +175,11 @@ public final class Utils {
 			return false;
 		return (chars.length > 0);
 	}
+	public static char[] ifEmpty(final char[] chars, final char[] def) {
+		if (isEmpty(chars))
+			return def;
+		return chars;
+	}
 
 
 
@@ -127,6 +189,11 @@ public final class Utils {
 	}
 	public static boolean notEmpty(final Character chr) {
 		return (chr != null);
+	}
+	public static Character ifEmpty(final Character chr, final Character def) {
+		if (isEmpty(chr))
+			return def;
+		return chr;
 	}
 
 
@@ -142,6 +209,20 @@ public final class Utils {
 			return false;
 		return (chars.length > 0);
 	}
+	public static Character[] ifEmpty(final Character[] chars, final Character[] def) {
+		if (isEmpty(chars))
+			return def;
+		return chars;
+	}
+
+
+
+	// short
+	public static Short ifEmpty(final Short value, final Short def) {
+		if (value == null)
+			return def;
+		return value;
+	}
 
 
 
@@ -155,6 +236,20 @@ public final class Utils {
 		if (shorts == null)
 			return false;
 		return (shorts.length > 0);
+	}
+	public static short[] ifEmpty(final short[] shorts, final short[] def) {
+		if (isEmpty(shorts))
+			return def;
+		return shorts;
+	}
+
+
+
+	// integer
+	public static Integer ifEmpty(final Integer value, final Integer def) {
+		if (value == null)
+			return def;
+		return value;
 	}
 
 
@@ -170,6 +265,20 @@ public final class Utils {
 			return false;
 		return (ints.length > 0);
 	}
+	public static int[] ifEmpty(final int[] ints, final int[] def) {
+		if (isEmpty(ints))
+			return def;
+		return ints;
+	}
+
+
+
+	// long
+	public static Long ifEmpty(final Long value, final Long def) {
+		if (value == null)
+			return def;
+		return value;
+	}
 
 
 
@@ -183,6 +292,20 @@ public final class Utils {
 		if (longs == null)
 			return false;
 		return (longs.length > 0);
+	}
+	public static long[] ifEmpty(final long[] longs, final long[] def) {
+		if (isEmpty(longs))
+			return def;
+		return longs;
+	}
+
+
+
+	// double
+	public static Double ifEmpty(final Double value, final Double def) {
+		if (value == null)
+			return def;
+		return value;
 	}
 
 
@@ -198,6 +321,20 @@ public final class Utils {
 			return false;
 		return (doubles.length > 0);
 	}
+	public static double[] ifEmpty(final double[] doubles, final double[] def) {
+		if (isEmpty(doubles))
+			return def;
+		return doubles;
+	}
+
+
+
+	// float
+	public static Float ifEmpty(final Float value, final Float def) {
+		if (value == null)
+			return def;
+		return value;
+	}
 
 
 
@@ -212,6 +349,20 @@ public final class Utils {
 			return false;
 		return (floats.length > 0);
 	}
+	public static float[] ifEmpty(final float[] floats, final float[] def) {
+		if (isEmpty(floats))
+			return def;
+		return floats;
+	}
+
+
+
+	// boolean
+	public static Boolean ifEmpty(final Boolean bool, final Boolean def) {
+		if (bool == null)
+			return def;
+		return bool;
+	}
 
 
 
@@ -225,6 +376,11 @@ public final class Utils {
 		if (bools == null)
 			return false;
 		return (bools.length > 0);
+	}
+	public static boolean[] ifEmpty(final boolean[] bools, final boolean[] def) {
+		if (isEmpty(bools))
+			return def;
+		return bools;
 	}
 
 
