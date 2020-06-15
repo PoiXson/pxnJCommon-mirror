@@ -3,12 +3,10 @@
 	"ArtifactId": "common-plugin",
 	"GroupId": "com.poixson",
 	"Version": "4.0.0",
-	"URL": "https://poixson.com",
-	"Hub-Path": "https://git.poixson.com/summary/pxn!pxnCommon.git",
-	"SCM-Path": "https://lorenzop@git.poixson.com/r/pxn/pxnCommon.git",
-	"Dev-Path": "ssh://lorenzop@git.poixson.com/pxn/pxnCommon.git",
-	"Tickets": "https://git.poixson.com/tickets/pxn!pxnCommon.git",
 	"Org-Name": "PoiXson",
+	"URL": "https://poixson.com",
+	"GitBlit-Host": "git.poixson.com",
+	"GitBlit-Repo": "pxn!pxnCommon",
 	"Deps": {
 		"pxnCommon-Core": {
 			"GroupId": "com.poixson",
