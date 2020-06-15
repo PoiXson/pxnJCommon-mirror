@@ -11,12 +11,12 @@
 		"pxnCommon-Core": {
 			"GroupId": "com.poixson",
 			"ArtifactId": "common-core",
-			"Version": "4.0.0"
+			"Version": "${project.version}"
 		},
 		"pxnCommon-Config": {
 			"GroupId": "com.poixson",
 			"ArtifactId": "common-config",
-			"Version": "4.0.0"
+			"Version": "${project.version}"
 		},
 		"jcl": {
 			"GroupId": "org.xeustechnologies",
