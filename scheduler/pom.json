@@ -1,6 +1,6 @@
 {
 	"Name": "pxnCommon-Scheduler",
-	"ArtifactId": "common-sched",
+	"ArtifactId": "common-scheduler",
 	"GroupId": "com.poixson",
 	"Version": "4.0.0",
 	"Org-Name": "PoiXson",
