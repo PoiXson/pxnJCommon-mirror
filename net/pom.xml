@@ -1,4 +1,4 @@
-<!-- Generated on: June 15, 2020 18:42 UTC -->
+<!-- Generated on: June 20, 2020 10:41 UTC -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -25,8 +25,13 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+		<Netty-Version>4.1.48.Final</Netty-Version>
+
 		<!-- Dependencies -->
 		<pxnCommon-Core-version>${project.version}</pxnCommon-Core-version>
+		<Netty-Common-version>${Netty-Version}</Netty-Common-version>
+		<Netty-Handler-version>${Netty-Version}</Netty-Handler-version>
+		<Netty-Codec-version>${Netty-Version}</Netty-Codec-version>
 		<jUnit-version>4.13</jUnit-version>
 
 		<!-- MVN Plugins -->
@@ -152,6 +157,24 @@
 			<groupId>com.poixson</groupId>
 			<artifactId>common-core</artifactId>
 			<version>${pxnCommon-Core-version}</version>
+		</dependency>
+		<!-- Netty-Common -->
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-common</artifactId>
+			<version>${Netty-Common-version}</version>
+		</dependency>
+		<!-- Netty-Handler -->
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-handler</artifactId>
+			<version>${Netty-Handler-version}</version>
+		</dependency>
+		<!-- Netty-Codec -->
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-codec</artifactId>
+			<version>${Netty-Codec-version}</version>
 		</dependency>
 		<!-- jUnit -->
 		<dependency>

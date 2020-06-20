@@ -1,4 +1,4 @@
-<!-- Generated on: June 15, 2020 18:42 UTC -->
+<!-- Generated on: June 20, 2020 10:41 UTC -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -28,7 +28,6 @@
 		<!-- Dependencies -->
 		<pxnCommon-Core-version>${project.version}</pxnCommon-Core-version>
 		<slf4j-version>1.7.30</slf4j-version>
-		<jUnit-version>4.13</jUnit-version>
 
 		<!-- MVN Plugins -->
 		<git-commit-id-plugin-version>4.0.0</git-commit-id-plugin-version>
@@ -37,9 +36,6 @@
 		<maven-jar-plugin-version>3.2.0</maven-jar-plugin-version>
 		<maven-source-plugin-version>3.2.1</maven-source-plugin-version>
 		<maven-eclipse-plugin-version>2.10</maven-eclipse-plugin-version>
-		<surefire-version>3.0.0-M4</surefire-version>
-		<cobertura-version>2.7</cobertura-version>
-		<project-info-reports-version>3.0.0</project-info-reports-version>
 
 	</properties>
 	<build>
@@ -134,17 +130,6 @@
 					<downloadJavadocs>true</downloadJavadocs>
 				</configuration>
 			</plugin>
-			<!-- jUnit Plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${surefire-version}</version>
-				<configuration>
-					<useFile>false</useFile>
-					<parallel>methods</parallel>
-					<threadCount>4</threadCount>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -160,37 +145,5 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j-version}</version>
 		</dependency>
-		<!-- jUnit -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${jUnit-version}</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
-	<reporting>
-		<plugins>
-			<!-- Reports Plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>${project-info-reports-version}</version>
-				<configuration>
-					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-				</configuration>
-			</plugin>
-			<!-- Cobertura Plugin -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>${cobertura-version}</version>
-				<configuration>
-					<formats>
-						<format>html</format>
-						<format>xml</format>
-					</formats>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 </project>
