@@ -3,6 +3,10 @@
 	"ArtifactId": "common-plugin",
 	"GroupId": "com.poixson",
 	"Version": "4.0.0",
+	"Versions": {
+		"jcl": "2.8",
+		"SnakeYAML": "1.26"
+	},
 	"Org-Name": "PoiXson",
 	"URL": "https://poixson.com",
 	"GitBlit-Host": "git.poixson.com",
@@ -20,13 +24,11 @@
 		},
 		"jcl": {
 			"GroupId": "org.xeustechnologies",
-			"ArtifactId": "jcl-core",
-			"Version": "2.8"
+			"ArtifactId": "jcl-core"
 		},
 		"SnakeYAML": {
 			"GroupId": "org.yaml",
-			"ArtifactId": "snakeyaml",
-			"Version": "1.26"
+			"ArtifactId": "snakeyaml"
 		}
 	}
 }

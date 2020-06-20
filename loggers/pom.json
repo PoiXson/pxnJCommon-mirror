@@ -3,6 +3,9 @@
 	"ArtifactId": "common-loggers",
 	"GroupId": "com.poixson",
 	"Version": "4.0.0",
+	"Versions": {
+		"slf4j": "1.7.30"
+	},
 	"Org-Name": "PoiXson",
 	"URL": "https://poixson.com",
 	"GitBlit-Host": "git.poixson.com",
@@ -15,8 +18,7 @@
 		},
 		"slf4j": {
 			"GroupId": "org.slf4j",
-			"ArtifactId": "slf4j-api",
-			"Version": "1.7.30"
+			"ArtifactId": "slf4j-api"
 		}
 	}
 }

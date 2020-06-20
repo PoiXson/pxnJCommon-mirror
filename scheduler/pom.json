@@ -3,6 +3,9 @@
 	"ArtifactId": "common-scheduler",
 	"GroupId": "com.poixson",
 	"Version": "4.0.0",
+	"Versions": {
+		"Quartz": "2.3.2"
+	},
 	"Org-Name": "PoiXson",
 	"URL": "https://poixson.com",
 	"GitBlit-Host": "git.poixson.com",
@@ -15,8 +18,7 @@
 		},
 		"Quartz": {
 			"GroupId": "org.quartz-scheduler",
-			"ArtifactId": "quartz",
-			"Version": "2.3.2"
+			"ArtifactId": "quartz"
 		}
 	}
 }

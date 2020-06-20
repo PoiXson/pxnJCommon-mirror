@@ -3,6 +3,9 @@
 	"ArtifactId": "common-net",
 	"GroupId": "com.poixson",
 	"Version": "4.0.0",
+	"Props": {
+		"Netty-Version": "4.1.48.Final"
+	},
 	"Org-Name": "PoiXson",
 	"URL": "https://poixson.com",
 	"GitBlit-Host": "git.poixson.com",
@@ -12,6 +15,21 @@
 			"GroupId": "com.poixson",
 			"ArtifactId": "common-core",
 			"Version": "${project.version}"
+		},
+		"Netty-Common": {
+			"GroupId": "io.netty",
+			"ArtifactId": "netty-common",
+			"Version": "${Netty-Version}"
+		},
+		"Netty-Handler": {
+			"GroupId": "io.netty",
+			"ArtifactId": "netty-handler",
+			"Version": "${Netty-Version}"
+		},
+		"Netty-Codec": {
+			"GroupId": "io.netty",
+			"ArtifactId": "netty-codec",
+			"Version": "${Netty-Version}"
 		}
 	}
 }
