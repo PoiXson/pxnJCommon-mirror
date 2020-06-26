@@ -17,11 +17,6 @@
 			"ArtifactId": "common-core",
 			"Version": "${project.version}"
 		},
-		"pxnCommon-App": {
-			"GroupId": "com.poixson",
-			"ArtifactId": "common-app",
-			"Version": "${project.version}"
-		},
 		"jAnsi": {
 			"GroupId": "org.fusesource.jansi",
 			"ArtifactId": "jansi"
