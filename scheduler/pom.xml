@@ -1,4 +1,4 @@
-<!-- Generated on: June 15, 2020 18:42 UTC -->
+<!-- Generated on: June 25, 2020 08:43 UTC -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -40,6 +40,7 @@
 		<surefire-version>3.0.0-M4</surefire-version>
 		<cobertura-version>2.7</cobertura-version>
 		<project-info-reports-version>3.0.0</project-info-reports-version>
+		<jxr-version>3.0.0</jxr-version>
 
 	</properties>
 	<build>
@@ -145,6 +146,15 @@
 					<threadCount>4</threadCount>
 				</configuration>
 			</plugin>
+			<!-- Cobertura Plugin -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>${cobertura-version}</version>
+				<configuration>
+					<quiet>true</quiet>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -190,6 +200,12 @@
 						<format>xml</format>
 					</formats>
 				</configuration>
+			</plugin>
+			<!-- Cross-Reference Plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>${jxr-version}</version>
 			</plugin>
 		</plugins>
 	</reporting>
