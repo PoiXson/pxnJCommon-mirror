@@ -375,9 +375,15 @@ public class xLog implements xLogInterface {
 
 	// title
 	@Override
-	public void title(final String...lines) {
+	public void title(final String line, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(xLevel.TITLE, lines, null)
+			new xLogRecord_Msg(xLevel.TITLE, line, args)
+		);
+	}
+	@Override
+	public void title(final String[] lines, final Object...args) {
+		this.publish(
+			new xLogRecord_Msg(xLevel.TITLE, lines, args)
 		);
 	}
 

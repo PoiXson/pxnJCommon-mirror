@@ -25,14 +25,13 @@ public interface xLogInterface {
 	public void beep();
 
 
-	public void title  (final String...lines);
-
 	public void trace  (final Throwable e);
 	public void trace  (final Throwable e, final String line, final Object...args);
 
 	public void stdout(final String...lines);
 	public void stderr(final String...lines);
 
+	public void title  (final String line,    final Object...args);
 	public void detail (final String line, final Object...args);
 	public void finest (final String line, final Object...args);
 	public void finer  (final String line, final Object...args);
@@ -44,6 +43,7 @@ public interface xLogInterface {
 	public void severe (final String line, final Object...args);
 	public void fatal  (final String line, final Object...args);
 
+	public void title  (final String[] lines, final Object...args);
 	public void detail (final String[] lines, final Object...args);
 	public void finest (final String[] lines, final Object...args);
 	public void finer  (final String[] lines, final Object...args);
