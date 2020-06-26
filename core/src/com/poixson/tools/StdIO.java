@@ -9,6 +9,9 @@ public final class StdIO {
 	static { Keeper.add(new StdIO()); }
 
 
+	public static void init() {}
+
+
 	public static final PrintStream OriginalOut = System.out;
 	public static final PrintStream OriginalErr = System.err;
 	public static final InputStream OriginalIn  = System.in;
