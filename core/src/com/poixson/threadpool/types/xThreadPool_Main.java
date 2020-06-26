@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.xThreadPoolWorker;
+import com.poixson.tools.Keeper;
 
 
 public class xThreadPool_Main extends xThreadPool_Single {
@@ -55,6 +56,15 @@ public class xThreadPool_Main extends xThreadPool_Single {
 
 	// ------------------------------------------------------------------------------- //
 	// state
+
+
+
+	public void stopMain() {
+		if (this.stopping.compareAndSet(false, true)) {
+			this.stopWorkers();
+		}
+		Keeper.remove(this);
+	}
 
 
 
