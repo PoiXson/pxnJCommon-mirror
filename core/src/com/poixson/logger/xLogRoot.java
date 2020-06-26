@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.poixson.logger.handlers.xLogHandler;
 import com.poixson.logger.handlers.xLogHandler_Console;
 import com.poixson.tools.Keeper;
+import com.poixson.tools.StdIO;
 import com.poixson.tools.abstractions.OutputStreamLineRemapper;
 import com.poixson.utils.Utils;
 
@@ -43,6 +44,7 @@ public class xLogRoot extends xLog {
 //TODO: remove this?
 //			// be sure this gets inited first
 //			xVars.isDebug();
+			StdIO.init();
 			// capture std-out
 			System.setOut(
 				OutputStreamLineRemapper.toPrintStream(
