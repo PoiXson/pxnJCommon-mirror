@@ -10,8 +10,23 @@ public class StringParts extends xString {
 
 
 
+	public static StringParts getNew() {
+		return new StringParts("");
+	}
+	public static StringParts getNew(final String data) {
+		return new StringParts(data);
+	}
+	public static StringParts getNew(final Object obj) {
+		return new StringParts(obj);
+	}
+
+
+
 	public StringParts(final String data) {
 		super(data);
+	}
+	public StringParts(final Object obj) {
+		super(obj);
 	}
 
 
