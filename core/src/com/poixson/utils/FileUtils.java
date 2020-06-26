@@ -5,6 +5,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.security.CodeSource;
 import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.tools.Keeper;
@@ -14,9 +15,9 @@ public final class FileUtils {
 	private FileUtils() {}
 	static { Keeper.add(new FileUtils()); }
 
-	private static volatile String cwd = null;
-	private static volatile String pwd = null;
-	private static volatile String exe = null;
+	private static final AtomicReference<String> cwd = new AtomicReference<String>(null);
+	private static final AtomicReference<String> pwd = new AtomicReference<String>(null);
+	private static final AtomicReference<String> exe = new AtomicReference<String>(null);
 
 
 
@@ -63,23 +64,22 @@ public final class FileUtils {
 
 	// get current working directory
 	public static String cwd() {
-		if (Utils.isEmpty(cwd))
+		if (cwd.get() == null)
 			populateCwd();
-		return cwd;
+		return cwd.get();
 	}
 	private static void populateCwd() {
-		if (Utils.notEmpty(cwd))
-			return;
+		if (cwd.get() != null) return;
 		final String path = System.getProperty("user.dir");
 		if (Utils.notEmpty(path)) {
-			cwd = path;
+			cwd.compareAndSet(null, path);
 			return;
 		}
 		try {
 			final File dir = new File(".");
-			cwd = dir.getCanonicalPath();
+			cwd.compareAndSet(null, dir.getCanonicalPath());
 		} catch (IOException ignore) {
-			cwd = null;
+			cwd.set(null);
 		}
 	}
 
@@ -87,73 +87,48 @@ public final class FileUtils {
 
 	// get running directory
 	public static String pwd() {
-		if (Utils.isEmpty(pwd))
+		if (pwd.get() == null)
 			populatePwdExe();
-		return pwd;
+		return pwd.get();
 	}
 	public static String exe() {
-		if (Utils.isEmpty(exe))
+		if (exe.get() == null)
 			populatePwdExe();
-		return exe;
+		return exe.get();
 	}
 	private static void populatePwdExe() {
-		if (Utils.notEmpty(pwd))
-			return;
+		if (pwd.get() != null && exe.get() != null) return;
 		final CodeSource source = FileUtils.class.getProtectionDomain().getCodeSource();
 		final String pathRaw = source.getLocation().getPath();
 		final String path = StringUtils.decodeDef(pathRaw, pathRaw);
 		if (Utils.isEmpty(path)) throw new RuntimeException("Failed to get pwd path");
 		final int pos = path.lastIndexOf('/');
 		if (pos < 0) throw new RuntimeException("Invalid pwd path: "+path);
-		pwd =
-			StringUtils.TrimEnd(
-				path.substring(0, pos),
-				'/'
-			);
-		exe =
-			StringUtils.TrimFront(
-				path.substring(pos + 1),
-				'/'
-			);
+		pwd.compareAndSet(null, StringUtils.TrimEnd(   path.substring(0, pos),  '/' ));
+		exe.compareAndSet(null, StringUtils.TrimFront( path.substring(pos + 1), '/' ));
 	}
 
 
 
 	public static boolean isDir(final String pathStr) {
-		if (Utils.isEmpty(pathStr))
-			return false;
+		if (Utils.isEmpty(pathStr)) return false;
 		final File path = new File(pathStr);
-		return (
-			path.exists() &&
-			path.isDirectory()
-		);
+		return ( path.exists() && path.isDirectory() );
 	}
 	public static boolean isFile(final String fileStr) {
-		if (Utils.isEmpty(fileStr))
-			return false;
+		if (Utils.isEmpty(fileStr)) return false;
 		final File file = new File(fileStr);
-		return (
-			file.exists() &&
-			file.isFile()
-		);
+		return ( file.exists() && file.isFile() );
 	}
 	public static boolean isReadable(final String pathStr) {
-		if (Utils.isEmpty(pathStr))
-			return false;
+		if (Utils.isEmpty(pathStr)) return false;
 		final File path = new File(pathStr);
-		return (
-			path.exists() &&
-			path.canRead()
-		);
+		return ( path.exists() && path.canRead() );
 	}
 	public static boolean isWritable(final String pathStr) {
-		if (Utils.isEmpty(pathStr))
-			return false;
+		if (Utils.isEmpty(pathStr)) return false;
 		final File path = new File(pathStr);
-		return (
-			path.exists() &&
-			path.canWrite()
-		);
+		return ( path.exists() && path.canWrite() );
 	}
 
 
@@ -233,15 +208,8 @@ public final class FileUtils {
 		} catch (IllegalAccessException ignore) {
 		}
 	}
-*/
 
-
-
-// TODO: these functions can have inconsistent results. a better class will be needed
-
-
-
-/*
+//TODO: remove this?
 	// build path+file+ext
 	public static String BuildFilePath(final String pathStr,
 			final String fileName, final String extension) {
@@ -274,7 +242,7 @@ public final class FileUtils {
 
 
 	public static String MergePaths(final String...strings) {
-		if (strings.length == 0)
+		if (Utils.isEmpty(strings))
 			return null;
 		boolean isAbsolute = false;
 		// maintain absolute
@@ -290,10 +258,9 @@ public final class FileUtils {
 		final LinkedList<String> list = new LinkedList<String>();
 		int count = 0;
 		for (int index=0; index<strings.length; index++) {
-			final String[] strs =
-				StringUtils.SplitByDelims(strings[index], "/", "\\");
+			final String[] array = strings[index].replace('\\', '/').split("/");
 			// remove nulls/blanks
-			for (final String str : strs) {
+			for (final String str : array) {
 				if (Utils.isEmpty(str)) continue;
 				final String s =
 					StringUtils.Trim(
@@ -316,8 +283,7 @@ public final class FileUtils {
 		if (".".equals(first)) {
 			list.removeFirst();
 			isAbsolute = true;
-			final String[] array =
-				StringUtils.SplitByDelims(cwd(), "/", "\\");
+			final String[] array = cwd().replace('\\', '/').split("/");
 			for (int index=array.length-1; index>=0; index--) {
 				list.addFirst(array[index]);
 			}
@@ -326,8 +292,7 @@ public final class FileUtils {
 		if (",".equals(first)) {
 			list.removeFirst();
 			isAbsolute = true;
-			final String[] array =
-				StringUtils.SplitByDelims(pwd(), "/", "\\");
+			final String[] array = pwd().replace('\\', '/').split("/");
 			for (int index=array.length-1; index>=0; index--) {
 				list.addFirst(array[index]);
 			}
