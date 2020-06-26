@@ -109,7 +109,7 @@ public abstract class xThreadPool_Single extends xThreadPool {
 
 
 	@Override
-	public void joinWorkers(final long timeout) {
+	public void join(final long timeout) {
 		final xThreadPoolWorker worker = this.worker.get();
 		if (worker == null)
 			return;

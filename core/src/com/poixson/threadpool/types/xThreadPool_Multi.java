@@ -107,7 +107,7 @@ throw new RuntimeException("UNFINISHED CODE");
 
 
 	@Override
-	public void joinWorkers(final long timeout) {
+	public void join(final long timeout) {
 		OUTER_LOOP:
 		while (true) {
 			if (this.workers.isEmpty())

@@ -155,11 +155,18 @@ public abstract class xThreadPool implements xStartable {
 
 
 
-	public abstract void joinWorkers(final long timeout);
-
-	public void joinWorkers() {
-		this.joinWorkers(0L);
+	public void join(final xTime time) {
+		if (time == null) {
+			this.join(0L);
+		} else {
+			this.join(time.getMS());
+		}
 	}
+	public void join() {
+		this.join(0L);
+	}
+
+	public abstract void join(final long timeout);
 
 
 
