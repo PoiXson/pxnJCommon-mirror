@@ -7,6 +7,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 import com.poixson.exceptions.ContinueException;
@@ -19,6 +20,21 @@ import com.poixson.tools.remapped.RemappedMethod;
 public final class guiUtils {
 	private guiUtils() {}
 	private static final String LOG_NAME = "GUI";
+
+
+
+	// change font size
+	public static void ChangeFontSize(final JComponent component, final int size) {
+		if (component == null) throw new RequiredArgumentException("component");
+		final Font font = component.getFont();
+		component.setFont(
+			new Font(
+				font.getFontName(),
+				font.getStyle(),
+				font.getSize() + size
+			)
+		);
+	}
 
 
 
