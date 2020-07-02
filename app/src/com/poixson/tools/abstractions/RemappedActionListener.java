@@ -1,4 +1,4 @@
-package com.poixson.tools.remapped;
+package com.poixson.tools.abstractions;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
