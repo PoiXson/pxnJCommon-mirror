@@ -14,8 +14,7 @@ import com.poixson.utils.Utils;
 
 public class xConfig {
 
-	protected final Map<String, Object> datamap =
-			new ConcurrentHashMap<String, Object>();
+	protected final Map<String, Object> datamap = new ConcurrentHashMap<String, Object>();
 
 
 
@@ -37,112 +36,17 @@ public class xConfig {
 
 
 
-	public Object get(final String key) {
+	public Object read(final String key) {
 		if (Utils.isEmpty(key))
 			return null;
 		return this.datamap.get(key);
 	}
-	public Object gets(final String key) {
+	public Object readSafe(final String key) {
 		try {
-			return this.get(key);
+			return this.read(key);
 		} catch (Exception ignore) {}
 		return null;
 	}
-
-
-
-//TODO: is this useful?
-/*
-	/ **
-	 * Get an object from the stored data.
-	 * @return Object
-	 * @throws xConfigException
-	 * /
-	public Object get(final String path) throws xConfigException {
-		if(utils.isEmpty(path))
-			return null;
-		try {
-			return this.datamap.get(path);
-		} catch (Exception e) {
-			throw new xConfigException(e, path);
-		}
-	}
-	/ **
-	 * Get an object from the stored data.
-	 * @return Object or null on failure.
-	 * /
-	public Object gt(final String path) {
-		try {
-			return this.get(path);
-		} catch (xConfigException ignore) {}
-		return null;
-	}
-
-
-
-//	// get path recursively
-//	@SuppressWarnings("unchecked")
-//	protected Map<String, Object> getByPath(final String path) {
-//		try {
-//			if (path.contains(".")) {
-//				Map<String, Object> map = this.datamap;
-//				final StringRef str = new StringRef(path);
-//				while(str.notEmpty()) {
-//					final String part = StringUtils.getNextPart(".", str);
-//					map = (Map<String, Object>) map.get(part);
-//				}
-//				return map;
-//			}
-//			return (Map<String, Object>) this.get(path);
-//		} catch (Exception e) {
-//			throw new xConfigException(e, path);
-//		}
-//	}
-//	public Map<String, Object> getDatPth(final String path) {
-//		try {
-//			return this.getDataPath(path);
-//		} catch (xConfigException ignore) {}
-//		return null;
-//	}
-
-
-
-	/ **
-	 * Get an object from the stored data by path.
-	 * @return Object
-	 * @throws xConfigException
-	 * /
-	@SuppressWarnings("unchecked")
-	@Override
-	public Map<String, Object> getDataPath(final String path)
-			throws xConfigException {
-		try {
-			if(path.contains(".")) {
-				Map<String, Object> map = this.datamap;
-				final StringRef str = new StringRef(path);
-				while(str.notEmpty()) {
-					final String part = utilsString.getNextPart(".", str);
-					map = (Map<String, Object>) map.get(part);
-				}
-				return map;
-			}
-			return (Map<String, Object>) this.get(path);
-		} catch (Exception e) {
-			throw new xConfigException(e, path);
-		}
-	}
-	/ **
-	 * Gets an object from the stored data by path.
-	 * @return Object or null on failure
-	 * /
-	@Override
-	public Map<String, Object> getPath(final String path) {
-		try {
-			return this.getDataPath(path);
-		} catch (xConfigException ignoire) {}
-		return null;
-	}
-*/
 
 
 
@@ -153,14 +57,10 @@ public class xConfig {
 
 	// string
 	public String getString(final String key) {
-		return (String) this.get(key);
+		return (String) this.read(key);
 	}
 	public String getStr(final String key, final String defVal) {
-		return this.getStr(
-			key,
-			defVal,
-			false
-		);
+		return this.getStr(key, defVal, false);
 	}
 	public String getStr(final String key, final String defVal, final boolean blankable) {
 		try {
@@ -180,7 +80,7 @@ public class xConfig {
 
 	// boolean
 	public Boolean getBoolean(final String key) {
-		return (Boolean) this.get(key);
+		return (Boolean) this.read(key);
 	}
 	public boolean getBool(final String key, final boolean defVal) {
 		try {
@@ -195,7 +95,7 @@ public class xConfig {
 
 	// integer
 	public Integer getInteger(final String key) {
-		return (Integer) this.get(key);
+		return (Integer) this.read(key);
 	}
 	public int getInt(final String key, final int defVal) {
 		try {
@@ -210,7 +110,7 @@ public class xConfig {
 
 	// long
 	public Long getLong(final String key) {
-		return (Long) this.get(key);
+		return (Long) this.read(key);
 	}
 	public long getLng(final String key, final long defVal) {
 		try {
@@ -225,7 +125,7 @@ public class xConfig {
 
 	// double
 	public Double getDouble(final String key) {
-		return (Double) this.get(key);
+		return (Double) this.read(key);
 	}
 	public double getDbl(final String key, final double defVal) {
 		try {
@@ -240,7 +140,7 @@ public class xConfig {
 
 	// float
 	public Float getFloat(final String key) {
-		return (Float) this.get(key);
+		return (Float) this.read(key);
 	}
 	public float getFlt(final String key, final float defVal) {
 		try {
@@ -260,32 +160,20 @@ public class xConfig {
 
 	// set
 	public <C> Set<C> getSet(final String key, final Class<? extends C> clss) {
-		return ObjectUtils.CastSet(
-				this.get(key),
-				clss
-		);
+		return ObjectUtils.CastSet(this.read(key), clss);
 	}
 	public Set<String> getStringSet(final String key) {
-		return this.getSet(
-				key,
-				String.class
-		);
+		return this.getSet(key, String.class);
 	}
 
 
 
 	// list
 	public <C> List<C> getList(final String key, final Class<? extends C> clss) {
-		return ObjectUtils.CastList(
-				this.get(key),
-				clss
-		);
+		return ObjectUtils.CastList(this.read(key), clss);
 	}
 	public List<String> getStringList(final String key) {
-		return this.getList(
-				key,
-				String.class
-		);
+		return this.getList(key, String.class);
 	}
 
 
@@ -293,68 +181,35 @@ public class xConfig {
 	// map
 	public <K, V> Map<K, V> getMap(final String key,
 			final Class<? extends K> clssK, final Class<? extends V> clssV) {
-		return ObjectUtils.CastMap(
-				this.get(key),
-				clssK,
-				clssV
-		);
+		return ObjectUtils.CastMap(this.read(key), clssK, clssV);
 	}
 	public Map<String, Object> getStringObjectMap(final String key) {
-		return this.getMap(
-				key,
-				String.class,
-				Object.class
-		);
+		return this.getMap(key, String.class, Object.class);
 	}
 	public Map<String, String> getStringMap(final String key) {
-		return this.getMap(
-				key,
-				String.class,
-				String.class
-		);
+		return this.getMap(key, String.class, String.class);
 	}
 
 
 
 	public <T extends xConfig> List<T> getConfigList(final String key,
 			final Class<T> cfgClass) {
-		final List<Object> datalist =
-			this.getList(
-				key,
-				Object.class
-			);
+		final List<Object> datalist = this.getList(key, Object.class);
 		if (datalist == null)
 			return null;
 		final List<T> list = new ArrayList<T>();
 		final Iterator<Object> it = datalist.iterator();
 		while (it.hasNext()) {
-			final Object o = it.next();
+			final Object obj = it.next();
 			final Map<String, Object> datamap =
-				ObjectUtils.CastMap(
-					o,
-					String.class,
-					Object.class
-				);
+				ObjectUtils.CastMap(obj, String.class, Object.class);
 			if (datamap == null)
 				throw new RuntimeException("Failed to get Map constructor for class: "+cfgClass.getName());
-			final T cfg =
-				xConfigLoaders.newConfig(
-					datamap,
-					cfgClass
-				);
+			final T cfg = xConfigLoaders.NewConfig(datamap, cfgClass);
 			list.add(cfg);
 		}
 		return list;
 	}
-
-
-
-	//TODO: remove this
-//	// config list
-//	public List<? extends xConfig> getConfigList(final String path,
-//			final Class<? extends xConfig> clss) throws xConfigException;
-//	public List<xConfig> getConfigList(final String path,
-//			final Class<? extends xConfig> clss) throws xConfigException;
 
 
 
