@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.tools.Keeper;
@@ -457,29 +458,98 @@ public final class StringUtils {
 
 
 	// increment and append string_# until unique
-	public static String ForceUnique(final String match, final Collection<String> existing) {
-		if (Utils.isEmpty(match)) throw new RequiredArgumentException("match");
-		if (existing == null)     throw new RequiredArgumentException("existing");
-		// already unique
-		if (existing.isEmpty()) {
-			existing.add(match);
-			return match;
-		}
-		if (!existing.contains(match)) {
-			existing.add(match);
-			return match;
-		}
-		int i = 0;
+	public static String UniqueKey(final Collection<String> collect, final String key) {
+		if (collect == null)    throw new RequiredArgumentException("collect");
+		if (Utils.isEmpty(key)) throw new RequiredArgumentException("key");
+		if (collect.isEmpty())
+			return key;
+		if ( ! collect.contains(key) )
+			return key;
+		int index = 0;
 		while (true) {
-			i++;
+			index++;
 			final String str =
 				(new StringBuilder())
-					.append( match )
+					.append( key   )
 					.append( "_"   )
-					.append( i     )
+					.append( index )
 					.toString();
-			if (!existing.contains(str)) {
-				existing.add(str);
+			if (!collect.contains(str)) {
+				return str;
+			}
+		}
+	}
+	// collection
+	public static String AddUnique(final Collection<String> collect, final String key) {
+		if (collect == null)    throw new RequiredArgumentException("collect");
+		if (Utils.isEmpty(key)) throw new RequiredArgumentException("key");
+		if (collect.isEmpty()) {
+			collect.add(key);
+			return key;
+		}
+		if ( ! collect.contains(key) ) {
+			collect.add(key);
+			return key;
+		}
+		int index = 0;
+		while (true) {
+			index++;
+			final String str =
+				(new StringBuilder())
+					.append( key   )
+					.append( "_"   )
+					.append( index )
+					.toString();
+			if (!collect.contains(str)) {
+				collect.add(str);
+				return str;
+			}
+		}
+	}
+	// concurrent hash map
+	public static <T> String PutUnique(final ConcurrentHashMap<String, T> map, final String key, final T value) {
+		if (map == null)        throw new RequiredArgumentException("map");
+		if (Utils.isEmpty(key)) throw new RequiredArgumentException("key");
+		if (value == null)      throw new RequiredArgumentException("value");
+		if (map.putIfAbsent(key, value) == null)
+			return key;
+		int index = 0;
+		while (true) {
+			index++;
+			final String str =
+				(new StringBuilder())
+					.append( key   )
+					.append( "_"   )
+					.append( index )
+					.toString();
+			if (map.putIfAbsent(str, value) == null)
+				return str;
+		}
+	}
+	// map
+	public static <T> String PutUnique(final Map<String, T> map, final String key, final T value) {
+		if (map == null)        throw new RequiredArgumentException("map");
+		if (Utils.isEmpty(key)) throw new RequiredArgumentException("key");
+		if (value == null)      throw new RequiredArgumentException("value");
+		if (map.isEmpty()) {
+			map.put(key, value);
+			return key;
+		}
+		if ( ! map.containsKey(key) ) {
+			map.put(key, value);
+			return key;
+		}
+		int index = 0;
+		while (true) {
+			index++;
+			final String str =
+				(new StringBuilder())
+					.append( key   )
+					.append( "_"   )
+					.append( index )
+					.toString();
+			if (!map.containsKey(str)) {
+				map.put(str, value);
 				return str;
 			}
 		}
