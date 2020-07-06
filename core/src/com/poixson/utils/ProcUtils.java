@@ -3,6 +3,7 @@ package com.poixson.utils;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.poixson.tools.Keeper;
 
@@ -11,32 +12,26 @@ public final class ProcUtils {
 	private ProcUtils() {}
 	static { Keeper.add(new ProcUtils()); }
 
-	private static volatile Boolean debugWireEnabled = null;
+	private static final AtomicInteger pid = new AtomicInteger(Integer.MIN_VALUE);
 
-	private static volatile int pid = Integer.MIN_VALUE;
+	private static final boolean debugWireEnabled = initDebugWire();
 
 
 
 	public static boolean isDebugWireEnabled() {
-		if (debugWireEnabled == null) {
-			final RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
-			if (bean == null) {
-				debugWireEnabled = Boolean.FALSE;
-				return false;
-			}
+		return debugWireEnabled;
+	}
+	private static boolean initDebugWire() {
+		final RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
+		if (bean != null) {
 			final List<String> args = bean.getInputArguments();
-			if (args == null) {
-				debugWireEnabled = Boolean.FALSE;
-				return false;
-			}
-			final String argsStr = args.toString();
-			if (argsStr.indexOf("jdwp") >= 0) {
-				debugWireEnabled = Boolean.TRUE;
-			} else {
-				debugWireEnabled = Boolean.FALSE;
+			if (args != null) {
+				final String argsStr = args.toString();
+				if (argsStr.indexOf("jdwp") >= 0)
+					return true;
 			}
 		}
-		return debugWireEnabled.booleanValue();
+		return false;
 	}
 
 
@@ -46,50 +41,23 @@ public final class ProcUtils {
 	 * @return process id number (pid)
 	 */
 	public static int getPid() {
-		if (pid == Integer.MIN_VALUE) {
+		if (pid.get() == Integer.MIN_VALUE) {
+			int value = -1;
 			final RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
-			if (bean == null) {
-				pid = -1;
-				return pid;
+			if (bean != null) {
+				final String procName = bean.getName();
+				if (Utils.notEmpty(procName)) {
+					final String[] parts = procName.split("@", 2);
+					if (parts != null) {
+						if (parts.length == 2) {
+							value = NumberUtils.ToInteger(parts[0], -1);
+						}
+					}
+				}
 			}
-			final String procName = bean.getName();
-			if (Utils.isEmpty(procName)) {
-				pid = -1;
-				return pid;
-			}
-			final String[] parts = procName.split("@", 2);
-			if (parts == null) {
-				pid = -1;
-				return pid;
-			}
-			if (parts.length != 2) {
-				pid = -1;
-				return pid;
-			}
-			pid = NumberUtils.toInteger(parts[0], -1);
+			pid.set(value);
 		}
-		return pid;
-//TODO:
-//another option to try
-//final int pid = Integer.parseInt(new File("/proc/self").getCanonicalFile().getName());
-//original
-//		try {
-//			final java.lang.management.RuntimeMXBean runtime =
-//					java.lang.management.ManagementFactory.getRuntimeMXBean();
-//			final java.lang.reflect.Field jvm = runtime.getClass().getDeclaredField("jvm");
-//			jvm.setAccessible(true);
-//			final sun.management.VMManagement mgmt =
-//					(sun.management.VMManagement) jvm.get(runtime);
-//			final java.lang.reflect.Method pid_method =
-//					mgmt.getClass().getDeclaredMethod("getProcessId");
-//			pid_method.setAccessible(true);
-//			return (int) pid_method.invoke(mgmt);
-//		} catch (IllegalAccessException | IllegalArgumentException
-//				| InvocationTargetException | NoSuchFieldException
-//				| SecurityException | NoSuchMethodException e) {
-//			xLogRoot.get().trace(e);
-//		}
-//		return -1;
+		return pid.get();
 	}
 
 
