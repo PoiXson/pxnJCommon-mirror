@@ -25,6 +25,38 @@ public final class ReflectUtils {
 
 
 
+	public static <T> T NewInstance(final Class<T> clss, final Object...args) {
+		final Constructor<T> construct;
+		try {
+			if (args.length == 0) {
+				construct = clss.getConstructor();
+			} else {
+				construct = clss.getConstructor( ArgsToClasses(args) );
+			}
+		} catch (NoSuchMethodException e) {
+			throw new IllegalArgumentException(e);
+		} catch (SecurityException e) {
+			throw new IllegalArgumentException(e);
+		}
+		final T instance;
+		try {
+			if (args.length == 0) {
+				instance = construct.newInstance();
+			} else {
+				instance = construct.newInstance(args);
+			}
+		} catch (InstantiationException e) {
+			throw new IllegalArgumentException(e);
+		} catch (IllegalAccessException e) {
+			throw new IllegalArgumentException(e);
+		} catch (InvocationTargetException e) {
+			throw new IllegalArgumentException(e);
+		}
+		return instance;
+	}
+
+
+
 	// ------------------------------------------------------------------------------- //
 	// methods
 
