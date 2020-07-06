@@ -32,9 +32,21 @@ public class Test_StringUtils {
 		Assert.assertEquals( "1.23",   StringUtils.ToString(1.23F            ) );
 		Assert.assertEquals( null,     StringUtils.ToString(null             ) );
 		Assert.assertEquals( "",       StringUtils.ToString(""               ) );
+		// array to string
+		Assert.assertEquals(
+			"{A} {b} {c}",
+			StringUtils.ToString( new String[] {"A", null, "b", "c"} )
+		);
+		// object to string
 		{
-			final String result = StringUtils.ToString(new RuntimeException("Abcdef"));
-			Assert.assertTrue(result.startsWith("java.lang.RuntimeException: Abcdef"));
+			final String result = StringUtils.ToString(new Object());
+			Assert.assertTrue(result.startsWith("java.lang.Object@"));
+		}
+		// exception to string
+		{
+			final String result = StringUtils.ToString(new Exception("Abcdef"));
+			Assert.assertTrue(result.startsWith("java.lang.Exception: Abcdef"));
+			Assert.assertEquals(null, StringUtils.ExceptionToString(null));
 		}
 	}
 
@@ -61,7 +73,9 @@ public class Test_StringUtils {
 		Assert.assertArrayEquals( new String[] { "A", "b", "c"               }, StringUtils.SplitLines(new String[] { "A\nb\nc"               }) );
 		Assert.assertArrayEquals( new String[] { "Abc", "def", "ghi"         }, StringUtils.SplitLines(new String[] { "Abc", "def", "ghi"     }) );
 		Assert.assertArrayEquals( new String[] { "Abc", "d", "e", "f", "ghi" }, StringUtils.SplitLines(new String[] { "Abc", "d\ne\nf", "ghi" }) );
-		Assert.assertArrayEquals( null,                                         StringUtils.SplitLines(null)                                     );
+		Assert.assertArrayEquals( new String[0], StringUtils.SplitLines(new String[] { "\n\n" }) );
+		Assert.assertArrayEquals( new String[0], StringUtils.SplitLines(new String[0]          ) );
+		Assert.assertArrayEquals( null,          StringUtils.SplitLines(null                   ) );
 	}
 
 
@@ -78,6 +92,7 @@ public class Test_StringUtils {
 		Assert.assertEquals( false, StringUtils.IsAlpha("123"    ) );
 		Assert.assertEquals( false, StringUtils.IsAlpha("Abc123" ) );
 		Assert.assertEquals( false, StringUtils.IsAlpha("Abc123!") );
+		Assert.assertEquals( false, StringUtils.IsAlpha(null     ) );
 	}
 	@Test
 	public void testIsAlphaSpace() {
@@ -86,6 +101,7 @@ public class Test_StringUtils {
 		Assert.assertEquals( false, StringUtils.IsAlphaSpace("123"    ) );
 		Assert.assertEquals( false, StringUtils.IsAlphaSpace("Abc123" ) );
 		Assert.assertEquals( false, StringUtils.IsAlphaSpace("Abc123!") );
+		Assert.assertEquals( false, StringUtils.IsAlphaSpace(null     ) );
 	}
 	@Test
 	public void testIsAlphaNum() {
@@ -94,6 +110,7 @@ public class Test_StringUtils {
 		Assert.assertEquals( true,  StringUtils.IsAlphaNum("123"    ) );
 		Assert.assertEquals( true,  StringUtils.IsAlphaNum("Abc123" ) );
 		Assert.assertEquals( false, StringUtils.IsAlphaNum("Abc123!") );
+		Assert.assertEquals( false, StringUtils.IsAlphaNum(null     ) );
 	}
 	@Test
 	public void testIsAlphaNumSpace() {
@@ -102,6 +119,7 @@ public class Test_StringUtils {
 		Assert.assertEquals( true,  StringUtils.IsAlphaNumSpace("123"    ) );
 		Assert.assertEquals( true,  StringUtils.IsAlphaNumSpace("Abc123" ) );
 		Assert.assertEquals( false, StringUtils.IsAlphaNumSpace("Abc123!") );
+		Assert.assertEquals( false, StringUtils.IsAlphaNumSpace(null     ) );
 	}
 
 
@@ -110,33 +128,45 @@ public class Test_StringUtils {
 	public void testStrEquals() {
 		Assert.assertEquals( true,  StringUtils.StrEquals("Abc", "Abc") );
 		Assert.assertEquals( false, StringUtils.StrEquals("Abc", "abc") );
+		Assert.assertEquals( false, StringUtils.StrEquals("Abc", ""   ) );
+		Assert.assertEquals( false, StringUtils.StrEquals("Abc", null ) );
 		Assert.assertEquals( true,  StringUtils.StrEquals(null,  null ) );
 		Assert.assertEquals( true,  StringUtils.StrEquals("",    ""   ) );
 		Assert.assertEquals( true,  StringUtils.StrEquals("",    null ) );
+		Assert.assertEquals( true,  StringUtils.StrEquals(null,  ""   ) );
 	}
 	@Test
 	public void testEqualsIgnoreCase() {
-		Assert.assertEquals( true, StringUtils.StrEqualsIgnoreCase("Abc", "Abc") );
-		Assert.assertEquals( true, StringUtils.StrEqualsIgnoreCase("Abc", "abc") );
-		Assert.assertEquals( true, StringUtils.StrEqualsIgnoreCase(null,  null ) );
-		Assert.assertEquals( true, StringUtils.StrEqualsIgnoreCase("",    ""   ) );
-		Assert.assertEquals( true, StringUtils.StrEqualsIgnoreCase("",    null ) );
+		Assert.assertEquals( true,  StringUtils.StrEqualsIgnoreCase("Abc", "Abc") );
+		Assert.assertEquals( true,  StringUtils.StrEqualsIgnoreCase("Abc", "abc") );
+		Assert.assertEquals( false, StringUtils.StrEqualsIgnoreCase("Abc", ""   ) );
+		Assert.assertEquals( false, StringUtils.StrEqualsIgnoreCase("Abc", null ) );
+		Assert.assertEquals( true,  StringUtils.StrEqualsIgnoreCase(null,  null ) );
+		Assert.assertEquals( true,  StringUtils.StrEqualsIgnoreCase("",    ""   ) );
+		Assert.assertEquals( true,  StringUtils.StrEqualsIgnoreCase("",    null ) );
+		Assert.assertEquals( true,  StringUtils.StrEqualsIgnoreCase(null,  ""   ) );
 	}
 	@Test
 	public void testStrEqualsExact() {
 		Assert.assertEquals( true,  StringUtils.StrEqualsExact("Abc", "Abc") );
 		Assert.assertEquals( false, StringUtils.StrEqualsExact("Abc", "abc") );
+		Assert.assertEquals( false, StringUtils.StrEqualsExact("Abc", ""   ) );
+		Assert.assertEquals( false, StringUtils.StrEqualsExact("Abc", null ) );
 		Assert.assertEquals( true,  StringUtils.StrEqualsExact(null,  null ) );
 		Assert.assertEquals( true,  StringUtils.StrEqualsExact("",    ""   ) );
 		Assert.assertEquals( false, StringUtils.StrEqualsExact("",    null ) );
+		Assert.assertEquals( false, StringUtils.StrEqualsExact(null,  ""   ) );
 	}
 	@Test
 	public void testStrEqualsExactIgnoreCase() {
 		Assert.assertEquals( true,  StringUtils.StrEqualsExactIgnoreCase("Abc", "Abc") );
 		Assert.assertEquals( true,  StringUtils.StrEqualsExactIgnoreCase("Abc", "abc") );
+		Assert.assertEquals( false, StringUtils.StrEqualsExactIgnoreCase("Abc", ""   ) );
+		Assert.assertEquals( false, StringUtils.StrEqualsExactIgnoreCase("Abc", null ) );
 		Assert.assertEquals( true,  StringUtils.StrEqualsExactIgnoreCase(null,  null ) );
 		Assert.assertEquals( true,  StringUtils.StrEqualsExactIgnoreCase("",    ""   ) );
 		Assert.assertEquals( false, StringUtils.StrEqualsExactIgnoreCase("",    null ) );
+		Assert.assertEquals( false, StringUtils.StrEqualsExactIgnoreCase(null,  ""   ) );
 	}
 
 
@@ -277,8 +307,8 @@ public class Test_StringUtils {
 		{
 			final List<String> list = new ArrayList<String>();
 			list.add("a");
-			Assert.assertEquals( "a_1", StringUtils.ForceUnique("a", list) );
-			Assert.assertEquals( "b",   StringUtils.ForceUnique("b", list) );
+			Assert.assertEquals( "a_1", StringUtils.UniqueKey(list, "a") );
+			Assert.assertEquals( "b",   StringUtils.UniqueKey(list, "b") );
 			Assert.assertArrayEquals(
 				new String[] { "a", "a_1", "b" },
 				list.toArray(new String[0])
