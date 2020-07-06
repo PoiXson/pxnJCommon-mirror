@@ -1,7 +1,6 @@
 package org.slf4j.impl;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
@@ -15,8 +14,7 @@ import com.poixson.utils.Utils;
 public class slf4jLoggerFactory implements ILoggerFactory {
 	public static final String LOG_NAME = "slf4j";
 
-	private final ConcurrentMap<String, Logger> loggers =
-			new ConcurrentHashMap<String, Logger>();
+	private final ConcurrentHashMap<String, Logger> loggers = new ConcurrentHashMap<String, Logger>();
 
 
 
@@ -31,28 +29,18 @@ public class slf4jLoggerFactory implements ILoggerFactory {
 		// new logger instance
 		{
 			// wrap the logger
-			final Logger newlogger =
-				new slf4jLoggerAdapter(
-					name,
-					getLog(name)
-				);
+			final Logger newlogger = new slf4jLoggerAdapter(name, getXLog(name));
 			// cache wrapped logger
-			final Logger existing =
-				this.loggers.putIfAbsent(
-					name,
-					newlogger
-				);
-			return (
-				existing == null
-				? newlogger
-				: existing
-			);
+			final Logger existing = this.loggers.putIfAbsent(name, newlogger);
+			if (existing != null)
+				return existing;
+			return newlogger;
 		}
 	}
 
 
 
-	public static xLog getLog(final String name) {
+	public static xLog getXLog(final String name) {
 		final xLog log;
 		if (Utils.isEmpty(name)) {
 			log = xLogRoot.Get(LOG_NAME);
@@ -60,12 +48,10 @@ public class slf4jLoggerFactory implements ILoggerFactory {
 		if (name.startsWith("org.xeustechnologies.jcl.")) {
 			log = xLogRoot.Get("jcl");
 		} else {
-			log = xLogRoot
-					.Get(LOG_NAME)
-						.get(name);
+			log = xLogRoot.Get(LOG_NAME).get(name);
 		}
 		// disable logging if not detail mode
-		if ( ! xLogRoot.Get().isDetailLoggable() ) {
+		if ( ! xLogRoot.Get().isLoggable(xLevel.DETAIL) ) {
 			log.setLevel(xLevel.WARNING);
 		}
 		return log;

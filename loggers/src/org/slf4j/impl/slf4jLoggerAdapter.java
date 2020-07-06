@@ -31,36 +31,30 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 	// trace
 	@Override
 	public boolean isTraceEnabled() {
-		return
-			this.getXLog()
-				.isLoggable(xLevel.FINEST);
+		return this.getXLog().isLoggable(xLevel.FINEST);
 	}
 	@Override
 	public void trace(final String msg) {
-		this.getXLog()
-			.finest(msg);
+		this.getXLog().finest(msg);
 	}
 	@Override
 	public void trace(final String format, final Object arg) {
 		if (this.isTraceEnabled()) {
-			final FormattingTuple ft =
-				MessageFormatter.format(format, arg);
+			final FormattingTuple ft = MessageFormatter.format(format, arg);
 			this.trace(ft.getMessage(), ft.getThrowable());
 		}
 	}
 	@Override
 	public void trace(final String format, final Object arg1, final Object arg2) {
 		if (this.isTraceEnabled()) {
-			final FormattingTuple ft =
-				MessageFormatter.format(format, arg1, arg2);
+			final FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
 			this.trace(ft.getMessage(), ft.getThrowable());
 		}
 	}
 	@Override
-	public void trace(final String format, final Object... args) {
+	public void trace(final String format, final Object...args) {
 		if (this.isTraceEnabled()) {
-			final FormattingTuple ft =
-				MessageFormatter.format(format, args);
+			final FormattingTuple ft = MessageFormatter.format(format, args);
 			this.trace(ft.getMessage(), ft.getThrowable());
 		}
 	}
@@ -76,36 +70,30 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 	// debug
 	@Override
 	public boolean isDebugEnabled() {
-		return
-			this.getXLog()
-				.isLoggable(xLevel.DETAIL);
+		return this.getXLog().isLoggable(xLevel.DETAIL);
 	}
 	@Override
 	public void debug(final String msg) {
-		this.getXLog()
-			.detail(msg);
+		this.getXLog().detail(msg);
 	}
 	@Override
 	public void debug(final String format, final Object arg) {
 		if (this.isDebugEnabled()) {
-			final FormattingTuple ft =
-				MessageFormatter.format(format, arg);
+			final FormattingTuple ft = MessageFormatter.format(format, arg);
 			this.debug(ft.getMessage(), ft.getThrowable());
 		}
 	}
 	@Override
 	public void debug(final String format, final Object arg1, final Object arg2) {
 		if (this.isDebugEnabled()) {
-			final FormattingTuple ft =
-				MessageFormatter.format(format, arg1, arg2);
+			final FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
 			this.debug(ft.getMessage(), ft.getThrowable());
 		}
 	}
 	@Override
-	public void debug(final String format, final Object... args) {
+	public void debug(final String format, final Object...args) {
 		if (this.isDebugEnabled()) {
-			final FormattingTuple ft =
-				MessageFormatter.format(format, args);
+			final FormattingTuple ft = MessageFormatter.format(format, args);
 			this.debug(ft.getMessage(), ft.getThrowable());
 		}
 	}
@@ -113,10 +101,11 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 	public void debug(final String msg, final Throwable e) {
 		final xLog log = this.getXLog();
 		if (log.isLoggable(xLevel.DETAIL)) {
-			if (e == null)
+			if (e == null) {
 				log.detail(msg);
-			else
+			} else {
 				log.trace(e, msg);
+			}
 		}
 	}
 
@@ -125,36 +114,30 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 	// info
 	@Override
 	public boolean isInfoEnabled() {
-		return
-			this.getXLog()
-				.isLoggable(xLevel.INFO);
+		return this.getXLog().isLoggable(xLevel.INFO);
 	}
 	@Override
 	public void info(final String msg) {
-		this.getXLog()
-			.info(msg);
+		this.getXLog().info(msg);
 	}
 	@Override
 	public void info(final String format, final Object arg) {
 		if (this.isInfoEnabled()) {
-			final FormattingTuple ft =
-				MessageFormatter.format(format, arg);
+			final FormattingTuple ft = MessageFormatter.format(format, arg);
 			this.info(ft.getMessage(), ft.getThrowable());
 		}
 	}
 	@Override
 	public void info(final String format, final Object arg1, final Object arg2) {
 		if (this.isInfoEnabled()) {
-			final FormattingTuple ft =
-				MessageFormatter.format(format, arg1, arg2);
+			final FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
 			this.info(ft.getMessage(), ft.getThrowable());
 		}
 	}
 	@Override
-	public void info(final String format, final Object... args) {
+	public void info(final String format, final Object...args) {
 		if (this.isInfoEnabled()) {
-			final FormattingTuple ft =
-				MessageFormatter.format(format, args);
+			final FormattingTuple ft = MessageFormatter.format(format, args);
 			this.info(ft.getMessage(), ft.getThrowable());
 		}
 	}
@@ -162,10 +145,11 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 	public void info(final String msg, final Throwable e) {
 		final xLog log = this.getXLog();
 		if (log.isLoggable(xLevel.INFO)) {
-			if (e == null)
+			if (e == null) {
 				log.info(msg);
-			else
+			} else {
 				log.trace(e, msg);
+			}
 		}
 	}
 
@@ -174,36 +158,30 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 	// warning
 	@Override
 	public boolean isWarnEnabled() {
-		return
-			this.getXLog()
-				.isLoggable(xLevel.WARNING);
+		return this.getXLog().isLoggable(xLevel.WARNING);
 	}
 	@Override
 	public void warn(final String msg) {
-		this.getXLog()
-			.warning(msg);
+		this.getXLog().warning(msg);
 	}
 	@Override
 	public void warn(final String format, final Object arg) {
 		if (this.isWarnEnabled()) {
-			final FormattingTuple ft =
-				MessageFormatter.format(format, arg);
+			final FormattingTuple ft = MessageFormatter.format(format, arg);
 			this.warn(ft.getMessage(), ft.getThrowable());
 		}
 	}
 	@Override
 	public void warn(final String format, final Object arg1, final Object arg2) {
 		if (this.isWarnEnabled()) {
-			final FormattingTuple ft =
-				MessageFormatter.format(format, arg1, arg2);
+			final FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
 			this.warn(ft.getMessage(), ft.getThrowable());
 		}
 	}
 	@Override
-	public void warn(final String format, final Object... args) {
+	public void warn(final String format, final Object...args) {
 		if (this.isWarnEnabled()) {
-			final FormattingTuple ft =
-				MessageFormatter.format(format, args);
+			final FormattingTuple ft = MessageFormatter.format(format, args);
 			this.warn(ft.getMessage(), ft.getThrowable());
 		}
 	}
@@ -211,10 +189,11 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 	public void warn(final String msg, final Throwable e) {
 		final xLog log = this.getXLog();
 		if (log.isLoggable(xLevel.WARNING)) {
-			if (e == null)
+			if (e == null) {
 				log.warning(msg);
-			else
+			} else {
 				log.trace(e, msg);
+			}
 		}
 	}
 
@@ -223,36 +202,30 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 	// error
 	@Override
 	public boolean isErrorEnabled() {
-		return
-			this.getXLog()
-				.isLoggable(xLevel.SEVERE);
+		return this.getXLog().isLoggable(xLevel.SEVERE);
 	}
 	@Override
 	public void error(final String msg) {
-		this.getXLog()
-			.severe(msg);
+		this.getXLog().severe(msg);
 	}
 	@Override
 	public void error(final String format, final Object arg) {
 		if (this.isErrorEnabled()) {
-			final FormattingTuple ft =
-				MessageFormatter.format(format, arg);
+			final FormattingTuple ft = MessageFormatter.format(format, arg);
 			this.error(ft.getMessage(), ft.getThrowable());
 		}
 	}
 	@Override
 	public void error(final String format, final Object arg1, final Object arg2) {
 		if (this.isErrorEnabled()) {
-			final FormattingTuple ft =
-				MessageFormatter.format(format, arg1, arg2);
+			final FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
 			this.error(ft.getMessage(), ft.getThrowable());
 		}
 	}
 	@Override
-	public void error(final String format, final Object... args) {
+	public void error(final String format, final Object...args) {
 		if (this.isErrorEnabled()) {
-			final FormattingTuple ft =
-				MessageFormatter.format(format, args);
+			final FormattingTuple ft = MessageFormatter.format(format, args);
 			this.error(ft.getMessage(), ft.getThrowable());
 		}
 	}
@@ -260,10 +233,11 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 	public void error(final String msg, final Throwable e) {
 		final xLog log = this.getXLog();
 		if (log.isLoggable(xLevel.SEVERE)) {
-			if (e == null)
+			if (e == null) {
 				log.severe(msg);
-			else
+			} else {
 				log.trace(e, msg);
+			}
 		}
 	}
 

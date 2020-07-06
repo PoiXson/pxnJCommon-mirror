@@ -10,8 +10,7 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
 
 	public static String REQUESTED_API_VERSION = "1.6.99"; // not final
 
-	private static final String loggerFactoryClassStr =
-			slf4jLoggerFactory.class.getName();
+	private static final String loggerFactoryClassStr = slf4jLoggerFactory.class.getName();
 
 	private final ILoggerFactory loggerFactory;
 
