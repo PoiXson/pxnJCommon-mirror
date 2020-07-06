@@ -23,8 +23,7 @@ public class xLockFile {
 
 	private static final ConcurrentHashMap<String, xLockFile> instances = new ConcurrentHashMap<String, xLockFile>();
 
-	public final String filename;
-	public final File   file;
+	public final File file;
 
 	protected FileLock         lock    = null;
 	protected FileChannel      channel = null;
@@ -33,7 +32,7 @@ public class xLockFile {
 
 
 	public static xLockFile Get(final String filename) {
-		if (Utils.isEmpty(filename))          throw new RequiredArgumentException("filename");
+		if (Utils.isEmpty(filename)) throw new RequiredArgumentException("filename");
 		// existing lock instance
 		{
 			final xLockFile lock = instances.get(filename);
@@ -51,7 +50,7 @@ public class xLockFile {
 		}
 	}
 	public static xLockFile Peek(final String filename) {
-		if (Utils.isEmpty(filename))          throw new RequiredArgumentException("filename");
+		if (Utils.isEmpty(filename)) throw new RequiredArgumentException("filename");
 		return instances.get(filename);
 	}
 
@@ -75,8 +74,7 @@ public class xLockFile {
 
 
 	protected xLockFile(final String filename) {
-		if (Utils.isEmpty(filename))          throw new RequiredArgumentException("filename");
-		this.filename = filename;
+		if (Utils.isEmpty(filename)) throw new RequiredArgumentException("filename");
 		this.file = new File(filename);
 		// register shutdown hook
 		Runtime.getRuntime().addShutdownHook(
@@ -141,7 +139,7 @@ public class xLockFile {
 			this.channel = null;
 			return false;
 		}
-		this.log().fine("Locked file:", this.filename);
+		this.log().fine("Locked file:", this.file.getName());
 		return true;
 	}
 	// release file lock
@@ -156,7 +154,7 @@ public class xLockFile {
 		this.lock    = null;
 		this.channel = null;
 		this.handle  = null;
-		log().fine("Released file lock:", this.filename);
+		log().fine("Released file lock:", this.file.getName());
 		try {
 			this.file.delete();
 		} catch (Exception ignore) {}
