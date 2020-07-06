@@ -2,80 +2,38 @@ package com.poixson.utils;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.poixson.app.commands.xCommandHandler;
+import com.poixson.tools.Keeper;
 
 
 public class ShellUtils {
 
-	private static final AtomicReference<ShellUtils> instance =
-			new AtomicReference<ShellUtils>(null);
+	protected static final AtomicReference<ShellUtils> instance = new AtomicReference<ShellUtils>(null);
 
 
 
-	private static ShellUtils get() {
-		// existing instance
-		{
-			final ShellUtils util = instance.get();
-			if (util != null)
-				return util;
+	protected static ShellUtils Get() {
+		if (instance.get() == null) {
+			// extended utility
+			try {
+				final Class<?> clss = Class.forName("com.poixson.utils.ShellUtils_Extended");
+				if (clss != null) {
+					final ShellUtils utility = (ShellUtils) clss.newInstance();
+					if (instance.compareAndSet(null, utility))
+						return utility;
+					return instance.get();
+				}
+			} catch (ClassNotFoundException ignore) {
+			} catch (InstantiationException ignore) {
+			} catch (IllegalAccessException ignore) {}
+			// default utility
+			final ShellUtils utility = new ShellUtils();
+			if (instance.compareAndSet(null, utility))
+				return utility;
 		}
-		// extended utils if available
-		try {
-			final Class<?> clss = Class.forName("com.poixson.utils.ShellUtils_Extended");
-			if (clss != null) {
-				ShellUtils util;
-				util = (ShellUtils) clss.newInstance();
-				if (instance.compareAndSet(null, util))
-					return util;
-				return instance.get();
-			}
-		} catch (ClassNotFoundException ignore) {
-		} catch (InstantiationException ignore) {
-		} catch (IllegalAccessException ignore) {}
-		// new default instance
-		{
-			final ShellUtils util = new ShellUtils();
-			if (instance.compareAndSet(null, util))
-				return util;
-			return instance.get();
-		}
+		return instance.get();
 	}
 	protected ShellUtils() {
-	}
-
-
-
-	// ------------------------------------------------------------------------------- //
-	// commands
-
-
-
-	public static xCommandHandler GetCommandHandler() {
-		return get().getCommandHandler();
-	}
-	public static void SetCommandHandler(final xCommandHandler handler) {
-		get().setCommandHandler(handler);
-	}
-	public static void RegisterCommands(final Object...objs) {
-		get().registerCommands(objs);
-	}
-	public static boolean Process(final String line) {
-		return get().process(line);
-	}
-
-
-
-	public xCommandHandler getCommandHandler() {
-		throw new UnsupportedOperationException("pxnCommon-Shell library is required");
-	}
-	public void setCommandHandler(final xCommandHandler handler) {
-		throw new UnsupportedOperationException("pxnCommon-Shell library is required");
-	}
-	public void registerCommands(final Object...objs) {
-		throw new UnsupportedOperationException("pxnCommon-Shell library is required");
-	}
-	public boolean process(final String line) {
-		throw new UnsupportedOperationException("pxnCommon-Shell library is required");
+		Keeper.add(this);
 	}
 
 
@@ -86,18 +44,16 @@ public class ShellUtils {
 
 
 	public static String RenderAnsi(final String line) {
-		return get().renderAnsi(line);
+		return Get()._renderAnsi(line);
 	}
-	public static String[] RenderAnsi(final String[] lines) {
-		return get().renderAnsi(lines);
-	}
-
-
-
-	protected String renderAnsi(final String line) {
+	protected String _renderAnsi(final String line) {
 		return StripColorTags(line);
 	}
-	protected String[] renderAnsi(final String[] lines) {
+
+	public static String[] RenderAnsi(final String[] lines) {
+		return Get()._renderAnsi(lines);
+	}
+	protected String[] _renderAnsi(final String[] lines) {
 		return StripColorTags(lines);
 	}
 
@@ -105,8 +61,7 @@ public class ShellUtils {
 
 	// strip color tags
 	public static String StripColorTags(final String line) {
-		if (Utils.isEmpty(line))
-			return line;
+		if (Utils.isEmpty(line)) return line;
 		final StringBuilder result = new StringBuilder(line);
 		boolean changed = false;
 		while (true) {
@@ -125,14 +80,10 @@ public class ShellUtils {
 		return line;
 	}
 	public static String[] StripColorTags(final String[] lines) {
-		if (Utils.isEmpty(lines))
-			return lines;
+		if (Utils.isEmpty(lines)) return lines;
 		String[] result = new String[ lines.length ];
 		for (int index=0; index<lines.length; index++) {
-			result[index] =
-				StripColorTags(
-					result[index]
-				);
+			result[index] = StripColorTags(result[index]);
 		}
 		return result;
 	}
