@@ -28,32 +28,48 @@ public abstract class RemappedEventListener {
 	protected Method findMethod(final String methodStr, final Class<?> eventClass) {
 		if (Utils.isEmpty(methodStr)) return null;
 		if (eventClass == null)       return null;
+		Method method = null;
+		final Class<?> clss = this.container.getClass();
+		// method(event)
 		try {
-			final Class<?> clss = this.container.getClass();
-			final Method method = clss.getMethod(methodStr, eventClass);
-			if (method == null) {
-				throw new NoSuchMethodException(
+			method = clss.getMethod(methodStr, eventClass);
+		} catch (NoSuchMethodException e) {
+			method = null;
+		} catch (SecurityException e) {
+			method = null;
+		}
+		// method()
+		if (method == null) {
+			try {
+				method = clss.getMethod(methodStr);
+			} catch (NoSuchMethodException e) {
+				method = null;
+			} catch (SecurityException e) {
+				method = null;
+			}
+		}
+		// method not found
+		if (method == null) {
+			this.log().trace(
+				new NoSuchMethodException(
 					StringUtils.ReplaceTags(
 						"Method not found: {}::{}({})",
 						clss.getName(),
 						methodStr,
 						eventClass.getName()
 					)
-				);
-			}
-			this.log()
-				.detail(
-					"New ItemListener created for: {}::{}({})",
-					clss.getName(),
-					methodStr,
-					eventClass.getName()
-				);
-			return method;
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
-		} catch (SecurityException e) {
-			throw new RuntimeException(e);
+				)
+			);
+			return null;
 		}
+		this.log()
+			.detail(
+				"New ItemListener created for: {}::{}({})",
+				clss.getName(),
+				methodStr,
+				eventClass.getName()
+			);
+		return method;
 	}
 
 
