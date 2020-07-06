@@ -1,6 +1,8 @@
 package com.poixson.tools;
 
 import java.awt.Font;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.logger.xLog;
 import com.poixson.utils.NumberUtils;
@@ -10,10 +12,10 @@ import com.poixson.utils.guiUtils;
 
 public class xFont {
 
-	protected volatile String family = null;
-	protected volatile Style  style  = Style.PLAIN;
-	protected final    int    base   = 12;
-	protected volatile int    size   = 0;
+	public final AtomicReference<String> family = new AtomicReference<String>(null);
+	public final AtomicReference<Style>  style  = new AtomicReference<Style>(Style.PLAIN);
+	public final AtomicInteger size = new AtomicInteger(0);
+	public final int base = 12;
 
 
 
@@ -21,7 +23,7 @@ public class xFont {
 		PLAIN (Font.PLAIN),
 		BOLD  (Font.BOLD),
 		ITALIC(Font.ITALIC);
-		protected final int value;
+		public final int value;
 		Style(final int value) {
 			this.value = value;
 		}
@@ -37,27 +39,27 @@ public class xFont {
 	}
 	public xFont(final xFont font) {
 		this();
-		this.family = font.family;
-		this.style  = font.style;
-		this.size   = font.size;
+		this.family.set(font.family.get());
+		this.style.set( font.style.get() );
+		this.size.set(  font.size.get()  );
 	}
 	public xFont() {
 	}
 
 
 
-	public Font getFont(final String format) {
+	public Font font(final String format) {
 		if (Utils.isEmpty(format))
-			return this.getFont();
+			return this.font();
 		final xFont font = new xFont(this);
 		font.apply(format);
-		return font.getFont();
+		return font.font();
 	}
-	public Font getFont() {
+	public Font font() {
 		return new Font(
-			this.family,
-			this.style.value,
-			this.base + this.size
+			this.family.get(),
+			this.style.get().value,
+			this.base + this.size.get()
 		);
 	}
 
@@ -66,61 +68,53 @@ public class xFont {
 	public xFont apply(final String format) {
 		if (Utils.isEmpty(format))
 			return this;
-		final xString str = xString.getNew(format);
-		str.delim(",");
-		while (str.hasNext()) {
-			// get part
-			final String part;
-			{
-				final String prt = str.part();
-				if (prt == null)
-					break;
-				part = prt.trim().toLowerCase();
-				if (Utils.isEmpty(part))
-					continue;
-			}
+		final StringParts parts = StringParts.getNew(format);
+		parts.delim(",");
+		while (parts.hasNext()) {
+			String part = parts.part();
+			if (part == null) break;
+			part = part.trim().toLowerCase();
+			if (part.isEmpty()) continue;
 			// font style
 			switch (part) {
 			case "b":
 			case "bold":
-				this.style = Style.BOLD;
+				this.style.set(Style.BOLD);
 				continue;
 			case "i":
 			case "italic":
-				this.style = Style.ITALIC;
+				this.style.set(Style.ITALIC);
 				continue;
 			case "p":
 			case "plain":
-				this.style = Style.PLAIN;
+				this.style.set(Style.PLAIN);
 				continue;
+			default:
 			}
 			// font family
 			if (part.startsWith("fam")) {
-				String tmp = (
-					part.startsWith("family")
-					? part.substring(6)
-					: part.substring(3)
-				).trim();
-				if (tmp.startsWith("=") || tmp.startsWith(":"))
-					tmp = tmp.substring(1).trim();
-				this.family = tmp;
+				String str = ( part.startsWith("family") ? part.substring(6) : part.substring(3) ).trim();
+				if (str.startsWith("=") || str.startsWith(":")) {
+					str = str.substring(1).trim();
+				}
+				this.family.set(str);
 				continue;
 			}
 			// font size
 			if (part.startsWith("size")) {
-				String tmp = part.substring(4).trim();
-				if (tmp.startsWith("=") || tmp.startsWith(":")) {
-					tmp = tmp.substring(1).trim();
+				String str = part.substring(4).trim();
+				if (str.startsWith("=") || str.startsWith(":")) {
+					str = str.substring(1).trim();
 				}
-				if (tmp.startsWith("+")) {
-					tmp = tmp.substring(1).trim();
+				if (str.startsWith("+")) {
+					str = str.substring(1).trim();
 				}
-				final Integer i = NumberUtils.toInteger(tmp);
+				final Integer i = NumberUtils.ToInteger(str);
 				if (i == null) {
 					this.log().warning("Invalid font size value:", part);
 					continue;
 				}
-				this.size = i.intValue();
+				this.size.set(i.intValue());
 				continue;
 			}
 			// unknown format
