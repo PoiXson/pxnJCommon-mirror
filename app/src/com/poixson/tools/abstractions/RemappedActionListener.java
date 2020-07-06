@@ -3,43 +3,16 @@ package com.poixson.tools.abstractions;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.logger.xLog;
-import com.poixson.utils.Utils;
-import com.poixson.utils.guiUtils;
 
 
-public class RemappedActionListener implements ActionListener {
-
-	protected final Object obj;
-	protected final Method method;
+public class RemappedActionListener
+extends RemappedEventListener
+implements ActionListener {
 
 
 
-	public RemappedActionListener(final Object listenerClass, final String methodStr)
-			throws NoSuchMethodException {
-		if (listenerClass == null)    throw new RequiredArgumentException("listenerClass");
-		if (Utils.isEmpty(methodStr)) throw new RequiredArgumentException("methodName");
-		this.obj = listenerClass;
-		final Class<?> clss = listenerClass.getClass();
-		this.method = clss.getMethod(methodStr, ActionEvent.class);
-		if (this.method == null) {
-			this.log()
-				.severe(
-					"Method: {}() in class: {}",
-					methodStr,
-					listenerClass.getClass().getName()
-				);
-			throw new NoSuchMethodException();
-		}
-		this.log()
-			.detail(
-				"New ActionListener created for: {}::{}()",
-				clss.getName(),
-				methodStr
-			);
+	public RemappedActionListener(final Object container, final String methodStr) {
+		super(container, methodStr, ActionEvent.class);
 	}
 
 
@@ -47,7 +20,7 @@ public class RemappedActionListener implements ActionListener {
 	@Override
 	public void actionPerformed(final ActionEvent event) {
 		try {
-			this.method.invoke(this.obj, event);
+			this.method.invoke(this.container, event);
 		} catch (IllegalAccessException e) {
 			this.log().trace(e);
 		} catch (IllegalArgumentException e) {
@@ -57,13 +30,6 @@ public class RemappedActionListener implements ActionListener {
 		} catch (Exception e) {
 			this.log().trace(e);
 		}
-	}
-
-
-
-	// logger
-	public xLog log() {
-		return guiUtils.log();
 	}
 
 
