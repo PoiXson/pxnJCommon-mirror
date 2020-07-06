@@ -81,7 +81,11 @@ public final class StringUtils {
 		if (e == null) return null;
 		final StringWriter writer = new StringWriter(256);
 		e.printStackTrace(new PrintWriter(writer));
-		return writer.toString().trim();
+		try {
+			return writer.toString().trim();
+		} finally {
+			Utils.safeClose(writer);
+		}
 	}
 
 
