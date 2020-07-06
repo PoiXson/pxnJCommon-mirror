@@ -21,7 +21,7 @@ import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.Utils;
 
 
-public class xScheduler implements xStartable {
+public class xScheduler implements xStartable, Runnable {
 
 	private static final String LOG_NAME        = "xSched";
 	private static final String MAIN_SCHED_NAME = "main";

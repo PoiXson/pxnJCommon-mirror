@@ -21,7 +21,7 @@ import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.utils.Utils;
 
 
-public abstract class xPluginManager<T extends xJavaPlugin> implements xStartable {
+public abstract class xPluginManager<T extends xJavaPlugin> implements xStartable, Runnable {
 	private static final String DEFAULT_LOG_NAME = "xPluginManager";
 
 	protected final String logName;

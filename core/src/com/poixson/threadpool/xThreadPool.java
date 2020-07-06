@@ -21,7 +21,7 @@ import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
-public abstract class xThreadPool implements xStartable {
+public abstract class xThreadPool implements xStartable, Runnable {
 
 	public static final int  HARD_MAX_WORKERS = 100;
 	public static final int  DEFAULT_THREAD_PRIORITY = Thread.NORM_PRIORITY;

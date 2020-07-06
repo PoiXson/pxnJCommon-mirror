@@ -14,7 +14,7 @@ import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.Utils;
 
 
-public class xThreadPoolWorker implements xStartable {
+public class xThreadPoolWorker implements xStartable, Runnable {
 
 	public static final long WORKER_START_TIMEOUT = 500L;
 

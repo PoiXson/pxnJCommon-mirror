@@ -15,7 +15,7 @@ import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
-public abstract class xJavaPlugin implements xStartable, AttachedLogger {
+public abstract class xJavaPlugin implements xStartable, Runnable, AttachedLogger {
 
 	protected final AtomicReference<JarClassLoader> jcl =
 			new AtomicReference<JarClassLoader>(null);
