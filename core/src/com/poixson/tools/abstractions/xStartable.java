@@ -1,7 +1,7 @@
 package com.poixson.tools.abstractions;
 
 
-public interface xStartable extends Runnable {
+public interface xStartable {
 
 
 	public void start();
