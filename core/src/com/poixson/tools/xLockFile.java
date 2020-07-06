@@ -9,7 +9,6 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.channels.OverlappingFileLockException;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
@@ -17,7 +16,6 @@ import com.poixson.logger.xLog;
 import com.poixson.logger.xLogRoot;
 import com.poixson.utils.ProcUtils;
 import com.poixson.utils.ReflectUtils;
-import com.poixson.utils.SanUtils;
 import com.poixson.utils.Utils;
 
 
@@ -28,15 +26,14 @@ public class xLockFile {
 	public final String filename;
 	public final File   file;
 
-	private volatile FileLock         fileLock;
-	private volatile RandomAccessFile handle;
-	private volatile FileChannel      channel;
+	protected FileLock         lock    = null;
+	protected FileChannel      channel = null;
+	protected RandomAccessFile handle  = null;
 
 
 
 	public static xLockFile Get(final String filename) {
-		if (Utils.isBlank(filename))          throw new RequiredArgumentException("filename");
-		if (!SanUtils.SafeFileName(filename)) throw new IllegalArgumentException("Invalid lock file name: "+filename);
+		if (Utils.isEmpty(filename))          throw new RequiredArgumentException("filename");
 		// existing lock instance
 		{
 			final xLockFile lock = instances.get(filename);
@@ -54,8 +51,7 @@ public class xLockFile {
 		}
 	}
 	public static xLockFile Peek(final String filename) {
-		if (Utils.isBlank(filename))          throw new RequiredArgumentException("filename");
-		if (!SanUtils.SafeFileName(filename)) throw new IllegalArgumentException("Invalid lock file name: "+filename);
+		if (Utils.isEmpty(filename))          throw new RequiredArgumentException("filename");
 		return instances.get(filename);
 	}
 
@@ -63,30 +59,23 @@ public class xLockFile {
 
 	public static xLockFile Lock(final String filename) {
 		final xLockFile lock = Get(filename);
-		if (lock == null)
-			return null;
-		if (lock.acquire())
-			return lock;
-		return null;
+		if (lock == null)    return null;
+		if (!lock.acquire()) return null;
+		return lock;
 	}
-	public static boolean getRelease(final String filename) {
-		final LockFile lock = get(filename);
-		if (lock == null)
-			return false;
-		return lock.release();
-	}
-
-
-
-	public boolean isLocked() {
-		return (this.fileLock != null);
+	public static boolean Release(final String filename) {
+		final xLockFile lock = Get(filename);
+		if (lock != null) {
+			Keeper.remove(lock);
+			return lock.release();
+		}
+		return false;
 	}
 
 
 
 	protected xLockFile(final String filename) {
-		if (Utils.isBlank(filename))          throw new RequiredArgumentException("filename");
-		if (!SanUtils.SafeFileName(filename)) throw new IllegalArgumentException("Invalid lock file name: "+filename);
+		if (Utils.isEmpty(filename))          throw new RequiredArgumentException("filename");
 		this.filename = filename;
 		this.file = new File(filename);
 		// register shutdown hook
@@ -102,37 +91,54 @@ public class xLockFile {
 
 
 
+	public boolean isLocked() {
+		return (this.lock != null);
+	}
+
+
+
 	// get lock on file
 	public boolean acquire() {
-		if (this.fileLock != null)
-			return true;
+		if (this.lock != null) return true;
 		try {
 			this.handle = new RandomAccessFile(this.file, "rw");
 		} catch (FileNotFoundException e) {
 			this.log().trace(e);
+			Utils.safeClose(this.handle);
+			this.handle = null;
 			return false;
 		}
-		this.channel  = this.handle.getChannel();
+		this.channel = this.handle.getChannel();
 		try {
-			this.fileLock = this.channel.tryLock();
+			this.lock = this.channel.tryLock();
+			if (this.lock == null) {
+				Utils.safeClose(this.handle);
+				Utils.safeClose(this.channel);
+				this.handle  = null;
+				this.channel = null;
+				return false;
+			}
+			final int pid = ProcUtils.getPid();
+			this.handle.write(
+				Integer.toString(pid).getBytes()
+			);
 		} catch (OverlappingFileLockException e) {
 			this.log().trace(e);
+			Utils.safeClose(this.lock);
+			Utils.safeClose(this.handle);
+			Utils.safeClose(this.channel);
+			this.lock    = null;
+			this.handle  = null;
+			this.channel = null;
 			return false;
 		} catch (IOException e) {
 			this.log().trace(e);
-			return false;
-		}
-		if (this.fileLock == null)
-			return false;
-		final int pid = ProcUtils.getPid();
-		try {
-			this.handle.write(
-				Integer.toString(pid)
-					.getBytes()
-			);
-		} catch (IOException e) {
-			this.log().trace(e);
-			this.fileLock = null;
+			Utils.safeClose(this.lock);
+			Utils.safeClose(this.handle);
+			Utils.safeClose(this.channel);
+			this.lock    = null;
+			this.handle  = null;
+			this.channel = null;
 			return false;
 		}
 		this.log().fine("Locked file:", this.filename);
@@ -140,17 +146,14 @@ public class xLockFile {
 	}
 	// release file lock
 	public boolean release() {
-		if (this.fileLock == null)
-			return false;
+		if (this.lock == null) return false;
 		try {
-			this.fileLock.release();
+			this.lock.release();
 		} catch (Exception ignore) {}
-		try {
-			this.fileLock.close();
-		} catch (Exception ignore) {}
+		Utils.safeClose(this.lock);
 		Utils.safeClose(this.channel);
 		Utils.safeClose(this.handle);
-		this.fileLock = null;
+		this.lock    = null;
 		this.channel = null;
 		this.handle  = null;
 		log().fine("Released file lock:", this.filename);
@@ -168,31 +171,25 @@ public class xLockFile {
 
 
 
-	private final AtomicReference<SoftReference<xLog>> _log =
-			new AtomicReference<SoftReference<xLog>>(null);
+	private final AtomicReference<SoftReference<xLog>> _log = new AtomicReference<SoftReference<xLog>>(null);
 
 	public xLog log() {
 		// cached logger
 		final SoftReference<xLog> ref = this._log.get();
 		if (ref != null) {
 			final xLog log = ref.get();
-			if (log != null)
-				return log;
+			if (log != null) return log;
 		}
 		// get logger
 		{
-			final String className =
-				ReflectUtils.getClassName(
-					this.getClass()
-				);
-			final xLog log = xLogRoot.Get(className);
-			this._log.set(
-				new SoftReference<xLog>(
-					log
-				)
-			);
+			final xLog log = this._log();
+			this._log.set( new SoftReference<xLog>(log) );
 			return log;
 		}
+	}
+	protected xLog _log() {
+		final String className = ReflectUtils.GetClassName( this.getClass() );
+		return xLogRoot.Get(className);
 	}
 
 
