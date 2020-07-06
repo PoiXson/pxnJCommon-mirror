@@ -32,10 +32,37 @@ public class xLogHandler_Console extends xLogHandler {
 
 	@Override
 	public void publish(final String line) {
-		if (Utils.isEmpty(line)) {
-			this.out.println();
-		} else {
-			this.out.println( ShellUtils.RenderAnsi(line) );
+		this.getPublishLock();
+		try {
+			if (Utils.isEmpty(line)) {
+				this.out.println();
+			} else {
+				this.out.println( ShellUtils.RenderAnsi(line) );
+			}
+			this.out.flush();
+		} finally {
+			this.releasePublishLock();
+		}
+	}
+	@Override
+	public void publish(final String[] lines) {
+		this.getPublishLock();
+		try {
+			if (Utils.isEmpty(lines)) {
+				this.out.println();
+			} else
+			// single line
+			if (lines.length == 1) {
+				this.out.println( ShellUtils.RenderAnsi(lines[0]) );
+			// multiple lines
+			} else {
+				for (final String line : lines) {
+					this.out.println( ShellUtils.RenderAnsi(line) );
+				}
+			}
+			this.out.flush();
+		} finally {
+			this.releasePublishLock();
 		}
 	}
 
@@ -43,8 +70,13 @@ public class xLogHandler_Console extends xLogHandler {
 
 	@Override
 	public void flush() {
-		this.out.flush();
-		this.err.flush();
+		this.getPublishLock();
+		try {
+			this.out.flush();
+			this.err.flush();
+		} finally {
+			this.releasePublishLock();
+		}
 	}
 	@Override
 	public void clearScreen() {
@@ -52,6 +84,15 @@ public class xLogHandler_Console extends xLogHandler {
 	@Override
 	public void beep() {
 	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// formatter
+
+
+
+//TODO
 
 
 
