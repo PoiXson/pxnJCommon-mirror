@@ -1,120 +1,86 @@
-package com.poixson.app;
+package com.poixson.tools;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.logger.xLog;
-import com.poixson.logger.xLogRoot;
-import com.poixson.tools.Keeper;
-import com.poixson.tools.xTime;
+import com.poixson.utils.NumberUtils;
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.Utils;
 
 
 public final class Failure {
-	private Failure() {}
-	static { Keeper.add(new Failure()); }
 
-	public static final xTime EXIT_TIMEOUT = xTime.getNew("300n");
+	protected final CopyOnWriteArrayList<String> messages = new CopyOnWriteArrayList<String>();
 
-	private static final List<String> messages = new CopyOnWriteArrayList<String>();
-	private static volatile boolean failed = false;
-
-	private static final CopyOnWriteArraySet<Runnable> actions =
-			new CopyOnWriteArraySet<Runnable>();
+	protected final AtomicInteger exitCode = new AtomicInteger(0);
 
 
 
-	public static void fail() {
-		fail( (Throwable)null, (String)null );
+	public static boolean AtomicFail(final AtomicReference<Failure> atomic,
+			final xLog log, final String msg, final Object...args) {
+		if (log != null) {
+			log.fatal(
+				(new StringBuilder())
+					.append("@|FG_RED ")
+					.append(msg)
+					.append("|@")
+					.toString(),
+				args
+			);
+		}
+		if (atomic.get() == null) {
+			final Failure failure = new Failure();
+			if (atomic.compareAndSet(null, failure)) {
+				failure.addMessage(msg, args);
+				return true;
+			}
+		}
+		final Failure failure = atomic.get();
+		failure.addMessage(msg, args);
+		return false;
 	}
-	public static void fail(final String msg, final Object... args) {
-		fail( (Throwable)null, msg, args);
+
+
+
+	public Failure() {
 	}
-	public static void fail(final Throwable e) {
-		fail( e, (String)null );
+
+
+
+	public void addMessage(final int exitCode, final String msg, final Object...args) {
+		this.addMessage(msg, args);
+		this.exitCode.set( NumberUtils.MinMax(exitCode, 0, 255) );
 	}
-	public static void fail(final Throwable e, final String msg, final Object... args) {
-		failed = true;
-		final xLog log = xLogRoot.Peek();
+	public void addMessage(final String msg, final Object...args) {
 		if (Utils.notEmpty(msg)) {
-			final String str = StringUtils.ReplaceTags(msg, args);
-			if (log == null) {
-				xVars.getOriginalErr()
-					.println(str);
-			} else {
-				log.fatal(str);
-			}
-			addMessageSilently(str);
-		}
-		if (e != null) {
-			if (log == null) {
-				e.printStackTrace();
-			} else {
-				log.trace(e);
-			}
-		}
-		doFailActions();
-	}
-	public static void reset() {
-		failed = false;
-		messages.clear();
-	}
-
-
-
-	// fail actions
-	public static void register(final Runnable action) {
-		actions.add(action);
-		if (failed) {
-			doFailActions();
+			this.messages.add(
+				StringUtils.ReplaceTags(msg, args)
+			);
 		}
 	}
-	// perform actions
-	protected static void doFailActions() {
-		failed = true;
-		while (!actions.isEmpty()) {
-			final Iterator<Runnable> it = actions.iterator();
-			while (it.hasNext()) {
-				final Runnable run = it.next();
-				it.remove();
-				run.run();
-			}
-		}
-		ExitNow();
-	}
-	public static void ExitNow() {
-		// wait for things to finish
-		ThreadUtils.Sleep(EXIT_TIMEOUT.getMS());
-		System.exit(1);
+	public String[] getMessages() {
+		return this.messages.toArray(new String[0]);
 	}
 
 
 
-	public static boolean hasFailed() {
-		return failed;
-	}
-	public static String[] getMessages() {
-		if (!failed) return null;
-		return messages.toArray(new String[0]);
-	}
-	public static void addMessageSilently(final String msg) {
-		messages.add(msg);
-	}
 	@Override
 	public String toString() {
-		if (!failed)
-			return null;
-		final String[] msgs = getMessages();
+		final String[] msgs = this.getMessages();
 		if (msgs == null)     return null;
 		if (msgs.length == 0) return "";
-		return StringUtils.MergeStrings(
-			"; ",
-			msgs
-		);
+		return StringUtils.MergeStrings("; ", msgs);
+	}
+
+
+
+	public int getExitCode() {
+		return this.exitCode.get();
+	}
+	public void setExitCode(final int exitCode) {
+		this.exitCode.set(exitCode);
 	}
 
 
