@@ -1,29 +1,31 @@
 package com.poixson.utils;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
-import com.poixson.app.commands.xCommandHandler;
+import com.poixson.tools.StdIO;
 
 
 public final class ShellUtils_Extended extends ShellUtils {
-
-	protected final AtomicReference<xCommandHandler> handler =
-			new AtomicReference<xCommandHandler>(null);
 
 
 
 	protected ShellUtils_Extended() {
 		super();
+		StdIO.init();
 		AnsiConsole.systemInstall();
 	}
 
 
 
+//TODO
+/*
 	// ------------------------------------------------------------------------------- //
-	// commands
+	// command handler
+
+
+
+	protected final AtomicReference<xCommandHandler> handler = new AtomicReference<xCommandHandler>(null);
 
 
 
@@ -36,15 +38,15 @@ public final class ShellUtils_Extended extends ShellUtils {
 		if (handler == null) {
 			this.handler.set(null);
 		} else {
-			if ( ! this.handler.compareAndSet(null, handler) )
+			if (!this.handler.compareAndSet(null, handler))
 				throw new IllegalStateException("Command handler already set!");
 		}
 	}
 	@Override
-	public void registerCommands(final Object...objs) {
+	public void registerCommands(final Object...objects) {
 		final xCommandHandler handler = this.handler.get();
 		if (handler == null) throw new UnsupportedOperationException("Command handler not set");
-		handler.register(objs);
+		handler.register(objects);
 	}
 	@Override
 	public boolean process(final String line) {
@@ -52,6 +54,7 @@ public final class ShellUtils_Extended extends ShellUtils {
 		if (handler == null) throw new UnsupportedOperationException("Command handler not set");
 		return handler.process(line);
 	}
+*/
 
 
 
@@ -61,7 +64,7 @@ public final class ShellUtils_Extended extends ShellUtils {
 
 
 	@Override
-	protected String renderAnsi(final String line) {
+	protected String _renderAnsi(final String line) {
 		if (Utils.isEmpty(line))
 			return line;
 		return
@@ -70,7 +73,7 @@ public final class ShellUtils_Extended extends ShellUtils {
 				.toString();
 	}
 	@Override
-	protected String[] renderAnsi(final String[] lines) {
+	protected String[] _renderAnsi(final String[] lines) {
 		if (Utils.isEmpty(lines))
 			return lines;
 		String[] result = new String[ lines.length ];
@@ -78,10 +81,7 @@ public final class ShellUtils_Extended extends ShellUtils {
 			result[index] = (
 				Utils.isEmpty(lines[index])
 				? ""
-				: Ansi.ansi()
-					.render(
-						lines[index]
-					).toString()
+				: Ansi.ansi().render( lines[index] ).toString()
 			);
 		}
 		return result;
