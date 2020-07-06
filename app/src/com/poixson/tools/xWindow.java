@@ -1,156 +1,176 @@
 package com.poixson.tools;
 
-import java.awt.EventQueue;
-import java.awt.HeadlessException;
 import java.awt.LayoutManager;
-import java.io.Closeable;
-import java.util.Set;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JFrame;
 
+import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.AttachedLogger;
 import com.poixson.logger.xLog;
-import com.poixson.tools.remapped.RemappedWindowAdapter;
+import com.poixson.threadpool.types.xThreadPool_GUI;
+import com.poixson.tools.abstractions.RemappedWindowListener;
+import com.poixson.tools.abstractions.xCloseable;
 import com.poixson.utils.StringUtils;
+import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.Utils;
 import com.poixson.utils.guiUtils;
 
 
-public abstract class xWindow extends JFrame implements Closeable, AttachedLogger {
+public abstract class xWindow extends JFrame implements xCloseable, AttachedLogger {
 	private static final long serialVersionUID = 1L;
 
-	private static final ConcurrentMap<String, xWindow> allWindows =
-			new ConcurrentHashMap<String, xWindow>();
+	protected static final ConcurrentHashMap<String, xWindow> all = new ConcurrentHashMap<String, xWindow>();
 
-	private final String windowKey;
+	public final String name;
 
-	private final AtomicBoolean closing = new AtomicBoolean(false);
-
+	protected final AtomicBoolean closed = new AtomicBoolean(false);
 
 
-	// new window instance
-	public xWindow() throws HeadlessException {
-		// find a unique name
-		{
-			final String className =
-				StringUtils.PeekLastPart(
-					this.getClass().getName(),
-					'.'
-				);
-			if (Utils.isEmpty(className)) throw new RuntimeException("Failed to detect window class name");
-			final Set<String> winKeys = allWindows.keySet();
-			String last = null;
-			while (true) {
-				final String name =
-					StringUtils.ForceUnique(
-						className,
-						winKeys
-					);
-				if (StringUtils.StrEquals(name, last))
-					throw new RuntimeException("Detected duplicate window key when attempting to generate a unique key!");
-				if (allWindows.putIfAbsent(name, this) == null) {
-					this.windowKey = name;
-					this.log().fine("New window created:", name);
-					break;
-				}
-				last = name;
-			}
-		}
-		// annotations
-		final xWindowProperties props =
-			this.getClass().getAnnotation(xWindowProperties.class);
-		if (props != null) {
-			// window title
-			final String title = props.title();
-			if (Utils.notEmpty(title)) {
-				this.setTitle(title);
-			}
-			// resizable
-			this.setResizable(props.resizable());
-		}
-		// register close hook
-		EventQueue.invokeLater(
-			new Runnable() {
-				@Override
-				public void run() {
-					xWindow.this
-						.addWindowListener(
-							RemappedWindowAdapter.getNew(
-								xWindow.this,
-								"close"
-							)
-					);
-				}
-			}
-		);
+
+	public xWindow(final String title, final LayoutManager layout) {
+		this();
+		this.setTitle(title);
+		this.setLayout(layout);
 	}
-	public xWindow(final String title) throws HeadlessException {
+	public xWindow(final String title) {
 		this();
 		this.setTitle(title);
 	}
-	public xWindow(final String title, final LayoutManager layout) throws HeadlessException {
-		this(title);
+	public xWindow(final LayoutManager layout) {
+		this();
 		this.setLayout(layout);
+	}
+	public xWindow() {
+		super();
+		// find a unique name
+		final String className = StringParts.PeekLastPart( this.getClass().getName(), '.' );
+		if (Utils.isEmpty(className)) throw new RuntimeException("Failed to detect window class name");
+		this.name = StringUtils.PutUnique(all, className, this);
+		if (Utils.isEmpty(this.name)) throw new RuntimeException("Failed to find a unique class name");
+		// close hook
+		this.addWindowListener(
+			new RemappedWindowListener(this, "",
+				"", //methodStr_Opened,
+				"close",
+				"", //methodStr_Closed,
+				"", //methodStr_Iconified,
+				"", //methodStr_Deiconified,
+				"", //methodStr_Activated,
+				""  //methodStr_Deactivated
+			)
+		);
+		this.log().fine("New window created:", this.name);
 	}
 
 
 
-	public void display() {
-		this.setVisible(true);
+	// ------------------------------------------------------------------------------- //
+	// closing window
+
+
+
+	protected abstract void closing();
+
+	@Override
+	public void close() {
+		if (xThreadPool_GUI.Get().proper(this, "close")) return;
+		if (!this.closed.compareAndSet(false, true)) return;
+		this.log().fine("Closing window:", this.getName());
+		this.closing();
+		this.dispose();
+	}
+	public static void closeAll() {
+		boolean changed = false;
+		OUTER_LOOP:
+		while (true) {
+			if (changed)
+				ThreadUtils.Sleep(10L);
+			changed = false;
+			final Iterator<xWindow> it = all.values().iterator();
+			//IT_LOOP:
+			while (it.hasNext()) {
+				final xWindow window = it.next();
+				if (!window.isClosed()) {
+					window.close();
+					changed = true;
+				}
+			} // end IT_LOOP
+			if (!changed)
+				break OUTER_LOOP;
+		} // end OUTER_LOOP
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// state
+
+
+
+	@Override
+	public boolean isClosed() {
+		return this.closed.get();
+	}
+	@Override
+	public boolean notClosed() {
+		return ! this.closed.get();
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+
+
+
+	@Override
+	public String getName() {
+		return this.name;
 	}
 
 
 
 	@Override
-	public void close() {
-		if (guiUtils.forceDispatch(this, "close", false))
-			return;
-		// only close once
-		if ( ! this.closing.compareAndSet(false, true) )
-			return;
-		// close window
-		this.log().fine("Closing window:", this.getWindowKey());
-		this.doClose();
-		this.dispose();
+	public void setVisible(final boolean visible) {
+		if (xThreadPool_GUI.Get().proper(this, "_setVisible", Boolean.valueOf(visible))) return;
+		super.setVisible(visible);
 	}
-	protected void doClose() {
+	public void _setVisible(final Boolean visible) {
+		if (visible == null) throw new RequiredArgumentException("visible");
+		this.setVisible(visible.booleanValue());
 	}
-	public boolean isClosing() {
-		return this.closing.get();
+	public void setVisible() {
+		this.setVisible(true);
 	}
-
-
-
-	public String getWindowKey() {
-		return this.windowKey;
+	public void setHidden() {
+		this.setVisible(false);
+	}
+	public void setFocused() {
+		if (xThreadPool_GUI.Get().proper(this, "setFocused")) return;
+		this.requestFocus();
 	}
 
 
 
 	public void autoHeight(final int width) {
-		if (guiUtils.forceDispatch(this, "autoHeight", true, Integer.valueOf(width)))
-			return;
+		if (xThreadPool_GUI.Get().proper(this, "_autoHeight", Integer.valueOf(width))) return;
 		this.pack();
 		this.setSize(width, this.getHeight());
 	}
-
-
-
-	public void showFocused() {
-		if (guiUtils.forceDispatch(this, "showFocused", true))
-			return;
-		this.setVisible(true);
-		if (!this.isFocused()) {
-			this.requestFocus();
-		}
+	public void _autoHeight(final Integer width) {
+		if (width == null) throw new RequiredArgumentException("width");
+		this.autoHeight(width.intValue());
 	}
 
 
 
+	// ------------------------------------------------------------------------------- //
 	// logger
+
+
+
 	@Override
 	public xLog log() {
 		return guiUtils.log();
