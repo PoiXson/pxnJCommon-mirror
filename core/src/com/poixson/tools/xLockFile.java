@@ -21,10 +21,9 @@ import com.poixson.utils.SanUtils;
 import com.poixson.utils.Utils;
 
 
-public class LockFile {
+public class xLockFile {
 
-	private static final ConcurrentMap<String, LockFile> instances =
-			new ConcurrentHashMap<String, LockFile>();
+	private static final ConcurrentHashMap<String, xLockFile> instances = new ConcurrentHashMap<String, xLockFile>();
 
 	public final String filename;
 	public final File   file;
@@ -35,26 +34,26 @@ public class LockFile {
 
 
 
-	public static LockFile get(final String filename) {
+	public static xLockFile Get(final String filename) {
 		if (Utils.isBlank(filename))          throw new RequiredArgumentException("filename");
 		if (!SanUtils.SafeFileName(filename)) throw new IllegalArgumentException("Invalid lock file name: "+filename);
 		// existing lock instance
 		{
-			final LockFile lock = instances.get(filename);
+			final xLockFile lock = instances.get(filename);
 			if (lock != null)
 				return lock;
 		}
 		// new lock instance
 		{
-			final LockFile lock = new LockFile(filename);
-			final LockFile existing = instances.putIfAbsent(filename, lock);
+			final xLockFile lock = new xLockFile(filename);
+			final xLockFile existing = instances.putIfAbsent(filename, lock);
 			if (existing != null)
 				return existing;
 			Keeper.add(lock);
 			return lock;
 		}
 	}
-	public static LockFile peek(final String filename) {
+	public static xLockFile Peek(final String filename) {
 		if (Utils.isBlank(filename))          throw new RequiredArgumentException("filename");
 		if (!SanUtils.SafeFileName(filename)) throw new IllegalArgumentException("Invalid lock file name: "+filename);
 		return instances.get(filename);
@@ -62,8 +61,8 @@ public class LockFile {
 
 
 
-	public static LockFile getLock(final String filename) {
-		final LockFile lock = get(filename);
+	public static xLockFile Lock(final String filename) {
+		final xLockFile lock = Get(filename);
 		if (lock == null)
 			return null;
 		if (lock.acquire())
@@ -85,7 +84,7 @@ public class LockFile {
 
 
 
-	private LockFile(final String filename) {
+	protected xLockFile(final String filename) {
 		if (Utils.isBlank(filename))          throw new RequiredArgumentException("filename");
 		if (!SanUtils.SafeFileName(filename)) throw new IllegalArgumentException("Invalid lock file name: "+filename);
 		this.filename = filename;
@@ -95,8 +94,7 @@ public class LockFile {
 			new Thread() {
 				@Override
 				public void run() {
-					LockFile.this
-						.release();
+					xLockFile.this.release();
 				}
 			}
 		);
