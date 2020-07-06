@@ -8,19 +8,17 @@ public class xCallable<V> extends xRunnable implements Callable<V> {
 
 	public final Callable<V> call;
 
-	protected final ThreadLocal<Boolean> callDepth = new ThreadLocal<Boolean>();
-
+	// result
 	protected final AtomicReference<V> result = new AtomicReference<V>(null);
 	protected final AtomicReference<Exception> ex = new AtomicReference<Exception>(null);
+
+	protected final ThreadLocal<Boolean> callDepth = new ThreadLocal<Boolean>();
 
 
 
 	public xCallable() {
 		super();
 		this.call = null;
-	}
-	public void finalize() {
-		this.releaseCallDepth();
 	}
 	public xCallable(final String taskName) {
 		this(null, null, null);
@@ -46,50 +44,16 @@ public class xCallable<V> extends xRunnable implements Callable<V> {
 		super(run);
 		if (run != null && call != null)
 			throw new IllegalArgumentException("Cannot set runnable and callable at the same time!");
-		this.call   = call;
+		this.call = call;
 		this.result.set(result);
 	}
 
 
 
-	// ------------------------------------------------------------------------------- //
-	// cast
-
-
-
-	@SuppressWarnings("unchecked")
-	public static <V> xCallable<V> cast(final Object obj) {
-		if (obj == null)
-			return null;
-		// already correct type
-		if (obj instanceof xCallable)
-			return (xCallable<V>) obj;
-		// cast from runnable
-		if (obj instanceof Runnable) {
-			final Runnable run = (Runnable) obj;
-			final xCallable<V> result = new xCallable<V>(run);
-			// get name from interface
-			if (run instanceof RunnableNamed) {
-				result.setTaskName(
-					((RunnableNamed) run).getTaskName()
-				);
-			}
-			return result;
-		} else
-		// cast from callable
-		if (obj instanceof Callable) {
-			final Callable<V> call = (Callable<V>) obj;
-			final xCallable<V> result = new xCallable<V>(call);
-			// get name from interface
-			if (call instanceof RunnableNamed) {
-				result.setTaskName(
-					((RunnableNamed) call).getTaskName()
-				);
-			}
-			return result;
-		}
-		// unknown object
-		throw new UnsupportedOperationException("Invalid object, cannot cast!");
+	@Override
+	public void finalize() throws Throwable {
+		super.finalize();
+		this.releaseCallDepth();
 	}
 
 
