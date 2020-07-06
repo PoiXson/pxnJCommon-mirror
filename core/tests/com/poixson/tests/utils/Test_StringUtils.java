@@ -11,7 +11,7 @@ import com.poixson.utils.StringUtils;
 import com.poixson.utils.TestUtils;
 
 
-public class StringUtilsTest {
+public class Test_StringUtils {
 
 
 
