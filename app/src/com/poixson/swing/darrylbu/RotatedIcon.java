@@ -1,4 +1,4 @@
-package com.poixson.tools.darrylbu;
+package com.poixson.swing.darrylbu;
 
 import java.awt.Component;
 import java.awt.Graphics;
