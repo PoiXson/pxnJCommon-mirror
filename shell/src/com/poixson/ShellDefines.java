@@ -1,11 +1,11 @@
-package com.poixson.app;
+package com.poixson;
 
 import com.poixson.tools.Keeper;
 
 
-public class xShellDefines {
-	private xShellDefines() {}
-	static { Keeper.add(new xShellDefines()); }
+public class ShellDefines {
+	private ShellDefines() {}
+	static { Keeper.add(new ShellDefines()); }
 
 
 	public static final String HISTORY_FILE = "history.txt";
