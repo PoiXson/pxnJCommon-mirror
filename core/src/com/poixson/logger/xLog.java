@@ -319,16 +319,6 @@ public class xLog implements xLogInterface {
 
 
 
-//TODO
-//	public void getPublishLock() {
-//		throw new UnsupportedOperationException();
-//	}
-//	public void releasePublishLock() {
-//		throw new UnsupportedOperationException();
-//	}
-
-
-
 	@Override
 	public void flush() {
 		final xLogHandler[] handlers = this.getLogHandlers();
@@ -418,17 +408,12 @@ public class xLog implements xLogInterface {
 	// std out
 	@Override
 	public void stdout(final String...lines) {
-//TODO
-this.publish(lines);
+		this.publish(lines);
 	}
-
-
-
 	// std err
 	@Override
 	public void stderr(final String...lines) {
-//TODO
-this.publish(lines);
+		this.publish(lines);
 	}
 
 

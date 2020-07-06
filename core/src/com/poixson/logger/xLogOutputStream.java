@@ -8,7 +8,7 @@ import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.records.xLogRecord_Msg;
 
 
-//not thread safe - variables not volatile, assuming only used in one thread
+// note: not thread safe - variables not volatile, assuming only used in one thread
 public class xLogOutputStream extends OutputStream {
 
 	private final xLog   log;

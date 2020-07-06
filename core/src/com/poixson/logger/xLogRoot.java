@@ -41,9 +41,6 @@ public class xLogRoot extends xLog {
 		super();
 		// override stdio
 		if (OVERRIDE_STDIO) {
-//TODO: remove this?
-//			// be sure this gets inited first
-//			xVars.isDebug();
 			StdIO.init();
 			// capture std-out
 			System.setOut(

@@ -31,7 +31,7 @@ public interface xLogInterface {
 	public void stdout(final String...lines);
 	public void stderr(final String...lines);
 
-	public void title  (final String line,    final Object...args);
+	public void title  (final String line, final Object...args);
 	public void detail (final String line, final Object...args);
 	public void finest (final String line, final Object...args);
 	public void finer  (final String line, final Object...args);
