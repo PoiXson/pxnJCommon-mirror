@@ -1,14 +1,26 @@
 package com.poixson.app.steps;
 
-import com.poixson.app.Failure;
-import com.poixson.app.xApp;
 import com.poixson.app.xAppStep;
 import com.poixson.app.xAppStep.StepType;
-import com.poixson.logger.xLog;
-import com.poixson.tools.LockFile;
+import com.poixson.tools.xLockFile;
 
 
+/*
+ * Startup sequence
+ *   20  lock file
+ *
+ * Shutdown sequence
+ *   20  release lock
+ */
 public class xAppSteps_LockFile {
+
+	protected final String filename;
+
+
+
+	public xAppSteps_LockFile(final String filename) {
+		this.filename = filename;
+	}
 
 
 
@@ -18,12 +30,11 @@ public class xAppSteps_LockFile {
 
 
 	// lock file
-	@xAppStep( Type=StepType.START, Title="Lock File", StepValue=70 )
-	public void _START_lockfile(final xApp app) {
-		final String filename = app.getName()+".lock";
-		final LockFile lock = LockFile.get(filename);
+	@xAppStep(type=StepType.STARTUP, step=20, title="Lock File")
+	public void __START_lockfile() {
+		final xLockFile lock = xLockFile.Get(this.filename);
 		if ( ! lock.acquire() )
-			Failure.fail("Failed to get lock on file:", filename);
+			throw new RuntimeException("Failed to get lock on file: "+this.filename);
 	}
 
 
@@ -34,10 +45,9 @@ public class xAppSteps_LockFile {
 
 
 	// release lock file
-	@xAppStep( Type=StepType.STOP, Title="Lock File", StepValue=20 )
-	public void _STOP_lockfile(final xApp app, final xLog log) {
-		final String filename = app.getName()+".lock";
-		LockFile.getRelease(filename);
+	@xAppStep(type=StepType.SHUTDOWN, step=20, title="Lock File")
+	public void __STOP_lockfile() {
+		xLockFile.Release(this.filename);
 	}
 
 
