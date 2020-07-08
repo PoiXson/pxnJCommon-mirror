@@ -106,11 +106,20 @@ public final class NumberUtils {
 		return null;
 	}
 	public static int ToInteger(final String value, final int def) {
+		if (value == null) return def;
 		try {
 			return Integer.parseInt(value);
 		} catch (NumberFormatException ignore) {}
 		return def;
 	}
+	public static Integer CastInteger(final Object obj) {
+		if (obj == null) return null;
+		if (obj instanceof Integer)
+			return (Integer) obj;
+		throw new IllegalArgumentException("Invalid integer value: "+obj.toString());
+	}
+
+
 
 	// parse byte
 	public static Byte ToByte(final String value) {
@@ -121,11 +130,20 @@ public final class NumberUtils {
 		return null;
 	}
 	public static byte ToByte(final String value, final byte def) {
+		if (value == null) return def;
 		try {
 			return Byte.parseByte(value);
 		} catch (NumberFormatException ignore) {}
 		return def;
 	}
+	public static Byte CastByte(final Object obj) {
+		if (obj == null) return null;
+		if (obj instanceof Byte)
+			return (Byte) obj;
+		throw new IllegalArgumentException("Invalid byte value: "+obj.toString());
+	}
+
+
 
 	// parse short
 	public static Short ToShort(final String value) {
@@ -136,11 +154,20 @@ public final class NumberUtils {
 		return null;
 	}
 	public static short ToShort(final String value, final short def) {
+		if (value == null) return def;
 		try {
 			return Short.parseShort(value);
 		} catch (NumberFormatException ignore) {}
 		return def;
 	}
+	public static Short CastShort(final Object obj) {
+		if (obj == null) return null;
+		if (obj instanceof Short)
+			return (Short) obj;
+		throw new IllegalArgumentException("Invalid short value: "+obj.toString());
+	}
+
+
 
 	// parse long
 	public static Long ToLong(final String value) {
@@ -151,11 +178,20 @@ public final class NumberUtils {
 		return null;
 	}
 	public static long ToLong(final String value, final long def) {
+		if (value == null) return def;
 		try {
 			return Long.parseLong(value);
 		} catch (NumberFormatException ignore) {}
 		return def;
 	}
+	public static Long CastLong(final Object obj) {
+		if (obj == null) return null;
+		if (obj instanceof Long)
+			return (Long) obj;
+		throw new IllegalArgumentException("Invalid long value: "+obj.toString());
+	}
+
+
 
 	// parse double
 	public static Double ToDouble(final String value) {
@@ -166,11 +202,20 @@ public final class NumberUtils {
 		return null;
 	}
 	public static double ToDouble(final String value, final double def) {
+		if (value == null) return def;
 		try {
 			return Double.parseDouble(value);
 		} catch (NumberFormatException ignore) {}
 		return def;
 	}
+	public static Double CastDouble(final Object obj) {
+		if (obj == null) return null;
+		if (obj instanceof Double)
+			return (Double) obj;
+		throw new IllegalArgumentException("Invalid double value: "+obj.toString());
+	}
+
+
 
 	// parse float
 	public static Float ToFloat(final String value) {
@@ -181,11 +226,20 @@ public final class NumberUtils {
 		return null;
 	}
 	public static float ToFloat(final String value, final float def) {
+		if (value == null) return def;
 		try {
 			return Float.parseFloat(value);
 		} catch (NumberFormatException ignore) {}
 		return def;
 	}
+	public static Float CastFloat(final Object obj) {
+		if (obj == null) return null;
+		if (obj instanceof Float)
+			return (Float) obj;
+		throw new IllegalArgumentException("Invalid float value: "+obj.toString());
+	}
+
+
 
 	// parse boolean
 	public static Boolean ToBoolean(final String value) {
@@ -211,9 +265,39 @@ public final class NumberUtils {
 		return null;
 	}
 	public static boolean ToBoolean(final String value, final boolean def) {
+		if (value == null) return def;
 		final Boolean bool = ToBoolean(value);
 		if (bool == null) return def;
 		return bool.booleanValue();
+	}
+	public static Boolean CastBoolean(final Object obj) {
+		if (obj == null)
+			return null;
+		if (obj instanceof Boolean)
+			return (Boolean) obj;
+		if (obj instanceof Integer)
+			return ( ((Integer)obj).intValue() != 0 );
+		if (obj instanceof String) {
+			final String str = (String) obj;
+			for (final String entry : TRUE_VALUES) {
+				if (entry.equalsIgnoreCase(str))
+					return Boolean.TRUE;
+			}
+			for (final String entry : FALSE_VALUES) {
+				if (entry.equalsIgnoreCase(str))
+					return Boolean.FALSE;
+			}
+			final char first = str.charAt(0);
+			for (final char chr : T_VALUES) {
+				if (chr == first)
+					return Boolean.TRUE;
+			}
+			for (final char chr : F_VALUES) {
+				if (chr == first)
+					return Boolean.FALSE;
+			}
+		}
+		throw new IllegalArgumentException("Invalid boolean value: "+obj.toString());
 	}
 
 
