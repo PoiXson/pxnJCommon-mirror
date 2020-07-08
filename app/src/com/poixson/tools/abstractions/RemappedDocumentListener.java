@@ -1,6 +1,5 @@
 package com.poixson.tools.abstractions;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import javax.swing.event.DocumentEvent;
@@ -31,37 +30,20 @@ implements DocumentListener {
 
 
 
-	protected void trigger(final DocumentEvent event, final Method method) {
-		if (method == null) return;
-		try {
-			method.invoke(this.container, event);
-		} catch (IllegalAccessException e) {
-			this.log().trace(e);
-		} catch (IllegalArgumentException e) {
-			this.log().trace(e);
-		} catch (InvocationTargetException e) {
-			this.log().trace(e);
-		} catch (Exception e) {
-			this.log().trace(e);
-		}
-	}
-
-
-
 	@Override
 	public void insertUpdate(final DocumentEvent event) {
-		this.trigger(event, this.method);
-		this.trigger(event, this.methodInsert);
+		this.invoke(this.method,       event);
+		this.invoke(this.methodInsert, event);
 	}
 	@Override
 	public void removeUpdate(final DocumentEvent event) {
-		this.trigger(event, this.method);
-		this.trigger(event, this.methodRemove);
+		this.invoke(this.method,       event);
+		this.invoke(this.methodRemove, event);
 	}
 	@Override
 	public void changedUpdate(final DocumentEvent event) {
-		this.trigger(event, this.method);
-		this.trigger(event, this.methodChanged);
+		this.invoke(this.method,        event);
+		this.invoke(this.methodChanged, event);
 	}
 
 

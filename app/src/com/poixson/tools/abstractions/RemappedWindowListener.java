@@ -2,7 +2,6 @@ package com.poixson.tools.abstractions;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 
@@ -42,63 +41,46 @@ implements WindowListener {
 
 
 
-	protected void trigger(final WindowEvent event, final Method method) {
-		if (method == null) return;
-		try {
-			method.invoke(this.container, event);
-		} catch (IllegalAccessException e) {
-			this.log().trace(e);
-		} catch (IllegalArgumentException e) {
-			this.log().trace(e);
-		} catch (InvocationTargetException e) {
-			this.log().trace(e);
-		} catch (Exception e) {
-			this.log().trace(e);
-		}
-	}
-
-
-
 	@Override
 	public void windowOpened(final WindowEvent event) {
-		this.trigger(event, this.method);
-		this.trigger(event, this.methodOpened);
+		this.invoke(this.method,       event);
+		this.invoke(this.methodOpened, event);
 	}
 	@Override
 	public void windowClosing(final WindowEvent event) {
-		this.trigger(event, this.method);
-		this.trigger(event, this.methodClosing);
+		this.invoke(this.method,        event);
+		this.invoke(this.methodClosing, event);
 	}
 	@Override
 	public void windowClosed(final WindowEvent event) {
-		this.trigger(event, this.method);
-		this.trigger(event, this.methodClosed);
+		this.invoke(this.method,       event);
+		this.invoke(this.methodClosed, event);
 	}
 
 
 
 	@Override
 	public void windowIconified(final WindowEvent event) {
-		this.trigger(event, this.method);
-		this.trigger(event, this.methodIconified);
+		this.invoke(this.method,          event);
+		this.invoke(this.methodIconified, event);
 	}
 	@Override
 	public void windowDeiconified(final WindowEvent event) {
-		this.trigger(event, this.method);
-		this.trigger(event, this.methodDeiconified);
+		this.invoke(this.method,            event);
+		this.invoke(this.methodDeiconified, event);
 	}
 
 
 
 	@Override
 	public void windowActivated(final WindowEvent event) {
-		this.trigger(event, this.method);
-		this.trigger(event, this.methodActivated);
+		this.invoke(this.method,          event);
+		this.invoke(this.methodActivated, event);
 	}
 	@Override
 	public void windowDeactivated(final WindowEvent event) {
-		this.trigger(event, this.method);
-		this.trigger(event, this.methodDeactivated);
+		this.invoke(this.method,            event);
+		this.invoke(this.methodDeactivated, event);
 	}
 
 

@@ -1,5 +1,6 @@
 package com.poixson.tools.abstractions;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import com.poixson.exceptions.RequiredArgumentException;
@@ -72,6 +73,28 @@ public abstract class RemappedEventListener {
 				eventClass.getName()
 			);
 		return method;
+	}
+
+
+
+	public boolean invoke(final Method method, final Object event) {
+		try {
+			this.method.invoke(this.container, event);
+			return true;
+		} catch (IllegalAccessException ignore) {
+		} catch (IllegalArgumentException ignore) {
+		} catch (InvocationTargetException ignore) {
+		} catch (Exception ignore) {
+		}
+		try {
+			this.method.invoke(this.container);
+			return true;
+		} catch (IllegalAccessException ignore) {
+		} catch (IllegalArgumentException ignore) {
+		} catch (InvocationTargetException ignore) {
+		} catch (Exception ignore) {
+		}
+		return false;
 	}
 
 

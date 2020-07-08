@@ -2,7 +2,6 @@ package com.poixson.tools.abstractions;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.InvocationTargetException;
 
 
 public class RemappedActionListener
@@ -19,17 +18,7 @@ implements ActionListener {
 
 	@Override
 	public void actionPerformed(final ActionEvent event) {
-		try {
-			this.method.invoke(this.container, event);
-		} catch (IllegalAccessException e) {
-			this.log().trace(e);
-		} catch (IllegalArgumentException e) {
-			this.log().trace(e);
-		} catch (InvocationTargetException e) {
-			this.log().trace(e);
-		} catch (Exception e) {
-			this.log().trace(e);
-		}
+		this.invoke(this.method, event);
 	}
 
 
