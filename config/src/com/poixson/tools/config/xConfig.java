@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.poixson.exceptions.RequiredArgumentException;
+import com.poixson.utils.NumberUtils;
 import com.poixson.utils.ObjectUtils;
 import com.poixson.utils.Utils;
 
@@ -19,8 +20,11 @@ public class xConfig {
 
 
 	public xConfig(final Map<String, Object> datamap) {
+		this();
 		if (datamap == null) throw new RequiredArgumentException("datamap");
 		this.datamap.putAll(datamap);
+	}
+	protected xConfig() {
 	}
 
 
@@ -80,7 +84,7 @@ public class xConfig {
 
 	// boolean
 	public Boolean getBoolean(final String key) {
-		return (Boolean) this.read(key);
+		return NumberUtils.CastBoolean( this.read(key) );
 	}
 	public boolean getBool(final String key, final boolean defVal) {
 		try {
@@ -95,7 +99,7 @@ public class xConfig {
 
 	// integer
 	public Integer getInteger(final String key) {
-		return (Integer) this.read(key);
+		return NumberUtils.CastInteger( this.read(key) );
 	}
 	public int getInt(final String key, final int defVal) {
 		try {
@@ -110,7 +114,7 @@ public class xConfig {
 
 	// long
 	public Long getLong(final String key) {
-		return (Long) this.read(key);
+		return NumberUtils.CastLong( this.read(key) );
 	}
 	public long getLng(final String key, final long defVal) {
 		try {
@@ -125,7 +129,7 @@ public class xConfig {
 
 	// double
 	public Double getDouble(final String key) {
-		return (Double) this.read(key);
+		return NumberUtils.CastDouble( this.read(key) );
 	}
 	public double getDbl(final String key, final double defVal) {
 		try {
@@ -140,7 +144,7 @@ public class xConfig {
 
 	// float
 	public Float getFloat(final String key) {
-		return (Float) this.read(key);
+		return NumberUtils.CastFloat( this.read(key) );
 	}
 	public float getFlt(final String key, final float defVal) {
 		try {
