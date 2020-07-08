@@ -20,6 +20,8 @@ public final class NumberUtils {
 	// true;
 	public static final String[] TRUE_VALUES = new String[] {
 		"true",
+		"en",
+		"enable",
 		"enabled",
 		"yes",
 		"on",
@@ -27,12 +29,15 @@ public final class NumberUtils {
 	public static final char[] T_VALUES = new char[] {
 		'1',
 		't',
+		'i',
 		'e',
 		'y'
 	};
 	// false
 	public static final String[] FALSE_VALUES = new String[] {
 		"false",
+		"dis",
+		"disable",
 		"disabled",
 		"no",
 		"off"
@@ -40,9 +45,15 @@ public final class NumberUtils {
 	public static final char[] F_VALUES = new char[] {
 		'0',
 		'f',
+		'o',
 		'd',
 		'n'
 	};
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// equals
 
 
 
@@ -84,7 +95,12 @@ public final class NumberUtils {
 
 
 
-	public static int SafeToInt(final long value) {
+	// ------------------------------------------------------------------------------- //
+	// convert
+
+
+
+	public static int SafeLongToInt(final long value) {
 		// < int min
 		if ( value < ((long)Integer.MIN_VALUE) )
 			return Integer.MIN_VALUE;
@@ -93,6 +109,18 @@ public final class NumberUtils {
 			return Integer.MAX_VALUE;
 		// within int range
 		return (int) value;
+	}
+
+
+
+	// is number
+	public static boolean IsNumeric(final String value) {
+		if (Utils.isEmpty(value)) return false;
+		return (ToLong(value) != null);
+	}
+	// is boolean
+	public static boolean IsBoolean(final String value) {
+		return (ToBoolean(value) != null);
 	}
 
 
@@ -302,15 +330,8 @@ public final class NumberUtils {
 
 
 
-	// is number
-	public static boolean IsNumeric(final String value) {
-		if (Utils.isEmpty(value)) return false;
-		return (ToLong(value) != null);
-	}
-	// is boolean
-	public static boolean IsBoolean(final String value) {
-		return (ToBoolean(value) != null);
-	}
+	// ------------------------------------------------------------------------------- //
+	// format
 
 
 
@@ -327,6 +348,12 @@ public final class NumberUtils {
 
 
 
+	// ------------------------------------------------------------------------------- //
+	// round
+
+
+
+	// double
 	public static double Round(final double value, final double product) {
 		final double val = Math.round( value / product );
 		return val * product;
@@ -342,37 +369,37 @@ public final class NumberUtils {
 
 
 
+	// integer
 	public static int Round(final int value, final int product) {
-		return (int)
-			Round( (double) value, (double) product );
+		return (int) Round( (double) value, (double) product );
 	}
 	public static int Floor(final int value, final int product) {
-		return (int)
-			Floor( (double) value, (double) product );
+		return (int) Floor( (double) value, (double) product );
 	}
 	public static int Ceil(final int value, final int product) {
-		return (int)
-			Ceil( (double) value, (double) product );
+		return (int) Ceil( (double) value, (double) product );
 	}
 
 
 
+	// long
 	public static long Round(final long value, final int product) {
-		return (long)
-			Round( (double) value, (double) product );
+		return (long) Round( (double) value, (double) product );
 	}
 	public static long Floor(final long value, final int product) {
-		return (long)
-			Floor( (double) value, (double) product );
+		return (long) Floor( (double) value, (double) product );
 	}
 	public static long Ceil(final long value, final int product) {
-		return (long)
-			Ceil( (double) value, (double) product );
+		return (long) Ceil( (double) value, (double) product );
 	}
 
 
 
-	// min/max value
+	// ------------------------------------------------------------------------------- //
+	// min/max
+
+
+
 	public static int MinMax(final int value, final int min, final int max) {
 		if (min   > max) throw new IllegalArgumentException("min cannot be greater than max");
 		if (value < min) return min;
@@ -434,12 +461,15 @@ public final class NumberUtils {
 
 
 
+	// ------------------------------------------------------------------------------- //
 	// random number
+
+
+
 	public static int GetRandom(final int minNumber, final int maxNumber) {
 		final Random gen = new Random(Utils.getSystemMillis());
 		return gen.nextInt(maxNumber - minNumber) + minNumber;
 	}
-	// random number (not last)
 	public static int getNewRandom(final int minNumber, final int maxNumber, final int oldNumber) {
 		if (minNumber == maxNumber)
 			return minNumber;
