@@ -23,7 +23,12 @@ public class RunnableMethod<V> extends xRunnable {
 			final String methodName, final Object...args) {
 		if (container == null)         throw new RequiredArgumentException("container");
 		if (Utils.isEmpty(methodName)) throw new RequiredArgumentException("method");
-		this.method = ReflectUtils.getMethodByName(container, methodName, args);
+		this.method =
+			ReflectUtils.getMethodByName(
+				container,
+				methodName,
+				ReflectUtils.ArgsToClasses(args)
+			);
 		this.container = container;
 		this.args      = args;
 	}
@@ -39,7 +44,12 @@ public class RunnableMethod<V> extends xRunnable {
 			final String methodName, final Object...args) {
 		if (container == null) throw new RequiredArgumentException("container");
 		if (Utils.isEmpty(methodName)) throw new RequiredArgumentException("method");
-		this.method = ReflectUtils.getMethodByName(container, methodName, args);
+		this.method =
+			ReflectUtils.getMethodByName(
+				container,
+				methodName,
+				ReflectUtils.ArgsToClasses(args)
+			);
 		this.container = container;
 		this.args      = args;
 		this.setTaskName(taskName);
