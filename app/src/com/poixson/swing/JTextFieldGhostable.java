@@ -79,6 +79,14 @@ public class JTextFieldGhostable extends JTextField implements FocusListener {
 
 
 
+	public void setGhostText(final String ghostText) {
+		this.ghostText.set(ghostText);
+		if (this.ghosting.get())
+			this.update();
+	}
+
+
+
 	public boolean isGhosting() {
 		return this.ghosting.get();
 	}
