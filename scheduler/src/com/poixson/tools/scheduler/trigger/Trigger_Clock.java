@@ -15,7 +15,7 @@ import com.poixson.tools.scheduler.xSchedulerTrigger;
 import com.poixson.utils.Utils;
 
 
-public class TriggerClock extends xSchedulerTrigger {
+public class Trigger_Clock extends xSchedulerTrigger {
 
 	public static final String DEFAULT_DATE_FORMAT = "yy/MM/dd HH:mm:ss";
 	public static final long  DEFAULT_GRACE_TIME  = 1000L;
@@ -28,19 +28,19 @@ public class TriggerClock extends xSchedulerTrigger {
 
 
 	// builder
-	public static TriggerClock builder() {
-		return new TriggerClock();
+	public static Trigger_Clock builder() {
+		return new Trigger_Clock();
 	}
 
 
 
-	public TriggerClock() {
+	public Trigger_Clock() {
 	}
-	public TriggerClock(final long time) {
+	public Trigger_Clock(final long time) {
 		this();
 		this.setDate(time);
 	}
-	public TriggerClock(final String dateStr, final String dateFormatStr)
+	public Trigger_Clock(final String dateStr, final String dateFormatStr)
 			throws ParseException {
 		this();
 		this.setDate(
@@ -48,7 +48,7 @@ public class TriggerClock extends xSchedulerTrigger {
 			dateFormatStr
 		);
 	}
-	public TriggerClock(final Date date) {
+	public Trigger_Clock(final Date date) {
 		this();
 		this.setDate(date);
 	}

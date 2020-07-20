@@ -21,7 +21,7 @@ import com.poixson.tools.scheduler.xSchedulerTrigger;
 6 | Day-of-Week
 7 | Year (optional field)
 */
-public class TriggerCron extends xSchedulerTrigger {
+public class Trigger_Cron extends xSchedulerTrigger {
 
 	private final AtomicReference<CronTriggerImpl> trigger =
 			new AtomicReference<CronTriggerImpl>(null);
@@ -33,19 +33,19 @@ public class TriggerCron extends xSchedulerTrigger {
 
 
 	// builder
-	public static TriggerCron builder() {
-		return new TriggerCron();
+	public static Trigger_Cron builder() {
+		return new Trigger_Cron();
 	}
 
 
 
-	public TriggerCron() {
+	public Trigger_Cron() {
 	}
-	public TriggerCron(final String patternStr) throws ParseException {
+	public Trigger_Cron(final String patternStr) throws ParseException {
 		this();
 		this.setCronPattern(patternStr);
 	}
-	public TriggerCron(final CronExpression express) {
+	public Trigger_Cron(final CronExpression express) {
 		this();
 		this.setCronExpression(express);
 	}

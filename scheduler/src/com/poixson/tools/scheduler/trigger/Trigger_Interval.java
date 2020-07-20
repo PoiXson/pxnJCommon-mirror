@@ -8,7 +8,7 @@ import com.poixson.tools.xTime;
 import com.poixson.tools.scheduler.xSchedulerTrigger;
 
 
-public class TriggerInterval extends xSchedulerTrigger {
+public class Trigger_Interval extends xSchedulerTrigger {
 
 	private final xTime delay    = xTime.getNew();
 	private final xTime interval = xTime.getNew();
@@ -19,47 +19,47 @@ public class TriggerInterval extends xSchedulerTrigger {
 
 
 	// builder
-	public static TriggerInterval builder() {
-		return new TriggerInterval();
+	public static Trigger_Interval builder() {
+		return new Trigger_Interval();
 	}
-	public TriggerInterval() {
+	public Trigger_Interval() {
 	}
 
 	// long
-	public TriggerInterval(final long interval, final TimeUnit unit) {
+	public Trigger_Interval(final long interval, final TimeUnit unit) {
 		this(
 			interval,
 			interval,
 			unit
 		);
 	}
-	public TriggerInterval(final long delay, final long interval, final TimeUnit unit) {
+	public Trigger_Interval(final long delay, final long interval, final TimeUnit unit) {
 		this();
 		this.setDelay(   delay,    unit);
 		this.setInterval(interval, unit);
 	}
 
 	// string
-	public TriggerInterval(final String intervalStr) {
+	public Trigger_Interval(final String intervalStr) {
 		this(
 			intervalStr,
 			intervalStr
 		);
 	}
-	public TriggerInterval(final String delayStr, final String intervalStr) {
+	public Trigger_Interval(final String delayStr, final String intervalStr) {
 		this();
 		this.setDelay(delayStr);
 		this.setInterval(intervalStr);
 	}
 
 	// xTime
-	public TriggerInterval(final xTime interval) {
+	public Trigger_Interval(final xTime interval) {
 		this(
 			interval,
 			interval
 		);
 	}
-	public TriggerInterval(final xTime delay, final xTime interval) {
+	public Trigger_Interval(final xTime delay, final xTime interval) {
 		this();
 		this.setDelay(delay);
 		this.setInterval(interval);
