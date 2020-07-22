@@ -31,7 +31,7 @@ public class StringParts extends xString {
 
 
 
-	public xString delim(final String delimStr) {
+	public StringParts delim(final String delimStr) {
 		this.delim = Utils.ifEmpty(delimStr, null);
 		return this;
 	}
