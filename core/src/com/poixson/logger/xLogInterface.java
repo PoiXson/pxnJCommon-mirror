@@ -7,9 +7,9 @@ public interface xLogInterface {
 
 
 	public xLevel getLevel();
-	public void setLevel(final xLevel xlevel);
-	public boolean isLoggable(final xLevel xlevel);
-	public boolean notLoggable(final xLevel xlevel);
+	public void    setLevel(   final xLevel level);
+	public boolean isLoggable( final xLevel level);
+	public boolean notLoggable(final xLevel level);
 	public boolean isRoot();
 	public String[] getNameTree();
 

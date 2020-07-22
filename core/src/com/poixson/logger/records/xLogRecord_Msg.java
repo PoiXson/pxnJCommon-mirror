@@ -7,24 +7,20 @@ import com.poixson.utils.Utils;
 
 public class xLogRecord_Msg implements xLogRecord {
 
-	public final xLevel   xlevel;
+	public final xLevel   level;
 	public final long     timestamp;
 	public final String[] lines;
 	public final Object[] args;
 
 
 
-	public xLogRecord_Msg(final xLevel xlevel,
+	public xLogRecord_Msg(final xLevel level,
 			final String line, final Object[] args) {
-		this(
-			xlevel,
-			new String[] { line },
-			args
-		);
+		this(level, new String[] { line }, args);
 	}
-	public xLogRecord_Msg(final xLevel xlevel,
+	public xLogRecord_Msg(final xLevel level,
 			final String[] lines, final Object[] args) {
-		this.xlevel = xlevel;
+		this.level = level;
 		this.timestamp = Utils.getSystemMillis();
 		this.lines = lines;
 		this.args  = args;
@@ -73,13 +69,13 @@ public class xLogRecord_Msg implements xLogRecord {
 
 	@Override
 	public xLevel getLevel() {
-		return this.xlevel;
+		return this.level;
 	}
 	public String getLevelName() {
 		return (
-			this.xlevel == null
+			this.level == null
 			? "<null>"
-			: this.xlevel.toString()
+			: this.level.toString()
 		);
 	}
 

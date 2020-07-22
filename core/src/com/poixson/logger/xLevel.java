@@ -26,8 +26,7 @@ public enum xLevel {
 	public final String name;
 	public final int    value;
 
-	private static final CopyOnWriteArrayList<xLevel> xlevels =
-			new CopyOnWriteArrayList<xLevel>() {
+	private static final CopyOnWriteArrayList<xLevel> levels = new CopyOnWriteArrayList<xLevel>() {
 		private static final long serialVersionUID = 1L;
 		{
 			add( xLevel.OFF     );
@@ -57,14 +56,14 @@ public enum xLevel {
 
 
 	public static xLevel[] getLevels() {
-		return xlevels.toArray(new xLevel[0]);
+		return levels.toArray(new xLevel[0]);
 	}
 	public static xLevel FindLevel(final String name) {
 		if (Utils.isEmpty(name)) return null;
 		if (NumberUtils.IsNumeric(name)) {
 			return FindLevel(NumberUtils.ToInteger(name));
 		}
-		final Iterator<xLevel> it = xlevels.iterator();
+		final Iterator<xLevel> it = levels.iterator();
 		while (it.hasNext()) {
 			final xLevel level = it.next();
 			if (name.equalsIgnoreCase(level.name))
@@ -79,7 +78,7 @@ public enum xLevel {
 		if (val == xLevel.OFF.value) return xLevel.OFF;
 		xLevel found = xLevel.OFF;
 		int offset = xLevel.OFF.value;
-		final Iterator<xLevel> it = xlevels.iterator();
+		final Iterator<xLevel> it = levels.iterator();
 		while (it.hasNext()) {
 			final xLevel lvl = it.next();
 			if (xLevel.OFF.equals(lvl)) continue;
