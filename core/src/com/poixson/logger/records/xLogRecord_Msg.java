@@ -1,12 +1,14 @@
 package com.poixson.logger.records;
 
 import com.poixson.logger.xLevel;
+import com.poixson.logger.xLog;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
 public class xLogRecord_Msg implements xLogRecord {
 
+	public final xLog     log;
 	public final xLevel   level;
 	public final long     timestamp;
 	public final String[] lines;
@@ -14,12 +16,13 @@ public class xLogRecord_Msg implements xLogRecord {
 
 
 
-	public xLogRecord_Msg(final xLevel level,
+	public xLogRecord_Msg(final xLog log, final xLevel level,
 			final String line, final Object[] args) {
-		this(level, new String[] { line }, args);
+		this(log, level, new String[] { line }, args);
 	}
-	public xLogRecord_Msg(final xLevel level,
+	public xLogRecord_Msg(final xLog log, final xLevel level,
 			final String[] lines, final Object[] args) {
+		this.log = log;
 		this.level = level;
 		this.timestamp = Utils.getSystemMillis();
 		this.lines = lines;

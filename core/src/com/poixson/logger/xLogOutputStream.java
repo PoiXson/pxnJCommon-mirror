@@ -87,6 +87,7 @@ public class xLogOutputStream extends OutputStream {
 		this.log
 			.publish(
 				new xLogRecord_Msg(
+					this.log,
 					this.level,
 					this.buffer.toString(),
 					new Object[0]
