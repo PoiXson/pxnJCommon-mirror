@@ -80,6 +80,22 @@ public class Test_StringUtils {
 
 
 
+	@Test
+	public void testSplit() {
+		// char delims
+		Assert.assertArrayEquals( new String[] { "Abc", "def", "ghi" }, StringUtils.Split("Abc,def,ghi", ',') );
+		Assert.assertArrayEquals( new String[] { "Abc", "def"        }, StringUtils.Split(",Abc,,def,",  ',') );
+		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split(",Abc,",       ',') );
+		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split("Abc",         ',') );
+		// string delims
+		Assert.assertArrayEquals( new String[] { "Abc", "def", "ghi" }, StringUtils.Split("Abc,,def,,ghi", ",,") );
+		Assert.assertArrayEquals( new String[] { "Abc", "def"        }, StringUtils.Split("Abc,,,,def",    ",,") );
+		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split(",,Abc,,",       ",,") );
+		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split("Abc",           ",,") );
+	}
+
+
+
 	// ------------------------------------------------------------------------------- //
 	// check value
 
