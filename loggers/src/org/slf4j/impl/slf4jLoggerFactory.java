@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 
-import com.poixson.logger.xLevel;
+import com.poixson.logger.LoggerToXLog;
 import com.poixson.logger.xLog;
 import com.poixson.logger.xLogRoot;
 import com.poixson.utils.Utils;
@@ -41,20 +41,9 @@ public class slf4jLoggerFactory implements ILoggerFactory {
 
 
 	public static xLog getXLog(final String name) {
-		final xLog log;
-		if (Utils.isEmpty(name)) {
-			log = xLogRoot.Get(LOG_NAME);
-		} else
-		if (name.startsWith("org.xeustechnologies.jcl.")) {
-			log = xLogRoot.Get("jcl");
-		} else {
-			log = xLogRoot.Get(LOG_NAME).get(name);
-		}
-		// disable logging if not detail mode
-		if ( ! xLogRoot.Get().isLoggable(xLevel.DETAIL) ) {
-			log.setLevel(xLevel.WARNING);
-		}
-		return log;
+		if (Utils.isEmpty(name))
+			return xLogRoot.Get(LOG_NAME);
+		return xLogRoot.Get( LoggerToXLog.GetLoggerAlias(name) );
 	}
 
 

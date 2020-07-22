@@ -31,11 +31,22 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 	// trace
 	@Override
 	public boolean isTraceEnabled() {
-		return this.getXLog().isLoggable(xLevel.FINEST);
+		final xLog log = this.getXLog();
+		return log.isLoggable(xLevel.FINEST);
 	}
 	@Override
 	public void trace(final String msg) {
-		this.getXLog().finest(msg);
+		final xLog log = this.getXLog();
+		if (log.isLoggable(xLevel.FINEST)) {
+			log.finest(msg);
+		}
+	}
+	@Override
+	public void trace(final String msg, final Throwable e) {
+		final xLog log = this.getXLog();
+		if (log.isLoggable(xLevel.FINEST)) {
+			log.trace(e, msg);
+		}
 	}
 	@Override
 	public void trace(final String format, final Object arg) {
@@ -58,23 +69,32 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 			this.trace(ft.getMessage(), ft.getThrowable());
 		}
 	}
-	@Override
-	public void trace(final String msg, final Throwable e) {
-		final xLog log = this.getXLog();
-		if (log.isLoggable(xLevel.DETAIL))
-			log.trace(e, msg);
-	}
 
 
 
 	// debug
 	@Override
 	public boolean isDebugEnabled() {
-		return this.getXLog().isLoggable(xLevel.DETAIL);
+		final xLog log = this.getXLog();
+		return log.isLoggable(xLevel.DETAIL);
 	}
 	@Override
 	public void debug(final String msg) {
-		this.getXLog().detail(msg);
+		final xLog log = this.getXLog();
+		if (log.isLoggable(xLevel.DETAIL)) {
+			this.getXLog().detail(msg);
+		}
+	}
+	@Override
+	public void debug(final String msg, final Throwable e) {
+		final xLog log = this.getXLog();
+		if (log.isLoggable(xLevel.DETAIL)) {
+			if (e == null) {
+				log.detail(msg);
+			} else {
+				log.trace(e, msg);
+			}
+		}
 	}
 	@Override
 	public void debug(final String format, final Object arg) {
@@ -97,28 +117,32 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 			this.debug(ft.getMessage(), ft.getThrowable());
 		}
 	}
-	@Override
-	public void debug(final String msg, final Throwable e) {
-		final xLog log = this.getXLog();
-		if (log.isLoggable(xLevel.DETAIL)) {
-			if (e == null) {
-				log.detail(msg);
-			} else {
-				log.trace(e, msg);
-			}
-		}
-	}
 
 
 
 	// info
 	@Override
 	public boolean isInfoEnabled() {
-		return this.getXLog().isLoggable(xLevel.INFO);
+		final xLog log = this.getXLog();
+		return log.isLoggable(xLevel.INFO);
 	}
 	@Override
 	public void info(final String msg) {
-		this.getXLog().info(msg);
+		final xLog log = this.getXLog();
+		if (log.isLoggable(xLevel.INFO)) {
+			log.info(msg);
+		}
+	}
+	@Override
+	public void info(final String msg, final Throwable e) {
+		final xLog log = this.getXLog();
+		if (log.isLoggable(xLevel.INFO)) {
+			if (e == null) {
+				log.info(msg);
+			} else {
+				log.trace(e, msg);
+			}
+		}
 	}
 	@Override
 	public void info(final String format, final Object arg) {
@@ -141,28 +165,32 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 			this.info(ft.getMessage(), ft.getThrowable());
 		}
 	}
-	@Override
-	public void info(final String msg, final Throwable e) {
-		final xLog log = this.getXLog();
-		if (log.isLoggable(xLevel.INFO)) {
-			if (e == null) {
-				log.info(msg);
-			} else {
-				log.trace(e, msg);
-			}
-		}
-	}
 
 
 
 	// warning
 	@Override
 	public boolean isWarnEnabled() {
-		return this.getXLog().isLoggable(xLevel.WARNING);
+		final xLog log = this.getXLog();
+		return log.isLoggable(xLevel.WARNING);
 	}
 	@Override
 	public void warn(final String msg) {
-		this.getXLog().warning(msg);
+		final xLog log = this.getXLog();
+		if (log.isLoggable(xLevel.WARNING)) {
+			this.getXLog().warning(msg);
+		}
+	}
+	@Override
+	public void warn(final String msg, final Throwable e) {
+		final xLog log = this.getXLog();
+		if (log.isLoggable(xLevel.WARNING)) {
+			if (e == null) {
+				log.warning(msg);
+			} else {
+				log.trace(e, msg);
+			}
+		}
 	}
 	@Override
 	public void warn(final String format, final Object arg) {
@@ -185,28 +213,32 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 			this.warn(ft.getMessage(), ft.getThrowable());
 		}
 	}
-	@Override
-	public void warn(final String msg, final Throwable e) {
-		final xLog log = this.getXLog();
-		if (log.isLoggable(xLevel.WARNING)) {
-			if (e == null) {
-				log.warning(msg);
-			} else {
-				log.trace(e, msg);
-			}
-		}
-	}
 
 
 
 	// error
 	@Override
 	public boolean isErrorEnabled() {
-		return this.getXLog().isLoggable(xLevel.SEVERE);
+		final xLog log = this.getXLog();
+		return log.isLoggable(xLevel.SEVERE);
 	}
 	@Override
 	public void error(final String msg) {
-		this.getXLog().severe(msg);
+		final xLog log = this.getXLog();
+		if (log.isLoggable(xLevel.SEVERE)) {
+			this.getXLog().severe(msg);
+		}
+	}
+	@Override
+	public void error(final String msg, final Throwable e) {
+		final xLog log = this.getXLog();
+		if (log.isLoggable(xLevel.SEVERE)) {
+			if (e == null) {
+				log.severe(msg);
+			} else {
+				log.trace(e, msg);
+			}
+		}
 	}
 	@Override
 	public void error(final String format, final Object arg) {
@@ -227,17 +259,6 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 		if (this.isErrorEnabled()) {
 			final FormattingTuple ft = MessageFormatter.format(format, args);
 			this.error(ft.getMessage(), ft.getThrowable());
-		}
-	}
-	@Override
-	public void error(final String msg, final Throwable e) {
-		final xLog log = this.getXLog();
-		if (log.isLoggable(xLevel.SEVERE)) {
-			if (e == null) {
-				log.severe(msg);
-			} else {
-				log.trace(e, msg);
-			}
 		}
 	}
 
