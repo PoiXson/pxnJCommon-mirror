@@ -140,6 +140,83 @@ public final class StringUtils {
 
 
 
+	public static String[] Split(final String line, final char...delims) {
+		final int len = line.length();
+		final List<String> result = new ArrayList<String>();
+		int next;
+		int last = 0;
+		SPLIT_LOOP:
+		while (true) {
+			// find next delim
+			next = len;
+			DELIM_LOOP:
+			for (final char chr : delims) {
+				final int pos = line.indexOf(chr, last);
+				if (pos == -1) continue DELIM_LOOP;
+				if (next > pos)
+					next = pos;
+				if (pos == last)   break DELIM_LOOP;
+				if (pos == last+1) break DELIM_LOOP;
+			} // end DELIM_LOOP
+			// delim not found
+			if (next == len) {
+				if (last < len) {
+					result.add(line.substring(last));
+				}
+				break SPLIT_LOOP;
+			}
+			// delim found
+			if (last != next) {
+				result.add(line.substring(last, next));
+			}
+			last = next + 1;
+		} // end SPLIT_LOOP
+		return result.toArray(new String[0]);
+	}
+	public static String[] Split(final String line, final String...delims) {
+		final int lenLine = line.length();
+		final List<String> result = new ArrayList<String>();
+		int next;
+		int lenNext;
+		int last = 0;
+		SPLIT_LOOP:
+		while (true) {
+			// find next delim
+			next = lenLine;
+			lenNext = 0;
+			DELIM_LOOP:
+			for (final String str : delims) {
+				final int pos = line.indexOf(str, last);
+				if (pos == -1) continue DELIM_LOOP;
+				if (next == pos) {
+					if (str.length() > lenNext)
+						lenNext = str.length();
+				} else
+				if (next > pos) {
+					next = pos;
+					lenNext = str.length();
+				}
+				if (pos == last)   break DELIM_LOOP;
+				if (pos == last+1) break DELIM_LOOP;
+			} // end DELIM_LOOP
+			// delim not found
+			if (next == lenLine) {
+				if (last < lenLine) {
+					result.add(line.substring(last));
+				}
+				break SPLIT_LOOP;
+			}
+			// delim found
+			if (last != next) {
+				result.add(line.substring(last, next));
+			}
+			last = next + lenNext;
+		} // end SPLIT_LOOP
+		return result.toArray(new String[0]);
+	}
+
+
+
 	// ------------------------------------------------------------------------------- //
 	// check value
 
