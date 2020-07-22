@@ -102,23 +102,11 @@ public class xLogRecord_Msg implements xLogRecord {
 
 
 
-//TODO: remove this
-//	// [logger] [crumbs]
-//	public String[] getNameTree() {
-//		if (this.log == null)
-//			return null;
-//		return this.log.getNameTree();
-//	}
-
-
-
-//TODO: is this needed?
-//	// java util level type
-//	public java.util.logging.Level getJavaLevel() {
-//		if (this.level == null)
-//			return null;
-//		return this.level.getJavaLevel();
-//	}
+	// [logger][crumbs]
+	public String[] getNameTree() {
+		if (this.log == null) return null;
+		return this.log.getNameTree();
+	}
 
 
 
