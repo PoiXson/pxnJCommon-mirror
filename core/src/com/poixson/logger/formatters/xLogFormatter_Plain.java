@@ -5,11 +5,11 @@ import com.poixson.logger.records.xLogRecord_Msg;
 import com.poixson.utils.StringUtils;
 
 
-public class xLogFormatter_Simple extends xLogFormatter {
+public class xLogFormatter_Plain extends xLogFormatter {
 
 
 
-	public xLogFormatter_Simple() {
+	public xLogFormatter_Plain() {
 		super();
 	}
 
