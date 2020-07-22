@@ -5,7 +5,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.poixson.logger.xLevel;
+import com.poixson.logger.formatters.xLogFormatter;
 import com.poixson.logger.records.xLogRecord;
+import com.poixson.logger.records.xLogRecord_Msg;
 import com.poixson.utils.Utils;
 
 
@@ -15,9 +17,8 @@ public abstract class xLogHandler {
 
 	protected final AtomicReference<xLevel> level = new AtomicReference<xLevel>(null);
 
-//TODO
-//	private volatile xLogFormatter formatter = null;
-//	protected final AtomicReference<xLogFormatter> defaultFormatter = new AtomicReference<xLogFormatter>(null);
+	protected final AtomicReference<xLogFormatter> formatter        = new AtomicReference<xLogFormatter>(null);
+	protected final AtomicReference<xLogFormatter> defaultFormatter = new AtomicReference<xLogFormatter>(null);
 
 
 
@@ -60,15 +61,15 @@ public abstract class xLogHandler {
 			this.publish();
 			return;
 		}
-		final String[] lines = record.getLines();
+		final String[] lines = this.formatMessage(record);
 		// single line
 		if (lines.length == 1) {
 			this.publish(lines[0]);
-			return;
-		}
 		// multiple lines
-		for (final String line : lines) {
-			this.publish(line);
+		} else {
+			for (final String line : lines) {
+				this.publish(line);
+			}
 		}
 	}
 
@@ -122,7 +123,43 @@ public abstract class xLogHandler {
 
 
 
-//TODO
+	public String[] formatMessage(final xLogRecord record) {
+		final xLogFormatter formatter = this.getFormatterOrDefault();
+		if (formatter == null)
+			return record.getLines();
+		if (record instanceof xLogRecord_Msg)
+			return formatter.formatMessage( (xLogRecord_Msg)record );
+		return record.getLines();
+	}
+
+
+
+	public xLogFormatter getFormatter() {
+		return this.formatter.get();
+	}
+	public xLogFormatter getFormatterOrDefault() {
+		final xLogFormatter formatter = this.formatter.get();
+		if (formatter != null)
+			return formatter;
+		return this.getDefaultFormatter();
+	}
+	public xLogFormatter getDefaultFormatter() {
+		if (this.defaultFormatter.get() == null) {
+			final xLogFormatter formatter = this.newDefaultFormatter();
+			if (this.defaultFormatter.compareAndSet(null, formatter))
+				return formatter;
+		}
+		return this.defaultFormatter.get();
+	}
+	protected xLogFormatter newDefaultFormatter() {
+		return new xLogFormatter();
+	}
+
+
+
+	public void setFormatter(final xLogFormatter formatter) {
+		this.formatter.set(formatter);
+	}
 
 
 
