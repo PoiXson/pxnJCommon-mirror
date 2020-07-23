@@ -12,34 +12,11 @@ import com.poixson.utils.Utils;
 
 public class xLogRoot extends xLog {
 
-	// root logger
-	private static final AtomicReference<xLogRoot> root = new AtomicReference<xLogRoot>(null);
-
 	protected final AtomicReference<xLogHandler[]> defaultHandlers = new AtomicReference<xLogHandler[]>(null);
 
 
 
-	// get root logger
-	public static xLogRoot Get() {
-		if (root.get() == null) {
-			final xLogRoot log = new xLogRoot();
-			if (root.compareAndSet(null, log)) {
-				LoggerToXLog.init();
-				return log;
-			}
-		}
-		return root.get();
-	}
-	public static xLog Get(final String logName) {
-		return Get().get(logName);
-	}
-	public static xLogRoot Peek() {
-		return root.get();
-	}
-
-
-
-	protected xLogRoot() {
+	xLogRoot() {
 		super();
 		// override stdio
 		if (OVERRIDE_STDIO) {

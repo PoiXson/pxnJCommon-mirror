@@ -22,6 +22,8 @@ public class xLog implements xLogInterface {
 	public static final xLevel DEFAULT_LEVEL = xLevel.ALL;
 	public static final boolean OVERRIDE_STDIO = true;
 
+	// root logger
+	private static final AtomicReference<xLogRoot> root = new AtomicReference<xLogRoot>(null);
 	// child-loggers
 	private final ConcurrentMap<String, xLog> loggers = new ConcurrentHashMap<String, xLog>();
 
@@ -37,10 +39,30 @@ public class xLog implements xLogInterface {
 
 
 
+	// root logger
+	public static xLogRoot XLog() {
+		if (root.get() == null) {
+			final xLogRoot log = new xLogRoot();
+			if (root.compareAndSet(null, log)) {
+				LoggerToXLog.init();
+				return log;
+			}
+		}
+		return root.get();
+	}
+	public static xLogRoot Peek() {
+		return root.get();
+	}
+
+
+
 	// get logger
+	public static xLog XLog(final String logName) {
+		return XLog().get(logName);
+	}
 	public xLog get(final String logName) {
 		if (Utils.isEmpty(logName))
-			return xLogRoot.Get();
+			return XLog();
 		// existing logger instance
 		{
 			final xLog log = this.loggers.get(logName);
