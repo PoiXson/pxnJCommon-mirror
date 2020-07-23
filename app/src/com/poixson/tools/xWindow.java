@@ -46,11 +46,21 @@ public abstract class xWindow extends JFrame implements xCloseable, AttachedLogg
 	}
 	public xWindow() {
 		super();
+		// ensure dispatch thread
+		if ( ! xThreadPool_GUI.Get().isCurrentThread() ) {
+			throw new RuntimeException(
+				StringUtils.ReplaceTags(
+					"Cannot load xWindow {} from thread: {}",
+					this.getClass().getName(),
+					Thread.currentThread().getName()
+				)
+			);
+		}
 		// find a unique name
-		final String className = StringParts.PeekLastPart( this.getClass().getName(), '.' );
-		if (Utils.isEmpty(className)) throw new RuntimeException("Failed to detect window class name");
-		this.name = StringUtils.PutUnique(all, className, this);
-		if (Utils.isEmpty(this.name)) throw new RuntimeException("Failed to find a unique class name");
+		this.name = StringParts.PeekLastPart( this.getClass().getName(), '.' );
+		if (Utils.isEmpty(this.name)) throw new RuntimeException("Failed to detect window class name");
+		this.key = StringUtils.PutUnique(all, this.name, this);
+		if (Utils.isEmpty(this.key)) throw new RuntimeException("Failed to find a unique window key");
 		// close hook
 		this.addWindowListener(
 			new RemappedWindowListener(this, "",
@@ -73,7 +83,10 @@ public abstract class xWindow extends JFrame implements xCloseable, AttachedLogg
 
 
 
-	protected abstract void closing();
+	protected void closing() {
+	}
+
+
 
 	@Override
 	public void close() {
@@ -138,10 +151,10 @@ public abstract class xWindow extends JFrame implements xCloseable, AttachedLogg
 
 	@Override
 	public void setVisible(final boolean visible) {
-		if (xThreadPool_GUI.Get().proper(this, "_setVisible", Boolean.valueOf(visible))) return;
+		if (xThreadPool_GUI.Get().proper(this, "setVisible", Boolean.valueOf(visible))) return;
 		super.setVisible(visible);
 	}
-	public void _setVisible(final Boolean visible) {
+	public void setVisible(final Boolean visible) {
 		if (visible == null) throw new RequiredArgumentException("visible");
 		this.setVisible(visible.booleanValue());
 	}
@@ -159,11 +172,11 @@ public abstract class xWindow extends JFrame implements xCloseable, AttachedLogg
 
 
 	public void autoHeight(final int width) {
-		if (xThreadPool_GUI.Get().proper(this, "_autoHeight", Integer.valueOf(width))) return;
+		if (xThreadPool_GUI.Get().proper(this, "autoHeight", Integer.valueOf(width))) return;
 		this.pack();
 		this.setSize(width, this.getHeight());
 	}
-	public void _autoHeight(final Integer width) {
+	public void autoHeight(final Integer width) {
 		if (width == null) throw new RequiredArgumentException("width");
 		this.autoHeight(width.intValue());
 	}
