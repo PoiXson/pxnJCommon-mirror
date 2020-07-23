@@ -1,5 +1,7 @@
 package com.poixson.utils;
 
+import static com.poixson.logger.xLog.XLog;
+
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.geom.AffineTransform;
@@ -10,7 +12,6 @@ import javax.swing.JComponent;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
-import com.poixson.logger.xLogRoot;
 
 
 public final class guiUtils {
@@ -103,7 +104,7 @@ public final class guiUtils {
 
 
 	public static xLog log() {
-		return xLogRoot.Get(LOG_NAME);
+		return XLog(LOG_NAME);
 	}
 
 

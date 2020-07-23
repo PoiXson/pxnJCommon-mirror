@@ -1,12 +1,13 @@
 package com.poixson.threadpool;
 
+import static com.poixson.logger.xLog.XLog;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
-import com.poixson.logger.xLogRoot;
 import com.poixson.tools.CoolDown;
 import com.poixson.tools.abstractions.xStartable;
 import com.poixson.utils.StringUtils;
@@ -336,7 +337,7 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 		final String workerName = this.getWorkerName();
 		if (poolName.equalsIgnoreCase(workerName))
 			return this.pool.log();
-		return xLogRoot.Get().getWeak(workerName);
+		return XLog().getWeak(workerName);
 	}
 
 

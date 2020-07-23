@@ -1,5 +1,7 @@
 package com.poixson.tools.config;
 
+import static com.poixson.logger.xLog.XLog;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,7 +14,6 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.poixson.exceptions.CreateDefaultYmlFileException;
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.logger.xLogRoot;
 import com.poixson.utils.FileUtils;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
@@ -139,7 +140,7 @@ public final class xConfigLoaders {
 				if (cfg != null) {
 					// copy default file
 					try {
-						xLogRoot.Get().info("Creating default file:", fileStr);
+						XLog().info("Creating default file:", fileStr);
 						FileUtils.ExportResource(fileStr, FileUtils.OpenResource(clss, fileStr));
 					} catch (Exception e) {
 						throw new CreateDefaultYmlFileException(fileStr, e);
@@ -148,7 +149,7 @@ public final class xConfigLoaders {
 				}
 			}
 		} catch (Exception e) {
-			xLogRoot.Get().trace(e);
+			XLog().trace(e);
 		}
 		return null;
 	}

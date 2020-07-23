@@ -1,5 +1,7 @@
 package com.poixson.logger;
 
+import static com.poixson.logger.xLog.XLog;
+
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -88,10 +90,10 @@ public class LoggerToXLog extends Handler {
 
 	public xLog log(final LogRecord record) {
 		final String name = GetLoggerAlias( record.getLoggerName() );
-		return xLogRoot.Get(name);
+		return XLog(name);
 	}
 	public xLog log() {
-		return xLogRoot.Get();
+		return XLog();
 	}
 
 

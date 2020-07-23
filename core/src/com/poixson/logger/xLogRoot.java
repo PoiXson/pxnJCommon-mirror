@@ -27,8 +27,7 @@ public class xLogRoot extends xLog {
 					new OutputStreamLineRemapper() {
 						@Override
 						public void line(final String line) {
-							xLogRoot.Get()
-								.stdout(line);
+							XLog().stdout(line);
 						}
 					}
 				)
@@ -39,8 +38,7 @@ public class xLogRoot extends xLog {
 					new OutputStreamLineRemapper() {
 						@Override
 						public void line(final String line) {
-							xLogRoot.Get()
-								.stderr(line);
+							XLog().stderr(line);
 						}
 					}
 				)

@@ -1,5 +1,7 @@
 package com.poixson.plugins;
 
+import static com.poixson.logger.xLog.XLog;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,7 +17,6 @@ import com.poixson.abstractions.xStartable;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLevel;
 import com.poixson.logger.xLog;
-import com.poixson.logger.xLogRoot;
 import com.poixson.plugins.loaders.xPluginLoader;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.utils.Utils;
@@ -390,7 +391,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 		return this._log.get();
 	}
 	protected xLog _log() {
-		return xLogRoot.Get( this.managerName );
+		return XLog("plugin");
 	}
 
 

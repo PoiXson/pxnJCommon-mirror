@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.poixson.logger.xLogRoot;
+import com.poixson.logger.xLog;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.xTime;
 import com.poixson.tools.abstractions.xCallable;
@@ -72,7 +72,7 @@ public final class ThreadUtils {
 		return threadNames.length;
 	}
 	// display threads still running
-	public static void DisplayStillRunning() {
+	public static void DisplayStillRunning(final xLog log) {
 //TODO
 //		if (xVars.notDebug()) return;
 		final String[] threadNames = GetThreadNames(false);
@@ -92,8 +92,7 @@ public final class ThreadUtils {
 		if (hasDestroyJavaVM) {
 			msg.append("\n\nShould use xApp.waitUntilClosed() when main() is finished.\n");
 		}
-		xLogRoot.Get()
-			.warning( msg.toString() );
+		log.warning( msg.toString() );
 	}
 
 

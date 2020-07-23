@@ -1,5 +1,7 @@
 package com.poixson.threadpool;
 
+import static com.poixson.logger.xLog.XLog;
+
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -12,7 +14,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.poixson.exceptions.ContinueException;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
-import com.poixson.logger.xLogRoot;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.abstractions.RunnableMethod;
@@ -669,7 +670,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 		return this._log.get();
 	}
 	protected xLog _log() {
-		return xLogRoot.Get( "thpool-"+this.getPoolName() );
+		return XLog( "thpool-"+this.getPoolName() );
 	}
 
 

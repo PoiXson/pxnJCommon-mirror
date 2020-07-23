@@ -1,5 +1,7 @@
 package com.poixson.logger.handlers;
 
+import static com.poixson.logger.xLog.XLog;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -18,7 +20,6 @@ import org.jline.terminal.TerminalBuilder;
 import com.poixson.ShellDefines;
 import com.poixson.exceptions.IORuntimeException;
 import com.poixson.logger.xLog;
-import com.poixson.logger.xLogRoot;
 import com.poixson.tools.abstractions.xStartable;
 import com.poixson.utils.ShellUtils;
 import com.poixson.utils.StringUtils;
@@ -370,7 +371,7 @@ log.publish("GOT INPUT: "+line);
 
 
 	public xLog log() {
-		return xLogRoot.Get();
+		return XLog();
 	}
 
 

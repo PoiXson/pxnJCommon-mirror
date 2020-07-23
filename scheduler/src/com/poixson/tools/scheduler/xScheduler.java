@@ -1,5 +1,7 @@
 package com.poixson.tools.scheduler;
 
+import static com.poixson.logger.xLog.XLog;
+
 import java.lang.ref.SoftReference;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,7 +14,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.abstractions.xStartable;
 import com.poixson.logger.xLog;
-import com.poixson.logger.xLogRoot;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.xClock;
 import com.poixson.tools.xTime;
@@ -374,6 +375,22 @@ public class xScheduler implements xStartable, Runnable {
 			);
 			return detail;
 		}
+	}
+
+
+
+	private final AtomicReference<xLog> _log = new AtomicReference<xLog>(null);
+
+	public xLog log() {
+		if (this._log.get() == null) {
+			final xLog log = this._log();
+			if (this._log.compareAndSet(null, log))
+				return log;
+		}
+		return this._log.get();
+	}
+	private xLog _log() {
+		return XLog(LOG_NAME);
 	}
 
 
