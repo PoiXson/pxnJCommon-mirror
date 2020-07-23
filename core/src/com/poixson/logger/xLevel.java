@@ -141,4 +141,19 @@ public enum xLevel {
 
 
 
+	public static xLevel FromJavaLevel(final java.util.logging.Level lvl) {
+		if (lvl.equals(java.util.logging.Level.ALL))     return xLevel.ALL;
+		if (lvl.equals(java.util.logging.Level.FINEST))  return xLevel.FINEST;
+		if (lvl.equals(java.util.logging.Level.FINER))   return xLevel.FINER;
+		if (lvl.equals(java.util.logging.Level.FINE))    return xLevel.FINE;
+		if (lvl.equals(java.util.logging.Level.CONFIG))  return xLevel.STATS;
+		if (lvl.equals(java.util.logging.Level.INFO))    return xLevel.INFO;
+		if (lvl.equals(java.util.logging.Level.WARNING)) return xLevel.WARNING;
+		if (lvl.equals(java.util.logging.Level.SEVERE))  return xLevel.SEVERE;
+		if (lvl.equals(java.util.logging.Level.OFF))     return xLevel.OFF;
+		return null;
+	}
+
+
+
 }
