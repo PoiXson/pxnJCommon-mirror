@@ -3,7 +3,7 @@ package com.poixson.exceptions;
 import com.poixson.utils.StringUtils;
 
 
-public class RequiredArgumentException extends NullPointerException {
+public class RequiredArgumentException extends IllegalArgumentException {
 	private static final long serialVersionUID = 1L;
 
 
