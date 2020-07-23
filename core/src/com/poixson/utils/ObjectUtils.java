@@ -10,10 +10,12 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.poixson.exceptions.RequiredArgumentException;
+import com.poixson.tools.Keeper;
 
 
 public final class ObjectUtils {
 	private ObjectUtils() {}
+	static { Keeper.add(new ObjectUtils()); }
 
 
 
