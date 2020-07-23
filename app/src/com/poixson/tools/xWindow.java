@@ -25,6 +25,7 @@ public abstract class xWindow extends JFrame implements xCloseable, AttachedLogg
 	protected static final ConcurrentHashMap<String, xWindow> all = new ConcurrentHashMap<String, xWindow>();
 
 	public final String name;
+	public final String key;
 
 	protected final AtomicBoolean closed = new AtomicBoolean(false);
 
@@ -62,7 +63,7 @@ public abstract class xWindow extends JFrame implements xCloseable, AttachedLogg
 				""  //methodStr_Deactivated
 			)
 		);
-		this.log().fine("New window created:", this.name);
+		this.log().fine("New window created:", this.key);
 	}
 
 
@@ -78,7 +79,7 @@ public abstract class xWindow extends JFrame implements xCloseable, AttachedLogg
 	public void close() {
 		if (xThreadPool_GUI.Get().proper(this, "close")) return;
 		if (!this.closed.compareAndSet(false, true)) return;
-		this.log().fine("Closing window:", this.getName());
+		this.log().fine("Closing window:", this.getUniqueKey());
 		this.closing();
 		this.dispose();
 	}
@@ -128,6 +129,9 @@ public abstract class xWindow extends JFrame implements xCloseable, AttachedLogg
 	@Override
 	public String getName() {
 		return this.name;
+	}
+	public String getUniqueKey() {
+		return this.key;
 	}
 
 
