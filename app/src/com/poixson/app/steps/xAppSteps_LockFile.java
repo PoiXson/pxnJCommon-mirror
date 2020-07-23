@@ -10,7 +10,7 @@ import com.poixson.tools.xLockFile;
  *   20  lock file
  *
  * Shutdown sequence
- *   20  release lock
+ *   20  release lock file
  */
 public class xAppSteps_LockFile {
 

@@ -3,17 +3,28 @@ package com.poixson.app.steps;
 import com.poixson.app.xApp;
 import com.poixson.app.xAppStep;
 import com.poixson.app.xAppStep.StepType;
-import com.poixson.app.xVars;
 import com.poixson.logger.xLog;
 import com.poixson.tools.AsciiArtBuilder;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.xAppUtils;
 
 
+/*
+ * Startup sequence
+ *   50  display logo
+ */
 public class xAppSteps_Logo {
 
 	protected static final int INDENT        = 2;
-	protected static final int VERSION_SPACE = 15;
+	protected static final int VERSION_WIDTH = 15;
+
+	protected final xApp app;
+
+
+
+	public xAppSteps_Logo(final xApp app) {
+		this.app = app;
+	}
 
 
 
@@ -23,110 +34,53 @@ public class xAppSteps_Logo {
 
 
 	// display logo
-	@xAppStep( Type=StepType.START, Title="Display Logo", StepValue=80 )
-	public void _START_display_logo(final xApp app, final xLog log) {
+	@xAppStep(type=StepType.STARTUP, step=50, title="Display Logo")
+	public void __START_display_logo() {
+		final xLog log = this.app.log();
 		log.publish();
-		this.displayLogo(app, log);
+		this.displayLogo(log);
 		log.publish();
 		this.displayLegal(log);
 		log.publish();
-		if (xVars.isDebug()) {
-			xAppUtils.DisplayColors();
-			log.publish();
-		}
-		xAppUtils.DisplayStartupVars(app, log);
+		xAppUtils.DisplayStartupVars(this.app, log);
 		log.publish();
-		if (xVars.isDebug()) {
-//TODO:
-//			DisplayTestColors(log);
-			log.publish();
-		}
 	}
 
 
 
 	protected void displayLegal(final xLog log) {
-		log.publish(" This program comes with absolutely no warranty. This is free");
-		log.publish(" software and you are welcome to modify it or redistribute it");
-		log.publish(" under certain conditions. Type 'show license' at the command");
-		log.publish(" prompt for license details, or go to www.growcontrol.com for");
-		log.publish(" more information.");
+		log.publish(" This program comes with absolutely no warranty. This is free ");
+		log.publish(" software and you are welcome to modify it or redistribute it ");
+		log.publish(" under certain conditions. Type 'show license' at the command ");
+		log.publish(" prompt for license details, or go to www.growcontrol.com for ");
+		log.publish(" more information.                                            ");
 	}
 
 
 
-/*
-	public static void DisplayTestColors(final xLog log) {
-		final Ansi.Color[] colors = Ansi.Color.values();
-		final int colorCount = colors.length;
-		final StringBuilder str = new StringBuilder();
-		COLOR_LOOP:
-		for (int index=0; index<colorCount; index++) {
-			final String colorName =
-				colors[index].name()
-					.toLowerCase();
-			String invertColor;
-			switch (colorName) {
-			case "black":
-				invertColor = "white";
-				break;
-			case "red":
-			case "green":
-			case "yellow":
-			case "blue":
-			case "magenta":
-				invertColor = "black";
-				break;
-			default:
-				continue COLOR_LOOP;
-			}
-			final Map<String, Object> map = new HashMap<String, Object>();
-			map.put("color",  colorName  );
-			map.put("invert", invertColor);
-			map.put(
-				"colorpad",
-				StringUtils.PadCenter(10, colorName, ' ')
-			);
-			str.append(
-				StringUtils.ReplaceTagKeys(
-					"   @|bg_{color},{invert} {colorpad}|@ @|bg_{invert},{color} {colorpad}|@   ",
-					map
-				)
-			);
-			if ( ((index+1) % 3) == 0 ) {
-				if (index != 2)
-					log.publish();
-				log.publish( str.toString() );
-				str.setLength(0);
-			}
-		}
+	protected String getAppVersion() {
+		return this.app.getVersion();
 	}
-*/
+	protected String getAppVersionPadded() {
+		return StringUtils.PadCenter(VERSION_WIDTH, this.getAppVersion(), ' ');
+	}
 
 
 
-//  |          1         2         3         4         5         6    |
-//  |0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4|
-//0 |                                     _/\_                        |
-//1 |         |`-.__     PoiXson          (('>  C      _   _          |
-//2 |         / ' _/    Software     _    /^|         /\\_/ \         |
-//3 |   A   -****\"  <---version---> =>--/__|m---    / 0  0  \        |
-//4 |      /    }                         ^^        /_   v   _\       |
-//5 |     /    \               @..@                   \__^___/        |
-//6 | \ /`    \\\          B  (----)              D   /  0    \       |
-//7 |  `\     /_\\           ( >__< )                /        \__     |
-//8 |   `~~~~~~``~`          ^^ ~~ ^^                \_(_|_)___  \    |
-//9 |^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^(____//^/^|
-//10|/////////////////////////////////////////////////////////////////|
-//  |0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4|
-//             1         2         3         4         5         6    |
-	protected void displayLogo(final xApp app, final xLog log) {
-		final String version =
-			StringUtils.PadCenter(
-				VERSION_SPACE,
-				app.getVersion(),
-				' '
-			);
+// 0 |                                     _/\_                        |
+// 1 |         |`-.__     PoiXson          (('>  C      _   _          |
+// 2 |         / ' _/     Software    _    /^|         /\\_/ \         |
+// 3 |   A   -****\"  <---version---> =>--/__|m---    / 0  0  \        |
+// 4 |      /    }                         ^^        /_   v   _\       |
+// 5 |     /    \               @..@                   \__^___/        |
+// 6 | \ /`    \\\          B  (----)              D   /  0    \       |
+// 7 |  `\     /_\\           ( >__< )                /        \__     |
+// 8 |   `~~~~~~``~`          ^^ ~~ ^^                \_(_|_)___  \    |
+// 9 |^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^/^(____//^/^|
+//10 |/////////////////////////////////////////////////////////////////|
+//   0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6
+//             1         2         3         4         5         6
+	protected void displayLogo(final xLog log) {
 		// define colors
 		final String COLOR_BG = "black";
 		final String COLOR_PXN_P       = "bold,green";
@@ -151,12 +105,13 @@ public class xAppSteps_Logo {
 		final String COLOR_CAT_MOUTH   = "red";
 		final String COLOR_CAT_COLLAR  = "blue";
 		final String COLOR_CAT_NOSE    = "bold,black";
-		// display ascii art
+		// ascii art
+		final String version = this.getAppVersionPadded();
 		final AsciiArtBuilder art =
 			new AsciiArtBuilder(
 				"                                     _/\\_                        ",
 				"         |`-.__     PoiXson          (('>         _   _          ",
-				"         / ' _/    Software     _    /^|         /\\\\_/ \\         ",
+				"         / ' _/     Software    _    /^|         /\\\\_/ \\         ",
 				"       -****\\\"  "+version+" =>--/_\\|m---    / 0  0  \\        ",
 				"      /    }                         ^^        /_   v   _\\       ",
 				"     /    \\               @..@                   \\__^___/        ",
@@ -185,7 +140,7 @@ public class xAppSteps_Logo {
 		art.setColor(COLOR_DOG_EYES,    11,  2);
 		art.setColor(COLOR_DOG_MOUTH,   13,  2);
 		art.setColor(COLOR_DOG_NOSE,    14,  2);
-		art.setColor(COLOR_SOFTWARE,    19,  2);
+		art.setColor(COLOR_SOFTWARE,    20,  2);
 		art.setColor(COLOR_WITCH_BROOM, 32,  2);
 		art.setColor(COLOR_WITCH,       37,  2);
 		art.setColor(COLOR_CAT,         49,  2);
@@ -235,16 +190,9 @@ public class xAppSteps_Logo {
 		art.setColor(COLOR_GRASS,       61,  9);
 		// line 11   color               x   y
 		art.setColor(COLOR_GRASS,        0, 10);
-		// display ascii art
-		for (final String line : art.build()) {
-			log.publish(line);
-		}
+		// display generated art
+		log.publish(art.build());
 	}
-
-
-
-	// ------------------------------------------------------------------------------- //
-	// shutdown steps
 
 
 

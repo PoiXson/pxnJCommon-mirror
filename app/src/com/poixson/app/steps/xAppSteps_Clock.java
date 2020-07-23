@@ -2,10 +2,12 @@ package com.poixson.app.steps;
 
 import com.poixson.app.xAppStep;
 import com.poixson.app.xAppStep.StepType;
-import com.poixson.logger.xLog;
-import com.poixson.tools.xClock;
 
 
+/*
+ * Startup sequence
+ *   55  sync clock
+ */
 public class xAppSteps_Clock {
 
 
@@ -16,15 +18,11 @@ public class xAppSteps_Clock {
 
 
 	// ensure not root
-	@xAppStep( Type=StepType.START, Title="Clock Sync", StepValue=85 )
-	public void _START_clock_sync(final xLog log) {
-		xClock.get(true);
+	@xAppStep(type=StepType.STARTUP, step=55, title="Clock Sync")
+	public void __START_clock_sync() {
+//TODO
+//		xClock.get(true);
 	}
-
-
-
-	// ------------------------------------------------------------------------------- //
-	// shutdown steps
 
 
 
