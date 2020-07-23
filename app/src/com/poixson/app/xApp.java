@@ -512,7 +512,8 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 	// garbage collect
 	@xAppStep(type=StepType.SHUTDOWN, step=10, title="Garbage Collect")
 	public void __STOP_garbage() {
-		StdIO.Flush();
+		StdIO.OriginalOut.flush();
+		StdIO.OriginalErr.flush();
 		Keeper.removeAll();
 		System.gc();
 	}
