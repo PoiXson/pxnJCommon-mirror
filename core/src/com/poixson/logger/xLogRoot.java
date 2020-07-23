@@ -23,8 +23,10 @@ public class xLogRoot extends xLog {
 	public static xLogRoot Get() {
 		if (root.get() == null) {
 			final xLogRoot log = new xLogRoot();
-			if (root.compareAndSet(null, log))
+			if (root.compareAndSet(null, log)) {
+				LoggerToXLog.init();
 				return log;
+			}
 		}
 		return root.get();
 	}
