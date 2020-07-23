@@ -61,6 +61,8 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 
 	protected final AtomicReference<Failure> failed = new AtomicReference<Failure>(null);
 
+	protected final CopyOnWriteArraySet<Runnable> hookReady = new CopyOnWriteArraySet<Runnable>();
+
 
 
 	@SuppressWarnings("unchecked")
@@ -235,6 +237,12 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 			this.stepLoader.set(null);
 			this.finishedStartup();
 			this.log_loader().title("{} is ready", this.getTitle());
+			final Iterator<Runnable> it = this.hookReady.iterator();
+			while (it.hasNext()) {
+				final Runnable run = it.next();
+				xThreadPool_Main.Get().runTaskLater(run);
+			}
+			this.hookReady.clear();
 			return;
 		}
 		// finished shutdown
@@ -417,6 +425,17 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 	@Override
 	public boolean hasFailed() {
 		return (this.failed.get() != null);
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// hooks
+
+
+
+	public void addHookReady(final Runnable run) {
+		this.hookReady.add(run);
 	}
 
 
