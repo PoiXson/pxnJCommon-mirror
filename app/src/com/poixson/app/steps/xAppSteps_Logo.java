@@ -1,12 +1,18 @@
 package com.poixson.app.steps;
 
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.poixson.app.xApp;
 import com.poixson.app.xAppStep;
 import com.poixson.app.xAppStep.StepType;
 import com.poixson.logger.xLog;
 import com.poixson.tools.AsciiArtBuilder;
+import com.poixson.utils.ProcUtils;
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.xAppUtils;
+import com.poixson.utils.Utils;
 
 
 /*
@@ -42,7 +48,7 @@ public class xAppSteps_Logo {
 		log.publish();
 		this.displayLegal(log);
 		log.publish();
-		xAppUtils.DisplayStartupVars(this.app, log);
+		DisplayStartupVars(this.app, log);
 		log.publish();
 	}
 
@@ -63,6 +69,43 @@ public class xAppSteps_Logo {
 	}
 	protected String getAppVersionPadded() {
 		return StringUtils.PadCenter(VERSION_WIDTH, this.getAppVersion(), ' ');
+	}
+
+
+
+	public static Map<String, String> GetStartupVars(final xApp app) {
+		final Map<String, String> result = new LinkedHashMap<String, String>();
+		result.put( "Pid",         Integer.toString(ProcUtils.getPid()) );
+		result.put( "Version",     app.getVersion()                     );
+		result.put( "Commit",      app.getCommitHashShort()             );
+		result.put( "Running as",  System.getProperty("user.name")      );
+		result.put( "Current dir", System.getProperty("user.dir")       );
+		result.put( "java home",   System.getProperty("java.home")      );
+		final String[] args = app.getArgs();
+		if (Utils.notEmpty(args)) {
+			result.put("Args", StringUtils.MergeStrings(", ", args));
+		}
+		return result;
+	}
+	public static void DisplayStartupVars(final xApp app, final xLog log) {
+		final Map<String, String> varsMap = GetStartupVars(app);
+		final Iterator<Entry<String, String>> it = varsMap.entrySet().iterator();
+		final int maxLineSize =
+			StringUtils.FindLongestLine(
+				varsMap.keySet().toArray(new String[0])
+			) + 1;
+		final StringBuilder str = new StringBuilder();
+		while (it.hasNext()) {
+			final Entry<String, String> entry = it.next();
+			final String key = entry.getKey();
+			final String val = entry.getValue();
+			str.setLength(0);
+			str.append(key)
+				.append(':')
+				.append( StringUtils.Repeat(maxLineSize - key.length(), ' ') )
+				.append(val);
+			log.publish( str.toString() );
+		}
 	}
 
 
