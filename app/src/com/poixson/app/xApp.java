@@ -426,6 +426,9 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 
 
 
+	public String[] getArgs() {
+		return this.args.get();
+	}
 	public void setArgs(final String[] args) {
 		this.args.set(args);
 	}
