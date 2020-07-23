@@ -15,10 +15,18 @@ public final class xAppDefines {
 	protected static final int STATE_RUNNING = Integer.MAX_VALUE;
 
 
+	// .debug file
+	public static final int SEARCH_DEBUG_PARENTS = 2;
+	public static final String[] SEARCH_DEBUG_FILES =
+		new String[] {
+			".debug",
+			"debug"
+		};
+
+
 //TODO:
 //	// defaults
 //	public static final xTime DEFAULT_TICK_INTERVAL = xTime.getNew("60s");
-
 
 
 }

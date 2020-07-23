@@ -11,11 +11,16 @@ import java.lang.annotation.Target;
 public @interface xAppStep {
 
 
-	public enum StepType {START, STOP};
+	public enum StepType {STARTUP, SHUTDOWN};
 
-	StepType Type();
-	int    StepValue() default 100;
-	String Title()     default "";
+	StepType type();
+	int      step()  default 100;
+	String   title() default "";
+
+	boolean  multi() default false;
+
+	public enum PauseWhen {NONE, BEFORE, AFTER};
+	PauseWhen pause() default PauseWhen.NONE;
 
 
 }

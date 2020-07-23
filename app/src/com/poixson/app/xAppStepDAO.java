@@ -1,68 +1,77 @@
 package com.poixson.app;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import com.poixson.app.xAppStep.PauseWhen;
 import com.poixson.app.xAppStep.StepType;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
-import com.poixson.tools.remapped.RunnableNamed;
+import com.poixson.tools.abstractions.RunnableNamed;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
 public class xAppStepDAO implements RunnableNamed {
 
-	public final StepType type;
-	public final int      stepValue;
-	public final String   name;
-	public final String   title;
-
 	public final xApp     app;
-	public final Object   container;
-	public final Method   method;
 	public final xAppStep anno;
+	public final int      step;
+	public final StepType type;
+	public final boolean  multi;
+	public final PauseWhen pause;
+
+	public final String title;
+	public final String titleFull;
+
+	public final Object container;
+	public final Method method;
 
 
 
-	public xAppStepDAO(final xApp app,
-			final Object container, final Method method, final xAppStep anno) {
+	public xAppStepDAO(final xApp app, final xAppStep anno,
+			final Object container, final Method method) {
 		if (app       == null) throw new RequiredArgumentException("app");
+		if (anno      == null) throw new RequiredArgumentException("annotation");
 		if (container == null) throw new RequiredArgumentException("container");
 		if (method    == null) throw new RequiredArgumentException("method");
-		if (anno      == null) throw new RequiredArgumentException("annotation");
-		this.type = anno.Type();
-		this.stepValue = (
-			StepType.START.equals(anno.Type())
-			? anno.StepValue()
-			: 0 - Math.abs( anno.StepValue() )
-		);
-		this.app       = app;
+		this.app  = app;
+		this.anno = anno;
+		this.type = anno.type();
+		this.step =
+			(
+				StepType.STARTUP.equals(this.type)
+				? anno.step()
+				: 0 - Math.abs(anno.step())
+			);
+		this.multi = anno.multi();
+		this.pause = anno.pause();
+		if (Utils.notEmpty(anno.title())) {
+			this.title = anno.title();
+		} else {
+			final String name =
+				StringUtils.iTrimFront(
+					method.getName(),
+					"_",
+					"startup",
+					"start",
+					"shutdown",
+					"stop"
+				);
+			if (Utils.notEmpty(name)) {
+				this.title = name;
+			} else {
+				this.title = method.getName();
+			}
+		}
+		this.titleFull =
+			StringUtils.MergeStrings('-',
+				this.type.name(),
+				Integer.toString(this.step),
+				this.title
+			);
 		this.container = container;
 		this.method    = method;
-		this.anno      = anno;
-		{
-			String name = method.getName();
-			name = StringUtils.iTrimFront(
-				name,
-				"_",
-				"startup",
-				"start",
-				"shutdown",
-				"stop"
-			);
-			this.name =
-				Utils.isEmpty(name)
-				? StringUtils.Trim(this.method.getName(), "_")
-				: name;
-		}
-		{
-			final String title = anno.Title();
-			this.title = (
-				Utils.isEmpty(title)
-				? this.name
-				: title
-			);
-		}
 	}
 
 
@@ -74,78 +83,37 @@ public class xAppStepDAO implements RunnableNamed {
 
 	@Override
 	public void run() {
-		if (Failure.hasFailed()) return;
-		try {
-			this.invoke();
-		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	public void invoke() throws ReflectiveOperationException, RuntimeException {
-		final String stepStr =
-			StringUtils.MergeStrings(
-				'-',
-				( this.stepValue > xApp.STATE_OFF ? "startup" : "shutdown" ),
-				Integer.toString(this.stepValue),
-				( Utils.isEmpty(this.title) ? this.name : this.title )
-			);
-		final xLog log = this.app.log()
-				.getWeak(stepStr);
+		if (this.app.hasFailed()) return;
 		final Thread currentThread = Thread.currentThread();
 		final String originalThreadName = currentThread.getName();
-		currentThread.setName(stepStr);
+		currentThread.setName(this.getTaskName());
 		try {
 			// ()
-			this.method.invoke(this.container);
-		} catch (IllegalArgumentException ignore1) {
 			try {
+				this.method.invoke(this.container);
+			} catch (IllegalArgumentException ignore1) {
+				final xLog log = this.log();
 				// (log)
-				this.method.invoke(this.container, log);
-			} catch (IllegalArgumentException ignore2) {
 				try {
-					// (app)
-					this.method.invoke(this.container, this.app);
-				} catch (IllegalArgumentException ignore3) {
-					// (app, log)
-					this.method.invoke(this.container, this.app, log);
-				}
-			}
-		} catch (Exception e) {
-			Failure.fail(
-				e,
-				StringUtils.ReplaceTags(
-					"Exception in {} step {}",
-					(this.stepValue > 0 ? "startup" : "shutdown"),
-					this.stepValue
-				)
-			);
-		} finally {
-			currentThread.setName(originalThreadName);
+					this.method.invoke(this.container, log);
+				} catch (IllegalArgumentException e) {
+					// method with arguments not found/supported
+					throw new RuntimeException("Method arguments not supported: "+this.method.getName(), e);
+				} // end (log)
+			} // end ()
+		} catch (RuntimeException e) {
+			throw e;
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e);
 		}
+		currentThread.setName(originalThreadName);
 	}
 
 
 
 	// ------------------------------------------------------------------------------- //
-	// config
-
-
-
-	// step name
-	@Override
-	public String getTaskName() {
-		return this.name;
-	}
-	@Override
-	public void setTaskName(final String name) {
-		throw new UnsupportedOperationException();
-	}
-	@Override
-	public boolean taskNameEquals(final String name) {
-		if (Utils.isEmpty(name))
-			return false;
-		return name.equals(this.getTaskName());
-	}
 
 
 
@@ -159,8 +127,56 @@ public class xAppStepDAO implements RunnableNamed {
 
 
 	// step value
-	public boolean isStepValue(final int stepValue) {
-		return (this.stepValue == stepValue);
+	public boolean isStepValue(final int step) {
+		return (this.step == step);
+	}
+
+
+
+	// multi step
+	public boolean isMultiStep() {
+		return this.multi;
+	}
+
+
+
+	// pause before/after
+	public boolean noPause() {
+		return PauseWhen.NONE.equals(this.pause);
+	}
+	public boolean isPauseBefore() {
+		return PauseWhen.BEFORE.equals(this.pause);
+	}
+	public boolean isPauseAfter() {
+		return PauseWhen.AFTER.equals(this.pause);
+	}
+
+
+	// step name
+	@Override
+	public String getTaskName() {
+		return this.titleFull;
+	}
+	@Override
+	public void setTaskName(final String name) {
+		throw new UnsupportedOperationException();
+	}
+	@Override
+	public boolean taskNameEquals(final String name) {
+		return StringUtils.StrEquals(name, this.title)
+			|| StringUtils.StrEquals(name, this.titleFull);
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// logger
+
+
+
+	public xLog log() {
+		return this.app.log()
+				.getWeak(this.titleFull);
 	}
 
 
