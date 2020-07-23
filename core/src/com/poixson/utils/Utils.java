@@ -430,6 +430,21 @@ public final class Utils {
 
 
 	// ------------------------------------------------------------------------------- //
+	// exceptions
+
+
+
+	public static Throwable RootCause(final Throwable e) {
+		final Throwable cause = e.getCause();
+		if (cause == null)
+			return e;
+		return RootCause(cause);
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// time
 
 
 
