@@ -8,22 +8,16 @@ import com.poixson.logger.xLevel;
 import com.poixson.logger.xLog;
 
 
-public class slf4jLoggerAdapter extends MarkerIgnoringBase {
+public class Slf4jLoggerAdapter extends MarkerIgnoringBase {
 	private static final long serialVersionUID = 1L;
 
 	private final xLog log;
 
 
 
-	public slf4jLoggerAdapter(final String name, final xLog log) {
+	public Slf4jLoggerAdapter(final String name, final xLog log) {
 		this.name = name;
 		this.log  = log;
-	}
-
-
-
-	public xLog getXLog() {
-		return this.log;
 	}
 
 
@@ -31,21 +25,18 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 	// trace
 	@Override
 	public boolean isTraceEnabled() {
-		final xLog log = this.getXLog();
-		return log.isLoggable(xLevel.FINEST);
+		return this.log.isLoggable(xLevel.FINEST);
 	}
 	@Override
 	public void trace(final String msg) {
-		final xLog log = this.getXLog();
-		if (log.isLoggable(xLevel.FINEST)) {
-			log.finest(msg);
+		if (this.log.isLoggable(xLevel.FINEST)) {
+			this.log.finest(msg);
 		}
 	}
 	@Override
 	public void trace(final String msg, final Throwable e) {
-		final xLog log = this.getXLog();
-		if (log.isLoggable(xLevel.FINEST)) {
-			log.trace(e, msg);
+		if (this.log.isLoggable(xLevel.FINEST)) {
+			this.log.trace(e, msg);
 		}
 	}
 	@Override
@@ -75,24 +66,21 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 	// debug
 	@Override
 	public boolean isDebugEnabled() {
-		final xLog log = this.getXLog();
-		return log.isLoggable(xLevel.DETAIL);
+		return this.log.isLoggable(xLevel.DETAIL);
 	}
 	@Override
 	public void debug(final String msg) {
-		final xLog log = this.getXLog();
-		if (log.isLoggable(xLevel.DETAIL)) {
-			this.getXLog().detail(msg);
+		if (this.log.isLoggable(xLevel.DETAIL)) {
+			this.log.detail(msg);
 		}
 	}
 	@Override
 	public void debug(final String msg, final Throwable e) {
-		final xLog log = this.getXLog();
-		if (log.isLoggable(xLevel.DETAIL)) {
+		if (this.log.isLoggable(xLevel.DETAIL)) {
 			if (e == null) {
-				log.detail(msg);
+				this.log.detail(msg);
 			} else {
-				log.trace(e, msg);
+				this.log.trace(e, msg);
 			}
 		}
 	}
@@ -123,24 +111,21 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 	// info
 	@Override
 	public boolean isInfoEnabled() {
-		final xLog log = this.getXLog();
-		return log.isLoggable(xLevel.INFO);
+		return this.log.isLoggable(xLevel.INFO);
 	}
 	@Override
 	public void info(final String msg) {
-		final xLog log = this.getXLog();
-		if (log.isLoggable(xLevel.INFO)) {
-			log.info(msg);
+		if (this.log.isLoggable(xLevel.INFO)) {
+			this.log.info(msg);
 		}
 	}
 	@Override
 	public void info(final String msg, final Throwable e) {
-		final xLog log = this.getXLog();
-		if (log.isLoggable(xLevel.INFO)) {
+		if (this.log.isLoggable(xLevel.INFO)) {
 			if (e == null) {
-				log.info(msg);
+				this.log.info(msg);
 			} else {
-				log.trace(e, msg);
+				this.log.trace(e, msg);
 			}
 		}
 	}
@@ -171,24 +156,21 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 	// warning
 	@Override
 	public boolean isWarnEnabled() {
-		final xLog log = this.getXLog();
-		return log.isLoggable(xLevel.WARNING);
+		return this.log.isLoggable(xLevel.WARNING);
 	}
 	@Override
 	public void warn(final String msg) {
-		final xLog log = this.getXLog();
-		if (log.isLoggable(xLevel.WARNING)) {
-			this.getXLog().warning(msg);
+		if (this.log.isLoggable(xLevel.WARNING)) {
+			this.log.warning(msg);
 		}
 	}
 	@Override
 	public void warn(final String msg, final Throwable e) {
-		final xLog log = this.getXLog();
-		if (log.isLoggable(xLevel.WARNING)) {
+		if (this.log.isLoggable(xLevel.WARNING)) {
 			if (e == null) {
-				log.warning(msg);
+				this.log.warning(msg);
 			} else {
-				log.trace(e, msg);
+				this.log.trace(e, msg);
 			}
 		}
 	}
@@ -219,24 +201,21 @@ public class slf4jLoggerAdapter extends MarkerIgnoringBase {
 	// error
 	@Override
 	public boolean isErrorEnabled() {
-		final xLog log = this.getXLog();
-		return log.isLoggable(xLevel.SEVERE);
+		return this.log.isLoggable(xLevel.SEVERE);
 	}
 	@Override
 	public void error(final String msg) {
-		final xLog log = this.getXLog();
-		if (log.isLoggable(xLevel.SEVERE)) {
-			this.getXLog().severe(msg);
+		if (this.log.isLoggable(xLevel.SEVERE)) {
+			this.log.severe(msg);
 		}
 	}
 	@Override
 	public void error(final String msg, final Throwable e) {
-		final xLog log = this.getXLog();
-		if (log.isLoggable(xLevel.SEVERE)) {
+		if (this.log.isLoggable(xLevel.SEVERE)) {
 			if (e == null) {
-				log.severe(msg);
+				this.log.severe(msg);
 			} else {
-				log.trace(e, msg);
+				this.log.trace(e, msg);
 			}
 		}
 	}

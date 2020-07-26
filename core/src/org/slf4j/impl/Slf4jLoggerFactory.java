@@ -7,15 +7,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 
-import com.poixson.logger.LoggerToXLog;
 import com.poixson.logger.xLog;
+import com.poixson.logger.proxies.LoggerToXLog;
 import com.poixson.utils.Utils;
 
 
-public class slf4jLoggerFactory implements ILoggerFactory {
+public class Slf4jLoggerFactory implements ILoggerFactory {
 	public static final String LOG_NAME = "slf4j";
 
 	private final ConcurrentHashMap<String, Logger> loggers = new ConcurrentHashMap<String, Logger>();
+
+
+
+	public Slf4jLoggerFactory() {
+	}
 
 
 
@@ -30,7 +35,7 @@ public class slf4jLoggerFactory implements ILoggerFactory {
 		// new logger instance
 		{
 			// wrap the logger
-			final Logger newlogger = new slf4jLoggerAdapter(name, getXLog(name));
+			final Logger newlogger = new Slf4jLoggerAdapter(name, GetXLog(name));
 			// cache wrapped logger
 			final Logger existing = this.loggers.putIfAbsent(name, newlogger);
 			if (existing != null)
@@ -41,10 +46,10 @@ public class slf4jLoggerFactory implements ILoggerFactory {
 
 
 
-	public static xLog getXLog(final String name) {
-		if (Utils.isEmpty(name))
-			return XLog(LOG_NAME);
-		return XLog( LoggerToXLog.GetLoggerAlias(name) );
+	public static xLog GetXLog(final String name) {
+		return XLog(
+			Utils.ifEmpty(LoggerToXLog.AliasFor(name), LOG_NAME)
+		);
 	}
 
 
