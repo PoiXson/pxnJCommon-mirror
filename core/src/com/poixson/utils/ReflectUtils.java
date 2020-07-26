@@ -62,6 +62,17 @@ public final class ReflectUtils {
 
 
 
+	public static Method getMethodByName(final String className,
+			final String methodName, final Class<?>...args) {
+		final Class<?> clss;
+		try {
+			clss = Class.forName(className);
+		} catch (ClassNotFoundException ignore) {
+			return null;
+		}
+		if (clss == null) return null;
+		return getMethodByName(clss, methodName, args);
+	}
 	public static Method getMethodByName(final Object container,
 			final String methodName, final Class<?>...args) {
 		if (container == null)         throw new IllegalArgumentException("container");
@@ -75,6 +86,20 @@ public final class ReflectUtils {
 		} catch (SecurityException e) {
 			throw new IllegalArgumentException("Error accessing method: "+methodName, e);
 		}
+	}
+
+
+
+	public static Object InvokeMethod(final String className,
+			final String methodName, final Object...args) {
+		final Class<?> clss;
+		try {
+			clss = Class.forName(className);
+		} catch (ClassNotFoundException ignore) {
+			return null;
+		}
+		if (clss == null) return null;
+		return InvokeMethod(clss, methodName, args);
 	}
 	public static Object InvokeMethod(final Object container,
 			final String methodName, final Object...args) {
