@@ -91,6 +91,11 @@ public class xTime {
 
 
 	// set value
+	public xTime set(final long ms) {
+		if (this.locked.get()) throw new UnmodifiableObjectException();
+		this.value.set(ms);
+		return this;
+	}
 	public xTime set(final long value, final xTimeU xunit) {
 		if (this.locked.get()) throw new UnmodifiableObjectException();
 		if (xunit == null) throw new RequiredArgumentException("unit");
