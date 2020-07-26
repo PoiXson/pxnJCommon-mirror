@@ -36,8 +36,8 @@ public interface xLogInterface {
 	public void finest (final String line, final Object...args);
 	public void finer  (final String line, final Object...args);
 	public void fine   (final String line, final Object...args);
-	public void info   (final String line, final Object...args);
 	public void stats  (final String line, final Object...args);
+	public void info   (final String line, final Object...args);
 	public void warning(final String line, final Object...args);
 	public void notice (final String line, final Object...args);
 	public void severe (final String line, final Object...args);
@@ -48,8 +48,8 @@ public interface xLogInterface {
 	public void finest (final String[] lines, final Object...args);
 	public void finer  (final String[] lines, final Object...args);
 	public void fine   (final String[] lines, final Object...args);
-	public void info   (final String[] lines, final Object...args);
 	public void stats  (final String[] lines, final Object...args);
+	public void info   (final String[] lines, final Object...args);
 	public void warning(final String[] lines, final Object...args);
 	public void notice (final String[] lines, final Object...args);
 	public void severe (final String[] lines, final Object...args);

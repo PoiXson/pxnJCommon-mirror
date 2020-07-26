@@ -15,8 +15,8 @@ public enum xLevel {
 	FINEST  ('1',  "finest",  200),
 	FINER   ('2',  "finer",   300),
 	FINE    ('3',  "fine",    400),
-	INFO    ('i',  "info",    500),
-	STATS   ('s',  "stats",   600),
+	STATS   ('s',  "stats",   500),
+	INFO    ('i',  "info",    600),
 	WARNING ('w',  "warning", 700),
 	NOTICE  ('n',  "notice",  800),
 	SEVERE  ('s',  "severe",  900),
@@ -36,8 +36,8 @@ public enum xLevel {
 			add( xLevel.FINEST  );
 			add( xLevel.FINER   );
 			add( xLevel.FINE    );
-			add( xLevel.INFO    );
 			add( xLevel.STATS   );
+			add( xLevel.INFO    );
 			add( xLevel.WARNING );
 			add( xLevel.NOTICE  );
 			add( xLevel.SEVERE  );

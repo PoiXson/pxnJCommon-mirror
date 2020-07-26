@@ -506,22 +506,6 @@ public class xLog implements xLogInterface {
 
 
 
-	// info
-	@Override
-	public void info(final String line, final Object...args) {
-		this.publish(
-			new xLogRecord_Msg(this, xLevel.INFO, line, args)
-		);
-	}
-	@Override
-	public void info(final String[] lines, final Object...args) {
-		this.publish(
-			new xLogRecord_Msg(this, xLevel.INFO, lines, args)
-		);
-	}
-
-
-
 	// stats
 	@Override
 	public void stats(final String line, final Object...args) {
@@ -533,6 +517,22 @@ public class xLog implements xLogInterface {
 	public void stats(final String[] lines, final Object...args) {
 		this.publish(
 			new xLogRecord_Msg(this, xLevel.STATS, lines, args)
+		);
+	}
+
+
+
+	// info
+	@Override
+	public void info(final String line, final Object...args) {
+		this.publish(
+			new xLogRecord_Msg(this, xLevel.INFO, line, args)
+		);
+	}
+	@Override
+	public void info(final String[] lines, final Object...args) {
+		this.publish(
+			new xLogRecord_Msg(this, xLevel.INFO, lines, args)
 		);
 	}
 
