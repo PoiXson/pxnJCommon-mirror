@@ -1,4 +1,4 @@
-package com.poixson.logger;
+package com.poixson.logger.proxies;
 
 import static com.poixson.logger.xLog.XLog;
 
@@ -8,8 +8,11 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+import com.poixson.logger.xLevel;
+import com.poixson.logger.xLog;
 import com.poixson.logger.records.xLogRecord_Msg;
 import com.poixson.tools.Keeper;
+import com.poixson.utils.Utils;
 
 
 public class LoggerToXLog extends Handler {
