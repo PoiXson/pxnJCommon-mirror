@@ -36,6 +36,12 @@ public class LoggerToXLog extends Handler {
 		if (!found) {
 			logger.addHandler( Get() );
 		}
+		// default log levels
+		XLog("jline").setLevel(xLevel.INFO);
+		XLog("netty").setLevel(xLevel.INFO);
+		XLog("jcl"  ).setLevel(xLevel.INFO);
+		XLog("X11"  ).setLevel(xLevel.INFO);
+	}
 
 
 
