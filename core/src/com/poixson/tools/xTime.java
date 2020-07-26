@@ -18,41 +18,31 @@ public class xTime {
 
 
 
-	// ------------------------------------------------------------------------------- //
-	// get object
+	public xTime() {
+		this.set(0L);
+	}
+	public xTime(final long ms) {
+		this.set(ms);
+	}
+	public xTime(final long value, final xTimeU xunit) {
+		this.set(value, xunit);
+	}
+	public xTime(final long value, final TimeUnit unit) {
+		this.set(value, unit);
+	}
+	public xTime(final String value) {
+		this.set(value);
+	}
+	public xTime(final xTime time) {
+		this.set(time);
+	}
 
 
 
-	public static xTime getNew() {
-		return new xTime(0);
-	}
-	public static xTime getNew(final long ms) {
-		return getNew(ms, xTimeU.MS);
-	}
-	public static xTime getNew(final long value, final xTimeU xunit) {
-		if (value < 0) return null;
-		return getNew().set(value, xunit);
-	}
-	public static xTime getNew(final long value, final TimeUnit unit) {
-		if (value < 0) return null;
-		return getNew().set(value, unit);
-	}
-	public static xTime getNew(final String value) {
-		if (Utils.isEmpty(value)) return null;
-		return getNew().set(value);
-	}
-	public static xTime getNew(final xTime time) {
-		if (time == null) return null;
-		return getNew().set(time);
-	}
-	// new object
-	protected xTime(final long ms) {
-		this.value.set(ms);
-	}
 	// clone object
 	@Override
 	public xTime clone() {
-		return getNew(this);
+		return new xTime(this);
 	}
 
 
