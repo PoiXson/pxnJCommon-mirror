@@ -43,13 +43,13 @@ import com.poixson.utils.Utils;
  */
 public abstract class xApp implements xStartable, Runnable, xFailable, AttachedLogger {
 
-	public static final xTime EXIT_TIMEOUT = xTime.getNew(200L);
+	public static final xTime EXIT_TIMEOUT = new xTime(200L);
 
 	// app instances
 	protected static final CopyOnWriteArraySet<xApp> apps = new CopyOnWriteArraySet<xApp>();
 	protected final AtomicReference<String[]> args = new AtomicReference<String[]>(null);
 
-	protected final xTime startTime = xTime.getNew();
+	protected final xTime startTime = new xTime();
 	protected final AppProps props;
 
 	protected final AtomicInteger state  = new AtomicInteger(xAppDefines.STATE_OFF);

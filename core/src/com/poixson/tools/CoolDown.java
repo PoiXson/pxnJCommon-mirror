@@ -7,7 +7,7 @@ import com.poixson.utils.Utils;
 
 public class CoolDown {
 
-	protected final xTime duration = xTime.getNew();
+	protected final xTime duration = new xTime();
 	protected final AtomicLong last = new AtomicLong(-1L);
 
 	protected final Object lock = new Object();

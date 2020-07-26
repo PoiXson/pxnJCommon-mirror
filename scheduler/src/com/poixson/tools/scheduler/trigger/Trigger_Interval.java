@@ -10,8 +10,8 @@ import com.poixson.tools.scheduler.xSchedulerTrigger;
 
 public class Trigger_Interval extends xSchedulerTrigger {
 
-	private final xTime delay    = xTime.getNew();
-	private final xTime interval = xTime.getNew();
+	protected final xTime delay    = new xTime();
+	protected final xTime interval = new xTime();
 	private final AtomicLong last = new AtomicLong( Long.MIN_VALUE );
 
 	private final Object updateLock = new Object();
