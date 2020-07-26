@@ -33,7 +33,6 @@
 		<module>core</module>
 		<module>app</module>
 		<module>config</module>
-		<module>loggers</module>
 		<module>net</module>
 		<module>plugin</module>
 		<module>scheduler</module>
