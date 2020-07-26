@@ -1,4 +1,4 @@
-<!-- Generated on: June 25, 2020 08:39 UTC -->
+<!-- Generated on: July 26, 2020 09:05 UTC -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -26,6 +26,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- Dependencies -->
+		<slf4j-version>1.7.30</slf4j-version>
 		<jUnit-version>4.13</jUnit-version>
 
 		<!-- MVN Plugins -->
@@ -156,6 +157,12 @@
 		</plugins>
 	</build>
 	<dependencies>
+		<!-- slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j-version}</version>
+		</dependency>
 		<!-- jUnit -->
 		<dependency>
 			<groupId>junit</groupId>

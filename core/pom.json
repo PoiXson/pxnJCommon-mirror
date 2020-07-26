@@ -3,10 +3,17 @@
 	"ArtifactId": "common-core",
 	"GroupId": "com.poixson",
 	"Version": "4.0.0",
+	"Versions": {
+		"slf4j": "1.7.30"
+	},
 	"Org-Name": "PoiXson",
 	"URL": "https://poixson.com",
 	"GitBlit-Host": "git.poixson.com",
 	"GitBlit-Repo": "pxn!pxnCommon",
 	"Deps": {
+		"slf4j": {
+			"GroupId": "org.slf4j",
+			"ArtifactId": "slf4j-api"
+		}
 	}
 }
