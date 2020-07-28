@@ -1,4 +1,4 @@
-<!-- Generated on: June 25, 2020 08:40 UTC -->
+<!-- Generated on: July 28, 2020 12:17 UTC -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -146,6 +146,7 @@
 					<useFile>false</useFile>
 					<parallel>methods</parallel>
 					<threadCount>4</threadCount>
+					<trimStackTrace>false</trimStackTrace>
 				</configuration>
 			</plugin>
 			<!-- Cobertura Plugin -->
