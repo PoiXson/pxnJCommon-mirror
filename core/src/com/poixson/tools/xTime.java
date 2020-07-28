@@ -1,11 +1,14 @@
 package com.poixson.tools;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.exceptions.UnmodifiableObjectException;
+import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
@@ -78,14 +81,35 @@ public class xTime {
 		if (xunit == null) throw new RuntimeException("Unknown time unit: "+unit.toString());
 		return xunit.convertTo( this.value.get() );
 	}
-	public String getString() {
-		return xTime.ToString(this);
-	}
+
+
+
 	public long ms() {
 		return this.value.get();
 	}
-	public int getTicks() {
+	public int ticks() {
 		return (int) xTimeU.T.convertFrom( this.value.get() );
+	}
+	public int seconds() {
+		return (int) xTimeU.S.convertFrom( this.value.get() );
+	}
+	public int minutes() {
+		return (int) xTimeU.M.convertFrom( this.value.get() );
+	}
+	public int hours() {
+		return (int) xTimeU.H.convertFrom( this.value.get() );
+	}
+	public int days() {
+		return (int) xTimeU.D.convertFrom( this.value.get() );
+	}
+	public int weeks() {
+		return (int) xTimeU.W.convertFrom( this.value.get() );
+	}
+	public int months() {
+		return (int) xTimeU.MO.convertFrom( this.value.get() );
+	}
+	public int years() {
+		return (int) xTimeU.Y.convertFrom( this.value.get() );
 	}
 
 
@@ -110,12 +134,10 @@ public class xTime {
 		this.value.set( xunit.convertTo(value) );
 		return this;
 	}
-	public xTime set(final String val) {
+	public xTime set(final String str) {
 		if (this.locked.get())  throw new UnmodifiableObjectException();
-		if (Utils.isEmpty(val)) throw new RequiredArgumentException("val");
-		final Long value = parseToLong(val);
-		if (value == null)      throw new RuntimeException("Invalid value: "+val);
-		this.value.set( value.longValue() );
+		if (Utils.isEmpty(str)) throw new RequiredArgumentException("str");
+		this.value.set( ParseLong(str) );
 		return this;
 	}
 	public xTime set(final xTime time) {
@@ -128,158 +150,179 @@ public class xTime {
 
 
 	// reset value to 0
-	public void reset() {
+	public xTime reset() {
 		if (this.locked.get()) throw new UnmodifiableObjectException();
 		this.value.set(0L);
+		return this;
 	}
 
 
 
 	// add time
-	public void add(final long val, final xTimeU xunit) {
+	public void add(final long ms) {
+		this.value.addAndGet(ms);
+	}
+	public void add(final long value, final xTimeU xunit) {
 		if (this.locked.get()) throw new UnmodifiableObjectException();
 		if (xunit == null)     throw new RequiredArgumentException("unit");
-		this.value.addAndGet( xunit.convertTo(val) );
+		this.value.addAndGet( xunit.convertTo(value) );
 	}
-	public void add(final long val, final TimeUnit unit) {
+	public void add(final long value, final TimeUnit unit) {
 		if (this.locked.get()) throw new UnmodifiableObjectException();
 		if (unit == null)      throw new RequiredArgumentException("unit");
 		final xTimeU xunit = xTimeU.GetUnit(unit);
 		if (xunit == null)     throw new RuntimeException("Unknown time unit: "+unit.toString());
-		this.value.addAndGet( xunit.convertTo(val) );
+		this.value.addAndGet( xunit.convertTo(value) );
 	}
-	public void add(final String val) {
+	public void add(final String str) {
 		if (this.locked.get())  throw new UnmodifiableObjectException();
-		if (Utils.isEmpty(val)) throw new RequiredArgumentException("val");
-		final Long value = parseToLong(val);
-		if (value == null)      throw new RuntimeException("Invalid value: "+val);
-		this.value.addAndGet( value.longValue() );
+		if (Utils.isEmpty(str)) throw new RequiredArgumentException("str");
+		this.value.addAndGet( ParseLong(str) );
 	}
 	public void add(final xTime time) {
 		if (this.locked.get()) throw new UnmodifiableObjectException();
 		if (time == null)      throw new RequiredArgumentException("time");
-		this.value.addAndGet( time.getMS() );
+		this.value.addAndGet( time.ms() );
 	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// to/from string
 
 
 
 	// parse time from string
-	public static xTime parse(final String value) {
-//TODO
-throw new RuntimeException("UNFINISHED CODE");
-//		if (Utils.isEmpty(value)) throw new RequiredArgumentException("value");
-//		return xTime.getNew( parseToLong(value), xTimeU.MS );
+	public static xTime Parse(final String str) {
+		if (Utils.isEmpty(str)) return null;
+		return new xTime( ParseLong(str) );
 	}
-	public static Long parseToLong(final String value) {
-//TODO
-throw new RuntimeException("UNFINISHED CODE");
-//		if (Utils.isEmpty(value)) throw new RequiredArgumentException("value");
-//		long time = 0;
-//		StringBuilder buf = new StringBuilder();
-//		for (char c : value.toCharArray()) {
-//			if (c == ' ') continue;
-//			if (Character.isDigit(c) || c == '.' || c == ',') {
-//				buf.append(c);
-//				continue;
-//			}
-//			if (Character.isLetter(c)) {
-//				final Character chr = new Character(
-//					Character.toLowerCase(c)
-//				);
-//				if (timeValues.containsKey(chr)) {
-//					final double unitValue = timeValues.get(chr).doubleValue();
-//					final double dblValue = NumberUtils.ToDouble( buf.toString() );
-//					time += (long) (dblValue * unitValue);
-//				}
-//				buf = new StringBuilder();
-//				continue;
-//			}
-//		}
-//		return new Long(time);
+	public static long ParseLong(final String str) {
+		if (Utils.isEmpty(str)) throw new RequiredArgumentException("str");
+		long value = 0L;
+		// split into parts
+		final StringBuilder bufValue = new StringBuilder();
+		final StringBuilder bufUnit  = new StringBuilder();
+		boolean moreNumbers = true;
+		boolean decimal = false;
+		for (char chr : (str+"  ").toCharArray()) {
+			if (moreNumbers) {
+				if (chr == '.') {
+					decimal = true;
+					bufValue.append(chr);
+					continue;
+				}
+				if (chr == ',') continue;
+				if (chr == '-') {
+					if (bufValue.length() == 0) {
+						bufValue.append('-');
+						continue;
+					}
+				}
+				if (Character.isDigit(chr)) {
+					bufValue.append(chr);
+					continue;
+				}
+			}
+			if (chr == ' ') {
+				if (moreNumbers) {
+					moreNumbers = false;
+				} else {
+					final xTimeU xunit;
+					if (bufUnit.length() == 0) {
+						xunit = xTimeU.MS;
+					} else {
+						xunit = xTimeU.GetUnit( bufUnit.toString() );
+						if (xunit == null) throw new NumberFormatException("Unknown unit: "+bufUnit.toString());
+					}
+					if (bufValue.length() > 0) {
+						if (decimal) {
+							final Double val = Double.valueOf( bufValue.toString() );
+							if (val == null) throw new NumberFormatException("Invalid number: "+bufValue.toString());
+							value += (long) xunit.convertFrom( val.doubleValue() );
+						} else {
+							final Long val = Long.valueOf( bufValue.toString() );
+							if (val == null) throw new NumberFormatException("Invalid number: "+bufValue.toString());
+							value += xunit.convertTo( val.longValue() );
+						}
+					}
+					// reset buffers
+					bufValue.setLength(0);
+					bufUnit.setLength(0);
+					moreNumbers = true;
+					decimal = false;
+				}
+				continue;
+			}
+			if (Character.isLetter(chr)) {
+				moreNumbers = false;
+				bufUnit.append(chr);
+				continue;
+			}
+			throw new NumberFormatException(
+				(new StringBuilder())
+				.append("Unknown character ").append(chr)
+				.append(" in value: ").append(str)
+				.toString()
+			);
+		}
+		return value;
 	}
 
 
 
-	// to string
 	@Override
 	public String toString() {
-		return this.toString();
+		return ToString(this.ms(), false, false);
 	}
-	public String ToString() {
-		return xTime.ToString(this);
+	public String toRoundedString() {
+		return ToString(this.ms(), true, true);
 	}
-	public static String ToString(final xTime time) {
-		if (time == null) return null;
-		return xTime.ToString(time.getMS());
-	}
-	public static String ToString(final long ms) {
-		return BuildString(ms, false);
-	}
-	// full format
 	public String toFullString() {
-		return xTime.ToString(this, true);
+		return ToString(this.ms(), true, false);
 	}
-	public static String ToString(final xTime time, final boolean fullFormat) {
-		return BuildString(time.getMS(), fullFormat);
+
+
+
+	public static String ToString(final xTime time,
+			final boolean fullFormat, final boolean roundedFormat) {
+		if (time == null) return null;
+		return ToString(time.ms(), fullFormat, roundedFormat);
 	}
-	public static String BuildString(final long ms, final boolean fullFormat) {
-//TODO
-throw new RuntimeException("UNFINISHED CODE");
-//		if (ms < 1) return null;
-//		long tmp = ms;
-//		final StringBuilder buf = new StringBuilder();
-//		for (final Entry<Character, Long> entry : timeValues.entrySet()) {
-//			final char chr  = entry.getKey().charValue();
-//			final long unit = entry.getValue().longValue();
-//			if (tmp < unit) continue;
-//			final long val = (long) Math.floor(
-//				((double) tmp) / ((double) unit)
-//			);
-//			// append to string
-//			if (buf.length() > 0) {
-//				buf.append(' ');
-//			}
-//			buf.append(Long.toString(val));
-//			if (!fullFormat) {
-//				// minimal format
-//				buf.append(chr);
-//			} else {
-//				// full format
-//				switch (chr) {
-//				case 'y':
-//					buf.append(" year");
-//					break;
-//				case 'o':
-//					buf.append(" month");
-//					break;
-//				case 'w':
-//					buf.append(" week");
-//					break;
-//				case 'd':
-//					buf.append(" day");
-//					break;
-//				case 'h':
-//					buf.append(" hour");
-//					break;
-//				case 'm':
-//					buf.append(" minute");
-//					break;
-//				case 's':
-//					buf.append(" second");
-//					break;
-//				case 'n':
-//					buf.append(" ms");
-//					break;
-//				default:
-//					continue;
-//				}
-//				if (chr != 'n' && val > 1) {
-//					buf.append('s');
-//				}
-//			}
-//			tmp = tmp % unit;
-//		}
-//		return buf.toString();
+	public static String ToString(final long ms,
+			final boolean fullFormat, final boolean roundedFormat) {
+		long tmp = ms;
+		final List<String> result = new ArrayList<String>();
+		for (final xTimeU xunit : xTimeU.xunits) {
+			if (xTimeU.T.equals(xunit)) continue;
+			if (xTimeU.W.equals(xunit)) continue;
+			if (tmp < xunit.value) continue;
+			final long val = Math.floorDiv(tmp, xunit.value);
+			if (val == 0L) continue;
+			tmp -= (val * xunit.value);
+			final StringBuilder str = new StringBuilder();
+			// full format
+			if (fullFormat) {
+				str.append(val)
+					.append(' ')
+					.append(xunit.name);
+				if (val != 1L)
+					str.append('s');
+			// short format
+			} else {
+				str.append(val);
+				if (xTimeU.MS.equals(xunit)) {
+					str.append(xunit.name);
+				} else {
+					str.append(xunit.chr);
+				}
+			}
+			if (roundedFormat) {
+				return str.toString();
+			}
+			result.add(str.toString());
+		}
+		return StringUtils.MergeStrings( ' ', result.toArray(new String[0]) );
 	}
 
 
