@@ -456,11 +456,7 @@ System.out.println("SEARCH PATH: "+FileUtils.MergePaths(path, fileName));
 		// get logger
 		{
 			final xLog log = XLog("LibLoader");
-			this._log.set(
-				new SoftReference<xLog>(
-					log
-				)
-			);
+			this._log.set( new SoftReference<xLog>(log) );
 			return log;
 		}
 	}

@@ -43,16 +43,17 @@ public class xClock {
 
 //TODO: add cooldown to update again
 	public static xClock get(final boolean blocking) {
-		if (instance.get() != null)
-			return instance.get();
-		// new instance
-		final xClock clock = new xClock();
-		if (!instance.compareAndSet(null, clock))
-			return instance.get();
-		clock.update(blocking);
-		// just to prevent gc
-		Keeper.add(clock);
-		return clock;
+		if (instance.get() == null) {
+			// new instance
+			final xClock clock = new xClock();
+			if (instance.compareAndSet(null, clock)) {
+				clock.update(blocking);
+				// just to prevent gc
+				Keeper.add(clock);
+				return clock;
+			}
+		}
+		return instance.get();
 	}
 	public static xClock get() {
 		return get(DEFAULT_BLOCKING);

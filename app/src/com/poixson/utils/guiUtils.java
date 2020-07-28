@@ -12,10 +12,12 @@ import javax.swing.JComponent;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
+import com.poixson.tools.Keeper;
 
 
 public final class guiUtils {
 	private guiUtils() {}
+	static { Keeper.add(new guiUtils()); }
 	private static final String LOG_NAME = "GUI";
 
 

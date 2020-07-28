@@ -262,7 +262,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 			try {
 				dao.run();
 			} catch (Exception e) {
-				this.fail("{} step failed: ", dao.type.toString(), e);
+				this.fail(e);
 			}
 //TODO
 //			this.resetHangCatcher();
@@ -455,7 +455,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 
 
 	protected String getLockFile() {
-		return this.getName()+".lock";
+		return this.getTitle()+".lock";
 	}
 
 

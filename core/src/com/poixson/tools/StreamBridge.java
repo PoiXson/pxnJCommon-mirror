@@ -84,7 +84,7 @@ public class StreamBridge implements xStartable {
 			} catch (IOException e) {
 				if (!this.stopping) {
 					if (!Thread.interrupted()) {
-						xLogRoot.Get().trace(e);
+						XLog().trace(e);
 					}
 				}
 				break;
@@ -96,7 +96,7 @@ public class StreamBridge implements xStartable {
 			} catch (IOException e) {
 				if (!this.stopping) {
 					if (!Thread.interrupted()) {
-						xLogRoot.Get().trace(e);
+						XLog().trace(e);
 					}
 				}
 				break;

@@ -11,6 +11,19 @@ public class ShellUtils {
 
 
 
+	public static enum AnsiColor {
+		BLACK,
+		RED,
+		GREEN,
+		YELLOW,
+		BLUE,
+		MAGENTA,
+		CYAN,
+		WHITE
+	};
+
+
+
 	protected static ShellUtils Get() {
 		if (instance.get() == null) {
 			// extended utility

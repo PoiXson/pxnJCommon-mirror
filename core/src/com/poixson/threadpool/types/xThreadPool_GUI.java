@@ -55,19 +55,15 @@ public class xThreadPool_GUI extends xThreadPool_Single {
 	public void go() {
 		throw new UnsupportedOperationException();
 	}
-
-
-
 	@Override
 	public void stop() {
+		throw new UnsupportedOperationException();
 	}
 
 
 
 	@Override
 	protected void startNewWorkerIfNeededAndAble() {
-		if (this.isStopping()) return;
-		if (!this.isRunning()) return;
 		EventQueue.invokeLater(
 			this.getWorker()
 		);
@@ -89,6 +85,13 @@ public class xThreadPool_GUI extends xThreadPool_Single {
 
 	// ------------------------------------------------------------------------------- //
 	// state
+
+
+
+	@Override
+	public boolean isRunning() {
+		return true;
+	}
 
 
 

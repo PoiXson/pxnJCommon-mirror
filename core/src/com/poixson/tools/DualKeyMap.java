@@ -143,15 +143,14 @@ public class DualKeyMap<K, J, V> {
 		while (itK.hasNext() && itJ.hasNext()) {
 			final Entry<K, V> entryK = itK.next();
 			final Entry<J, V> entryJ = itJ.next();
-			if ( ! entryK.getValue().equals(entryJ.getValue()) ) {
-				xLogRoot.Get()
-					.severe(
-						"Missmatched values in DualKeyMap object! [ {} : {} ] != [ {} : {} ]",
-						entryK.getKey().toString(),
-						entryK.getValue().toString(),
-						entryJ.getKey().toString(),
-						entryJ.getValue().toString()
-					);
+			if (!entryK.getValue().equals(entryJ.getValue())) {
+				XLog().severe(
+					"Missmatched values in DualKeyMap object! [ {} : {} ] != [ {} : {} ]",
+					entryK.getKey().toString(),
+					entryK.getValue().toString(),
+					entryJ.getKey().toString(),
+					entryJ.getValue().toString()
+				);
 				continue;
 			}
 			this.put(

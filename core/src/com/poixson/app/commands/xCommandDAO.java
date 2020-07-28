@@ -28,16 +28,14 @@ public class xCommandDAO extends xEventListenerDAO {
 
 
 	public void invoke(final String line) {
-		// ensure main thread
-		if (xThreadPool_Main.get().force(this, "invoke", line))
-			return;
-		xLogRoot.Get()
-			.finest(
-				"Invoking command: {}->{} {}",
-				super.object.getClass().getName(),
-				super.method.getName(),
-				line
-			);
+		// only run in main thread
+		if (xThreadPool_Main.get().force(this, "invoke", line)) return;
+		XLog().finest(
+			"Invoking command: {}->{} {}",
+			super.object.getClass().getName(),
+			super.method.getName(),
+			line
+		);
 		// method(object, line)
 		try {
 			this.method.invoke(this.object, line);

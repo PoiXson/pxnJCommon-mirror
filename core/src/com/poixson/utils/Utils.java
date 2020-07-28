@@ -24,19 +24,16 @@ public final class Utils {
 
 
 	// string
-	public static boolean isEmpty(final String value) {
-		if (value == null)
-			return true;
-		return (value.length() == 0);
+	public static boolean isEmpty(final String str) {
+		if (str == null) return true;
+		return (str.length() == 0);
 	}
-	public static boolean notEmpty(final String value) {
-		if (value == null)
-			return false;
-		return (value.length() > 0);
+	public static boolean notEmpty(final String str) {
+		if (str == null) return false;
+		return (str.length() > 0);
 	}
 	public static String ifEmpty(final String value, final String def) {
-		if (isEmpty(value))
-			return def;
+		if (isEmpty(value)) return def;
 		return value;
 	}
 

@@ -31,8 +31,7 @@ public class xCommandHandler extends xHandler<xCommand> {
 		final int count =
 			super.register(objects);
 		if (count > 0) {
-			xLogRoot.Get()
-				.fine("Found {} commands", count);
+			XLog().fine("Found {} commands", count);
 		}
 		return count;
 	}
@@ -71,7 +70,7 @@ public class xCommandHandler extends xHandler<xCommand> {
 				remove.add(dao);
 			}
 		}
-		if ( ! remove.isEmpty() ) {
+		if (!remove.isEmpty()) {
 			for (final xCommandDAO dao : remove) {
 				this.commands.remove(dao);
 			}
@@ -88,7 +87,7 @@ public class xCommandHandler extends xHandler<xCommand> {
 				remove.add(dao);
 			}
 		}
-		if ( ! remove.isEmpty() ) {
+		if (!remove.isEmpty()) {
 			for (final xCommandDAO dao : remove) {
 				this.commands.remove(dao);
 			}

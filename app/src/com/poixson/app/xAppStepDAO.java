@@ -162,7 +162,7 @@ public class xAppStepDAO implements RunnableNamed {
 		throw new UnsupportedOperationException();
 	}
 	@Override
-	public boolean taskNameEquals(final String name) {
+	public boolean equalsTaskName(final String name) {
 		return StringUtils.StrEquals(name, this.title)
 			|| StringUtils.StrEquals(name, this.titleFull);
 	}
