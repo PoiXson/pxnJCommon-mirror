@@ -645,19 +645,26 @@ public final class StringUtils {
 
 	// add strings with delimiter
 	public static String MergeStrings(final String delim, final String...addThis) {
-		if (Utils.isEmpty(addThis)) throw new RequiredArgumentException("addThis");
+		if (Utils.isEmpty(addThis)) return "";
 		final String dlm = Utils.ifEmpty(delim, null);
 		final StringBuilder buf = new StringBuilder();
-		boolean b = false;
-		for (final String line : addThis) {
-			if (Utils.isEmpty(line)) continue;
-			if (b && dlm != null) {
+		// no delim
+		if (dlm == null) {
+			for (final String part : addThis) {
+				buf.append(part);
+			}
+			return buf.toString();
+		}
+		// merge with delim
+		boolean first = true;
+		for (final String part : addThis) {
+			if (Utils.isEmpty(part)) continue;
+			if (first) {
+				first = false;
+			} else {
 				buf.append(dlm);
 			}
-			buf.append(line);
-			if (!b && buf.length() > 0) {
-				b = true;
-			}
+			buf.append(part);
 		}
 		return buf.toString();
 	}
