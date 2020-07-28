@@ -191,25 +191,27 @@ public final class FileUtils {
 		// split further
 		final LinkedList<String> result = new LinkedList<String>();
 		int count = 0;
+		//PARAMS_LOOP:
 		for (int index=0; index<strings.length; index++) {
-			final String[] array = strings[index].replace('\\', '/').split("/");
+			final String[] array = strings[index].split("/");
 			// remove nulls/blanks
+			PARTS_ARRAY:
 			for (final String str : array) {
-				if (Utils.isEmpty(str)) continue;
+				if (Utils.isEmpty(str)) continue PARTS_ARRAY;
 				final String s =
 					StringUtils.Trim(
 						str,
 						" ", "\t", "\r", "\n"
 					);
+				if (Utils.isEmpty(s)) continue PARTS_ARRAY;
 				if (count > 0) {
-					if (".".equals(s)) continue;
-					if (",".equals(s)) continue;
+					if (".".equals(s)) continue PARTS_ARRAY;
+					if (",".equals(s)) continue PARTS_ARRAY;
 				}
-				if (Utils.isEmpty(s)) continue;
 				result.add(s);
 				count++;
-			}
-		}
+			} // end PARTS_ARRAY
+		} // end PARAMS_LOOP
 		if (result.isEmpty())
 			return null;
 		final String first = result.getFirst();
@@ -217,8 +219,9 @@ public final class FileUtils {
 		if (".".equals(first)) {
 			result.removeFirst();
 			isAbsolute = true;
-			final String[] array = cwd().replace('\\', '/').split("/");
+			final String[] array = cwd().split("/");
 			for (int index=array.length-1; index>=0; index--) {
+				if (array[index].length() == 0) continue;
 				result.addFirst(array[index]);
 			}
 		} else
@@ -226,12 +229,12 @@ public final class FileUtils {
 		if (",".equals(first)) {
 			result.removeFirst();
 			isAbsolute = true;
-			final String[] array = pwd().replace('\\', '/').split("/");
+			final String[] array = pwd().split("/");
 			for (int index=array.length-1; index>=0; index--) {
 				result.addFirst(array[index]);
 			}
 		}
-		// resolve ..
+		// resolve ../
 		for (int index=0; index<result.size(); index++) {
 			final String entry = result.get(index);
 			if ("..".equals(entry)) {
