@@ -2,14 +2,13 @@ package com.poixson.tools.scheduler;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.poixson.abstractions.xEnableable;
+import com.poixson.tools.abstractions.xEnableable;
 
 
 public abstract class xSchedulerTrigger implements xEnableable {
 
-	// trigger config
-	private final AtomicBoolean enabled   = new AtomicBoolean(true);
-	private final AtomicBoolean repeating = new AtomicBoolean(true);
+	protected final AtomicBoolean enabled   = new AtomicBoolean(true);
+	protected final AtomicBoolean repeating = new AtomicBoolean(false);
 
 
 
@@ -18,31 +17,24 @@ public abstract class xSchedulerTrigger implements xEnableable {
 
 
 
-	public abstract long untilNextTrigger(final long now);
+	public abstract long untilNext(final long now);
 
 
 
-	public void unregister() {
-		this.setDisabled();
-	}
-
-
-
-	// ------------------------------------------------------------------------------- //
-	// trigger config
-
-
-
-	// trigger enabled
+	// enabled
 	@Override
 	public boolean isEnabled() {
 		return this.enabled.get();
 	}
 	@Override
 	public boolean notEnabled() {
-		return ! this.isEnabled();
+		return ! this.enabled.get();
 	}
 
+	@Override
+	public void setEnabled(final boolean enabled) {
+		this.enabled.set(enabled);
+	}
 	@Override
 	public void setEnabled() {
 		this.setEnabled(true);
@@ -51,32 +43,20 @@ public abstract class xSchedulerTrigger implements xEnableable {
 	public void setDisabled() {
 		this.setEnabled(false);
 	}
-	@Override
-	public void setEnabled(final boolean enabled) {
-		this.enabled.set(enabled);
-	}
-
-	public xSchedulerTrigger enable() {
-		return this.enable(true);
-	}
-	public xSchedulerTrigger disable() {
-		return this.enable(false);
-	}
-	public xSchedulerTrigger enable(final boolean enabled) {
-		this.setEnabled(enabled);
-		return this;
-	}
 
 
 
 	// repeating trigger
-	public boolean isRepeating() {
+	public boolean isRepeat() {
 		return this.repeating.get();
 	}
-	public boolean notRepeating() {
-		return ! this.isRepeating();
+	public boolean notRepeat() {
+		return ! this.repeating.get();
 	}
 
+	public void setRepeat(final boolean repeating) {
+		this.repeating.set(repeating);
+	}
 	public void setRepeat() {
 		this.setRepeat(true);
 	}
@@ -85,23 +65,6 @@ public abstract class xSchedulerTrigger implements xEnableable {
 	}
 	public void setRunOnce() {
 		this.setRepeat(false);
-	}
-	public void setRepeat(final boolean repeating) {
-		this.repeating.set(repeating);
-	}
-
-	public xSchedulerTrigger repeat() {
-		return this.repeat(true);
-	}
-	public xSchedulerTrigger noRepeat() {
-		return this.repeat(false);
-	}
-	public xSchedulerTrigger runOnce() {
-		return this.repeat(false);
-	}
-	public xSchedulerTrigger repeat(final boolean repeating) {
-		this.setRepeat(repeating);
-		return this;
 	}
 
 

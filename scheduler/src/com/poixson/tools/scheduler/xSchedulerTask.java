@@ -1,258 +1,176 @@
 package com.poixson.tools.scheduler;
 
-import java.lang.ref.SoftReference;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 
-import com.poixson.abstractions.xEnableable;
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.logger.xLog;
-import com.poixson.logger.xLogRoot;
 import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.types.xThreadPool_Main;
-import com.poixson.tools.xTime;
-import com.poixson.tools.remapped.xRunnable;
+import com.poixson.tools.abstractions.xEnableable;
+import com.poixson.tools.abstractions.xRunnable;
 import com.poixson.utils.Utils;
 
 
 public class xSchedulerTask extends xRunnable implements xEnableable {
 
-	private final xScheduler sched;
+	protected static final AtomicInteger nextTaskIndex = new AtomicInteger(0);
+	public final int taskIndex;
 
-	private static final AtomicInteger taskCount = new AtomicInteger(0);
-	private final int taskIndex;
+	protected final AtomicReference<xScheduler> sched = new AtomicReference<xScheduler>(null);
+	protected final AtomicReference<xThreadPool> pool = new AtomicReference<xThreadPool>(null);
 
-	// task config
-	private final AtomicBoolean enabled = new AtomicBoolean(true);
+	protected final AtomicBoolean enabled = new AtomicBoolean(true);
+	protected final AtomicBoolean lazy    = new AtomicBoolean(false);
 
-	private final AtomicReference<xRunnable> run =
-			new AtomicReference<xRunnable>(null);
-	private final AtomicReference<xThreadPool> pool =
-			new AtomicReference<xThreadPool>(null);
+	protected final CopyOnWriteArraySet<xSchedulerTrigger> triggers = new CopyOnWriteArraySet<xSchedulerTrigger>();
 
-	// triggers
-	private final Set<xSchedulerTrigger> triggers =
-			new CopyOnWriteArraySet<xSchedulerTrigger>();
-
-	// task run count
-	private final AtomicLong runCount = new AtomicLong(0L);
-
-	// wait functions
-	private final ReentrantLock waitForNextRunStart_Lock     = new ReentrantLock();
-	private final ReentrantLock waitForNextRunCompleted_Lock = new ReentrantLock();
-	private final Condition waitForNextRunStart     = this.waitForNextRunStart_Lock.newCondition();
-	private final Condition waitForNextRunCompleted = this.waitForNextRunCompleted_Lock.newCondition();
+	protected final AtomicLong runCount = new AtomicLong(0L);
 
 
 
-	public static xSchedulerTask getNew() {
-		return new xSchedulerTask(null);
+	public xSchedulerTask() {
+		super();
+		this.taskIndex = nextTaskIndex.getAndIncrement();
 	}
-	public xSchedulerTask(final xScheduler sched) {
-		this.sched = (
-			sched == null
-			? xScheduler.getMainSched()
-			: sched
-		);
-		this.taskIndex = taskCount.incrementAndGet();
+	public xSchedulerTask(final xSchedulerTrigger...triggers) {
+		super();
+		this.add(triggers);
+		this.taskIndex = nextTaskIndex.getAndIncrement();
+	}
+	public xSchedulerTask(final String taskName, final Runnable run) {
+		super(taskName, run);
+		this.taskIndex = nextTaskIndex.getAndIncrement();
+	}
+	public xSchedulerTask(final xRunnable run) {
+		super(run);
+		this.taskIndex = nextTaskIndex.getAndIncrement();
 	}
 
 
 
-	public void register() {
-		final xScheduler sched = this.sched;
-		if (sched == null) throw new RequiredArgumentException("sched");
-		sched.add(this);
-	}
-	public void unregister() {
-		final Iterator<xSchedulerTrigger> it = this.triggers.iterator();
-		while (it.hasNext()) {
-			it.next()
-				.unregister();
+	// ------------------------------------------------------------------------------- //
+	// trigger
+
+
+
+	public void doTrigger() {
+		if (this.notEnabled()) return;
+		this.runCount.incrementAndGet();
+		final xThreadPool pool = this.getPoolOrMain();
+		if (this.isLazy()) {
+			pool.runTaskLazy(this);
+		} else {
+			pool.runTaskLater(this);
 		}
 	}
 
 
 
-	public long untilSoonestTrigger(final long now) {
+	public long untilNext(final long now) {
 		if (this.notEnabled())
 			return Long.MIN_VALUE;
-		// run once has finished
-		if (this.notRepeating()) {
+		if (this.notRepeat()) {
 			if (this.runCount.get() > 0) {
+				this.setEnabled(false);
 				return Long.MIN_VALUE;
 			}
 		}
 		if (this.triggers.isEmpty())
 			return Long.MIN_VALUE;
 		final Iterator<xSchedulerTrigger> it = this.triggers.iterator();
-		long lowest = Long.MAX_VALUE;
+		long next = Long.MAX_VALUE;
+		TRIGGERS_LOOP:
 		while (it.hasNext()) {
 			final xSchedulerTrigger trigger = it.next();
-			final long untilNext = trigger.untilNextTrigger(now);
-			if (untilNext < lowest) {
-				lowest = untilNext;
-				if (lowest <= 0L)
-					break;
+			if (trigger.notEnabled())
+				continue TRIGGERS_LOOP;
+			final long untilNext = trigger.untilNext(now);
+			if (untilNext == Long.MIN_VALUE)
+				continue TRIGGERS_LOOP;
+			if (next > untilNext) {
+				next = untilNext;
+				if (next <= 0L)
+					return 0L;
 			}
-		}
-		if (lowest == Long.MAX_VALUE)
+		} // end TRIGGERS_LOOP
+		if (next == Long.MAX_VALUE)
 			return Long.MIN_VALUE;
-		return lowest;
+		return next;
 	}
 
 
 
-	public void doTrigger() {
-		if (this.notEnabled()) {
-			this.log()
-				.warning("Skipping disabled task.. this should only happen rarely.");
-			return;
+	public xSchedulerTrigger[] getTriggers() {
+		return this.triggers.toArray(new xSchedulerTrigger[0]);
+	}
+	public int getTriggersCount() {
+		return this.triggers.size();
+	}
+	public void add(final xSchedulerTrigger trigger) {
+		if (trigger == null) throw new RequiredArgumentException("trigger");
+		this.triggers.add(trigger);
+	}
+	public void add(final xSchedulerTrigger...triggers) {
+		if (triggers.length == 0) throw new RequiredArgumentException("triggers");
+		for (final xSchedulerTrigger trigger : triggers) {
+			this.triggers.add(trigger);
 		}
-		// run task
-		this.runCount.incrementAndGet();
-		final xThreadPool pool = this.getThreadPool();
-		try {
-			this.waitForNextRunStart.signalAll();
-		} catch (IllegalMonitorStateException ignore) {}
-//TODO: improve priorities
-		pool.runTaskLater(this);
-		try {
-			this.waitForNextRunCompleted.signalAll();
-		} catch (IllegalMonitorStateException ignore) {}
+	}
+	public void clearTriggers() {
+		this.triggers.clear();
 	}
 
 
 
-	// run task
+	// ------------------------------------------------------------------------------- //
+	// configs
+
+
+
 	@Override
-	public void run() {
-		if (this.run != null) {
-			final xRunnable run = this.run.get();
-			if (run != null) {
-				run.run();
-				return;
-			}
-		}
-		this.setDisabled();
-		throw new RequiredArgumentException("run");
+	public String getTaskName() {
+		final String name = super.getTaskName();
+		if (Utils.notEmpty(name))
+			return name;
+		return (new StringBuilder()).append("task").append(this.taskIndex).toString();
 	}
 
 
 
-	// task run count
-	public long getRunCount() {
-		return this.runCount
-				.get();
+	// scheduler
+	public xScheduler getScheduler() {
+		return this.sched.get();
 	}
-	public long resetRunCount() {
-		return this.runCount
-				.getAndSet(0L);
+	public void setScheduler(final xScheduler sched) {
+		this.sched.set(sched);
 	}
 
 
 
-	// ------------------------------------------------------------------------------- //
-	// wait functions
-
-
-
-	public void waitForNextRunStart()
-			throws InterruptedException {
-		this.waitForNextRunStart_Lock.lockInterruptibly();
-		try {
-			this.waitForNextRunStart.await();
-		} finally {
-			this.waitForNextRunStart_Lock.unlock();
-		}
+	// thread pool
+	public xThreadPool getPool() {
+		return this.pool.get();
 	}
-	public void waitForNextRunStart(final long time, final TimeUnit unit)
-			throws InterruptedException {
-		this.waitForNextRunStart_Lock.lockInterruptibly();
-		try {
-			this.waitForNextRunStart.await(time, unit);
-		} finally {
-			this.waitForNextRunStart_Lock.unlock();
-		}
+	public xThreadPool getPoolOrMain() {
+		final xThreadPool pool = this.getPool();
+		if (pool == null)
+			return xThreadPool_Main.Get();
+		return pool;
 	}
-	public void waitForNextRunStart(final String timeStr)
-			throws InterruptedException {
-		this.waitForNextRunStart_Lock.lockInterruptibly();
-		try {
-			this.waitForNextRunStart(xTime.getNew(timeStr));
-		} finally {
-			this.waitForNextRunStart_Lock.unlock();
-		}
-	}
-	public void waitForNextRunStart(final xTime time)
-			throws InterruptedException {
-		this.waitForNextRunStart_Lock.lockInterruptibly();
-		try {
-			this.waitForNextRunStart(time.getMS(), TimeUnit.MILLISECONDS);
-		} finally {
-			this.waitForNextRunStart_Lock.unlock();
-		}
+	public void setPool(final xThreadPool pool) {
+		this.pool.set(pool);
 	}
 
 
 
-	public void waitForNextRunCompleted()
-			throws InterruptedException {
-		this.waitForNextRunCompleted_Lock.lockInterruptibly();
-		try {
-			this.waitForNextRunCompleted.await();
-		} finally {
-			this.waitForNextRunCompleted_Lock.unlock();
-		}
-	}
-	public void waitForNextRunCompleted(final long time, final TimeUnit unit)
-			throws InterruptedException {
-		this.waitForNextRunCompleted_Lock.lockInterruptibly();
-		try {
-			this.waitForNextRunCompleted.await(time, unit);
-		} finally {
-			this.waitForNextRunCompleted_Lock.unlock();
-		}
-	}
-	public void waitForNextRunCompleted(final String timeStr)
-			throws InterruptedException {
-		this.waitForNextRunCompleted_Lock.lockInterruptibly();
-		try {
-			this.waitForNextRunCompleted(xTime.getNew(timeStr));
-		} finally {
-			this.waitForNextRunCompleted_Lock.unlock();
-		}
-	}
-	public void waitForNextRunCompleted(final xTime time)
-			throws InterruptedException {
-		this.waitForNextRunCompleted_Lock.lockInterruptibly();
-		try {
-			this.waitForNextRunCompleted(time.getMS(), TimeUnit.MILLISECONDS);
-		} finally {
-			this.waitForNextRunCompleted_Lock.unlock();
-		}
-	}
-
-
-
-	// ------------------------------------------------------------------------------- //
-	// task config
-
-
-
-	// task enabled
+	// enabled
 	@Override
 	public boolean isEnabled() {
-		if ( ! this.enabled.get() )
+		if (!this.enabled.get())
 			return false;
 		final Iterator<xSchedulerTrigger> it = this.triggers.iterator();
 		while (it.hasNext()) {
@@ -266,6 +184,11 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 	public boolean notEnabled() {
 		return ! this.isEnabled();
 	}
+
+	@Override
+	public void setEnabled(final boolean enabled) {
+		this.enabled.set(enabled);
+	}
 	@Override
 	public void setEnabled() {
 		this.setEnabled(true);
@@ -274,159 +197,52 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 	public void setDisabled() {
 		this.setEnabled(false);
 	}
-	@Override
-	public void setEnabled(boolean enabled) {
-		this.enabled.set(enabled);
-	}
 
 
 
 	// repeating triggers
-	public boolean isRepeating() {
+	public boolean isRepeat() {
 		final Iterator<xSchedulerTrigger> it = this.triggers.iterator();
 		while (it.hasNext()) {
-			if (it.next().isRepeating())
+			if (it.next().isRepeat())
 				return true;
 		}
 		return false;
 	}
-	public boolean notRepeating() {
-		return ! this.isRepeating();
+	public boolean notRepeat() {
+		return ! this.isRepeat();
 	}
 
 
 
-	// runnable
-	public xRunnable getRunnable() {
-		return this.run.get();
+	// run lazy
+	public boolean isLazy() {
+		return this.lazy.get();
 	}
-	public xSchedulerTask setRunnable(final Runnable run) {
-		this.run.set(
-			xRunnable.cast(run)
-		);
-		return this;
+	public boolean notLazy() {
+		return ! this.lazy.get();
 	}
-
-
-
-	// task name
-	@Override
-	public String getTaskName() {
-		if (this.run != null) {
-			final xRunnable run = this.run.get();
-			if (run != null) {
-				final String runTaskName = run.getTaskName();
-				if (Utils.notEmpty(runTaskName)) {
-					return runTaskName;
-				}
-			}
-		}
-		final String taskName = super.getTaskName();
-		return Utils.ifEmpty(taskName, "task"+Integer.toString(this.taskIndex));
+	public void setLazy(final boolean lazy) {
+		this.lazy.set(lazy);
 	}
-	@Override
-	public void setTaskName(final String taskName) {
-		super.setTaskName(taskName);
-		this._log.set(null);
-		final xRunnable run = this.run.get();
-		if (run != null) {
-			run.setTaskName(taskName);
-		}
-	}
-	public xSchedulerTask setName(final String taskName) {
-		this.setTaskName(taskName);
-		return this;
-	}
-	@Override
-	public boolean taskNameEquals(final String taskName) {
-		final xRunnable run = this.run.get();
-		if (run != null) {
-			final String runTaskName = run.getTaskName();
-			if (Utils.isEmpty(runTaskName))
-				return Utils.isEmpty(runTaskName);
-			return runTaskName.equals(taskName);
-		}
-		return super.taskNameEquals(taskName);
-	}
-
-
-
-	// thread pool
-	public xThreadPool getThreadPool() {
-		final xThreadPool pool = this.pool.get();
-		return (
-			pool == null
-			? xThreadPool_Main.get()
-			: pool
-		);
-	}
-	public xSchedulerTask setThreadPool(final xThreadPool pool) {
-		this.pool.set(pool);
-		return this;
-	}
-
-
-
-	// trigger
-	public xSchedulerTrigger[] getTriggers() {
-		return this.triggers.toArray(new xSchedulerTrigger[0]);
-	}
-	public int getTriggersCount() {
-		return this.triggers.size();
-	}
-	public xSchedulerTask addTrigger(final xSchedulerTrigger trigger) {
-		if (trigger != null) {
-			this.triggers.add(trigger);
-		}
-		return this;
-	}
-	public xSchedulerTask clearTriggers() {
-		if (!this.triggers.isEmpty()) {
-			final Iterator<xSchedulerTrigger> it = this.triggers.iterator();
-			final Set<xSchedulerTrigger> removing = new HashSet<xSchedulerTrigger>();
-			while (it.hasNext()) {
-				final xSchedulerTrigger trigger = it.next();
-				trigger.unregister();
-				removing.add(trigger);
-			}
-			for (final xSchedulerTrigger trigger : removing) {
-				this.triggers.remove(trigger);
-			}
-		}
-		return this;
+	public void setLazy() {
+		this.setLazy(true);
 	}
 
 
 
 	// ------------------------------------------------------------------------------- //
-	// logger
+	// stats
 
 
 
-	private final AtomicReference<SoftReference<xLog>> _log =
-			new AtomicReference<SoftReference<xLog>>(null);
-
-	public xLog log() {
-		// cached logger
-		final SoftReference<xLog> ref = this._log.get();
-		if (ref != null) {
-			final xLog log = ref.get();
-			if (log != null)
-				return log;
-		}
-		// get logger
-		{
-			final String taskName = this.getTaskName();
-			final xLog log =
-				xLogRoot.Get()
-					.getWeak(taskName);
-			this._log.set(
-				new SoftReference<xLog>(
-					log
-				)
-			);
-			return log;
-		}
+	// task run count
+	public long getRunCount() {
+		return this.runCount.get();
+	}
+	public long resetRunCount() {
+		return this.runCount
+				.getAndSet(0L);
 	}
 
 
