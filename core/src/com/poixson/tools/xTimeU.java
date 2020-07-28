@@ -1,13 +1,15 @@
 package com.poixson.tools;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
 public enum xTimeU {
-	T ( 't', "ticks",  null,                 -1L ),
+	T ( 't', "tick",   null,                 -1L ),
 	MS( 'n', "ms",     TimeUnit.MILLISECONDS, 1L ),
 	S ( 's', "second", TimeUnit.SECONDS,   1000L ),
 	M ( 'm', "minute", TimeUnit.MINUTES,   1000L * 60L ),
@@ -24,21 +26,20 @@ public enum xTimeU {
 	public final TimeUnit timeUnit;
 	public final long     value;
 
-	private static final CopyOnWriteArrayList<xTimeU> xunits =
-			new CopyOnWriteArrayList<xTimeU>() {
-		private static final long serialVersionUID = 1L;
-		{
-			add( xTimeU.T  );
-			add( xTimeU.MS );
-			add( xTimeU.S  );
-			add( xTimeU.M  );
-			add( xTimeU.H  );
-			add( xTimeU.D  );
-			add( xTimeU.W  );
-			add( xTimeU.MO );
-			add( xTimeU.Y  );
-		}
-	};
+	public static final List<xTimeU> xunits =
+		Collections.unmodifiableList(
+			Arrays.asList(
+				xTimeU.Y,
+				xTimeU.MO,
+				xTimeU.W,
+				xTimeU.D,
+				xTimeU.H,
+				xTimeU.M,
+				xTimeU.S,
+				xTimeU.MS,
+				xTimeU.T
+			)
+		);
 
 
 
@@ -74,11 +75,55 @@ public enum xTimeU {
 		return null;
 	}
 	public static xTimeU GetUnit(final String str) {
-		final Iterator<xTimeU> it = xunits.iterator();
-		while (it.hasNext()) {
-			final xTimeU xunit = it.next();
-			if (xunit.name.equalsIgnoreCase(str))
-				return xunit;
+		final String match = str.toUpperCase();
+		switch (match) {
+		case "T":
+		case "TK":
+		case "TCK":
+		case "TICK":
+		case "TICKS":
+			return xTimeU.T;
+		case "N":
+		case "MS":
+			return xTimeU.MS;
+		case "S":
+		case "SEC":
+		case "SECS":
+		case "SECOND":
+		case "SECONDS":
+			return xTimeU.S;
+		case "M":
+		case "MIN":
+		case "MINUTE":
+		case "MINUTES":
+			return xTimeU.M;
+		case "H":
+		case "HR":
+		case "HOUR":
+		case "HOURS":
+			return xTimeU.H;
+		case "D":
+		case "DY":
+		case "DAY":
+		case "DAYS":
+			return xTimeU.D;
+		case "W":
+		case "WK":
+		case "WEEK":
+		case "WEEKS":
+			return xTimeU.W;
+		case "O":
+		case "MN":
+		case "MTH":
+		case "MONTH":
+		case "MONTHS":
+			return xTimeU.MO;
+		case "Y":
+		case "YR":
+		case "YEAR":
+		case "YEARS":
+			return xTimeU.Y;
+		default:
 		}
 		return null;
 	}
@@ -86,7 +131,7 @@ public enum xTimeU {
 		final Iterator<xTimeU> it = xunits.iterator();
 		while (it.hasNext()) {
 			final xTimeU xunit = it.next();
-			if (xunit.value == value)
+			if (xunit.getUnitValue() == value)
 				return xunit;
 		}
 		return null;
@@ -95,10 +140,19 @@ public enum xTimeU {
 
 
 	public long convertTo(final long value) {
-		return value * this.value;
+		return value * this.getUnitValue();
 	}
+	public double convertTo(final double value) {
+		return value * ((double)this.getUnitValue());
+	}
+
+
+
 	public long convertFrom(final long value) {
-		return Math.floorDiv(value, this.value);
+		return Math.floorDiv(value, this.getUnitValue());
+	}
+	public double convertFrom(final double value) {
+		return value / ((double)this.getUnitValue());
 	}
 
 
