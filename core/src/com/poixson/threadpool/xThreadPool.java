@@ -159,7 +159,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 		if (time == null) {
 			this.join(0L);
 		} else {
-			this.join(time.getMS());
+			this.join(time.ms());
 		}
 	}
 	public void join() {

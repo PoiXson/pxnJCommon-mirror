@@ -59,7 +59,7 @@ public class CoolDown {
 				return true;
 			}
 			// run again
-			final long duration = this.duration.getMS();
+			final long duration = this.duration.ms();
 			if (duration <= 0L)
 				return false;
 			if (current - last >= duration) {
@@ -92,7 +92,7 @@ public class CoolDown {
 		final long last = this.last.get();
 		if (last == -1L)
 			return -1L;
-		final long duration = this.duration.getMS();
+		final long duration = this.duration.ms();
 		if (duration <= 0L)
 			return -1L;
 		return ( (last + duration) - this.getCurrent() );

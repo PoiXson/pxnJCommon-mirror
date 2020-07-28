@@ -127,11 +127,11 @@ public final class ThreadUtils {
 		} catch (InterruptedException ignore) {}
 	}
 	public static void Sleep(final String time) {
-		Sleep( xTime.getNew(time) );
+		Sleep( new xTime(time) );
 	}
 	public static void Sleep(final xTime time) {
 		if (time == null) return;
-		Sleep( time.getMS() );
+		Sleep( time.ms() );
 	}
 
 

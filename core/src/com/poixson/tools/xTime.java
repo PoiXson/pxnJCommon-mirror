@@ -81,7 +81,7 @@ public class xTime {
 	public String getString() {
 		return xTime.ToString(this);
 	}
-	public long getMS() {
+	public long ms() {
 		return this.value.get();
 	}
 	public int getTicks() {
@@ -121,7 +121,7 @@ public class xTime {
 	public xTime set(final xTime time) {
 		if (this.locked.get()) throw new UnmodifiableObjectException();
 		if (time == null)      throw new RequiredArgumentException("time");
-		this.value.set( time.getMS() );
+		this.value.set( time.ms() );
 		return this;
 	}
 
