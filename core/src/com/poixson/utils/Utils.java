@@ -39,6 +39,18 @@ public final class Utils {
 
 
 
+	// string builder
+	public static boolean isEmpty(final StringBuilder str) {
+		if (str == null) return true;
+		return (str.length() == 0);
+	}
+	public static boolean notEmpty(final StringBuilder str) {
+		if (str == null) return false;
+		return (str.length() > 0);
+	}
+
+
+
 	// string array
 	public static boolean isEmpty(final String[] array) {
 		if (array == null)
