@@ -3,6 +3,8 @@ package com.poixson.tests.utils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -318,16 +320,59 @@ public class Test_StringUtils {
 
 
 
+	// unique key
 	@Test
-	public void testForceUnique() {
+	public void testUniqueKey() {
 		{
 			final List<String> list = new ArrayList<String>();
 			list.add("a");
 			Assert.assertEquals( "a_1", StringUtils.UniqueKey(list, "a") );
 			Assert.assertEquals( "b",   StringUtils.UniqueKey(list, "b") );
 			Assert.assertArrayEquals(
+				new String[] { "a" },
+				list.toArray(new String[0])
+			);
+		}
+	}
+	// collection
+	@Test
+	public void testAddUnique_Collection() {
+		{
+			final List<String> list = new ArrayList<String>();
+			list.add("a");
+			Assert.assertEquals( "a_1", StringUtils.AddUnique(list, "a") );
+			Assert.assertEquals( "b",   StringUtils.AddUnique(list, "b") );
+			Assert.assertArrayEquals(
 				new String[] { "a", "a_1", "b" },
 				list.toArray(new String[0])
+			);
+		}
+	}
+	// concurrent hash map
+	@Test
+	public void testPutUnique_ConcurrentHashMap() {
+		{
+			final ConcurrentHashMap<String, Object> map = new ConcurrentHashMap<String, Object>();
+			map.put("a", new Object());
+			Assert.assertEquals( "a_1", StringUtils.PutUnique(map, "a", new Object()) );
+			Assert.assertEquals( "b",   StringUtils.PutUnique(map, "b", new Object()) );
+			Assert.assertArrayEquals(
+				new String[] { "a", "a_1", "b" },
+				map.keySet().toArray(new String[0])
+			);
+		}
+	}
+	// map
+	@Test
+	public void testPutUnique_Map() {
+		{
+			final Map<String, Object> map = new HashMap<String, Object>();
+			map.put("a", new Object());
+			Assert.assertEquals( "a_1", StringUtils.PutUnique(map, "a", new Object()) );
+			Assert.assertEquals( "b",   StringUtils.PutUnique(map, "b", new Object()) );
+			Assert.assertArrayEquals(
+				new String[] { "a", "a_1", "b" },
+				map.keySet().toArray(new String[0])
 			);
 		}
 	}
