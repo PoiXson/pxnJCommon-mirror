@@ -189,7 +189,7 @@ public final class FileUtils {
 			break;
 		}
 		// split further
-		final LinkedList<String> list = new LinkedList<String>();
+		final LinkedList<String> result = new LinkedList<String>();
 		int count = 0;
 		for (int index=0; index<strings.length; index++) {
 			final String[] array = strings[index].replace('\\', '/').split("/");
@@ -206,39 +206,39 @@ public final class FileUtils {
 					if (",".equals(s)) continue;
 				}
 				if (Utils.isEmpty(s)) continue;
-				list.add(s);
+				result.add(s);
 				count++;
 			}
 		}
-		if (list.isEmpty())
+		if (result.isEmpty())
 			return null;
-		final String first = list.getFirst();
+		final String first = result.getFirst();
 		// prepend cwd
 		if (".".equals(first)) {
-			list.removeFirst();
+			result.removeFirst();
 			isAbsolute = true;
 			final String[] array = cwd().replace('\\', '/').split("/");
 			for (int index=array.length-1; index>=0; index--) {
-				list.addFirst(array[index]);
+				result.addFirst(array[index]);
 			}
 		} else
 		// prepend pwd
 		if (",".equals(first)) {
-			list.removeFirst();
+			result.removeFirst();
 			isAbsolute = true;
 			final String[] array = pwd().replace('\\', '/').split("/");
 			for (int index=array.length-1; index>=0; index--) {
-				list.addFirst(array[index]);
+				result.addFirst(array[index]);
 			}
 		}
 		// resolve ..
-		for (int index=0; index<list.size(); index++) {
-			final String entry = list.get(index);
+		for (int index=0; index<result.size(); index++) {
+			final String entry = result.get(index);
 			if ("..".equals(entry)) {
-				list.remove(index);
+				result.remove(index);
 				if (index > 0) {
 					index--;
-					list.remove(index);
+					result.remove(index);
 				}
 				index--;
 			}
@@ -247,7 +247,7 @@ public final class FileUtils {
 		final String path =
 			StringUtils.MergeStrings(
 				File.separator,
-				list.toArray(new String[0])
+				result.toArray(new String[0])
 			);
 		if (isAbsolute) {
 			return
