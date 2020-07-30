@@ -5,10 +5,9 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.tools.xTime;
-import com.poixson.tools.scheduler.xSchedulerTrigger;
 
 
-public class Trigger_Interval extends xSchedulerTrigger {
+public class Trigger_Interval extends Trigger {
 
 	protected final xTime delay    = new xTime();
 	protected final xTime interval = new xTime();

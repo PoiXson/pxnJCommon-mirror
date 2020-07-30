@@ -9,7 +9,6 @@ import org.quartz.CronExpression;
 import org.quartz.impl.triggers.CronTriggerImpl;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.tools.scheduler.xSchedulerTrigger;
 
 
 /*
@@ -21,7 +20,7 @@ import com.poixson.tools.scheduler.xSchedulerTrigger;
 6 | Day-of-Week
 7 | Year (optional field)
 */
-public class Trigger_Cron extends xSchedulerTrigger {
+public class Trigger_Cron extends Trigger {
 
 	private final AtomicReference<CronTriggerImpl> trigger =
 			new AtomicReference<CronTriggerImpl>(null);

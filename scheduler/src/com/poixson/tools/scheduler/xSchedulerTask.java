@@ -12,6 +12,7 @@ import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.abstractions.xEnableable;
 import com.poixson.tools.abstractions.xRunnable;
+import com.poixson.tools.scheduler.trigger.Trigger;
 import com.poixson.utils.Utils;
 
 
@@ -26,7 +27,7 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 	protected final AtomicBoolean enabled = new AtomicBoolean(true);
 	protected final AtomicBoolean lazy    = new AtomicBoolean(false);
 
-	protected final CopyOnWriteArraySet<xSchedulerTrigger> triggers = new CopyOnWriteArraySet<xSchedulerTrigger>();
+	protected final CopyOnWriteArraySet<Trigger> triggers = new CopyOnWriteArraySet<Trigger>();
 
 	protected final AtomicLong runCount = new AtomicLong(0L);
 
@@ -36,7 +37,7 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 		super();
 		this.taskIndex = nextTaskIndex.getAndIncrement();
 	}
-	public xSchedulerTask(final xSchedulerTrigger...triggers) {
+	public xSchedulerTask(final Trigger...triggers) {
 		super();
 		this.add(triggers);
 		this.taskIndex = nextTaskIndex.getAndIncrement();
@@ -81,11 +82,11 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 		}
 		if (this.triggers.isEmpty())
 			return Long.MIN_VALUE;
-		final Iterator<xSchedulerTrigger> it = this.triggers.iterator();
+		final Iterator<Trigger> it = this.triggers.iterator();
 		long next = Long.MAX_VALUE;
 		TRIGGERS_LOOP:
 		while (it.hasNext()) {
-			final xSchedulerTrigger trigger = it.next();
+			final Trigger trigger = it.next();
 			if (trigger.notEnabled())
 				continue TRIGGERS_LOOP;
 			final long untilNext = trigger.untilNext(now);
@@ -104,19 +105,19 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 
 
 
-	public xSchedulerTrigger[] getTriggers() {
-		return this.triggers.toArray(new xSchedulerTrigger[0]);
+	public Trigger[] getTriggers() {
+		return this.triggers.toArray(new Trigger[0]);
 	}
 	public int getTriggersCount() {
 		return this.triggers.size();
 	}
-	public void add(final xSchedulerTrigger trigger) {
+	public void add(final Trigger trigger) {
 		if (trigger == null) throw new RequiredArgumentException("trigger");
 		this.triggers.add(trigger);
 	}
-	public void add(final xSchedulerTrigger...triggers) {
+	public void add(final Trigger...triggers) {
 		if (triggers.length == 0) throw new RequiredArgumentException("triggers");
-		for (final xSchedulerTrigger trigger : triggers) {
+		for (final Trigger trigger : triggers) {
 			this.triggers.add(trigger);
 		}
 	}
@@ -172,9 +173,9 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 	public boolean isEnabled() {
 		if (!this.enabled.get())
 			return false;
-		final Iterator<xSchedulerTrigger> it = this.triggers.iterator();
+		final Iterator<Trigger> it = this.triggers.iterator();
 		while (it.hasNext()) {
-			final xSchedulerTrigger trigger = it.next();
+			final Trigger trigger = it.next();
 			if (trigger.isEnabled())
 				return true;
 		}
@@ -202,7 +203,7 @@ public class xSchedulerTask extends xRunnable implements xEnableable {
 
 	// repeating triggers
 	public boolean isRepeat() {
-		final Iterator<xSchedulerTrigger> it = this.triggers.iterator();
+		final Iterator<Trigger> it = this.triggers.iterator();
 		while (it.hasNext()) {
 			if (it.next().isRepeat())
 				return true;

@@ -1,18 +1,18 @@
-package com.poixson.tools.scheduler;
+package com.poixson.tools.scheduler.trigger;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.poixson.tools.abstractions.xEnableable;
 
 
-public abstract class xSchedulerTrigger implements xEnableable {
+public abstract class Trigger implements xEnableable {
 
 	protected final AtomicBoolean enabled   = new AtomicBoolean(true);
 	protected final AtomicBoolean repeating = new AtomicBoolean(false);
 
 
 
-	public xSchedulerTrigger() {
+	public Trigger() {
 	}
 
 

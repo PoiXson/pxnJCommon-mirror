@@ -16,6 +16,7 @@ import com.poixson.tools.Keeper;
 import com.poixson.tools.xTime;
 import com.poixson.tools.abstractions.xRunnable;
 import com.poixson.tools.abstractions.xStartable;
+import com.poixson.tools.scheduler.trigger.Trigger;
 import com.poixson.utils.NumberUtils;
 import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.Utils;
@@ -258,7 +259,7 @@ public class xScheduler implements xStartable, Runnable {
 		this.tasks.add(task);
 		this.wake();
 	}
-	public void add(final xRunnable run, final xSchedulerTrigger trigger) {
+	public void add(final xRunnable run, final Trigger trigger) {
 		if (run     == null) throw new RequiredArgumentException("run");
 		if (trigger == null) throw new RequiredArgumentException("trigger");
 		final xSchedulerTask task = new xSchedulerTask(run);
@@ -266,7 +267,7 @@ public class xScheduler implements xStartable, Runnable {
 		task.add(trigger);
 		this.add(task);
 	}
-	public void add(final String name, final Runnable run, final xSchedulerTrigger trigger) {
+	public void add(final String name, final Runnable run, final Trigger trigger) {
 		if (Utils.isEmpty(name)) throw new RequiredArgumentException("name");
 		if (run     == null)     throw new RequiredArgumentException("run");
 		if (trigger == null)     throw new RequiredArgumentException("trigger");

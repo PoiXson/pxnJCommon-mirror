@@ -11,11 +11,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLogRoot;
 import com.poixson.tools.xTime;
-import com.poixson.tools.scheduler.xSchedulerTrigger;
 import com.poixson.utils.Utils;
 
 
-public class Trigger_Clock extends xSchedulerTrigger {
+public class Trigger_Clock extends Trigger {
 
 	public static final String DEFAULT_DATE_FORMAT = "yy/MM/dd HH:mm:ss";
 	public static final long  DEFAULT_GRACE_TIME  = 1000L;
