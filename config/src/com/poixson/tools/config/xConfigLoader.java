@@ -19,8 +19,8 @@ import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
-public final class xConfigLoaders {
-	private xConfigLoaders() {}
+public final class xConfigLoader {
+	private xConfigLoader() {}
 
 
 

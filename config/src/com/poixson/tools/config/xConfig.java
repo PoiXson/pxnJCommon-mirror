@@ -209,7 +209,7 @@ public class xConfig {
 				ObjectUtils.CastMap(obj, String.class, Object.class);
 			if (datamap == null)
 				throw new RuntimeException("Failed to get Map constructor for class: "+cfgClass.getName());
-			final T cfg = xConfigLoaders.NewConfig(datamap, cfgClass);
+			final T cfg = xConfigLoader.NewConfig(datamap, cfgClass);
 			list.add(cfg);
 		}
 		return list;
