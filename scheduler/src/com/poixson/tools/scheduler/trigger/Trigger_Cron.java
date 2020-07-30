@@ -3,7 +3,6 @@ package com.poixson.tools.scheduler.trigger;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.quartz.CronExpression;
 import org.quartz.impl.triggers.CronTriggerImpl;
@@ -22,117 +21,104 @@ import com.poixson.exceptions.RequiredArgumentException;
 */
 public class Trigger_Cron extends Trigger {
 
-	private final AtomicReference<CronTriggerImpl> trigger =
-			new AtomicReference<CronTriggerImpl>(null);
+	protected final CronTriggerImpl trigger;
 
-	private final AtomicLong next = new AtomicLong( Long.MIN_VALUE );
-
-	private final Object updateLock = new Object();
+	protected final AtomicLong next = new AtomicLong( Long.MIN_VALUE );
 
 
 
-	// builder
-	public static Trigger_Cron builder() {
-		return new Trigger_Cron();
+	public Trigger_Cron(final CronExpression pattern) {
+		super();
+		if (pattern == null) throw new RequiredArgumentException("pattern");
+		this.trigger = new CronTriggerImpl();
+		this.trigger.setCronExpression(pattern);
+		this.setRepeat(true);
 	}
-
-
-
-	public Trigger_Cron() {
-	}
-	public Trigger_Cron(final String patternStr) throws ParseException {
-		this();
-		this.setCronPattern(patternStr);
-	}
-	public Trigger_Cron(final CronExpression express) {
-		this();
-		this.setCronExpression(express);
-	}
-
-
-
-	public void update(final long now) {
-		if (this.trigger == null) throw new RequiredArgumentException("CronTrigger");
-		synchronized(this.updateLock) {
-			final CronTriggerImpl trigger = this.trigger.get();
-			if (trigger == null) throw new RequiredArgumentException("CronTrigger");
-			// calculate time until next trigger
-			final Date nowDate = new Date(now);
-			final Date nextDate = trigger.getFireTimeAfter(nowDate);
-			if (nextDate == null) {
-				this.setDisabled();
-				return;
-			}
-			this.next.set(
-				nextDate.getTime()
-			);
-		}
-	}
-
-
-
-	@Override
-	public long untilNextTrigger(final long now) {
-		if (this.notEnabled())
-			return Long.MIN_VALUE;
-		synchronized(this.updateLock) {
-			final long next = this.next.get();
-			if (next == Long.MIN_VALUE)
-				this.update(now);
-			if (this.notEnabled())
-				return Long.MIN_VALUE;
-			final long untilNext = next - now;
-			if (untilNext <= 0L) {
-				this.update(now + 1L);
-			}
-			return untilNext;
-		}
-	}
-
-
-
-	public TriggerCron setCronPattern(final String patternStr) throws ParseException {
-		final CronExpression express = new CronExpression(patternStr);
-		return this.setCronExpression(express);
-	}
-	public TriggerCron setCronExpression(final CronExpression express) {
-		if (express == null) throw new RequiredArgumentException("expression");
-		final CronTriggerImpl trigger = new CronTriggerImpl();
-		trigger.setCronExpression(express);
-		this.trigger.set(trigger);
-		return this;
+	public Trigger_Cron(final CronTriggerImpl trigger) {
+		super();
+		if (trigger == null) throw new RequiredArgumentException("trigger");
+		this.trigger = trigger;
+		this.setRepeat(true);
 	}
 
 
 
 	// ------------------------------------------------------------------------------- //
-	// overrides
+	// calculate time
 
 
 
-	public TriggerCron enable() {
-		return ( super.enable() == null ? null : this );
-	}
-	public TriggerCron disable() {
-		return ( super.disable() == null ? null : this );
-	}
-	public TriggerCron enable(final boolean enabled) {
-		return ( super.enable(enabled) == null ? null : this );
+	@Override
+	public long untilNext(long now) {
+		if (this.notEnabled())
+			return Long.MIN_VALUE;
+		final long next = this.next.get();
+		if (next == Long.MIN_VALUE) {
+			this.update(now);
+			return this.untilNext(now);
+		}
+		final long untilNext = next - now;
+		if (untilNext <= 0L) {
+			this.update(now + 1L);
+		}
+		return untilNext;
 	}
 
 
 
-	public TriggerCron repeat() {
-		return ( super.repeat() == null ? null : this );
+	public void update(final long now) {
+		// calculate time until next trigger
+		final Date nextDate = this.trigger.getFireTimeAfter( new Date(now) );
+		if (nextDate == null) {
+			this.setDisabled();
+			return;
+		}
+		this.next.set( nextDate.getTime() );
 	}
-	public TriggerCron noRepeat() {
-		return ( super.noRepeat() == null ? null : this );
-	}
-	public TriggerCron runOnce() {
-		return ( super.runOnce() == null ? null : this );
-	}
-	public TriggerCron repeat(final boolean repeating) {
-		return ( super.repeat(repeating) == null ? null : this );
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// factory
+
+
+
+	public static class TriggerFactory_Cron extends TriggerFactory<Trigger_Cron> {
+
+		protected CronExpression pattern;
+
+
+
+		public static TriggerFactory_Cron New() {
+			return new TriggerFactory_Cron();
+		}
+		public TriggerFactory_Cron() {}
+
+
+
+		@Override
+		public Trigger_Cron build() {
+			return
+				new Trigger_Cron(
+					this.pattern
+				);
+		}
+
+
+
+		public TriggerFactory_Cron pattern(final String patternStr)
+				throws ParseException {
+			final CronExpression pattern = new CronExpression(patternStr);
+			return this.pattern(pattern);
+		}
+		public TriggerFactory_Cron pattern(final CronExpression pattern) {
+			if (pattern == null) throw new RequiredArgumentException("pattern");
+			this.pattern = pattern;
+			return this;
+		}
+
+
+
 	}
 
 

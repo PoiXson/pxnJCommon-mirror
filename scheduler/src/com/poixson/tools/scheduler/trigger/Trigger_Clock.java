@@ -6,167 +6,147 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.logger.xLogRoot;
 import com.poixson.tools.xTime;
+import com.poixson.tools.xTimeU;
 import com.poixson.utils.Utils;
 
 
 public class Trigger_Clock extends Trigger {
-
 	public static final String DEFAULT_DATE_FORMAT = "yy/MM/dd HH:mm:ss";
 	public static final long  DEFAULT_GRACE_TIME  = 1000L;
 
-	private final AtomicReference<Date> date = new AtomicReference<Date>(null);
-	private final xTime grace = xTime.getNew();
-
-	private final Object updateLock = new Object();
+	protected final Date date;
+	protected final long grace;
 
 
 
-	// builder
-	public static Trigger_Clock builder() {
-		return new Trigger_Clock();
-	}
-
-
-
-	public Trigger_Clock() {
-	}
-	public Trigger_Clock(final long time) {
-		this();
-		this.setDate(time);
-	}
-	public Trigger_Clock(final String dateStr, final String dateFormatStr)
+	public Trigger_Clock(final Date date, final long grace)
 			throws ParseException {
-		this();
-		this.setDate(
-			dateStr,
-			dateFormatStr
-		);
+		super();
+		if (date == null) throw new RequiredArgumentException("date");
+		this.date  = date;
+		this.grace = (grace < 0L ? 0L : grace);
+		this.setRepeat(false);
 	}
-	public Trigger_Clock(final Date date) {
-		this();
-		this.setDate(date);
-	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// calculate time
 
 
 
 	@Override
-	public long untilNextTrigger(final long now) {
+	public long untilNext(final long now) {
 		if (this.notEnabled())
 			return Long.MIN_VALUE;
 		if (this.date == null) throw new RequiredArgumentException("date");
-		synchronized(this.updateLock) {
-			final Date date = this.date.get();
-			if (date == null) throw new RequiredArgumentException("date");
-			final long time = date.getTime();
-			final long grace = this.getGraceTime();
-			// calculate time until trigger
-			final long untilNext = time - now;
-			if (0 - untilNext > grace) {
-//TODO: what should we do here?
-xLogRoot.Get().warning("Skipping old scheduled clock trigger..");
-				this.setDisabled();
-				return Long.MIN_VALUE;
-			}
-			return untilNext;
+		final long time = this.date.getTime();
+		final long last = this.last.get();
+		if (last == Long.MIN_VALUE) {
+			this.last.compareAndSet(Long.MIN_VALUE, now);
+			return this.untilNext(now);
 		}
+		// until next trigger
+		final long untilNext = time - now;
+		if (0 - untilNext > this.grace) {
+			this.log().warning("Skipping old scheduled clock trigger..");
+			this.setEnabled(false);
+			return Long.MIN_VALUE;
+		}
+		return untilNext;
 	}
 
 
 
 	// ------------------------------------------------------------------------------- //
-	// trigger config
+	// factory
 
 
 
-	// scheduled date
-	public TriggerClock setDate(final long time) {
-		final Date date = new Date(time);
-		return this.setDate(date);
-	}
-	public TriggerClock setDate(final String dateStr, final String dateFormatStr)
-			throws ParseException {
-		if (Utils.isBlank(dateStr))       throw new RequiredArgumentException("dateStr");
-		if (Utils.isBlank(dateFormatStr)) throw new RequiredArgumentException("dateFormatStr");
-		final DateFormat format =
-			new SimpleDateFormat(
-				(
-					Utils.isBlank(dateFormatStr)
-					? DEFAULT_DATE_FORMAT
-					: dateFormatStr
-				),
-				Locale.ENGLISH
-			);
-		final Date date = format.parse(dateStr);
-		return this.setDate(date);
-	}
-	public TriggerClock setDate(final Date date) {
-		if (date == null) throw new RequiredArgumentException("date");
-		this.date.set(date);
-		return this;
-	}
+	public static class TriggerFactory_Clock extends TriggerFactory<Trigger_Clock> {
+
+		protected Date  date = null;
+		protected xTime grace = new xTime();
 
 
 
-	// grace time
-	public long getGraceTime() {
-		final long time = this.grace.getMS();
-		return (
-			time <= 0L
-			? DEFAULT_GRACE_TIME
-			: time
-		);
-	}
-	public TriggerClock setGraceTime(final long time) {
-		this.grace.set(
-			time,
-			TimeUnit.MILLISECONDS
-		);
-		return this;
-	}
-	public TriggerClock setGraceTime(final String timeStr) {
-		this.grace.set(timeStr);
-		return this;
-	}
-	public TriggerClock setGraceTime(final xTime time) {
-		this.grace.set(time);
-		return this;
-	}
+		public static TriggerFactory_Clock New() {
+			return new TriggerFactory_Clock();
+		}
+		public TriggerFactory_Clock() {}
 
 
 
-	// ------------------------------------------------------------------------------- //
-	// overrides
+		@Override
+		public Trigger_Clock build() {
+			try {
+				return
+					new Trigger_Clock(
+						this.date,
+						this.grace.ms()
+					);
+			} catch (ParseException e) {
+				this.log().trace(e);
+			}
+			return null;
+		}
 
 
 
-	public TriggerClock enable() {
-		return ( super.enable() == null ? null : this );
-	}
-	public TriggerClock disable() {
-		return ( super.disable() == null ? null : this );
-	}
-	public TriggerClock enable(final boolean enabled) {
-		return ( super.enable(enabled) == null ? null : this );
-	}
+		public TriggerFactory_Clock date(final long time) {
+			if (time < 0L) throw new IllegalArgumentException("Invalid time value: "+Long.toString(time));
+			this.date = new Date(time);
+			return this;
+		}
+		public TriggerFactory_Clock date(final String dateStr, final String formatStr)
+				throws ParseException {
+			if (Utils.isEmpty(dateStr))   throw new RequiredArgumentException("dateStr");
+			final DateFormat format =
+				new SimpleDateFormat(
+					( Utils.isEmpty(formatStr) ? DEFAULT_DATE_FORMAT : formatStr ),
+					Locale.ENGLISH
+				);
+			this.date = format.parse(dateStr);
+			return this;
+		}
+		public TriggerFactory_Clock date(final String dateStr)
+				throws ParseException {
+			return this.date(dateStr, null);
+		}
+		public TriggerFactory_Clock date(final Date date) {
+			if (date == null) throw new RequiredArgumentException("date");
+			this.date = date;
+			return this;
+		}
 
 
 
-	public TriggerClock repeat() {
-		return ( super.repeat() == null ? null : this );
-	}
-	public TriggerClock noRepeat() {
-		return ( super.noRepeat() == null ? null : this );
-	}
-	public TriggerClock runOnce() {
-		return ( super.runOnce() == null ? null : this );
-	}
-	public TriggerClock repeat(final boolean repeating) {
-		return ( super.repeat(repeating) == null ? null : this );
+		public TriggerFactory_Clock grace(final long grace) {
+			this.grace.set(grace);
+			return this;
+		}
+		public TriggerFactory_Clock grace(final long grace, xTimeU xunit) {
+			this.grace.set(grace, xunit);
+			return this;
+		}
+		public TriggerFactory_Clock grace(final long grace, final TimeUnit unit) {
+			this.grace.set(grace, unit);
+			return this;
+		}
+		public TriggerFactory_Clock grace(final String graceStr) {
+			this.grace.set(graceStr);
+			return this;
+		}
+		public TriggerFactory_Clock grace(final xTime time) {
+			this.grace.set(time);
+			return this;
+		}
+
+
+
 	}
 
 

@@ -1,206 +1,145 @@
 package com.poixson.tools.scheduler.trigger;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
 
-import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.tools.xTime;
+import com.poixson.tools.xTimeU;
 
 
 public class Trigger_Interval extends Trigger {
 
-	protected final xTime delay    = new xTime();
-	protected final xTime interval = new xTime();
-	private final AtomicLong last = new AtomicLong( Long.MIN_VALUE );
-
-	private final Object updateLock = new Object();
+	protected final long delay;
+	protected final long interval;
 
 
 
-	// builder
-	public static Trigger_Interval builder() {
-		return new Trigger_Interval();
+	public Trigger_Interval(final long delay) {
+		this(delay, 0L);
 	}
-	public Trigger_Interval() {
-	}
-
-	// long
-	public Trigger_Interval(final long interval, final TimeUnit unit) {
-		this(
-			interval,
-			interval,
-			unit
-		);
-	}
-	public Trigger_Interval(final long delay, final long interval, final TimeUnit unit) {
-		this();
-		this.setDelay(   delay,    unit);
-		this.setInterval(interval, unit);
-	}
-
-	// string
-	public Trigger_Interval(final String intervalStr) {
-		this(
-			intervalStr,
-			intervalStr
-		);
-	}
-	public Trigger_Interval(final String delayStr, final String intervalStr) {
-		this();
-		this.setDelay(delayStr);
-		this.setInterval(intervalStr);
-	}
-
-	// xTime
-	public Trigger_Interval(final xTime interval) {
-		this(
-			interval,
-			interval
-		);
-	}
-	public Trigger_Interval(final xTime delay, final xTime interval) {
-		this();
-		this.setDelay(delay);
-		this.setInterval(interval);
+	public Trigger_Interval(final long delay, final long interval) {
+		super();
+		if (delay    < 0L) throw new IllegalArgumentException("Invalid delay value: "+Long.toString(delay));
+		if (interval < 0L) throw new IllegalArgumentException("Invalid interval value: "+Long.toString(interval));
+		this.delay    = delay;
+		this.interval = interval;
+		this.setRepeat( this.interval > 0 );
 	}
 
 
 
-	private void validateValues(final long now) {
-		synchronized(this.updateLock) {
-			// check delay/interval values
-			{
-				final long delay    = this.delay.getMS();
-				final long interval = this.interval.getMS();
-				if (interval < 1L) {
-					if (delay < 1L) throw new RequiredArgumentException("delay/interval");
-					// swap delay to interval
-					// and set no repeat
-					this.interval.set(
-						delay,
-						TimeUnit.MILLISECONDS
-					);
-					this.delay.set(
-						0L,
-						TimeUnit.MILLISECONDS
-					);
-					this.setRunOnce();
-				}
-			}
-			// first calculations
-			{
-				final long last     = this.last.get();
-				final long delay    = this.delay.getMS();
-				final long interval = this.interval.getMS();
-				if (last == Long.MIN_VALUE) {
-					this.last.set(
-						(now + delay) - interval
-					);
-				}
-			}
-		}
-	}
+	// ------------------------------------------------------------------------------- //
+	// calculate time
+
+
+
 	@Override
-	public long untilNextTrigger(final long now) {
+	public long untilNext(final long now) {
 		if (this.notEnabled())
 			return Long.MIN_VALUE;
-		synchronized(this.updateLock) {
-			this.validateValues(now);
-			if (this.notEnabled())
-				return Long.MIN_VALUE;
-			// calculate time until next trigger
-			final long last     = this.last.get();
-			final long interval = this.interval.getMS();
-			final long sinceLast = now - last;
-			final long untilNext = interval - sinceLast;
-			// trigger now
-			if (untilNext <= 0L) {
-				// adjust last value (keeping sync with time)
-				final long add =
-					((long) Math.floor(
-						((double)sinceLast) / ((double)interval)
-					)) * interval;
-				this.last.set(
-					last + add
-				);
-				return 0L;
+		final long last = this.last.get();
+		// delay until first trigger
+		if (last == Long.MIN_VALUE) {
+			if (this.delay <= 0L) {
+				if (this.last.compareAndSet(Long.MIN_VALUE, now))
+					return 0L;
+			} else {
+				final long sinceLast = this.interval - this.delay;
+				if (this.last.compareAndSet(Long.MIN_VALUE, now - sinceLast))
+					return this.delay;
 			}
-			// sleep time
-			return untilNext;
+			return 1L;
 		}
+		// until next interval
+		final long sinceLast = now - last;
+		final long untilNext = this.interval - sinceLast;
+		// trigger now
+		if (untilNext <= 0L) {
+			// adjust last value (keeping sync with time)
+			final long mult = sinceLast / this.interval;
+			this.last.set( last + (mult * this.interval) );
+		}
+		// sleep time
+		return untilNext;
 	}
 
 
 
 	// ------------------------------------------------------------------------------- //
-	// trigger config
+	// factory
 
 
 
-	public TriggerInterval setDelay(final long delay, final TimeUnit unit) {
-		this.delay.set(
-			delay,
-			unit
-		);
-		return this;
-	}
-	public TriggerInterval setDelay(final String delayStr) {
-		this.delay.set(delayStr);
-		return this;
-	}
-	public TriggerInterval setDelay(final xTime delay) {
-		this.delay.set(delay);
-		return this;
-	}
+	public static class TriggerFactory_Interval extends TriggerFactory<Trigger_Interval> {
+
+		protected final xTime delay    = new xTime();
+		protected final xTime interval = new xTime();
 
 
 
-	public TriggerInterval setInterval(final long interval, final TimeUnit unit) {
-		this.interval.set(
-			interval,
-			unit
-		);
-		return this;
-	}
-	public TriggerInterval setInterval(final String intervalStr) {
-		this.interval.set(intervalStr);
-		return this;
-	}
-	public TriggerInterval setInterval(final xTime interval) {
-		this.interval.set(interval);
-		return this;
-	}
+		public static TriggerFactory_Interval New() {
+			return new TriggerFactory_Interval();
+		}
+		public TriggerFactory_Interval() {}
 
 
 
-	// ------------------------------------------------------------------------------- //
-	// overrides
+		@Override
+		public Trigger_Interval build() {
+			return
+				new Trigger_Interval(
+					this.delay.ms(),
+					this.interval.ms()
+				);
+		}
 
 
 
-	public TriggerInterval enable() {
-		return ( super.enable() == null ? null : this );
-	}
-	public TriggerInterval disable() {
-		return ( super.disable() == null ? null : this );
-	}
-	public TriggerInterval enable(final boolean enabled) {
-		return ( super.enable(enabled) == null ? null : this );
-	}
+		public TriggerFactory_Interval delay(final long time) {
+			this.delay.set(time);
+			return this;
+		}
+		public TriggerFactory_Interval delay(final long delay, final xTimeU xunit) {
+			this.delay.set(delay, xunit);
+			return this;
+		}
+		public TriggerFactory_Interval delay(final long delay, final TimeUnit unit) {
+			this.delay.set(delay, unit);
+			return this;
+		}
+		public TriggerFactory_Interval delay(final String delayStr) {
+			this.delay.set(delayStr);
+			return this;
+		}
+		public TriggerFactory_Interval delay(final xTime time) {
+			this.delay.set(time);
+			return this;
+		}
 
 
 
-	public TriggerInterval repeat() {
-		return ( super.repeat() == null ? null : this );
-	}
-	public TriggerInterval noRepeat() {
-		return ( super.noRepeat() == null ? null : this );
-	}
-	public TriggerInterval runOnce() {
-		return ( super.runOnce() == null ? null : this );
-	}
-	public TriggerInterval repeat(final boolean repeating) {
-		return ( super.repeat(repeating) == null ? null : this );
+		public TriggerFactory_Interval interval(final long time) {
+			this.interval.set(time);
+			return this;
+		}
+		public TriggerFactory_Interval interval(final long interval, final xTimeU xunit) {
+			this.interval.set(interval, xunit);
+			return this;
+		}
+		public TriggerFactory_Interval interval(final long interval, final TimeUnit unit) {
+			this.interval.set(interval, unit);
+			return this;
+		}
+		public TriggerFactory_Interval interval(final String intervalStr) {
+			this.interval.set(intervalStr);
+			return this;
+		}
+		public TriggerFactory_Interval interval(final xTime time) {
+			this.interval.set(time);
+			return this;
+		}
+
+
+
 	}
 
 

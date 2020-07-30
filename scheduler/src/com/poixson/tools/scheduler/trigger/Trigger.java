@@ -1,7 +1,11 @@
 package com.poixson.tools.scheduler.trigger;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import static com.poixson.logger.xLog.XLog;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
+
+import com.poixson.logger.xLog;
 import com.poixson.tools.abstractions.xEnableable;
 
 
@@ -9,6 +13,8 @@ public abstract class Trigger implements xEnableable {
 
 	protected final AtomicBoolean enabled   = new AtomicBoolean(true);
 	protected final AtomicBoolean repeating = new AtomicBoolean(false);
+
+	protected final AtomicLong last = new AtomicLong( Long.MIN_VALUE );
 
 
 
@@ -65,6 +71,17 @@ public abstract class Trigger implements xEnableable {
 	}
 	public void setRunOnce() {
 		this.setRepeat(false);
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// logger
+
+
+
+	public xLog log() {
+		return XLog();
 	}
 
 
