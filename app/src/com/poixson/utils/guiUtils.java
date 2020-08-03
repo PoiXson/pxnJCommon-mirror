@@ -4,9 +4,16 @@ import static com.poixson.logger.xLog.XLog;
 
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
@@ -96,6 +103,23 @@ public final class guiUtils {
 		} catch(Exception ignore) {}
 		log().warning("Failed to load image:", path);
 		return null;
+	}
+
+
+
+	public static Image IconToImage(final Icon icon) {
+		if (icon instanceof ImageIcon)
+			return ((ImageIcon) icon).getImage();
+		final int w = icon.getIconWidth();
+		final int h = icon.getIconHeight();
+		final GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		final GraphicsDevice dev = env.getDefaultScreenDevice();
+		final GraphicsConfiguration cfg = dev.getDefaultConfiguration();
+		final BufferedImage image = cfg.createCompatibleImage(w, h);
+		final Graphics2D g = image.createGraphics();
+		icon.paintIcon(null, g, 0, 0);
+		g.dispose();
+		return image;
 	}
 
 
