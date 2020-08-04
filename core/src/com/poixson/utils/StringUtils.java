@@ -846,6 +846,53 @@ public final class StringUtils {
 
 
 
+	public static String FirstPart(final String data, final char...delims) {
+		if (Utils.isEmpty(data)) return "";
+		if (delims.length == 0) throw new RequiredArgumentException("delims");
+		final int pos = IndexOf(data, delims);
+		if (pos == -1)
+			return data;
+		return data.substring(0, pos);
+	}
+	public static String FirstPart(final String data, final String...delims) {
+		if (Utils.isEmpty(data)) return "";
+		if (delims.length == 0) throw new RequiredArgumentException("delims");
+		final int pos = IndexOf(data, delims);
+		if (pos == -1)
+			return data;
+		return data.substring(0, pos);
+	}
+
+
+
+	public static String LastPart(final String data, final char...delims) {
+		if (Utils.isEmpty(data)) return "";
+		if (delims.length == 0) throw new RequiredArgumentException("delims");
+		final int pos = IndexOfLast(data, delims);
+		if (pos == -1)
+			return data;
+		return data.substring(pos + 1);
+	}
+	public static String LastPart(final String data, final String...delims) {
+		if (Utils.isEmpty(data)) return "";
+		if (delims.length == 0) throw new RequiredArgumentException("delims");
+		final int pos = IndexOfLast(data, delims);
+		if (pos == -1)
+			return data;
+		int delimLen = 0;
+		for (final String delim : delims) {
+			if (Utils.isEmpty(delim)) continue;
+			final int len = delim.length();
+			if (len <= delimLen) continue;
+			if (data.substring(pos, len).equals(delim))
+				delimLen = len;
+		}
+		if (delimLen == 0) throw new RuntimeException("delim not found second pass");
+		return data.substring(pos + delimLen);
+	}
+
+
+
 	// ------------------------------------------------------------------------------- //
 	// replace within string
 
