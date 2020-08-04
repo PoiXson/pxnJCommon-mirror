@@ -167,6 +167,12 @@ public class xFont {
 
 
 
+	public int getSize() {
+		final int size = this.size;
+		if (size <= 0)
+			return DefaultSize();
+		return size;
+	}
 	public xFont size(final int size) {
 		this.size = size;
 		return this;
@@ -183,6 +189,9 @@ public class xFont {
 
 
 
+	public int getStyle() {
+		return this.style;
+	}
 	public xFont plain() {
 		this.style = Font.PLAIN;
 		return this;
@@ -203,6 +212,12 @@ public class xFont {
 
 
 
+	public String getFamily() {
+		final String family = this.family;
+		if (Utils.isEmpty(family))
+			return DefaultFamily();
+		return family;
+	}
 	public xFont family(final String family) {
 		this.family = family;
 		return this;
@@ -218,9 +233,9 @@ public class xFont {
 	public Font font() {
 		return
 			new Font(
-				this.family,
-				this.style,
-				this.size
+				this.getFamily(),
+				this.getStyle(),
+				this.getSize()
 			);
 	}
 
