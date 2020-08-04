@@ -1,6 +1,7 @@
 package com.poixson.tools;
 
 import java.awt.Font;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.utils.NumberUtils;
 import com.poixson.utils.Utils;
@@ -8,9 +9,11 @@ import com.poixson.utils.Utils;
 
 public class xFont {
 
-	public String family = null;
-	public int style = Font.PLAIN;
-	public int size  = xFontDefault.Get().size;
+	protected static final AtomicReference<xFont> DefaultFont = new AtomicReference<xFont>(null);
+
+	protected String family = DefaultFamily();
+	protected int style     = DefaultStyle();
+	protected int size      = DefaultSize();
 
 
 
@@ -45,6 +48,41 @@ public class xFont {
 	}
 	public xFont() {
 	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// default font
+
+
+
+	public static xFont GetDefault() {
+		if (DefaultFont.get() == null) {
+			final xFont font = new xFont( Font.decode(null) );
+			if (DefaultFont.compareAndSet(null, font))
+				return font;
+		}
+		return DefaultFont.get();
+	}
+
+
+
+	public static String DefaultFamily() {
+		final xFont font = GetDefault();
+		return font.family;
+	}
+	public static int DefaultStyle() {
+		final xFont font = GetDefault();
+		return font.style;
+	}
+	public static int DefaultSize() {
+		final xFont font = GetDefault();
+		return font.size;
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
 
 
 
