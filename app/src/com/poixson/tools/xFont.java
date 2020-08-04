@@ -11,9 +11,9 @@ public class xFont {
 
 	protected static final AtomicReference<xFont> DefaultFont = new AtomicReference<xFont>(null);
 
-	protected String family = DefaultFamily();
-	protected int style     = DefaultStyle();
-	protected int size      = DefaultSize();
+	protected String family = null;
+	protected int style     = Font.PLAIN;
+	protected int size      = 0;
 
 
 
