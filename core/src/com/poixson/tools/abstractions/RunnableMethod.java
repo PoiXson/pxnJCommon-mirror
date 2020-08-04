@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.tools.StringParts;
 import com.poixson.utils.ReflectUtils;
 import com.poixson.utils.Utils;
 
@@ -93,11 +92,11 @@ public class RunnableMethod<V> extends xRunnable {
 	public String getFullName() {
 		return
 			(new StringBuilder())
-				.append( StringParts.PeekLastPart(this.container.getClass().getName(), '.'))
-				.append("->")
-				.append( this.method.getName())
-				.append("()")
-				.toString();
+			.append( Utils.GetClassName(this.container) )
+			.append("->")
+			.append( this.method.getName())
+			.append("()")
+			.toString();
 	}
 
 

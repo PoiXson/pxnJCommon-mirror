@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.utils.ProcUtils;
-import com.poixson.utils.ReflectUtils;
 import com.poixson.utils.Utils;
 
 
@@ -187,7 +186,7 @@ public class xLockFile {
 		}
 	}
 	protected xLog _log() {
-		final String className = ReflectUtils.GetClassName( this.getClass() );
+		final String className = Utils.GetClassName(this);
 		return XLog(className);
 	}
 

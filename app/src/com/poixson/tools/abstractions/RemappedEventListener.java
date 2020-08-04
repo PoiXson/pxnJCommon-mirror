@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
-import com.poixson.tools.StringParts;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 import com.poixson.utils.guiUtils;
@@ -100,8 +99,7 @@ public abstract class RemappedEventListener {
 
 
 	public String getListenerName() {
-		final String name = StringParts.PeekLastPart(this.getClass().getName(), '.');
-		return StringUtils.TrimFront(name, "Remapped");
+		return StringUtils.TrimFront( Utils.GetClassName(this), "Remapped" );
 	}
 
 

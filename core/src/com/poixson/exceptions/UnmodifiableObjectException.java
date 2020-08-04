@@ -3,7 +3,6 @@ package com.poixson.exceptions;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import com.poixson.tools.StringParts;
 import com.poixson.utils.StringUtils;
 
 
@@ -22,15 +21,11 @@ public class UnmodifiableObjectException extends UnsupportedOperationException {
 			final StackTraceElement e = it.next();
 			final String className = e.getClassName();
 			if (!className.endsWith("UnmodifiableObjectException")) {
-				final String parentClassName =
-					StringParts.PeekLastPart(className, '.');
-				final String parentMethodName =
-					StringUtils.Trim(e.getMethodName(), '<', '>');
 				return
 					StringUtils.ReplaceTags(
 						"Object cannot be modified! {}->{}()",
-						parentClassName,
-						parentMethodName
+						StringUtils.LastPart(className, '.'),
+						StringUtils.Trim(e.getMethodName(), '<', '>')
 					);
 			}
 		}
