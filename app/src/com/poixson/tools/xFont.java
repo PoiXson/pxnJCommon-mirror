@@ -20,6 +20,9 @@ public class xFont {
 	public static xFont Build(final xFont clone) {
 		return new xFont(clone);
 	}
+	public static xFont Build(final Font clone) {
+		return new xFont(clone);
+	}
 	public static xFont Build() {
 		return new xFont();
 	}
@@ -35,6 +38,9 @@ public class xFont {
 		this.apply(format);
 	}
 	public xFont(final xFont clone) {
+		this.apply(clone);
+	}
+	public xFont(final Font clone) {
 		this.apply(clone);
 	}
 	public xFont() {
@@ -107,6 +113,12 @@ public class xFont {
 		this.family = clone.family;
 		this.style  = clone.style;
 		this.size   = clone.size;
+		return this;
+	}
+	public xFont apply(final Font clone) {
+		this.family = clone.getFamily();
+		this.style  = clone.getStyle();
+		this.size   = clone.getSize();
 		return this;
 	}
 
