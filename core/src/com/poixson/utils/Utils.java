@@ -18,6 +18,15 @@ public final class Utils {
 
 
 
+	public static String GetClassName(final Object obj) {
+		if (obj == null) return null;
+		if (obj instanceof Class)
+			return ((Class<?>) obj).getSimpleName();
+		return obj.getClass().getSimpleName();
+	}
+
+
+
 	// ------------------------------------------------------------------------------- //
 	// is empty
 
