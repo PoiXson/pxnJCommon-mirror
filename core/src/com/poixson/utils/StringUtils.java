@@ -756,11 +756,11 @@ public final class StringUtils {
 
 
 	// index of (many delims)
-	public static int IndexOf(final String string, final int fromIndex, final char...delims) {
-		if (Utils.isEmpty(string)) return -1;
+	public static int IndexOf(final String data, final int fromIndex, final char...delims) {
+		if (Utils.isEmpty(data)) return -1;
 		int pos = Integer.MAX_VALUE;
 		for (final char delim : delims) {
-			final int p = string.indexOf(delim, fromIndex);
+			final int p = data.indexOf(delim, fromIndex);
 			// delim not found
 			if (p == -1) continue;
 			// earlier delim
@@ -771,18 +771,18 @@ public final class StringUtils {
 		}
 		return (pos == Integer.MAX_VALUE ? -1 : pos);
 	}
-	public static int IndexOf(final String string, final char...delims) {
-		return IndexOf(string, 0, delims);
+	public static int IndexOf(final String data, final char...delims) {
+		return IndexOf(data, 0, delims);
 	}
 
 
 
-	public static int IndexOf(final String string, final int fromIndex, final String...delims) {
-		if (Utils.isEmpty(string)) return -1;
+	public static int IndexOf(final String data, final int fromIndex, final String...delims) {
+		if (Utils.isEmpty(data)) return -1;
 		int pos = Integer.MAX_VALUE;
 		for (final String delim : delims) {
 			if (Utils.isEmpty(delim)) continue;
-			final int p = string.indexOf(delim, fromIndex);
+			final int p = data.indexOf(delim, fromIndex);
 			// delim not found
 			if (p == -1) continue;
 			// earlier delim
@@ -793,18 +793,18 @@ public final class StringUtils {
 		}
 		return (pos == Integer.MAX_VALUE ? -1 : pos);
 	}
-	public static int IndexOf(final String string, final String...delims) {
-		return IndexOf(string, 0, delims);
+	public static int IndexOf(final String data, final String...delims) {
+		return IndexOf(data, 0, delims);
 	}
 
 
 
 	// last index of (many delims)
-	public static int IndexOfLast(final String string, final char...delims) {
-		if (Utils.isEmpty(string)) return -1;
+	public static int IndexOfLast(final String data, final char...delims) {
+		if (Utils.isEmpty(data)) return -1;
 		int pos = Integer.MIN_VALUE;
 		for (final char delim : delims) {
-			final int p = string.lastIndexOf(delim);
+			final int p = data.lastIndexOf(delim);
 			// delim not found
 			if (p == -1) continue;
 			// later delim
@@ -814,12 +814,12 @@ public final class StringUtils {
 		}
 		return (pos == Integer.MIN_VALUE ? -1 : pos);
 	}
-	public static int IndexOfLast(final String string, final String...delims) {
-		if (Utils.isEmpty(string)) return -1;
+	public static int IndexOfLast(final String data, final String...delims) {
+		if (Utils.isEmpty(data)) return -1;
 		int pos = Integer.MIN_VALUE;
 		for (final String delim : delims) {
 			if (Utils.isEmpty(delim)) continue;
-			final int p = string.lastIndexOf(delim);
+			final int p = data.lastIndexOf(delim);
 			// delim not found
 			if (p == -1) continue;
 			// later delim
