@@ -459,6 +459,38 @@ public class Test_StringUtils {
 
 
 
+	@Test
+	public void testFirstPart() {
+		// char
+		Assert.assertEquals( "abc", StringUtils.FirstPart("abc,def,ghi",   ',') );
+		Assert.assertEquals( "",    StringUtils.FirstPart(",abc,def,ghi,", ',') );
+		Assert.assertEquals( "abc", StringUtils.FirstPart("abc",           ',') );
+		Assert.assertEquals( "",    StringUtils.FirstPart("",              ',') );
+		Assert.assertEquals( "",    StringUtils.FirstPart(null,            ',') );
+		// string
+		Assert.assertEquals( "abc", StringUtils.FirstPart("abc,def,ghi",   ",") );
+		Assert.assertEquals( "",    StringUtils.FirstPart(",abc,def,ghi,", ",") );
+		Assert.assertEquals( "abc", StringUtils.FirstPart("abc",           ",") );
+		Assert.assertEquals( "",    StringUtils.FirstPart("",              ",") );
+		Assert.assertEquals( "",    StringUtils.FirstPart(null,            ",") );
+	}
+	public void testLastPart() {
+		// char
+		Assert.assertEquals( "ghi", StringUtils.LastPart("abc,def,ghi",   ',') );
+		Assert.assertEquals( "",    StringUtils.LastPart(",abc,def,ghi,", ',') );
+		Assert.assertEquals( "abc", StringUtils.LastPart("abc",           ',') );
+		Assert.assertEquals( "",    StringUtils.LastPart("",              ',') );
+		Assert.assertEquals( "",    StringUtils.LastPart(null,            ',') );
+		// string
+		Assert.assertEquals( "ghi", StringUtils.LastPart("abc,def,ghi",   ",") );
+		Assert.assertEquals( "",    StringUtils.LastPart(",abc,def,ghi,", ",") );
+		Assert.assertEquals( "abc", StringUtils.LastPart("abc",           ",") );
+		Assert.assertEquals( "",    StringUtils.LastPart("",              ",") );
+		Assert.assertEquals( "",    StringUtils.LastPart(null,            ",") );
+	}
+
+
+
 	// ------------------------------------------------------------------------------- //
 	// replace within string
 
