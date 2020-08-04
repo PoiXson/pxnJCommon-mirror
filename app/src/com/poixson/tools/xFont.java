@@ -104,7 +104,7 @@ public class xFont {
 					part = part.substring(1).trim();
 					final Integer size = NumberUtils.ToInteger(part);
 					if (size == null) throw new RuntimeException("Invalid font size: "+part);
-					final int sizeDef = xFontDefault.Get().size;
+					final int sizeDef = DefaultSize();
 					this.size(sizeDef + size.intValue());
 				} else {
 					final Integer size = NumberUtils.ToInteger(part);
