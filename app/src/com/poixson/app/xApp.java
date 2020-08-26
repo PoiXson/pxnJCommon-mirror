@@ -388,6 +388,14 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 
 
 
+	public long uptime() {
+		final long current = Utils.getSystemMillis();
+		final long startTime = this.startTime.ms();
+		return current - startTime;
+	}
+
+
+
 	// ------------------------------------------------------------------------------- //
 	// failure
 
