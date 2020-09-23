@@ -416,41 +416,6 @@ public final class NumberUtils {
 
 
 	// ------------------------------------------------------------------------------- //
-	// remap number between ranges
-
-
-
-	public static int Remap(
-			final int lowA, final int highA,
-			final int lowB, final int highB,
-			final int value) {
-		int result = (highB - lowB) / (highA - lowA);
-		result *= (value - lowA);
-		result += lowB;
-		return result;
-	}
-
-
-
-	public static int Remap(final int low, final int high, final double percent) {
-		double result = ((double)(high - low)) * percent;
-		return ((int)result) + low;
-	}
-
-
-
-	public static Color Remap(final Color colorA, final Color colorB, final double percent) {
-		return
-			new Color(
-				MinMax(Remap(colorA.getRed(),   colorB.getRed(),   percent), 0, 255),
-				MinMax(Remap(colorA.getGreen(), colorB.getGreen(), percent), 0, 255),
-				MinMax(Remap(colorA.getBlue(),  colorB.getBlue(),  percent), 0, 255)
-			);
-	}
-
-
-
-	// ------------------------------------------------------------------------------- //
 	// random number
 
 

@@ -1,5 +1,6 @@
 package com.poixson.utils;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +57,41 @@ public final class MathUtils {
 	}
 	public static long Ceil(final long value, final int product) {
 		return (long) Ceil( (double) value, (double) product );
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// remap number between ranges
+
+
+
+	public static int Remap(
+			final int lowA, final int highA,
+			final int lowB, final int highB,
+			final int value) {
+		int result = (highB - lowB) / (highA - lowA);
+		result *= (value - lowA);
+		result += lowB;
+		return result;
+	}
+
+
+
+	public static int Remap(final int low, final int high, final double percent) {
+		double result = ((double)(high - low)) * percent;
+		return ((int)result) + low;
+	}
+
+
+
+	public static Color Remap(final Color colorA, final Color colorB, final double percent) {
+		return
+			new Color(
+				NumberUtils.MinMax(Remap(colorA.getRed(),   colorB.getRed(),   percent), 0, 255),
+				NumberUtils.MinMax(Remap(colorA.getGreen(), colorB.getGreen(), percent), 0, 255),
+				NumberUtils.MinMax(Remap(colorA.getBlue(),  colorB.getBlue(),  percent), 0, 255)
+			);
 	}
 
 
