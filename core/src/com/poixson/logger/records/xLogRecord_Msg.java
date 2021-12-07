@@ -8,11 +8,11 @@ import com.poixson.utils.Utils;
 
 public class xLogRecord_Msg implements xLogRecord {
 
-	public final xLog     log;
 	public final xLevel   level;
 	public final long     timestamp;
 	public final String[] lines;
 	public final Object[] args;
+	public final String[] nametree;
 
 
 
@@ -22,11 +22,11 @@ public class xLogRecord_Msg implements xLogRecord {
 	}
 	public xLogRecord_Msg(final xLog log, final xLevel level,
 			final String[] lines, final Object[] args) {
-		this.log = log;
 		this.level = level;
 		this.timestamp = Utils.getSystemMillis();
 		this.lines = lines;
 		this.args  = args;
+		this.nametree = log.getNameTree();
 	}
 
 
@@ -84,6 +84,14 @@ public class xLogRecord_Msg implements xLogRecord {
 
 
 
+	// [logger][crumbs]
+	@Override
+	public String[] getNameTree() {
+		return this.nametree;
+	}
+
+
+
 	@Override
 	public long getTimestamp() {
 		return this.timestamp;
@@ -98,14 +106,6 @@ public class xLogRecord_Msg implements xLogRecord {
 	@Override
 	public boolean notEmpty() {
 		return Utils.notEmpty(this.lines);
-	}
-
-
-
-	// [logger][crumbs]
-	public String[] getNameTree() {
-		if (this.log == null) return null;
-		return this.log.getNameTree();
 	}
 
 
