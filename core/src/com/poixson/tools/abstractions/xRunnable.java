@@ -131,7 +131,7 @@ public class xRunnable implements RunnableNamed {
 	}
 	@Override
 	public boolean equalsTaskName(final String matchName) {
-		return StringUtils.StrEqualsExact(this.getTaskName(), matchName);
+		return StringUtils.MatchStringExact(this.getTaskName(), matchName);
 	}
 
 
