@@ -89,7 +89,7 @@ public class xLogOutputStream extends OutputStream {
 				new xLogRecord_Msg(
 					this.log,
 					this.level,
-					new String[] { this.buffer.toString() },
+					this.buffer.toString(),
 					new Object[0]
 				)
 			);

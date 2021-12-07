@@ -22,7 +22,7 @@ public class xLogHandler_File extends xLogHandler {
 
 
 	@Override
-	public void publish(final String line) {
+	public void publish(final String[] lines) {
 //TODO
 throw new RuntimeException("UNFINISHED CODE");
 	}

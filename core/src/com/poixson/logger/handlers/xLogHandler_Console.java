@@ -31,20 +31,6 @@ public class xLogHandler_Console extends xLogHandler {
 
 
 	@Override
-	public void publish(final String line) {
-		this.getPublishLock();
-		try {
-			if (Utils.isEmpty(line)) {
-				this.out.println();
-			} else {
-				this.out.println( ShellUtils.RenderAnsi(line) );
-			}
-			this.out.flush();
-		} finally {
-			this.releasePublishLock();
-		}
-	}
-	@Override
 	public void publish(final String[] lines) {
 		this.getPublishLock();
 		try {
@@ -84,15 +70,6 @@ public class xLogHandler_Console extends xLogHandler {
 	@Override
 	public void beep() {
 	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// formatter
-
-
-
-//TODO
 
 
 

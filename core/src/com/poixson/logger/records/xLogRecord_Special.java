@@ -24,7 +24,7 @@ public class xLogRecord_Special implements xLogRecord {
 
 
 	@Override
-	public String[] getLines() {
+	public String getMessage() {
 //TODO
 return null;
 	}

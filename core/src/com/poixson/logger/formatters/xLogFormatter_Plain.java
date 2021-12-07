@@ -14,9 +14,9 @@ public class xLogFormatter_Plain extends xLogFormatter {
 
 
 	@Override
-	public String[] formatMessage(final xLogRecord_Msg record) {
+	public String formatMessage(final xLogRecord_Msg record) {
 		if (record == null) return null;
-		return record.getLines();
+		return record.getMessage();
 	}
 
 

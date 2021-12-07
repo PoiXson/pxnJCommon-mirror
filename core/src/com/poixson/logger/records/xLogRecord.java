@@ -6,7 +6,7 @@ import com.poixson.logger.xLevel;
 public interface xLogRecord {
 
 
-	public String[] getLines();
+	public String   getMessage();
 	public xLevel   getLevel();
 	public String[] getNameTree();
 	public long     getTimestamp();

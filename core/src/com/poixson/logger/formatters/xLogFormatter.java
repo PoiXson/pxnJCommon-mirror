@@ -38,38 +38,26 @@ public class xLogFormatter {
 
 
 
-	public String[] formatMessage(final xLogRecord_Msg record) {
-		final String[] lines = record.getLines();
-		if (Utils.isEmpty(lines))
-			return new String[0];
+	public String formatMessage(final xLogRecord_Msg record) {
+		final String msg = record.getMessage();
+		if (Utils.isEmpty(msg))
+			return null;
 		// [[ title ]]
 		if (xLevel.TITLE.equals(record.level))
 			return this.genTitle(record);
 		// message
-		final HashMap<String, Object> args = new HashMap<String, Object>();
-		if (this.containsTime)
-			args.put( "time", this.genTimestamp(record) );
-		if (this.containsLevel) {
-			final String levelStr = record.getLevelName();
-			if (Utils.notEmpty(levelStr))
-				args.put("level", StringUtils.PadCenter(7, levelStr, ' '));
-		}
-		if (this.containsCrumbs)
-			args.put( "crumbs", this.genCrumbs(record) );
-		// single line
-		if (lines.length == 1) {
-			args.put("msg", lines[0]);
-			return new String[] {
-				StringUtils.ReplaceTags(this.format, args)
-			};
-		// multiple lines
-		} else {
-			final String[] result = new String[lines.length];
-			for (int index=0; index<lines.length; index++) {
-				args.put("msg", lines[index]);
-				result[index] = StringUtils.ReplaceTags(this.format, args);
+		{
+			final HashMap<String, Object> args = new HashMap<String, Object>();
+			if (this.containsTime)
+				args.put( "time", this.genTimestamp(record) );
+			if (this.containsLevel) {
+				final String levelStr = record.getLevelName();
+				if (Utils.notEmpty(levelStr))
+					args.put("level", StringUtils.PadCenter(7, levelStr, ' '));
 			}
-			return result;
+			if (this.containsCrumbs)
+				args.put( "crumbs", this.genCrumbs(record) );
+			return String.format(this.format, args);
 		}
 	}
 
@@ -81,33 +69,30 @@ public class xLogFormatter {
 
 
 	// title
-	protected String[] genTitle(final xLogRecord_Msg record) {
+	protected String genTitle(final xLogRecord_Msg record) {
 		return this.genTitle(record, " [[ ", " ]] ");
 	}
-	protected String[] genTitle(final xLogRecord_Msg record,
+	protected String genTitle(final xLogRecord_Msg record,
 			final String preStr, final String postStr) {
 		if (record.isEmpty()) {
-			return new String[] {
-				(new StringBuilder())
+			return (new StringBuilder())
 					.append(preStr)
 					.append("<null>")
 					.append(postStr)
-					.toString()
-			};
-		}
-		final String[] lines = record.getLines();
-		final String[] result = new String[ lines.length ];
-		final int len = StringUtils.FindLongestLine(lines);
-		for (int index = 0; index < lines.length; index++) {
-			final String line = StringUtils.PadEnd(len, lines[index], ' ');
-			result[index] =
-				(new StringBuilder())
-					.append(preStr)
-					.append(line)
-					.append(postStr)
 					.toString();
 		}
-		return result;
+		final String msg = record.getMessage();
+		final String[] lines = msg.split("\n");
+		final int length = StringUtils.FindLongestLine(lines);
+		final StringBuilder result = new StringBuilder();
+		for (final String line : lines) {
+			if (result.length() == 0)
+				result.append('\n');
+			result.append(preStr)
+				.append( StringUtils.PadEnd(length, line, ' ') )
+				.append(postStr);
+		}
+		return result.toString();
 	}
 
 

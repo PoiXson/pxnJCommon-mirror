@@ -77,7 +77,7 @@ public class LoggerToXLog extends Handler {
 		final Level  lvl = record.getLevel();
 		final xLevel level = xLevel.FromJavaLevel(lvl);
 		log.publish(
-			new xLogRecord_Msg(log, level, new String[] {msg}, null)
+			new xLogRecord_Msg(log, level, msg, null)
 		);
 	}
 

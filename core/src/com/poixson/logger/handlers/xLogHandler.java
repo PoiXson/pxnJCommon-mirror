@@ -8,6 +8,7 @@ import com.poixson.logger.xLevel;
 import com.poixson.logger.formatters.xLogFormatter;
 import com.poixson.logger.records.xLogRecord;
 import com.poixson.logger.records.xLogRecord_Msg;
+import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
@@ -32,26 +33,23 @@ public abstract class xLogHandler {
 
 
 
-	public abstract void publish(final String line);
+	public abstract void publish(final String[] lines);
 
 	public void publish() {
-		this.publish( (String) null );
+		this.publish( (String[])null );
 	}
-	public void publish(final String[] lines) {
-		// blank line
+	public void publish(final String msg) {
+		if (Utils.isEmpty(msg)) {
+			this.publish();
+			return;
+		}
+		final String trimmed = StringUtils.Trim(msg, '\n');
+		final String[] lines = trimmed.split("\n");
 		if (Utils.isEmpty(lines)) {
 			this.publish();
 			return;
 		}
-		// single line
-		if (lines.length == 1) {
-			this.publish(lines[0]);
-			return;
-		}
-		// multiple lines
-		for (final String line : lines) {
-			this.publish(line);
-		}
+		this.publish(lines);
 	}
 	public void publish(final xLogRecord record) {
 		if (this.notLoggable(record.getLevel()))
@@ -61,16 +59,7 @@ public abstract class xLogHandler {
 			this.publish();
 			return;
 		}
-		final String[] lines = this.formatMessage(record);
-		// single line
-		if (lines.length == 1) {
-			this.publish(lines[0]);
-		// multiple lines
-		} else {
-			for (final String line : lines) {
-				this.publish(line);
-			}
-		}
+		this.publish( this.formatMessage(record) );
 	}
 
 
@@ -123,13 +112,13 @@ public abstract class xLogHandler {
 
 
 
-	public String[] formatMessage(final xLogRecord record) {
+	public String formatMessage(final xLogRecord record) {
 		final xLogFormatter formatter = this.getFormatterOrDefault();
 		if (formatter == null)
-			return record.getLines();
+			return record.getMessage();
 		if (record instanceof xLogRecord_Msg)
 			return formatter.formatMessage( (xLogRecord_Msg)record );
-		return record.getLines();
+		return record.getMessage();
 	}
 
 

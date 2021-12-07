@@ -296,27 +296,15 @@ public class xLog implements xLogInterface {
 		}
 	}
 	@Override
-	public void publish(final String line) {
+	public void publish(final String msg) {
 		final xLogHandler[] handlers = this.getLogHandlers();
 		if (Utils.notEmpty(handlers)) {
 			for (final xLogHandler handler : handlers) {
-				handler.publish(line);
+				handler.publish(msg);
 			}
 		}
 		if (this.parent != null) {
-			this.parent.publish(line);
-		}
-	}
-	@Override
-	public void publish(final String[] lines) {
-		final xLogHandler[] handlers = this.getLogHandlers();
-		if (Utils.notEmpty(handlers)) {
-			for (final xLogHandler handler : handlers) {
-				handler.publish(lines);
-			}
-		}
-		if (this.parent != null) {
-			this.parent.publish(lines);
+			this.parent.publish(msg);
 		}
 	}
 	@Override
@@ -390,15 +378,9 @@ public class xLog implements xLogInterface {
 
 	// title
 	@Override
-	public void title(final String line, final Object...args) {
+	public void title(final String msg, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.TITLE, new String[] {line}, args)
-		);
-	}
-	@Override
-	public void title(final String[] lines, final Object...args) {
-		this.publish(
-			new xLogRecord_Msg(this, xLevel.TITLE, lines, args)
+			new xLogRecord_Msg(this, xLevel.TITLE, msg, args)
 		);
 	}
 
@@ -410,10 +392,10 @@ public class xLog implements xLogInterface {
 		this.trace(e, null);
 	}
 	@Override
-	public void trace(final Throwable e, final String line, final Object...args) {
+	public void trace(final Throwable e, final String msg, final Object...args) {
 		final StringBuilder str = new StringBuilder();
-		if (Utils.notEmpty(line)) {
-			str.append(line)
+		if (Utils.notEmpty(msg)) {
+			str.append(msg)
 				.append(" - ");
 		}
 		str.append(
@@ -423,7 +405,7 @@ public class xLog implements xLogInterface {
 			new xLogRecord_Msg(
 				this,
 				xLevel.SEVERE,
-				StringUtils.StringToArray(str.toString()),
+				str.toString(),
 				args
 			)
 		);
@@ -433,172 +415,93 @@ public class xLog implements xLogInterface {
 
 	// std out
 	@Override
-	public void stdout(final String...lines) {
-		this.publish(lines);
+	public void stdout(final String msg) {
+		this.publish(msg);
 	}
+
 	// std err
 	@Override
-	public void stderr(final String...lines) {
-		this.publish(lines);
+	public void stderr(final String msg) {
+		this.publish(msg);
 	}
-
-
 
 	// detail
 	@Override
-	public void detail(final String line, final Object...args) {
+	public void detail(final String msg, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.DETAIL, new String[] {line}, args)
+			new xLogRecord_Msg(this, xLevel.DETAIL, msg, args)
 		);
 	}
-	@Override
-	public void detail(final String[] lines, final Object...args) {
-		this.publish(
-			new xLogRecord_Msg(this, xLevel.DETAIL, lines, args)
-		);
-	}
-
-
 
 	// finest
 	@Override
-	public void finest(final String line, final Object...args) {
+	public void finest(final String msg, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.FINEST, new String[] {line}, args)
+			new xLogRecord_Msg(this, xLevel.FINEST, msg, args)
 		);
 	}
-	@Override
-	public void finest(final String[] lines, final Object...args) {
-		this.publish(
-			new xLogRecord_Msg(this, xLevel.FINEST, lines, args)
-		);
-	}
-
-
 
 	// finer
 	@Override
-	public void finer(final String line, final Object...args) {
+	public void finer(final String msg, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.FINER, new String[] {line}, args)
+			new xLogRecord_Msg(this, xLevel.FINER, msg, args)
 		);
 	}
-	@Override
-	public void finer(final String[] lines, final Object...args) {
-		this.publish(
-			new xLogRecord_Msg(this, xLevel.FINER, lines, args)
-		);
-	}
-
-
 
 	// fine
 	@Override
-	public void fine(final String line, final Object...args) {
+	public void fine(final String msg, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.FINE, new String[] {line}, args)
+			new xLogRecord_Msg(this, xLevel.FINE, msg, args)
 		);
 	}
-	@Override
-	public void fine(final String[] lines, final Object...args) {
-		this.publish(
-			new xLogRecord_Msg(this, xLevel.FINE, lines, args)
-		);
-	}
-
-
 
 	// stats
 	@Override
-	public void stats(final String line, final Object...args) {
+	public void stats(final String msg, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.STATS, new String[] {line}, args)
+			new xLogRecord_Msg(this, xLevel.STATS, msg, args)
 		);
 	}
-	@Override
-	public void stats(final String[] lines, final Object...args) {
-		this.publish(
-			new xLogRecord_Msg(this, xLevel.STATS, lines, args)
-		);
-	}
-
-
 
 	// info
 	@Override
-	public void info(final String line, final Object...args) {
+	public void info(final String msg, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.INFO, new String[] {line}, args)
+			new xLogRecord_Msg(this, xLevel.INFO, msg, args)
 		);
 	}
-	@Override
-	public void info(final String[] lines, final Object...args) {
-		this.publish(
-			new xLogRecord_Msg(this, xLevel.INFO, lines, args)
-		);
-	}
-
-
 
 	// warning
 	@Override
-	public void warning(final String line, final Object...args) {
+	public void warning(final String msg, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.WARNING, new String[] {line}, args)
+			new xLogRecord_Msg(this, xLevel.WARNING, msg, args)
 		);
 	}
-	@Override
-	public void warning(final String[] lines, final Object...args) {
-		this.publish(
-			new xLogRecord_Msg(this, xLevel.WARNING, lines, args)
-		);
-	}
-
-
 
 	// notice
 	@Override
-	public void notice(final String line, final Object...args) {
+	public void notice(final String msg, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.NOTICE, new String[] {line}, args)
+			new xLogRecord_Msg(this, xLevel.NOTICE, msg, args)
 		);
 	}
-	@Override
-	public void notice(final String[] lines, final Object...args) {
-		this.publish(
-			new xLogRecord_Msg(this, xLevel.NOTICE, lines, args)
-		);
-	}
-
-
 
 	// severe
 	@Override
-	public void severe(final String line, final Object...args) {
+	public void severe(final String msg, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.SEVERE, new String[] {line}, args)
+			new xLogRecord_Msg(this, xLevel.SEVERE, msg, args)
 		);
 	}
-	@Override
-	public void severe(final String[] lines, final Object...args) {
-		this.publish(
-			new xLogRecord_Msg(this, xLevel.SEVERE, lines, args)
-		);
-	}
-
-
 
 	// fatal
 	@Override
-	public void fatal(final String line, final Object...args) {
+	public void fatal(final String msg, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.FATAL, new String[] {line}, args)
-		);
-	}
-	@Override
-	public void fatal(final String[] lines, final Object...args) {
-		this.publish(
-			new xLogRecord_Msg(this, xLevel.FATAL, lines, args)
+			new xLogRecord_Msg(this, xLevel.FATAL, msg, args)
 		);
 	}
 
