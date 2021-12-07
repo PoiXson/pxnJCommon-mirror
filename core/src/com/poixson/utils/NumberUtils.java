@@ -1,6 +1,5 @@
 package com.poixson.utils;
 
-import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.Random;
 
@@ -130,7 +129,7 @@ public final class NumberUtils {
 	public static Integer ToInteger(final String value) {
 		if (Utils.isEmpty(value)) return null;
 		try {
-			return new Integer(Integer.parseInt(value));
+			return Integer.valueOf( Integer.parseInt(value) );
 		} catch (NumberFormatException ignore) {}
 		return null;
 	}
@@ -154,7 +153,7 @@ public final class NumberUtils {
 	public static Byte ToByte(final String value) {
 		if (Utils.isEmpty(value)) return null;
 		try {
-			return new Byte(Byte.parseByte(value));
+			return Byte.valueOf( Byte.parseByte(value) );
 		} catch (NumberFormatException ignore) {}
 		return null;
 	}
@@ -178,7 +177,7 @@ public final class NumberUtils {
 	public static Short ToShort(final String value) {
 		if (Utils.isEmpty(value)) return null;
 		try {
-			return new Short(Short.parseShort(value));
+			return Short.valueOf( Short.parseShort(value) );
 		} catch (NumberFormatException ignore) {}
 		return null;
 	}
@@ -202,7 +201,7 @@ public final class NumberUtils {
 	public static Long ToLong(final String value) {
 		if (Utils.isEmpty(value)) return null;
 		try {
-			return new Long(Long.parseLong(value));
+			return Long.valueOf( Long.parseLong(value) );
 		} catch (NumberFormatException ignore) {}
 		return null;
 	}
@@ -226,7 +225,7 @@ public final class NumberUtils {
 	public static Double ToDouble(final String value) {
 		if (Utils.isEmpty(value)) return null;
 		try {
-			return new Double(Double.parseDouble(value));
+			return Double.valueOf( Double.parseDouble(value) );
 		} catch (NumberFormatException ignore) {}
 		return null;
 	}
@@ -250,7 +249,7 @@ public final class NumberUtils {
 	public static Float ToFloat(final String value) {
 		if (Utils.isEmpty(value)) return null;
 		try {
-			return new Float(Float.parseFloat(value));
+			return Float.valueOf( Float.parseFloat(value) );
 		} catch (NumberFormatException ignore) {}
 		return null;
 	}
