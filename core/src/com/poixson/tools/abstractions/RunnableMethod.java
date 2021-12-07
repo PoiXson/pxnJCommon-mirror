@@ -92,7 +92,7 @@ public class RunnableMethod<V> extends xRunnable {
 	public String getFullName() {
 		return
 			(new StringBuilder())
-			.append( Utils.GetClassName(this.container) )
+			.append( ReflectUtils.GetClassName(this.container) )
 			.append("->")
 			.append( this.method.getName())
 			.append("()")
