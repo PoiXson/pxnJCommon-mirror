@@ -41,7 +41,7 @@ public class xLog implements xLogInterface {
 
 
 	// root logger
-	public static xLogRoot XLog() {
+	public static xLogRoot GetRoot() {
 		if (root.get() == null) {
 			final xLogRoot log = new xLogRoot();
 			if (root.compareAndSet(null, log)) {
@@ -51,19 +51,19 @@ public class xLog implements xLogInterface {
 		}
 		return root.get();
 	}
-	public static xLogRoot Peek() {
+	public static xLogRoot PeekRoot() {
 		return root.get();
 	}
 
 
 
 	// get logger
-	public static xLog XLog(final String logName) {
-		return XLog().get(logName);
+	public static xLog Get(final String logName) {
+		return GetRoot().get(logName);
 	}
 	public xLog get(final String logName) {
 		if (Utils.isEmpty(logName))
-			return XLog();
+			return GetRoot();
 		// existing logger instance
 		{
 			final xLog log = this.loggers.get(logName);
