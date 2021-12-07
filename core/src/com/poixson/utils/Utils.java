@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 
 import com.poixson.tools.Keeper;
 
@@ -391,6 +392,19 @@ public final class Utils {
 		if (isEmpty(bools))
 			return def;
 		return bools;
+	}
+
+
+
+	// ------------------------------------------------------------------------------- //
+	// match
+
+
+
+	public static boolean MatchUUID(final UUID expect, final UUID actual) {
+		if (expect == null || actual == null)
+			return false;
+		return (expect.compareTo(actual) == 0);
 	}
 
 
