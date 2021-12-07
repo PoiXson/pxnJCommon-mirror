@@ -268,30 +268,29 @@ public final class StringUtils {
 
 
 
+	// ------------------------------------------------------------------------------- //
 	// string equals
-	public static boolean StrEquals(final String a, final String b) {
-		final boolean aEmpty = Utils.isEmpty(a);
-		final boolean bEmpty = Utils.isEmpty(b);
-		if (aEmpty && bEmpty) return true;
-		if (aEmpty || bEmpty) return false;
-		return a.equals(b);
+
+
+
+	public static boolean MatchString(final String expect, final String actual) {
+		final boolean expectEmpty = (expect == null || expect.isEmpty());
+		final boolean actualEmpty = (actual == null || actual.isEmpty());
+		if (expectEmpty || actualEmpty)
+			return (expectEmpty == actualEmpty);
+		return expect.equals(actual);
 	}
-	public static boolean StrEqualsIgnoreCase(final String a, final String b) {
-		final boolean aEmpty = Utils.isEmpty(a);
-		final boolean bEmpty = Utils.isEmpty(b);
-		if (aEmpty && bEmpty) return true;
-		if (aEmpty || bEmpty) return false;
-		return a.equalsIgnoreCase(b);
+	public static boolean MatchStringIgnoreCase(final String expect, final String actual) {
+		final boolean expectEmpty = (expect == null || expect.isEmpty());
+		final boolean actualEmpty = (actual == null || actual.isEmpty());
+		if (expectEmpty || actualEmpty)
+			return (expectEmpty == actualEmpty);
+		return expect.equalsIgnoreCase(actual);
 	}
-	public static boolean StrEqualsExact(final String a, final String b) {
-		if (a == null && b == null) return true;
-		if (a == null || b == null) return false;
-		return a.equals(b);
-	}
-	public static boolean StrEqualsExactIgnoreCase(final String a, final String b) {
-		if (a == null && b == null) return true;
-		if (a == null || b == null) return false;
-		return a.equalsIgnoreCase(b);
+	public static boolean MatchStringExact(final String expect, final String actual) {
+		if (expect == null && actual == null) return true;
+		if (expect == null || actual == null) return false;
+		return expect.equals(actual);
 	}
 
 
