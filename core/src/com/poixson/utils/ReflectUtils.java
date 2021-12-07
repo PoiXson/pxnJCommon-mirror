@@ -27,6 +27,17 @@ public final class ReflectUtils {
 
 
 
+	public static <T> Class<T> GetClass(final String classStr) {
+		try {
+			@SuppressWarnings("unchecked")
+			final Class<T> clss = (Class<T>) Class.forName(classStr);
+			return clss;
+		} catch (ClassNotFoundException ignore) {}
+		return null;
+	}
+
+
+
 	public static <T> T NewInstance(final Class<T> clss, final Object...args) {
 		final Constructor<T> construct;
 		try {
