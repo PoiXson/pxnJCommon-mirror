@@ -25,32 +25,45 @@ public class xLogRecord_Special implements xLogRecord {
 
 	@Override
 	public String[] getLines() {
-		return null;
-	}
-
-
-
-	@Override
-	public boolean isEmpty() {
-		return true;
-	}
-	@Override
-	public boolean notEmpty() {
-		return false;
+//TODO
+return null;
 	}
 
 
 
 	@Override
 	public xLevel getLevel() {
-		return null;
+//TODO
+return null;
+	}
+
+
+
+	@Override
+	public String[] getNameTree() {
+//TODO
+return null;
 	}
 
 
 
 	@Override
 	public long getTimestamp() {
-		return 0L;
+//TODO
+return 0L;
+	}
+
+
+
+	@Override
+	public boolean isEmpty() {
+//TODO
+return true;
+	}
+	@Override
+	public boolean notEmpty() {
+//TODO
+return false;
 	}
 
 

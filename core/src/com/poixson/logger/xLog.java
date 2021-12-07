@@ -1,9 +1,9 @@
 package com.poixson.logger;
 
 import java.lang.ref.SoftReference;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -30,13 +30,14 @@ public class xLog implements xLogInterface {
 
 	public final xLog parent;
 	public final String logName;
-	protected final AtomicReference<xLevel> level = new AtomicReference<xLevel>(null);
 
-	protected final AtomicReference<SoftReference<String[]>> cachedNameTree =
-			new AtomicReference<SoftReference<String[]>>(null);
+	protected final AtomicReference<xLevel> level = new AtomicReference<xLevel>(null);
 
 	// print handlers
 	protected final AtomicReference<xLogHandler[]> handlers = new AtomicReference<xLogHandler[]>(null);
+
+	protected final AtomicReference<SoftReference<String[]>> cachedNameTree =
+			new AtomicReference<SoftReference<String[]>>(null);
 
 
 
@@ -85,6 +86,7 @@ public class xLog implements xLogInterface {
 			return this.clone();
 		return new xLog(this, logName);
 	}
+	// clone instance (weak reference)
 	@Override
 	public xLog clone() {
 		return new xLog(this, this.logName);
@@ -126,7 +128,7 @@ public class xLog implements xLogInterface {
 		}
 		// build name tree
 		{
-			final List<String> list = new ArrayList<String>();
+			final LinkedList<String> list = new LinkedList<String>();
 			this.buildNameTree(list);
 			final String[] result = list.toArray(new String[0]);
 			this.cachedNameTree.set(

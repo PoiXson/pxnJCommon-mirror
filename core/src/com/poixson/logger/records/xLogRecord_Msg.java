@@ -27,33 +27,6 @@ public class xLogRecord_Msg implements xLogRecord {
 
 
 
-//TODO: remove this
-//	protected static String[] PrepareLines(final String[] lines, final Object[] args) {
-//		final String[] linesSplit = StringUtils.SplitLines(lines);
-//		if (linesSplit == null) {
-//			// empty message
-//			if (Utils.isEmpty(args))
-//				return null;
-//			// args only message
-//			return
-//				new String[] {
-//					StringUtils.MergeObjects(", ", args)
-//				};
-//		}
-//		// lines only message
-//		if (Utils.isEmpty(args)) {
-//			return linesSplit;
-//		}
-//		// insert args into lines
-//		return
-//			StringUtils.ReplaceTags(
-//				linesSplit,
-//				args
-//			);
-//	}
-
-
-
 	@Override
 	public String[] getLines() {
 		return StringUtils.ReplaceTags(this.lines, this.args);

@@ -16,7 +16,7 @@ public class xLogRoot extends xLog {
 
 
 
-	xLogRoot() {
+	protected xLogRoot() {
 		super();
 		// override stdio
 		if (OVERRIDE_STDIO) {
