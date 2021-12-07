@@ -17,10 +17,6 @@ public class xLogRecord_Msg implements xLogRecord {
 
 
 	public xLogRecord_Msg(final xLog log, final xLevel level,
-			final String line, final Object[] args) {
-		this(log, level, new String[] { line }, args);
-	}
-	public xLogRecord_Msg(final xLog log, final xLevel level,
 			final String[] lines, final Object[] args) {
 		this.level = level;
 		this.timestamp = Utils.getSystemMillis();

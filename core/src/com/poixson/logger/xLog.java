@@ -390,7 +390,7 @@ public class xLog implements xLogInterface {
 	@Override
 	public void title(final String line, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.TITLE, line, args)
+			new xLogRecord_Msg(this, xLevel.TITLE, new String[] {line}, args)
 		);
 	}
 	@Override
@@ -446,7 +446,7 @@ public class xLog implements xLogInterface {
 	@Override
 	public void detail(final String line, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.DETAIL, line, args)
+			new xLogRecord_Msg(this, xLevel.DETAIL, new String[] {line}, args)
 		);
 	}
 	@Override
@@ -462,7 +462,7 @@ public class xLog implements xLogInterface {
 	@Override
 	public void finest(final String line, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.FINEST, line, args)
+			new xLogRecord_Msg(this, xLevel.FINEST, new String[] {line}, args)
 		);
 	}
 	@Override
@@ -478,7 +478,7 @@ public class xLog implements xLogInterface {
 	@Override
 	public void finer(final String line, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.FINER, line, args)
+			new xLogRecord_Msg(this, xLevel.FINER, new String[] {line}, args)
 		);
 	}
 	@Override
@@ -494,7 +494,7 @@ public class xLog implements xLogInterface {
 	@Override
 	public void fine(final String line, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.FINE, line, args)
+			new xLogRecord_Msg(this, xLevel.FINE, new String[] {line}, args)
 		);
 	}
 	@Override
@@ -510,7 +510,7 @@ public class xLog implements xLogInterface {
 	@Override
 	public void stats(final String line, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.STATS, line, args)
+			new xLogRecord_Msg(this, xLevel.STATS, new String[] {line}, args)
 		);
 	}
 	@Override
@@ -526,7 +526,7 @@ public class xLog implements xLogInterface {
 	@Override
 	public void info(final String line, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.INFO, line, args)
+			new xLogRecord_Msg(this, xLevel.INFO, new String[] {line}, args)
 		);
 	}
 	@Override
@@ -542,7 +542,7 @@ public class xLog implements xLogInterface {
 	@Override
 	public void warning(final String line, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.WARNING, line, args)
+			new xLogRecord_Msg(this, xLevel.WARNING, new String[] {line}, args)
 		);
 	}
 	@Override
@@ -558,7 +558,7 @@ public class xLog implements xLogInterface {
 	@Override
 	public void notice(final String line, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.NOTICE, line, args)
+			new xLogRecord_Msg(this, xLevel.NOTICE, new String[] {line}, args)
 		);
 	}
 	@Override
@@ -574,7 +574,7 @@ public class xLog implements xLogInterface {
 	@Override
 	public void severe(final String line, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.SEVERE, line, args)
+			new xLogRecord_Msg(this, xLevel.SEVERE, new String[] {line}, args)
 		);
 	}
 	@Override
@@ -590,7 +590,7 @@ public class xLog implements xLogInterface {
 	@Override
 	public void fatal(final String line, final Object...args) {
 		this.publish(
-			new xLogRecord_Msg(this, xLevel.FATAL, line, args)
+			new xLogRecord_Msg(this, xLevel.FATAL, new String[] {line}, args)
 		);
 	}
 	@Override
