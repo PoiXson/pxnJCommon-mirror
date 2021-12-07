@@ -22,8 +22,8 @@ public class UnmodifiableObjectException extends UnsupportedOperationException {
 			final String className = e.getClassName();
 			if (!className.endsWith("UnmodifiableObjectException")) {
 				return
-					StringUtils.ReplaceTags(
-						"Object cannot be modified! {}->{}()",
+					String.format(
+						"Object cannot be modified! %s->%s()",
 						StringUtils.LastPart(className, '.'),
 						StringUtils.Trim(e.getMethodName(), '<', '>')
 					);

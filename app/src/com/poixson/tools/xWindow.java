@@ -13,6 +13,7 @@ import com.poixson.logger.xLog;
 import com.poixson.threadpool.types.xThreadPool_GUI;
 import com.poixson.tools.abstractions.RemappedWindowListener;
 import com.poixson.tools.abstractions.xCloseable;
+import com.poixson.utils.ReflectUtils;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.Utils;
@@ -57,7 +58,7 @@ public abstract class xWindow extends JFrame implements xCloseable, AttachedLogg
 			);
 		}
 		// find a unique name
-		this.name = Utils.GetClassName(this);
+		this.name = ReflectUtils.GetClassName(this);
 		if (Utils.isEmpty(this.name)) throw new RuntimeException("Failed to detect window class name");
 		this.key = StringUtils.PutUnique(all, this.name, this);
 		if (Utils.isEmpty(this.key)) throw new RuntimeException("Failed to find a unique window key");

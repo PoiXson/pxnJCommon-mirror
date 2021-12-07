@@ -36,8 +36,8 @@ public class AppProps {
 			);
 			if (in == null) {
 				throw new IOException(
-					StringUtils.ReplaceTags(
-						"Failed to load {} resource from jar",
+					String.format(
+						"Failed to load %s resource from jar",
 						PROPS_FILE
 					)
 				);

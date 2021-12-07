@@ -1,7 +1,5 @@
 package com.poixson.exceptions;
 
-import com.poixson.utils.StringUtils;
-
 
 public class RequiredArgumentException extends IllegalArgumentException {
 	private static final long serialVersionUID = 1L;
@@ -9,12 +7,7 @@ public class RequiredArgumentException extends IllegalArgumentException {
 
 
 	public RequiredArgumentException(final String argName) {
-		super(
-			StringUtils.ReplaceTags(
-				"{} argument is required!",
-				argName
-			)
-		);
+		super( String.format("%s argument is required", argName) );
 	}
 
 
