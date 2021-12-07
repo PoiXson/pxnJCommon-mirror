@@ -18,6 +18,15 @@ public final class ReflectUtils {
 
 
 
+	public static String GetClassName(final Object obj) {
+		if (obj == null) return null;
+		if (obj instanceof Class)
+			return ((Class<?>) obj).getSimpleName();
+		return obj.getClass().getSimpleName();
+	}
+
+
+
 	public static <T> T NewInstance(final Class<T> clss, final Object...args) {
 		final Constructor<T> construct;
 		try {
