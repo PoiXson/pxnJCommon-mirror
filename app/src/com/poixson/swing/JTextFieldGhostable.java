@@ -40,7 +40,7 @@ public class JTextFieldGhostable extends JTextField implements FocusListener {
 
 
 
-	// ------------------------------------------------------------------------------- //
+	// -------------------------------------------------------------------------------
 	// state
 
 
@@ -93,7 +93,7 @@ public class JTextFieldGhostable extends JTextField implements FocusListener {
 
 
 
-	// ------------------------------------------------------------------------------- //
+	// -------------------------------------------------------------------------------
 	// focus listener
 
 

@@ -67,7 +67,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 
 
 
-	// ------------------------------------------------------------------------------- //
+	// -------------------------------------------------------------------------------
 	// startup/shutdown plugins
 
 
@@ -240,7 +240,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 
 
 
-	// ------------------------------------------------------------------------------- //
+	// -------------------------------------------------------------------------------
 	// loaders/unloaders
 
 
@@ -256,7 +256,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 
 
 
-	// ------------------------------------------------------------------------------- //
+	// -------------------------------------------------------------------------------
 	// plugins
 
 
@@ -334,7 +334,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 
 
 
-	// ------------------------------------------------------------------------------- //
+	// -------------------------------------------------------------------------------
 	// state
 
 
@@ -375,7 +375,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 
 
 
-	// ------------------------------------------------------------------------------- //
+	// -------------------------------------------------------------------------------
 	// logger
 
 

@@ -35,7 +35,7 @@ public abstract class xJavaPlugin implements xStartable, Runnable, AttachedLogge
 
 
 
-	// ------------------------------------------------------------------------------- //
+	// -------------------------------------------------------------------------------
 	// start/stop plugin
 
 
@@ -62,7 +62,7 @@ public abstract class xJavaPlugin implements xStartable, Runnable, AttachedLogge
 
 
 
-	// ------------------------------------------------------------------------------- //
+	// -------------------------------------------------------------------------------
 	// plugin state
 
 
@@ -174,7 +174,7 @@ public abstract class xJavaPlugin implements xStartable, Runnable, AttachedLogge
 
 
 
-	// ------------------------------------------------------------------------------- //
+	// -------------------------------------------------------------------------------
 	// config
 
 
@@ -288,7 +288,7 @@ public abstract class xJavaPlugin implements xStartable, Runnable, AttachedLogge
 
 
 
-	// ------------------------------------------------------------------------------- //
+	// -------------------------------------------------------------------------------
 	// logger
 
 
