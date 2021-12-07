@@ -27,17 +27,17 @@ public class ShellUtils {
 	protected static ShellUtils Get() {
 		if (instance.get() == null) {
 			// extended utility
-			try {
-				final Class<?> clss = Class.forName("com.poixson.utils.ShellUtils_Extended");
+			final Class<ShellUtils> clss =
+				ReflectUtils.GetClass(
+					"com.poixson.utils.ShellUtils_Extended"
+				);
 				if (clss != null) {
-					final ShellUtils utility = (ShellUtils) clss.newInstance();
+					final ShellUtils utility = (ShellUtils) ReflectUtils.NewInstance(clss);
+					if (utility == null) throw new RuntimeException("Unable to initialize ShellUtils instance");
 					if (instance.compareAndSet(null, utility))
 						return utility;
 					return instance.get();
 				}
-			} catch (ClassNotFoundException ignore) {
-			} catch (InstantiationException ignore) {
-			} catch (IllegalAccessException ignore) {}
 			// default utility
 			final ShellUtils utility = new ShellUtils();
 			if (instance.compareAndSet(null, utility))
