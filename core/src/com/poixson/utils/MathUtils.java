@@ -14,6 +14,15 @@ public final class MathUtils {
 
 
 
+	public static int BitValue(final int bit) {
+		int result = 1;
+		for (int i=0; i<bit; i++)
+			result *= 2;
+		return result;
+	}
+
+
+
 	// ------------------------------------------------------------------------------- //
 	// round
 
