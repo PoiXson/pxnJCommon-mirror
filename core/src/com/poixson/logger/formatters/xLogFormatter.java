@@ -49,8 +49,11 @@ public class xLogFormatter {
 		final HashMap<String, Object> args = new HashMap<String, Object>();
 		if (this.containsTime)
 			args.put( "time", this.genTimestamp(record) );
-		if (this.containsLevel)
-			args.put( "level", this.genLevel(record) );
+		if (this.containsLevel) {
+			final String levelStr = record.getLevelName();
+			if (Utils.notEmpty(levelStr))
+				args.put("level", StringUtils.PadCenter(7, levelStr, ' '));
+		}
 		if (this.containsCrumbs)
 			args.put( "crumbs", this.genCrumbs(record) );
 		// single line
@@ -119,13 +122,6 @@ public class xLogFormatter {
 				Utils.ifEmpty(format, DEFAULT_FORMAT_TIME)
 			);
 		return dateFormat.format( Long.valueOf(record.timestamp) );
-	}
-
-
-
-	// level
-	protected String genLevel(final xLogRecord_Msg record) {
-		return StringUtils.PadCenter(7, record.getLevelName(), ' ');
 	}
 
 

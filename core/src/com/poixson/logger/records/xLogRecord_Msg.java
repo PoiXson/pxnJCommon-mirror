@@ -44,11 +44,9 @@ public class xLogRecord_Msg implements xLogRecord {
 		return this.level;
 	}
 	public String getLevelName() {
-		return (
-			this.level == null
-			? "<null>"
-			: this.level.toString()
-		);
+		if (this.level == null)
+			return null;
+		return this.level.toString();
 	}
 
 
