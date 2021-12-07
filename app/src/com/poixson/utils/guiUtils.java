@@ -1,7 +1,5 @@
 package com.poixson.utils;
 
-import static com.poixson.logger.xLog.XLog;
-
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -130,7 +128,7 @@ public final class guiUtils {
 
 
 	public static xLog log() {
-		return XLog(LOG_NAME);
+		return xLog.Get(LOG_NAME);
 	}
 
 

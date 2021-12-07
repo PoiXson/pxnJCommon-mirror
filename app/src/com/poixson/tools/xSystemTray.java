@@ -1,12 +1,12 @@
 package com.poixson.tools;
 
-import static com.poixson.logger.xLog.XLog;
-
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
+
+import com.poixson.logger.xLog;
 
 
 public abstract class xSystemTray {
@@ -31,7 +31,7 @@ public abstract class xSystemTray {
 		} catch (AWTException e) {
 			throw new RuntimeException(e);
 		}
-		XLog().fine("Loaded system tray icon");
+		xLog.GetRoot().fine("Loaded system tray icon");
 	}
 
 

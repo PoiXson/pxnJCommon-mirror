@@ -2,7 +2,7 @@ package org.jline.utils;
 
 import java.util.function.Supplier;
 
-import com.poixson.logger.xLogRoot;
+import com.poixson.logger.xLog;
 
 
 public final class Log {
@@ -13,13 +13,13 @@ public final class Log {
 
 	public static void trace(final Object...messages) {
 		if (enableLogging) {
-			xLogRoot.Get()
+			xLog.GetRoot()
 				.trace(null, "", messages);
 		}
 	}
 	public static void trace(Supplier<String> supplier) {
 		if (enableLogging) {
-			xLogRoot.Get()
+			xLog.GetRoot()
 				.trace(null, supplier.get());
 		}
 	}
@@ -28,13 +28,13 @@ public final class Log {
 
 	public static void debug(final Object...messages) {
 		if (enableLogging) {
-			xLogRoot.Get()
+			xLog.GetRoot()
 				.fine("", messages);
 		}
 	}
 	public static void debug(Supplier<String> supplier) {
 		if (enableLogging) {
-			xLogRoot.Get()
+			xLog.GetRoot()
 				.fine(supplier.get());
 		}
 	}
@@ -43,7 +43,7 @@ public final class Log {
 
 	public static void info(final Object...messages) {
 		if (enableLogging) {
-			xLogRoot.Get()
+			xLog.GetRoot()
 				.info("", messages);
 		}
 	}
@@ -52,7 +52,7 @@ public final class Log {
 
 	public static void warn(final Object...messages) {
 		if (enableLogging) {
-			xLogRoot.Get()
+			xLog.GetRoot()
 				.warning("", messages);
 		}
 	}
@@ -61,7 +61,7 @@ public final class Log {
 
 	public static void error(final Object...messages) {
 		if (enableLogging) {
-			xLogRoot.Get()
+			xLog.GetRoot()
 				.severe("", messages);
 		}
 	}
@@ -70,7 +70,7 @@ public final class Log {
 
 	public static boolean isDebugEnabled() {
 		if (enableLogging)
-			return xLogRoot.Get()
+			xLog.GetRoot()
 				.isDetailLoggable();
 		return false;
 	}

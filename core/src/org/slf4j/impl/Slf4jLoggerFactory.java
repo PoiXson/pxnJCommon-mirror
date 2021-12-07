@@ -1,7 +1,5 @@
 package org.slf4j.impl;
 
-import static com.poixson.logger.xLog.XLog;
-
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.ILoggerFactory;
@@ -47,7 +45,7 @@ public class Slf4jLoggerFactory implements ILoggerFactory {
 
 
 	public static xLog GetXLog(final String name) {
-		return XLog(
+		return xLog.Get(
 			Utils.ifEmpty(LoggerToXLog.AliasFor(name), LOG_NAME)
 		);
 	}

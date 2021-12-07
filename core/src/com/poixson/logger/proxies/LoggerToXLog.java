@@ -1,7 +1,5 @@
 package com.poixson.logger.proxies;
 
-import static com.poixson.logger.xLog.XLog;
-
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -37,10 +35,10 @@ public class LoggerToXLog extends Handler {
 			logger.addHandler( Get() );
 		}
 		// default log levels
-		XLog("jline").setLevel(xLevel.INFO);
-		XLog("netty").setLevel(xLevel.INFO);
-		XLog("jcl"  ).setLevel(xLevel.INFO);
-		XLog("X11"  ).setLevel(xLevel.INFO);
+		xLog.Get("jline").setLevel(xLevel.INFO);
+		xLog.Get("netty").setLevel(xLevel.INFO);
+		xLog.Get("jcl"  ).setLevel(xLevel.INFO);
+		xLog.Get("X11"  ).setLevel(xLevel.INFO);
 	}
 
 
@@ -101,10 +99,10 @@ public class LoggerToXLog extends Handler {
 
 	public xLog log(final LogRecord record) {
 		final String name = AliasFor( record.getLoggerName() );
-		return XLog(name);
+		return xLog.Get(name);
 	}
 	public xLog log() {
-		return XLog();
+		return xLog.GetRoot();
 	}
 
 

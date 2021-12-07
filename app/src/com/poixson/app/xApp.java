@@ -1,7 +1,5 @@
 package com.poixson.app;
 
-import static com.poixson.logger.xLog.XLog;
-
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -14,7 +12,6 @@ import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.AttachedLogger;
 import com.poixson.logger.xDebug;
 import com.poixson.logger.xLog;
-import com.poixson.logger.xLogRoot;
 import com.poixson.logger.handlers.xLogHandler;
 import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.types.xThreadPool_Main;
@@ -95,8 +92,8 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 			}
 			this.props = props;
 		}
-		xLogRoot.XLog();
 		xDebug.init();
+		xLog.GetRoot();
 		// search for .debug file
 		if (Utils.notEmpty(xAppDefines.SEARCH_DEBUG_FILES)) {
 			final String result =
@@ -206,7 +203,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 
 
 	public void kill() {
-		final xLog log = XLog();
+		final xLog log = xLog.GetRoot();
 		log.flush();
 		final xLogHandler[] handlers = log.getLogHandlers();
 		for (final xLogHandler handler : handlers) {
@@ -601,7 +598,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 		return this._log.get();
 	}
 	protected xLog _log() {
-		return XLog();
+		return xLog.GetRoot();
 	}
 
 

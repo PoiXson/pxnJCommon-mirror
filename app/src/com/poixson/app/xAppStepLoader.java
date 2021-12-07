@@ -1,7 +1,5 @@
 package com.poixson.app;
 
-import static com.poixson.logger.xLog.XLog;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -150,7 +148,8 @@ public class xAppStepLoader {
 		return this._log.get();
 	}
 	protected xLog _log() {
-		return XLog().getWeak(this.type.toString());
+		return xLog.GetRoot()
+				.getWeak(this.type.toString());
 	}
 
 

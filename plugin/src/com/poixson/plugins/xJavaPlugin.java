@@ -305,10 +305,7 @@ public abstract class xJavaPlugin implements xStartable, Runnable, AttachedLogge
 		return this._log.get();
 	}
 	protected xLog _log() {
-		return
-			xLogRoot.Get(
-				"Plugin:"+this.getPluginNameSafe()
-			);
+		return xLog.Get( "Plugin:"+this.getPluginNameSafe() );
 	}
 
 

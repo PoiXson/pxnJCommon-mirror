@@ -47,7 +47,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 	protected final AtomicBoolean restartAfterUnload = new AtomicBoolean(false);
 
 	static {
-		xLogRoot.Get("jcl")
+		xLog.GetRoot("jcl")
 			.setLevel(xLevel.INFO);
 	}
 

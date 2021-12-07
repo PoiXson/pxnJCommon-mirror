@@ -99,12 +99,12 @@ public final class ProcUtils {
 			);
 			return true;
 		} catch (OverlappingFileLockException e) {
-			final xLog log = xLogRoot.Get();
+			final xLog log = xLog.GetRoot();
 			log.severe("Unable to create or lock file:", file.toString());
 			log.severe("File may already be locked!");
 			return false;
 		} catch (Exception e) {
-			final xLog log = xLogRoot.Get();
+			final xLog log = xLog.GetRoot();
 			log.severe("Unable to create or lock file:", file.toString());
 			log.trace(e);
 		} finally {
@@ -133,7 +133,7 @@ public final class ProcUtils {
 				utils.safeClose(this.access);
 				this.file.delete();
 			} catch (Exception e) {
-				final xLog log = xLogRoot.Get();
+				final xLog log = xLog.GetRoot();
 				log.severe("Unable to release lock file:", this.file.toString());
 				log.trace(e);
 			}

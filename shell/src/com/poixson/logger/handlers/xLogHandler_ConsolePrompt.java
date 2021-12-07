@@ -1,7 +1,5 @@
 package com.poixson.logger.handlers;
 
-import static com.poixson.logger.xLog.XLog;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -371,7 +369,7 @@ log.publish("GOT INPUT: "+line);
 
 
 	public xLog log() {
-		return XLog();
+		return xLog.GetRoot();
 	}
 
 
