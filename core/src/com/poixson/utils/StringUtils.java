@@ -119,6 +119,40 @@ public final class StringUtils {
 
 
 
+	public static boolean ArrayContains(final String match, final String[] array) {
+		if (match == null || match.isEmpty())   return false;
+		if (array == null || array.length == 0) return false;
+		for (final String entry : array) {
+			if (MatchString(match, entry))
+				return true;
+		}
+		return false;
+	}
+
+
+
+	public static String[] RemoveTruncatedDuplicates(final String[] array) {
+		final ArrayList<String> result = new ArrayList<String>();
+		for (final String entry : array) {
+			if (entry.isEmpty()) continue;
+			boolean dup = false;
+			for (final String match : array) {
+				if (match.isEmpty()) continue;
+				// match with self
+				if (entry.equals(match)) continue;
+				if (match.startsWith(entry)) {
+					dup = true;
+					break;
+				}
+			}
+			if (!dup)
+				result.add(entry);
+		}
+		return result.toArray(new String[0]);
+	}
+
+
+
 	public static String[] SplitLines(final String lines[]) {
 		if (lines == null) return null;
 		if (lines.length == 0) return new String[0];
@@ -828,6 +862,7 @@ public final class StringUtils {
 		}
 		return (pos == Integer.MIN_VALUE ? -1 : pos);
 	}
+
 
 
 	// find longest line
