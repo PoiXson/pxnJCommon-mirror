@@ -1,16 +1,13 @@
 package com.poixson.utils;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.poixson.tools.Keeper;
-import com.poixson.tools.dao.Ixy;
 
 
 public final class MathUtils {
 	private MathUtils() {}
-	static { Keeper.add(new MathUtils(); }
+	static { Keeper.add(new MathUtils()); }
 
 
 
