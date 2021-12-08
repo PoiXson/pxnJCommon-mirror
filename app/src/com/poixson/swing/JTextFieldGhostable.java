@@ -57,7 +57,7 @@ public class JTextFieldGhostable extends JTextField implements FocusListener {
 			this.setHorizontalAlignment(JTextField.CENTER);
 			this.setForeground(Color.GRAY);
 		} else {
-			if (StringUtils.StrEquals(this.ghostText.get(), this.getText())) {
+			if (StringUtils.MatchString(this.ghostText.get(), this.getText())) {
 				super.setText("");
 			}
 			this.setHorizontalAlignment(JTextField.LEFT);

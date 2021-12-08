@@ -163,8 +163,8 @@ public class xAppStepDAO implements RunnableNamed {
 	}
 	@Override
 	public boolean equalsTaskName(final String name) {
-		return StringUtils.StrEquals(name, this.title)
-			|| StringUtils.StrEquals(name, this.titleFull);
+		return StringUtils.MatchString(name, this.title)
+			|| StringUtils.MatchString(name, this.titleFull);
 	}
 
 
