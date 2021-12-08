@@ -36,7 +36,7 @@ public class xEventListenerDAO {
 			return;
 		xLog.GetRoot()
 			.finest(
-				"Invoking event: {}->{}",
+				"Invoking event: %s->%s",
 				this.object.getClass().getName(),
 				this.method.getName()
 			);

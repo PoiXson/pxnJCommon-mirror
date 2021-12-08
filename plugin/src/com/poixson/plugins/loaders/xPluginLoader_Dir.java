@@ -139,7 +139,7 @@ public class xPluginLoader_Dir<T extends xJavaPlugin> extends xPluginLoader_File
 		} else {
 			this.log()
 				.fine(
-					"Found [ {} ] plugin{} from dir: {}",
+					"Found [ %d ] plugin%s from dir: %s",
 					count,
 					(count == 1 ? "" : "s"),
 					dir.getPath()

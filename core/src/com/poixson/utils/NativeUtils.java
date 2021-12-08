@@ -32,7 +32,7 @@ public final class NativeUtils {
 			} else
 			if (ErrorMode.LOG.equals(errorMode)) {
 				log().severe(
-					"Failed to load library: {}  {}",
+					"Failed to load library: %s  %s",
 					fileStr,
 					e.getMessage()
 				);
@@ -45,7 +45,7 @@ public final class NativeUtils {
 			} else
 			if (ErrorMode.LOG.equals(errorMode)) {
 				log().severe(
-					"Failed to load library: {}  {}",
+					"Failed to load library: %s  %s",
 					fileStr,
 					e.getMessage()
 				);
@@ -65,7 +65,7 @@ public final class NativeUtils {
 			return;
 		}
 		log().detail(
-			"NativeUtils::LoadLibrary(path={})",
+			"NativeUtils::LoadLibrary(path=%s)",
 			pathStr
 		);
 		System.load(pathStr);
@@ -94,7 +94,7 @@ public final class NativeUtils {
 		InputStream      in  = null;
 		FileOutputStream out = null;
 		log().detail(
-			"NativeUtils::ExtractLibrary(outFilePath={},resPath={},fileName={},classRef={})",
+			"NativeUtils::ExtractLibrary(outFilePath=%s,resPath=%s,fileName=%s,classRef=%s)",
 			outFilePath,
 			resPath,
 			fileName,

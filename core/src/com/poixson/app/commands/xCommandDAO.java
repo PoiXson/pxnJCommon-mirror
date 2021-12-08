@@ -31,7 +31,7 @@ public class xCommandDAO extends xEventListenerDAO {
 		// only run in main thread
 		if (xThreadPool_Main.get().force(this, "invoke", line)) return;
 		XLog().finest(
-			"Invoking command: {}->{} {}",
+			"Invoking command: %s->%s %d",
 			super.object.getClass().getName(),
 			super.method.getName(),
 			line

@@ -107,7 +107,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 				if (count == 0) {
 					this.log().warning("No plugins found to load");
 				} else {
-					this.log().info( "Loading [ {} ] plugin{}..", count, (count == 1 ? "" : "s") );
+					this.log().info( "Loading [ %d ] plugin%s..", count, (count == 1 ? "" : "s") );
 					this.queueRun("Init-Plugins");
 				}
 			}
@@ -127,7 +127,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 //		synchronized (this.plugins) {
 //			final Collection<T> list = this.plugins.values();
 //			if ( ! list.isEmpty() ) {
-//				this.log().info("Unloading [ {} ] plugins..", list.size());
+//				this.log().info("Unloading [ %d ] plugins..", list.size());
 //				final Iterator<T> it = this.plugins.values().iterator();
 //				while (it.hasNext()) {
 //					final T plugin = it.next();
@@ -208,7 +208,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 			// finished loading plugins
 			{
 				final int count = this.countCache.getAndSet(0);
-				this.log().info( "Loaded [ {} ] plugin{}", count, (count == 1 ? "" : "s") );
+				this.log().info( "Loaded [ %d ] plugin%s", count, (count == 1 ? "" : "s") );
 			}
 		}
 	}

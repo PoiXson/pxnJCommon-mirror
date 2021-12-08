@@ -54,8 +54,8 @@ public abstract class RemappedEventListener {
 		if (method == null) {
 			this.log().trace(
 				new NoSuchMethodException(
-					StringUtils.ReplaceTags(
-						"Method not found: {}::{}({})",
+					String.format(
+						"Method not found: %s::%s(%s)",
 						clss.getName(),
 						methodStr,
 						eventClass.getName()
@@ -66,7 +66,7 @@ public abstract class RemappedEventListener {
 		}
 		this.log()
 			.detail(
-				"New {} created for: {}::{}({})",
+				"New %s created for: %s::%s(%s)",
 				this.getListenerName(),
 				clss.getName(),
 				methodStr,

@@ -352,7 +352,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 			}
 			// timeout adding to queue
 			if (!success) {
-				this.log().warning("Thread queue {} jammed!", pri.name());
+				this.log().warning("Thread queue %s jammed!", pri.name());
 				// try a lower priority
 				switch (priority) {
 				case NOW:
@@ -642,7 +642,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	public String getStatsDisplay() {
 		return
 			StringUtils.ReplaceTags(
-				"Queued: {}  Threads: {}[{}]  Active/Free: {}/{}  Finished: {}",
+				"Queued: %d  Threads: %d[%d]  Active/Free: %d/%d  Finished: %d",
 				this.getQueueCount(),
 				this.getWorkerCount(),
 				this.getMaxWorkers(),

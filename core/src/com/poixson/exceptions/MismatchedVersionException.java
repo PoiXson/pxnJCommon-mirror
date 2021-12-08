@@ -16,7 +16,7 @@ public class MismatchedVersionException extends Exception {
 			final String expectedVersion, final String libraryVersion) {
 		super(
 			StringUtils.ReplaceTags(
-				"Expected version: {} Found version: {}",
+				"Expected version: %s Found version: %s",
 				expectedVersion,
 				libraryVersion
 			)

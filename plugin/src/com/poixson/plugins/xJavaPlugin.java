@@ -135,7 +135,7 @@ public abstract class xJavaPlugin implements xStartable, Runnable, AttachedLogge
 		// fail the plugin
 		this.log()
 			.severe(
-				"Plugin {} has failed!",
+				"Plugin %s has failed! %s",
 				pluginName,
 				msg
 			);

@@ -156,7 +156,7 @@ public class xClock {
 			// less than 100ms
 			if (this.localOffset < 0.1 && this.localOffset > -0.1) {
 				log.info(
-					"System time only off by {}, ignoring adjustment.",
+					"System time only off by %d, ignoring adjustment.",
 					NumberUtils.FormatDecimal(
 						"0.000",
 						this.localOffset
@@ -165,7 +165,7 @@ public class xClock {
 				this.localOffset = 0.0;
 			} else {
 				log.info(
-					"Internal time adjusted by {}{} seconds",
+					"Internal time adjusted by %s%s seconds",
 					(
 						this.localOffset > 0
 						? "+"
@@ -177,13 +177,13 @@ public class xClock {
 					)
 				);
 				log.info(
-					"System time:   {}",
+					"System time:   %s",
 					timestampToString(
 						time / 1000.0
 					)
 				);
 				log.info(
-					"Internal time: {}",
+					"Internal time: %s",
 					this.getString()
 				);
 			}

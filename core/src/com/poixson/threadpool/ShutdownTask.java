@@ -111,7 +111,7 @@ public class ShutdownTask implements Runnable {
 			if (count == 0)
 				break OUTER_LOOP;
 			totalCount += count;
-			XLog().fine("Running {} shutdown hooks..", count);
+			XLog().fine("Running %d shutdown hooks..", count);
 			ThreadUtils.Sleep(20L);
 		} // end OUTER_LOOP
 		// queue another shutdown task (to wait for things to finish)

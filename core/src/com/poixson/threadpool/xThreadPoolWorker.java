@@ -287,8 +287,8 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 		// generated name
 		if (this.workerNameCached.get() == null) {
 			final String name =
-				StringUtils.ReplaceTags(
-					"{}-w{}",
+				String.format(
+					"%s-w%d",
 					this.pool.getPoolName(),
 					this.workerIndex
 				);

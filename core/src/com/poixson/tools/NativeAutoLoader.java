@@ -131,7 +131,7 @@ public class NativeAutoLoader {
 		if (localFile.exists()) {
 			this.log()
 				.fine(
-					"Found library {} at local path {}",
+					"Found library %s at local path %s",
 					fileName,
 					localPath
 				);
@@ -152,7 +152,7 @@ System.out.println("SEARCH PATH: "+FileUtils.MergePaths(path, fileName));
 				if (searchFile.exists()) {
 					this.log()
 						.fine(
-							"Found library {} at search path {}",
+							"Found library %s at search path %s",
 							fileName,
 							path
 						);

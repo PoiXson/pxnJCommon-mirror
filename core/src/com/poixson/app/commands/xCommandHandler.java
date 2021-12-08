@@ -31,7 +31,7 @@ public class xCommandHandler extends xHandler<xCommand> {
 		final int count =
 			super.register(objects);
 		if (count > 0) {
-			XLog().fine("Found {} commands", count);
+			XLog().fine("Found %d commands", count);
 		}
 		return count;
 	}

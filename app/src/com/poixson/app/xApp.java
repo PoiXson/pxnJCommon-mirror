@@ -149,7 +149,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 			this.fail("No startup steps were found!");
 			return;
 		}
-		this.log().title("Starting {}..", this.getTitle());
+		this.log().title("Starting %s..", this.getTitle());
 //TODO
 //		// start hang catcher
 //		this.startHangCatcher();
@@ -190,7 +190,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 			this.fail("No shutdown steps were found!");
 			return;
 		}
-		this.log().title("Stopping {}..", this.getTitle());
+		this.log().title("Stopping %s..", this.getTitle());
 //TODO
 //		// start hang catcher
 //		this.startHangCatcher();
@@ -233,7 +233,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 		if (this.isRunning()) {
 			this.stepLoader.set(null);
 			this.finishedStartup();
-			this.log_loader().title("{} is ready", this.getTitle());
+			this.log_loader().title("%s is ready", this.getTitle());
 			final Iterator<Runnable> it = this.hookReady.iterator();
 			while (it.hasNext()) {
 				final Runnable run = it.next();
@@ -246,14 +246,14 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 		if (this.isStopped()) {
 			this.stepLoader.set(null);
 			this.finishedShutdown();
-			this.log_loader().title("{} finished shutdown", this.getTitle());
+			this.log_loader().title("%s finished shutdown", this.getTitle());
 			return;
 		}
 		// run step
 		final xAppStepDAO dao = this.nextStepDAO.getAndSet(null);
 		if (this.hasFailed()) return;
 		if (dao != null) {
-			this.log_loader().fine("@|white,bold {} - {}|@", dao.step, dao.getTaskName());
+			this.log_loader().fine("@|white,bold %d - %s|@", dao.step, dao.getTaskName());
 //TODO
 //			this.resetHangCatcher();
 			try {
@@ -363,7 +363,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 		this.paused.set(true);
 		this.log_loader()
 			.fine(
-				"Paused {} at step: {}",
+				"Paused %s at step: %d",
 				(this.isStarting() ? "loading" : "unloading"),
 				this.state.get()
 			);
@@ -372,7 +372,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 		this.paused.set(false);
 		this.log_loader()
 			.fine(
-				"Resumed {} from step: {}",
+				"Resumed %s from step: %d",
 				(this.isStarting() ? "loading" : "unloading"),
 				this.state.get()
 			);

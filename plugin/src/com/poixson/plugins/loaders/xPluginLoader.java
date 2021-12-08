@@ -51,7 +51,7 @@ public abstract class xPluginLoader<T extends xJavaPlugin> implements Runnable {
 		if (count > 0) {
 			this.log()
 				.info(
-					"Found [ {} ] plugin{}",
+					"Found [ %d ] plugin%s",
 					count,
 					(count == 1 ? "" : "s")
 				);
@@ -116,12 +116,12 @@ public abstract class xPluginLoader<T extends xJavaPlugin> implements Runnable {
 			Utils.safeClose(in);
 		}
 		if (in == null) {
-			this.log().warning("Failed to load yaml file {} from jar:", resFileStr, jarFileStr);
+			this.log().warning("Failed to load yaml file %s from jar:", resFileStr, jarFileStr);
 			return null;
 		}
 		final Map<String, Object> datamap = ConfigUtils.LoadYamlFromStream(in);
 		if (datamap == null) {
-			this.log().warning("Failed to parse yaml file {} from jar:", resFileStr, jarFileStr);
+			this.log().warning("Failed to parse yaml file %s%s from jar:", resFileStr, jarFileStr);
 			return null;
 		}
 		final xPluginYML yml =
@@ -131,11 +131,11 @@ public abstract class xPluginLoader<T extends xJavaPlugin> implements Runnable {
 			);
 		// validate yml key values
 		if (Utils.isEmpty(yml.getPluginName())) {
-			this.log().warning("Plugin name not set in {} of {}", resFileStr, jarFileStr);
+			this.log().warning("Plugin name not set in %s of %s", resFileStr, jarFileStr);
 			return null;
 		}
 		if (Utils.isEmpty(yml.getMainClass())) {
-			this.log().warning("'{}' not set in {} of {}", this.mainClassKey, resFileStr, jarFileStr);
+			this.log().warning("'%s' not set in %s of %s", this.mainClassKey, resFileStr, jarFileStr);
 			return null;
 		}
 		return yml;
