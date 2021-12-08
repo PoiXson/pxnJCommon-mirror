@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated: Tue Dec  7 02:28:47 PM EST 2021 -->
+<!-- Generated: Tue Dec  7 09:45:06 PM EST 2021 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -10,6 +10,7 @@
 	<version>4.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<url>https://poixson.com</url>
+	<description>Config utilities for PoiXson projects</description>
 	<organization>
 		<name>PoiXson</name>
 		<url>https://poixson.com</url>
