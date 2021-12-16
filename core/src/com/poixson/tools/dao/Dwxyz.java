@@ -46,7 +46,12 @@ public class Dwxyz implements Serializable, Cloneable {
 		if (obj == null) return false;
 		if (obj instanceof Dwxyz) {
 			final Dwxyz dao = (Dwxyz) obj;
-			return (this.w == dao.w && this.x == dao.x && this.y == dao.y && this.z == dao.z);
+			return (
+				this.w == dao.w &&
+				this.x == dao.x &&
+				this.y == dao.y &&
+				this.z == dao.z
+			);
 		}
 		return false;
 	}
@@ -56,14 +61,10 @@ public class Dwxyz implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		return (new StringBuilder())
-				.append('(')
-				.append(this.w)
-				.append(", ")
-				.append(this.x)
-				.append(", ")
-				.append(this.y)
-				.append(", ")
-				.append(this.z)
+				.append('(') .append(this.w)
+				.append(", ").append(this.x)
+				.append(", ").append(this.y)
+				.append(", ").append(this.z)
 				.append(')')
 				.toString();
 	}

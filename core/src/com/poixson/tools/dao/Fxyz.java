@@ -42,7 +42,11 @@ public class Fxyz implements Serializable, Cloneable {
 		if (obj == null) return false;
 		if (obj instanceof Fxyz) {
 			final Fxyz dao = (Fxyz) obj;
-			return (this.x == dao.x && this.y == dao.y && this.z == dao.z);
+			return (
+				this.x == dao.x &&
+				this.y == dao.y &&
+				this.z == dao.z
+			);
 		}
 		return false;
 	}
@@ -52,12 +56,9 @@ public class Fxyz implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		return (new StringBuilder())
-				.append('(')
-				.append(this.x)
-				.append(", ")
-				.append(this.y)
-				.append(", ")
-				.append(this.z)
+				.append('(') .append(this.x)
+				.append(", ").append(this.y)
+				.append(", ").append(this.z)
 				.append(')')
 				.toString();
 	}

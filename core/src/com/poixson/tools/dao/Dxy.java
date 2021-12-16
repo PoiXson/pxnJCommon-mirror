@@ -38,7 +38,10 @@ public class Dxy implements Serializable, Cloneable {
 		if (obj == null) return false;
 		if (obj instanceof Dxy) {
 			final Dxy dao = (Dxy) obj;
-			return (this.x == dao.x && this.y == dao.y);
+			return (
+				this.x == dao.x &&
+				this.y == dao.y
+			);
 		}
 		return false;
 	}
@@ -48,10 +51,8 @@ public class Dxy implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		return (new StringBuilder())
-				.append('(')
-				.append(this.x)
-				.append(", ")
-				.append(this.y)
+				.append('(') .append(this.x)
+				.append(", ").append(this.y)
 				.append(')')
 				.toString();
 	}
