@@ -106,8 +106,8 @@ public final class FileUtils {
 		if (Utils.isEmpty(path)) throw new RuntimeException("Failed to get pwd path");
 		final int pos = path.lastIndexOf('/');
 		if (pos < 0) throw new RuntimeException("Invalid pwd path: "+path);
-		pwd.compareAndSet(null, StringUtils.TrimEnd(   path.substring(0, pos),  '/' ));
-		exe.compareAndSet(null, StringUtils.TrimFront( path.substring(pos + 1), '/' ));
+		pwd.compareAndSet(null, StringUtils.cTrimEnd(   path.substring(0, pos),  '/' ));
+		exe.compareAndSet(null, StringUtils.cTrimFront( path.substring(pos + 1), '/' ));
 	}
 
 

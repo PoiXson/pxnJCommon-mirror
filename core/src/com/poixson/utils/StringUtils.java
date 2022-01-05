@@ -352,19 +352,19 @@ public final class StringUtils {
 
 
 	// trim front/end
-	public static String Trim(final String str, final char...strip) {
+	public static String cTrim(final String str, final char...strip) {
 		//             front end   case
 		return doTrim( true, true, false, str, strip );
 	}
-	public static String iTrim(final String str, final char...strip) {
+	public static String ciTrim(final String str, final char...strip) {
 		//             front end   case
 		return doTrim( true, true, true, str, strip );
 	}
-	public static String Trim(final String str, final String...strip) {
+	public static String sTrim(final String str, final String...strip) {
 		//             front end   case
 		return doTrim( true, true, false, str, strip );
 	}
-	public static String iTrim(final String str, final String...strip) {
+	public static String siTrim(final String str, final String...strip) {
 		//             front end   case
 		return doTrim( true, true, true, str, strip );
 	}
@@ -372,19 +372,19 @@ public final class StringUtils {
 
 
 	// trim front
-	public static String TrimFront(final String str, final char...strip) {
+	public static String cTrimFront(final String str, final char...strip) {
 		//             front end    case
 		return doTrim( true, false, false, str, strip );
 	}
-	public static String iTrimFront(final String str, final char...strip) {
+	public static String ciTrimFront(final String str, final char...strip) {
 		//             front end    case
 		return doTrim( true, false, true, str, strip );
 	}
-	public static String TrimFront(final String str, final String...strip) {
+	public static String sTrimFront(final String str, final String...strip) {
 		//             front end    case
 		return doTrim( true, false, false, str, strip );
 	}
-	public static String iTrimFront(final String str, final String...strip) {
+	public static String siTrimFront(final String str, final String...strip) {
 		//             front end    case
 		return doTrim( true, false, true, str, strip );
 	}
@@ -392,19 +392,19 @@ public final class StringUtils {
 
 
 	// trim end
-	public static String TrimEnd(final String str, final char...strip) {
+	public static String cTrimEnd(final String str, final char...strip) {
 		//             front end    case
 		return doTrim( false, true, false, str, strip );
 	}
-	public static String iTrimEnd(final String str, final char...strip) {
+	public static String ciTrimEnd(final String str, final char...strip) {
 		//             front end    case
 		return doTrim( false, true, true, str, strip );
 	}
-	public static String TrimEnd(final String str, final String...strip) {
+	public static String sTrimEnd(final String str, final String...strip) {
 		//             front end    case
 		return doTrim( false, true, false, str, strip );
 	}
-	public static String iTrimEnd(final String str, final String...strip) {
+	public static String siTrimEnd(final String str, final String...strip) {
 		//             front end    case
 		return doTrim( false, true, true, str, strip );
 	}

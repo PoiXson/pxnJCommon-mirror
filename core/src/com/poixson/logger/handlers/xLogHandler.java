@@ -43,7 +43,7 @@ public abstract class xLogHandler {
 			this.publish();
 			return;
 		}
-		final String trimmed = StringUtils.Trim(msg, '\n');
+		final String trimmed = StringUtils.cTrim(msg, '\n');
 		final String[] lines = trimmed.split("\n");
 		if (Utils.isEmpty(lines)) {
 			this.publish();

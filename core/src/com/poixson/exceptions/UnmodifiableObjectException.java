@@ -25,7 +25,7 @@ public class UnmodifiableObjectException extends UnsupportedOperationException {
 					String.format(
 						"Object cannot be modified! %s->%s()",
 						StringUtils.LastPart(className, '.'),
-						StringUtils.Trim(e.getMethodName(), '<', '>')
+						StringUtils.cTrim(e.getMethodName(), '<', '>')
 					);
 			}
 		}
