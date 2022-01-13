@@ -480,10 +480,14 @@ public final class NumberUtils {
 			final int lowA, final int highA,
 			final int lowB, final int highB,
 			final int value) {
-		int result = (highB - lowB) / (highA - lowA);
-		result *= (value - lowA);
-		result += lowB;
-		return result;
+		final double lA = (double) lowA;
+		final double hA = (double) highA;
+		final double lB = (double) lowB;
+		final double hB = (double) highB;
+		double result = (hB - lB) / (hA - lA);
+		result *= (value - lA);
+		result += lB;
+		return (int) result;
 	}
 
 
@@ -508,9 +512,9 @@ public final class NumberUtils {
 
 	// rrrgggbb
 	public static Color Remap8BitColor(final int value) {
-		final int r = (value & 0B11100000) - 0B100000;
-		final int g = (value &    0B11100) -    0B100;
-		final int b = (value &       0B11);
+		final int r = (value & 0B00000111);
+		final int g = (value & 0B00111000) >> 3;
+		final int b = (value & 0B11000000) >> 6;
 		return
 			new Color(
 				MinMax( Remap(0, 7, 0, 255, r), 0, 255),

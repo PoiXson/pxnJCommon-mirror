@@ -176,9 +176,12 @@ public class Test_NumberUtils {
 		// remap 8 bit color
 		Assert.assertEquals( Color.BLACK, NumberUtils.Remap8BitColor(0B00000000) );
 		Assert.assertEquals( Color.WHITE, NumberUtils.Remap8BitColor(0B11111111) );
-		Assert.assertEquals( Color.RED,   NumberUtils.Remap8BitColor(0B11100000) );
-		Assert.assertEquals( Color.GREEN, NumberUtils.Remap8BitColor(0B00011100) );
-		Assert.assertEquals( Color.BLUE,  NumberUtils.Remap8BitColor(0B00000011) );
+		Assert.assertEquals( Color.RED,   NumberUtils.Remap8BitColor(0B00000111) );
+		Assert.assertEquals( Color.GREEN, NumberUtils.Remap8BitColor(0B00111000) );
+		Assert.assertEquals( Color.BLUE,  NumberUtils.Remap8BitColor(0B11000000) );
+		Assert.assertEquals( 0B00000111,   7);
+		Assert.assertEquals( 0B00111000,  56);
+		Assert.assertEquals( 0B11000000, 192);
 	}
 
 
