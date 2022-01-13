@@ -5,8 +5,13 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import java.security.CodeSource;
 import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
@@ -131,6 +136,32 @@ public final class FileUtils {
 		if (Utils.isEmpty(pathStr)) return false;
 		final File path = new File(pathStr);
 		return ( path.exists() && path.canWrite() );
+	}
+
+
+
+	public static long LastModified(final String fileStr) {
+		if (Utils.isEmpty(fileStr))
+			return 0;
+		return LastModified( Paths.get(fileStr) );
+	}
+	public static long LastModified(final File file) {
+		if (file == null)
+			return 0;
+		return LastModified( file.toPath() );
+	}
+	public static long LastModified(final Path path) {
+		try {
+			BasicFileAttributes attr =
+				Files.readAttributes(path, BasicFileAttributes.class);
+			if (attr == null)
+				return 0;
+			final FileTime time = attr.lastModifiedTime();
+			return time.to(TimeUnit.SECONDS);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 
