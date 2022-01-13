@@ -6,11 +6,6 @@ import com.poixson.utils.NumberUtils;
 public class Tuple4I extends Iwxyz {
 	private static final long serialVersionUID = 1L;
 
-	public int w;
-	public int x;
-	public int y;
-	public int z;
-
 
 
 	public Tuple4I() {

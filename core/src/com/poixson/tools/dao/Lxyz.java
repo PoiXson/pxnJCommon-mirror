@@ -13,9 +13,9 @@ public class Lxyz implements Serializable, Cloneable {
 
 
 	public Lxyz() {
-		this.x = 0;
-		this.y = 0;
-		this.z = 0;
+		this.x = 0L;
+		this.y = 0L;
+		this.z = 0L;
 	}
 	public Lxyz(final long x, final long y, final long z) {
 		this.x = x;

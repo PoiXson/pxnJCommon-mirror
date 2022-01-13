@@ -3,22 +3,22 @@ package com.poixson.tools.dao;
 import com.poixson.utils.NumberUtils;
 
 
-public class Tuple3I extends Ixyz {
+public class Tuple3L extends Lxyz {
 	private static final long serialVersionUID = 1L;
 
 
 
-	public Tuple3I() {
+	public Tuple3L() {
 		this.x = 0;
 		this.y = 0;
 		this.z = 0;
 	}
-	public Tuple3I(final int x, final int y, final int z) {
+	public Tuple3L(final long x, final long y, final long z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
-	public Tuple3I(final Tuple3I tup) {
+	public Tuple3L(final Tuple3L tup) {
 		this.x = tup.x;
 		this.y = tup.y;
 		this.z = tup.z;
@@ -28,12 +28,12 @@ public class Tuple3I extends Ixyz {
 
 	@Override
 	public Object clone() {
-		return new Tuple3I(this.x, this.y, this.z);
+		return new Tuple3L(this.x, this.y, this.z);
 	}
 
 
 
-	public void get(final Tuple3I tup) {
+	public void get(final Tuple3L tup) {
 		tup.x = this.x;
 		tup.y = this.y;
 		tup.z = this.z;
@@ -41,39 +41,39 @@ public class Tuple3I extends Ixyz {
 
 
 
-	public void set(final int x, final int y, final int z) {
+	public void set(final long x, final long y, final long z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
-	public void set(final Tuple3I tup) {
+	public void set(final Tuple3L tup) {
 		this.x = tup.x;
 		this.y = tup.y;
 		this.z = tup.z;
 	}
-	public void setX(final int x) {
+	public void setX(final long x) {
 		this.x = x;
 	}
-	public void setY(final int y) {
+	public void setY(final long y) {
 		this.y = y;
 	}
-	public void setZ(final int z) {
+	public void setZ(final long z) {
 		this.z = z;
 	}
 
 
 
-	public void add(final int x, final int y, final int z) {
+	public void add(final long x, final long y, final long z) {
 		this.x += x;
 		this.y += y;
 		this.z += z;
 	}
-	public void add(final Tuple3I tup) {
+	public void add(final Tuple3L tup) {
 		this.x += tup.x;
 		this.y += tup.y;
 		this.z += tup.z;
 	}
-	public void add(final Tuple3I tupA, final Tuple3I tupB) {
+	public void add(final Tuple3L tupA, final Tuple3L tupB) {
 		this.x = tupA.x + tupB.x;
 		this.y = tupA.y + tupB.y;
 		this.z = tupA.z + tupB.z;
@@ -81,17 +81,17 @@ public class Tuple3I extends Ixyz {
 
 
 
-	public void sub(final int x, final int y, final int z) {
+	public void sub(final long x, final long y, final long z) {
 		this.x -= x;
 		this.y -= y;
 		this.z -= z;
 	}
-	public void sub(final Tuple3I tup) {
+	public void sub(final Tuple3L tup) {
 		this.x -= tup.x;
 		this.y -= tup.y;
 		this.z -= tup.z;
 	}
-	public void sub(final Tuple3I tupA, final Tuple3I tupB) {
+	public void sub(final Tuple3L tupA, final Tuple3L tupB) {
 		this.x = tupA.x - tupB.x;
 		this.y = tupA.y - tupB.y;
 		this.z = tupA.z - tupB.z;
@@ -107,7 +107,7 @@ public class Tuple3I extends Ixyz {
 
 
 
-	public void neg(final Tuple3I tup) {
+	public void neg(final Tuple3L tup) {
 		this.x = 0 - tup.x;
 		this.y = 0 - tup.y;
 		this.z = 0 - tup.z;
@@ -120,35 +120,35 @@ public class Tuple3I extends Ixyz {
 
 
 
-	public void scale(final int scale) {
+	public void scale(final long scale) {
 		this.x *= scale;
 		this.y *= scale;
 		this.z *= scale;
 	}
 	public void scale(final double scale) {
-		this.x = (int) ( ((double)this.x) * scale );
-		this.y = (int) ( ((double)this.y) * scale );
-		this.z = (int) ( ((double)this.z) * scale );
+		this.x = (long) ( ((double)this.x) * scale );
+		this.y = (long) ( ((double)this.y) * scale );
+		this.z = (long) ( ((double)this.z) * scale );
 	}
 	public void scale(final float scale) {
-		this.x = (int) ( ((float)this.x) * scale );
-		this.y = (int) ( ((float)this.y) * scale );
-		this.z = (int) ( ((float)this.z) * scale );
+		this.x = (long) ( ((float)this.x) * scale );
+		this.y = (long) ( ((float)this.y) * scale );
+		this.z = (long) ( ((float)this.z) * scale );
 	}
 
 
 
-	public void clamp(final int min, final int max) {
+	public void clamp(final long min, final long max) {
 		this.x = NumberUtils.MinMax(this.x, min, max);
 		this.y = NumberUtils.MinMax(this.y, min, max);
 		this.z = NumberUtils.MinMax(this.z, min, max);
 	}
-	public void clampMin(final int min) {
+	public void clampMin(final long min) {
 		if (this.x < min) this.x = min;
 		if (this.y < min) this.y = min;
 		if (this.z < min) this.z = min;
 	}
-	public void clampMax(final int max) {
+	public void clampMax(final long max) {
 		if (this.x > max) this.x = max;
 		if (this.y > max) this.y = max;
 		if (this.z > max) this.z = max;

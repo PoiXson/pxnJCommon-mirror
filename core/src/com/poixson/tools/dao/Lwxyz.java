@@ -14,12 +14,12 @@ public class Lwxyz implements Serializable, Cloneable {
 
 
 	public Lwxyz() {
-		this.w = 0.0;
-		this.x = 0.0;
-		this.y = 0.0;
-		this.z = 0.0;
+		this.w = 0L;
+		this.x = 0L;
+		this.y = 0L;
+		this.z = 0L;
 	}
-	public Lwxyz(final double w, final double x, final double y, final double z) {
+	public Lwxyz(final long w, final long x, final long y, final long z) {
 		this.w = w;
 		this.x = x;
 		this.y = y;

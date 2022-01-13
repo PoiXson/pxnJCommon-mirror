@@ -12,8 +12,8 @@ public class Lxy implements Serializable, Cloneable {
 
 
 	public Lxy() {
-		this.x = 0.0;
-		this.y = 0.0;
+		this.x = 0L;
+		this.y = 0L;
 	}
 	public Lxy(final long x, final long y) {
 		this.x = x;
