@@ -1,5 +1,7 @@
 package com.poixson.tests.utils;
 
+import java.awt.Color;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -137,16 +139,16 @@ public class Test_NumberUtils {
 		Assert.assertEquals( Boolean.valueOf(false), NumberUtils.ToBoolean("disabled") );
 		Assert.assertEquals( Boolean.valueOf(false), NumberUtils.ToBoolean("no")       );
 		Assert.assertEquals( Boolean.valueOf(false), NumberUtils.ToBoolean("off")      );
-		Assert.assertEquals( Boolean.valueOf(true),  NumberUtils.ToBoolean("1") );
-		Assert.assertEquals( Boolean.valueOf(true),  NumberUtils.ToBoolean("t") );
-		Assert.assertEquals( Boolean.valueOf(true),  NumberUtils.ToBoolean("i") );
-		Assert.assertEquals( Boolean.valueOf(true),  NumberUtils.ToBoolean("e") );
-		Assert.assertEquals( Boolean.valueOf(true),  NumberUtils.ToBoolean("y") );
-		Assert.assertEquals( Boolean.valueOf(false), NumberUtils.ToBoolean("0") );
-		Assert.assertEquals( Boolean.valueOf(false), NumberUtils.ToBoolean("f") );
-		Assert.assertEquals( Boolean.valueOf(false), NumberUtils.ToBoolean("o") );
-		Assert.assertEquals( Boolean.valueOf(false), NumberUtils.ToBoolean("d") );
-		Assert.assertEquals( Boolean.valueOf(false), NumberUtils.ToBoolean("n") );
+		Assert.assertEquals( Boolean.valueOf(true),  NumberUtils.ToBoolean("1")        );
+		Assert.assertEquals( Boolean.valueOf(true),  NumberUtils.ToBoolean("t")        );
+		Assert.assertEquals( Boolean.valueOf(true),  NumberUtils.ToBoolean("i")        );
+		Assert.assertEquals( Boolean.valueOf(true),  NumberUtils.ToBoolean("e")        );
+		Assert.assertEquals( Boolean.valueOf(true),  NumberUtils.ToBoolean("y")        );
+		Assert.assertEquals( Boolean.valueOf(false), NumberUtils.ToBoolean("0")        );
+		Assert.assertEquals( Boolean.valueOf(false), NumberUtils.ToBoolean("f")        );
+		Assert.assertEquals( Boolean.valueOf(false), NumberUtils.ToBoolean("o")        );
+		Assert.assertEquals( Boolean.valueOf(false), NumberUtils.ToBoolean("d")        );
+		Assert.assertEquals( Boolean.valueOf(false), NumberUtils.ToBoolean("n")        );
 	}
 	@Test
 	public void testObjectToNumber() {
@@ -158,6 +160,25 @@ public class Test_NumberUtils {
 		Assert.assertEquals( Float.valueOf( 12.3f),      NumberUtils.CastFloat(   (Object) Float.valueOf(12.3f)       ) );
 		Assert.assertEquals(Boolean.TRUE,  NumberUtils.CastBoolean( (Object) Boolean.valueOf(true)  ) );
 		Assert.assertEquals(Boolean.FALSE, NumberUtils.CastBoolean( (Object) Boolean.valueOf(false) ) );
+	}
+
+
+
+	@Test
+	public void testRemap() {
+		// remap percent
+		Assert.assertEquals(  0, NumberUtils.Remap(0, 10, 0.0) );
+		Assert.assertEquals( 10, NumberUtils.Remap(0, 10, 1.0) );
+		Assert.assertEquals(  5, NumberUtils.Remap(1, 10, 0.5) );
+		// remap range
+		Assert.assertEquals( 25, NumberUtils.Remap(1, 10, 21, 30,  5) );
+		Assert.assertEquals( 30, NumberUtils.Remap(1, 10, 21, 30, 10) );
+		// remap 8 bit color
+		Assert.assertEquals( Color.BLACK, NumberUtils.Remap8BitColor(0B00000000) );
+		Assert.assertEquals( Color.WHITE, NumberUtils.Remap8BitColor(0B11111111) );
+		Assert.assertEquals( Color.RED,   NumberUtils.Remap8BitColor(0B11100000) );
+		Assert.assertEquals( Color.GREEN, NumberUtils.Remap8BitColor(0B00011100) );
+		Assert.assertEquals( Color.BLUE,  NumberUtils.Remap8BitColor(0B00000011) );
 	}
 
 
