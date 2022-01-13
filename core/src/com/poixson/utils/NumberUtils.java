@@ -506,6 +506,21 @@ public final class NumberUtils {
 
 
 
+	// rrrgggbb
+	public static Color Remap8BitColor(final int value) {
+		final int r = (value & 0B11100000) - 0B100000;
+		final int g = (value &    0B11100) -    0B100;
+		final int b = (value &       0B11);
+		return
+			new Color(
+				MinMax( Remap(0, 7, 0, 255, r), 0, 255),
+				MinMax( Remap(0, 7, 0, 255, g), 0, 255),
+				MinMax( Remap(0, 3, 0, 255, b), 0, 255)
+			);
+	}
+
+
+
 	// -------------------------------------------------------------------------------
 	// random number
 
