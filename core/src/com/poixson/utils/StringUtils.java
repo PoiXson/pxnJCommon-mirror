@@ -569,6 +569,12 @@ public final class StringUtils {
 				.append(data).append(end).toString();
 	}
 
+	public static String ForceStartsEnds(final String start, final String end, final String data) {
+		return ForceStarts(start,
+				ForceEnds(end, data)
+			);
+	}
+
 
 
 	// increment and append string_# until unique
