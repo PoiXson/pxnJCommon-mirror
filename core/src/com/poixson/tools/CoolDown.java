@@ -7,35 +7,28 @@ import com.poixson.utils.Utils;
 
 public class CoolDown {
 
-	protected final xTime duration = new xTime();
-	protected final AtomicLong last = new AtomicLong(-1L);
-
-	protected final Object lock = new Object();
+	protected final AtomicLong duration = new AtomicLong(0L);
+	protected final AtomicLong last     = new AtomicLong(0L);
 
 
 
-	public static CoolDown getNew() {
-		return new CoolDown();
-	}
-	public static CoolDown getNew(final long ms) {
-		final CoolDown cool = CoolDown.getNew();
-		cool.setDuration(ms);
-		return cool;
-	}
-	public static CoolDown getNew(final String time) {
-		final CoolDown cool = CoolDown.getNew();
-		cool.setDuration(time);
-		return cool;
-	}
-	public static CoolDown getNew(final xTime time) {
-		final CoolDown cool = CoolDown.getNew();
-		cool.setDuration(time);
-		return cool;
+	public CoolDown() {
+		this(0L, 0L);
 	}
 
+	public CoolDown(final String duration) {
+		this( xTime.Parse(duration) );
+	}
+	public CoolDown(final xTime timeDuration) {
+		this(timeDuration.ms(), 0L);
+	}
+	public CoolDown(final long msDuration) {
+		this(msDuration, 0L);
+	}
 
-
-	protected CoolDown() {
+	public CoolDown(final long msDuration, final long msLast) {
+		this.duration.set(msDuration);
+		this.last.set(msLast);
 	}
 
 
@@ -45,30 +38,38 @@ public class CoolDown {
 
 
 
-	/**
-	 * Checks the state of the cooldown period.
-	 * @return true if period reached and reset, false if not yet reached.
-	 */
-	public boolean runAgain() {
-		synchronized (this.lock) {
-			final long current = this.getCurrent();
-			final long last    = this.last.get();
-			// first run
-			if (last == -1L) {
-				this.last.set(current);
+	public boolean again() {
+		return this.again( this.getCurrent() );
+	}
+	public boolean again(final long current) {
+		// disabled
+		final long duration = this.duration.get();
+		if (duration <= 0L)
+			return false;
+		// first run
+		final long last = this.last.get();
+		if (last <= 0L) {
+			if (this.last.compareAndSet(last, current))
 				return true;
-			}
-			// run again
-			final long duration = this.duration.ms();
-			if (duration <= 0L)
-				return false;
-			if (current - last >= duration) {
-				this.last.set(current);
+			return this.again();
+		}
+		// check timeout
+		if (current - last >= duration) {
+			if (this.last.compareAndSet(last, current))
 				return true;
-			}
+			return this.again();
 		}
 		// cooling
 		return false;
+	}
+
+
+
+	public void reset() {
+		this.reset( this.getCurrent() );
+	}
+	public void reset(final long time) {
+		this.last.set(time);
 	}
 
 
@@ -82,33 +83,21 @@ public class CoolDown {
 
 
 
-	public long getTimeSince() {
+	public long getTimeSinceLast() {
 		final long last = this.last.get();
-		if (last == -1L)
-			return -1L;
+		if (last <= 0L)
+			return last;
 		return (this.getCurrent() - last);
 	}
-	public long getTimeUntil() {
+	public long getTimeUntilNext() {
 		final long last = this.last.get();
-		if (last == -1L)
-			return -1L;
-		final long duration = this.duration.ms();
+		if (last <= 0L)
+			return last;
+		final long duration = this.duration.get();
+		// disabled
 		if (duration <= 0L)
 			return -1L;
 		return ( (last + duration) - this.getCurrent() );
-	}
-
-
-
-	public void resetClean() {
-		synchronized (this.lock) {
-			this.last.set(-1L);
-		}
-	}
-	public void resetRun() {
-		synchronized (this.lock) {
-			this.last.set(this.getCurrent());
-		}
 	}
 
 
@@ -118,19 +107,17 @@ public class CoolDown {
 
 
 
-	// set duration
-	public void setDuration(final long ms) {
-		this.duration.set(ms, xTimeU.MS);
+	public long getDuration() {
+		return this.duration.get();
 	}
 	public void setDuration(final String time) {
-		this.duration.set(time);
+		this.setDuration( xTime.Parse(time) );
 	}
 	public void setDuration(final xTime time) {
-		this.duration.set(time);
+		this.setDuration( time.ms() );
 	}
-	// get duration
-	public xTime getDuration() {
-		return this.duration.clone();
+	public void setDuration(final long ms) {
+		this.duration.set(ms);
 	}
 
 
