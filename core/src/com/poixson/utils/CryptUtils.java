@@ -9,71 +9,87 @@ import java.util.Formatter;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.poixson.logger.xLog;
-
 
 public final class CryptUtils {
 	private CryptUtils() {}
 
-	public static final String CRYPT_MD5    = "MD5";
-	public static final String CRYPT_SHA1   = "SHA1";
-	public static final String CRYPT_SHA256 = "SHA256";
-	public static final String CRYPT_SHA512 = "SHA512";
 
-	public static final String Hmac_MD5     = "Hmac"+CRYPT_MD5;
-	public static final String Hmac_SHA1    = "Hmac"+CRYPT_SHA1;
-	public static final String Hmac_SHA256  = "Hmac"+CRYPT_SHA256;
+
+	public static enum CryptType {
+		MD5(        "MD5"),
+		SHA1(       "SHA1"),
+		SHA256(     "SHA256"),
+		SHA512(     "SHA512"),
+		HMAC_MD5(   "HmacMD5"),
+		HMAC_SHA1(  "HmacSHA1"),
+		HMAC_SHA256("HmacSHA256");
+
+		public final String key;
+
+		private CryptType(final String key) {
+			this.key = key;
+		}
+
+		@Override
+		public String toString() {
+			return this.key;
+		}
+
+	}
 
 
 
 	// md5
 	public static String MD5(final String data) {
-		return Crypt(CRYPT_MD5, data);
+		return Crypt(CryptType.MD5, data);
 	}
 	// sha1
 	public static String SHA1(final String data) {
-		return Crypt(CRYPT_SHA1, data);
+		return Crypt(CryptType.SHA1, data);
 	}
 	// sha256
 	public static String SHA256(final String data) {
-		return Crypt(CRYPT_SHA256, data);
+		return Crypt(CryptType.SHA256, data);
 	}
 	// sha512
 	public static String SHA512(final String data) {
-		return Crypt(CRYPT_SHA512, data);
+		return Crypt(CryptType.SHA512, data);
 	}
 
 
 
 	// perform crypt
-	public static String Crypt(final String cryptMethod, final String data) {
+	public static String Crypt(final CryptType type, final String data) {
+		return Crypt(type.toString(), data);
+	}
+	public static String Crypt(final String typeStr, final String data) {
 		try {
-			final MessageDigest md = MessageDigest.getInstance(cryptMethod);
-			if (md == null)
-				return null;
-			md.update(data.getBytes());
-			return toHex(md.digest());
+			final MessageDigest md = MessageDigest.getInstance(typeStr);
+			if (md == null) throw new NoSuchAlgorithmException(typeStr);
+			md.update( data.getBytes() );
+			return toHex( md.digest() );
 		} catch (NoSuchAlgorithmException e) {
-			log().trace(e);
+e.printStackTrace();
+//			log().trace(e);
 		}
 		return null;
 	}
+
+
+
 	// crypt with key
-	public static String Crypt(final String cryptMethod, final String key, final String data) {
+	public static String Crypt(final String typeStr, final String key, final String data) {
 		try {
-			final Mac mac = Mac.getInstance(cryptMethod);
-			if (mac == null)
-				return null;
-			mac.init(new SecretKeySpec(key.getBytes(), cryptMethod));
-			return toHex(
-				mac.doFinal(
-					data.getBytes()
-				)
-			);
+			final Mac mac = Mac.getInstance(typeStr);
+			if (mac == null) throw new NoSuchAlgorithmException(typeStr);
+			mac.init(new SecretKeySpec(key.getBytes(), typeStr));
+			return toHex( mac.doFinal( data.getBytes() ) );
 		} catch (NoSuchAlgorithmException e) {
-			log().trace(e);
+e.printStackTrace();
+//			log().trace(e);
 		} catch (InvalidKeyException e) {
-			log().trace(e);
+e.printStackTrace();
+//			log().trace(e);
 		}
 		return null;
 	}
@@ -82,29 +98,32 @@ public final class CryptUtils {
 
 	// encrypted data checksum
 	public static String HMacMD5(final String key, final String data) {
-		return HMac(key, data, Hmac_MD5);
+		return HMac(CryptType.HMAC_MD5, key, data);
 	}
 	public static String HMacSHA1(final String key, final String data) {
-		return HMac(key, data, Hmac_SHA1);
+		return HMac(CryptType.HMAC_SHA1, key, data);
 	}
 	public static String HMacSHA256(final String key, final String data) {
-		return HMac(key, data, Hmac_SHA256);
+		return HMac(CryptType.HMAC_SHA256, key, data);
 	}
-	public static String HMac(final String key, final String data, final String cryptMethod) {
+	public static String HMac(final CryptType type, final String key, final String data) {
+		return HMac(type.toString(), key, data);
+	}
+
+
+
+	public static String HMac(final String typeStr, final String key, final String data) {
 		try {
-			final Mac mac = Mac.getInstance(cryptMethod);
-			if (mac == null)
-				return null;
-			mac.init(new SecretKeySpec(key.getBytes(), cryptMethod));
-			return toHex(
-				mac.doFinal(
-					data.getBytes()
-				)
-			);
+			final Mac mac = Mac.getInstance(typeStr);
+			if (mac == null) throw new NoSuchAlgorithmException(typeStr);
+			mac.init(new SecretKeySpec(key.getBytes(), typeStr));
+			return toHex( mac.doFinal( data.getBytes() ) );
 		} catch (NoSuchAlgorithmException e) {
-			log().trace(e);
+e.printStackTrace();
+//			log().trace(e);
 		} catch (InvalidKeyException e) {
-			log().trace(e);
+e.printStackTrace();
+//			log().trace(e);
 		}
 		return null;
 	}
@@ -113,24 +132,24 @@ public final class CryptUtils {
 
 	// base64 encode
 	public static String Base64Encode(final String data) {
-		if (data == null)   return null;
-		if (data.isEmpty()) return "";
+		if (Utils.isEmpty(data))
+			return data;
 		return new String(Base64Encode(data.getBytes()));
 	}
 	public static byte[] Base64Encode(final byte[] data) {
-		if (data == null)     return null;
-		if (data.length == 0) return new byte[0];
+		if (Utils.isEmpty(data))
+			return data;
 		return Base64.getEncoder().encode(data);
 	}
 	// base64 decode
 	public static String Base64Decode(final String data) {
-		if (data == null)   return null;
-		if (data.isEmpty()) return "";
+		if (Utils.isEmpty(data))
+			return data;
 		return new String(Base64Decode(data.getBytes()));
 	}
 	public static byte[] Base64Decode(final byte[] data) {
-		if (data == null)     return null;
-		if (data.length == 0) return new byte[0];
+		if (Utils.isEmpty(data))
+			return data;
 		return Base64.getDecoder().decode(data);
 	}
 
@@ -145,9 +164,9 @@ public final class CryptUtils {
 		final StringBuilder str = new StringBuilder(data.length * 2);
 		final Formatter formatter = new Formatter(str);
 		for (final byte b : data) {
-			formatter.format("%02x", new Byte(b));
+			formatter.format("%02x", Byte.valueOf(b));
 		}
-		Utils.safeClose(formatter);
+		Utils.SafeClose(formatter);
 		return str.toString();
 //TODO: is this useful?
 //		byte[] byteData = md.digest();
@@ -179,13 +198,6 @@ public final class CryptUtils {
 			out[i] = (byte) value;
 		}
 		return out;
-	}
-
-
-
-	// logger
-	public static xLog log() {
-		return Utils.log();
 	}
 
 
