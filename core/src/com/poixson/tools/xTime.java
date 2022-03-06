@@ -8,12 +8,11 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.exceptions.UnmodifiableObjectException;
-import com.poixson.tools.abstractions.LockableObject;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
-public class xTime implements LockableObject {
+public class xTime {
 
 	// stored value in ms
 	public final AtomicLong value = new AtomicLong(0L);
@@ -47,23 +46,6 @@ public class xTime implements LockableObject {
 	@Override
 	public xTime clone() {
 		return new xTime(this);
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// lock value
-
-
-
-	@Override
-	public xTime lock() {
-		this.locked.set(true);
-		return this;
-	}
-	@Override
-	public boolean isLocked() {
-		return this.locked.get();
 	}
 
 
