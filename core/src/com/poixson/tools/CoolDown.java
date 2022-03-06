@@ -74,7 +74,7 @@ public class CoolDown {
 
 
 	public long getCurrent() {
-		return Utils.getSystemMillis();
+		return Utils.GetMS();
 	}
 	public long getLast() {
 		return this.last.get();

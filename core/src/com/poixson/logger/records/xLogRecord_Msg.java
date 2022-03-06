@@ -18,7 +18,7 @@ public class xLogRecord_Msg implements xLogRecord {
 	public xLogRecord_Msg(final xLog log, final xLevel level,
 			final String msg, final Object[] args) {
 		this.level     = level;
-		this.timestamp = Utils.getSystemMillis();
+		this.timestamp = Utils.GetMS();
 		this.msg       = msg;
 		this.args      = args;
 		this.nametree  = log.getNameTree();

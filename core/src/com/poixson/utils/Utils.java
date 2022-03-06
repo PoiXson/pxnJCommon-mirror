@@ -540,7 +540,7 @@ public final class Utils {
 	/**
 	 * Close safely, ignoring errors.
 	 */
-	public static void safeClose(final Closeable obj) {
+	public static void SafeClose(final Closeable obj) {
 		if (obj == null) return;
 		try {
 			obj.close();
@@ -549,7 +549,7 @@ public final class Utils {
 	/**
 	 * Close safely, ignoring errors.
 	 */
-	public static void safeClose(final AutoCloseable obj) {
+	public static void SafeClose(final AutoCloseable obj) {
 		if (obj == null) return;
 		try {
 			obj.close();
@@ -581,7 +581,7 @@ public final class Utils {
 	 * Current system time in milliseconds.
 	 * @return
 	 */
-	public static long getSystemMillis() {
+	public static long GetMS() {
 		return System.currentTimeMillis();
 	}
 

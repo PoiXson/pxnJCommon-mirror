@@ -84,7 +84,7 @@ public final class StringUtils {
 		try {
 			return writer.toString().trim();
 		} finally {
-			Utils.safeClose(writer);
+			Utils.SafeClose(writer);
 		}
 	}
 

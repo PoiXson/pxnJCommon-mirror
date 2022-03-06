@@ -45,7 +45,7 @@ public class AppProps {
 			props = new Properties();
 			props.load(in);
 		} finally {
-			Utils.safeClose(in);
+			Utils.SafeClose(in);
 		}
 		return new AppProps(props);
 	}
