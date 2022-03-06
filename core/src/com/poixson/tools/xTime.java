@@ -122,7 +122,7 @@ public class xTime {
 	public xTime set(final String str) {
 		if (this.locked.get())  throw new UnmodifiableObjectException();
 		if (Utils.isEmpty(str)) throw new RequiredArgumentException("str");
-		this.value.set( ParseLong(str) );
+		this.value.set( ParseToLong(str) );
 		return this;
 	}
 	public xTime set(final xTime time) {
@@ -162,7 +162,7 @@ public class xTime {
 	public void add(final String str) {
 		if (this.locked.get())  throw new UnmodifiableObjectException();
 		if (Utils.isEmpty(str)) throw new RequiredArgumentException("str");
-		this.value.addAndGet( ParseLong(str) );
+		this.value.addAndGet( ParseToLong(str) );
 	}
 	public void add(final xTime time) {
 		if (this.locked.get()) throw new UnmodifiableObjectException();
@@ -180,9 +180,9 @@ public class xTime {
 	// parse time from string
 	public static xTime Parse(final String str) {
 		if (Utils.isEmpty(str)) return null;
-		return new xTime( ParseLong(str) );
+		return new xTime( ParseToLong(str) );
 	}
-	public static long ParseLong(final String str) {
+	public static long ParseToLong(final String str) {
 		if (Utils.isEmpty(str)) throw new RequiredArgumentException("str");
 		long value = 0L;
 		// split into parts
