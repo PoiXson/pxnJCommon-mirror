@@ -1,31 +1,21 @@
-/*
 package com.poixson.exceptions;
-
-import com.poixson.utils.StringUtils;
 
 
 public class MismatchedVersionException extends Exception {
 	private static final long serialVersionUID = 1L;
 
-	public final String expectedVersion;
-	public final String libraryVersion;
+	public final String versionExpected;
+	public final String versionActual;
 
 
 
 	public MismatchedVersionException(
-			final String expectedVersion, final String libraryVersion) {
-		super(
-			StringUtils.ReplaceTags(
-				"Expected version: %s Found version: %s",
-				expectedVersion,
-				libraryVersion
-			)
-		);
-		this.expectedVersion = expectedVersion;
-		this.libraryVersion  = libraryVersion;
+			final String versionExpected, final String versionActual) {
+		super(String.format("Expected version: %s Found version: %s", versionExpected, versionActual));
+		this.versionExpected = versionExpected;
+		this.versionActual  = versionActual;
 	}
 
 
 
 }
-*/

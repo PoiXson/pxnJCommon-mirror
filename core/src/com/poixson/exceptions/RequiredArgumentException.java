@@ -7,7 +7,7 @@ public class RequiredArgumentException extends IllegalArgumentException {
 
 
 	public RequiredArgumentException(final String argName) {
-		super( String.format("%s argument is required", argName) );
+		super(String.format("%s argument is required", argName));
 	}
 
 

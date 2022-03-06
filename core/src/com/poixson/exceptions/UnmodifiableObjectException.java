@@ -12,10 +12,8 @@ public class UnmodifiableObjectException extends UnsupportedOperationException {
 
 
 	private static String BuildMsg() {
-		final Exception eTemp = new Exception();
-		final StackTraceElement[] trace = eTemp.getStackTrace();
-		final Iterator<StackTraceElement> it =
-				Arrays.asList(trace).iterator();
+		final StackTraceElement[] trace = (new Exception()).getStackTrace();
+		final Iterator<StackTraceElement> it = Arrays.asList(trace).iterator();
 		// find calling class
 		while (it.hasNext()) {
 			final StackTraceElement e = it.next();

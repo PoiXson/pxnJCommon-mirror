@@ -1,4 +1,3 @@
-/*
 package com.poixson.exceptions;
 
 
@@ -8,15 +7,9 @@ public class UnknownThreadPoolException extends RuntimeException {
 
 
 	public UnknownThreadPoolException(final String poolName) {
-		super(
-			(new StringBuilder())
-				.append("Unknown xThreadPool: ")
-				.append(poolName)
-				.toString()
-		);
+		super("Unknown xThreadPool: " + poolName);
 	}
 
 
 
 }
-*/
