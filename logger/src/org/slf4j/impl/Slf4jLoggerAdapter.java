@@ -1,3 +1,4 @@
+/*
 package org.slf4j.impl;
 
 import org.slf4j.helpers.FormattingTuple;
@@ -244,3 +245,4 @@ public class Slf4jLoggerAdapter extends MarkerIgnoringBase {
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package org.slf4j.impl;
 
 import org.slf4j.ILoggerFactory;
@@ -43,3 +44,4 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package org.slf4j.impl;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,3 +54,4 @@ public class Slf4jLoggerFactory implements ILoggerFactory {
 
 
 }
+*/
