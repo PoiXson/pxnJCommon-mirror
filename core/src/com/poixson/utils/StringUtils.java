@@ -112,13 +112,6 @@ public final class StringUtils {
 
 
 
-	public static String[] StringToArray(final String str) {
-		if (Utils.isEmpty(str)) return null;
-		return new String[] { str };
-	}
-
-
-
 	public static boolean ArrayContains(final String match, final String[] array) {
 		if (match == null || match.isEmpty())   return false;
 		if (array == null || array.length == 0) return false;
