@@ -110,7 +110,7 @@ public final class ThreadUtils {
 			throws InvocationTargetException, InterruptedException {
 		final xCallable<Thread> call = new xCallable<Thread>() {
 			@Override
-			public Thread call() throws Exception {
+			public Thread call() {
 				return Thread.currentThread();
 			}
 		};

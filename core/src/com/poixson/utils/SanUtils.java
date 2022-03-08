@@ -61,7 +61,7 @@ public final class SanUtils {
 		return FileName(text, "_");
 	}
 	public static String FileName(final String text, final String replacement) {
-		if (Utils.isBlank(text)) return null;
+		if (Utils.isEmpty(text)) return null;
 		return text.replaceAll(
 			"[^a-zA-Z0-9\\._-]+",
 			(replacement == null ? "" : replacement)

@@ -248,7 +248,7 @@ public final class FileUtils {
 			for (final String str : array) {
 				if (Utils.isEmpty(str)) continue PARTS_ARRAY;
 				final String s =
-					StringUtils.Trim(
+					StringUtils.sTrim(
 						str,
 						" ", "\t", "\r", "\n"
 					);
@@ -321,16 +321,8 @@ public final class FileUtils {
 	 */
 	public static InputStream OpenResource(final Class<? extends Object> clssRef, final String fileStr) {
 		if (Utils.isEmpty(fileStr)) throw new RequiredArgumentException("fileStr");
-		final Class<? extends Object> clss = (
-			clssRef == null
-			? FileUtils.class
-			: clssRef
-		);
-		final InputStream in =
-			clss.getResourceAsStream(
-				StringUtils.ForceStarts("/", fileStr)
-			);
-		return in;
+		final Class<? extends Object> clss = (clssRef==null ? FileUtils.class : clssRef);
+		return clss.getResourceAsStream( StringUtils.ForceStarts("/", fileStr) );
 	}
 
 
@@ -343,7 +335,7 @@ public final class FileUtils {
 		try {
 			Files.copy(in, file.toPath());
 		} finally {
-			Utils.safeClose(in);
+			Utils.SafeClose(in);
 		}
 	}
 
