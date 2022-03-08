@@ -2,8 +2,10 @@ package com.poixson.utils;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -55,6 +57,26 @@ public final class FileUtils {
 			} // end PATH_LOOP
 		} // end PARENTS_LOOP
 		return null;
+	}
+
+
+
+	public static boolean SearchLocalOrResource(final Class<?> clss,
+			final String fileLocal, final String fileRes)
+			throws FileNotFoundException {
+		// local file
+		if (Utils.notEmpty(fileLocal)) {
+			final File path = new File(fileLocal);
+			if (path.isFile())
+				return true;
+		}
+		// resource file
+		if (Utils.notEmpty(fileRes)) {
+			final URL url = clss.getResource(fileRes);
+			if (url != null)
+				return false;
+		}
+		throw new FileNotFoundException(String.format("Loc:%s or Res:%s in %s", fileLocal, fileRes, clss.getName()));
 	}
 
 
