@@ -531,23 +531,30 @@ public final class NumberUtils {
 
 
 	public static int GetRandom(final int minNumber, final int maxNumber) {
-		final Random gen = new Random(Utils.getSystemMillis());
+		return GetRandom(minNumber, maxNumber, 1L);
+	}
+	public static int GetRandom(final int minNumber, final int maxNumber, final int seed) {
+		return GetRandom(minNumber, maxNumber, ((long)seed));
+	}
+	public static int GetRandom(final int minNumber, final int maxNumber, final long seed) {
+		if (seed == 0L)
+			return GetRandom(minNumber, maxNumber, 1L);
+		final Random gen = new Random(Utils.GetMS() * seed);
 		return gen.nextInt(maxNumber - minNumber) + minNumber;
 	}
-	public static int getNewRandom(final int minNumber, final int maxNumber, final int oldNumber) {
+
+	public static int GetNewRandom(final int minNumber, final int maxNumber, final int oldNumber) {
 		if (minNumber == maxNumber)
 			return minNumber;
-		if ((maxNumber - minNumber) == 1) {
-			return (
-				oldNumber == minNumber
-				? maxNumber
-				: minNumber
-			);
-		}
+		if ((maxNumber - minNumber) == 1)
+			return (oldNumber == minNumber ? maxNumber : minNumber);
 		int newNumber;
+		int seed = oldNumber;
 		for (int i=0; i<100; i++) {
-			newNumber = GetRandom(minNumber, maxNumber);
-			if (newNumber != oldNumber) return newNumber;
+			newNumber = GetRandom(minNumber, maxNumber, seed);
+			if (newNumber != oldNumber)
+				return newNumber;
+			seed += i;
 		}
 		throw new IllegalAccessError("Failed to generate a random number");
 	}
