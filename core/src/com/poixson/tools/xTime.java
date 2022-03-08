@@ -3,11 +3,9 @@ package com.poixson.tools;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.exceptions.UnmodifiableObjectException;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
@@ -16,8 +14,6 @@ public class xTime {
 
 	// stored value in ms
 	public final AtomicLong value = new AtomicLong(0L);
-	// write lock
-	protected final AtomicBoolean locked = new AtomicBoolean(false);
 
 
 
@@ -101,18 +97,15 @@ public class xTime {
 
 	// set value
 	public xTime set(final long ms) {
-		if (this.locked.get()) throw new UnmodifiableObjectException();
 		this.value.set(ms);
 		return this;
 	}
 	public xTime set(final long value, final xTimeU xunit) {
-		if (this.locked.get()) throw new UnmodifiableObjectException();
 		if (xunit == null) throw new RequiredArgumentException("unit");
 		this.value.set( xunit.convertTo(value) );
 		return this;
 	}
 	public xTime set(final long value, final TimeUnit unit) {
-		if (this.locked.get()) throw new UnmodifiableObjectException();
 		if (unit == null)      throw new RequiredArgumentException("unit");
 		final xTimeU xunit = xTimeU.GetUnit(unit);
 		if (xunit == null)     throw new RuntimeException("Unknown time unit: "+unit.toString());
@@ -120,13 +113,11 @@ public class xTime {
 		return this;
 	}
 	public xTime set(final String str) {
-		if (this.locked.get())  throw new UnmodifiableObjectException();
 		if (Utils.isEmpty(str)) throw new RequiredArgumentException("str");
 		this.value.set( ParseToLong(str) );
 		return this;
 	}
 	public xTime set(final xTime time) {
-		if (this.locked.get()) throw new UnmodifiableObjectException();
 		if (time == null)      throw new RequiredArgumentException("time");
 		this.value.set( time.ms() );
 		return this;
@@ -136,7 +127,6 @@ public class xTime {
 
 	// reset value to 0
 	public xTime reset() {
-		if (this.locked.get()) throw new UnmodifiableObjectException();
 		this.value.set(0L);
 		return this;
 	}
@@ -148,24 +138,20 @@ public class xTime {
 		this.value.addAndGet(ms);
 	}
 	public void add(final long value, final xTimeU xunit) {
-		if (this.locked.get()) throw new UnmodifiableObjectException();
 		if (xunit == null)     throw new RequiredArgumentException("unit");
 		this.value.addAndGet( xunit.convertTo(value) );
 	}
 	public void add(final long value, final TimeUnit unit) {
-		if (this.locked.get()) throw new UnmodifiableObjectException();
 		if (unit == null)      throw new RequiredArgumentException("unit");
 		final xTimeU xunit = xTimeU.GetUnit(unit);
 		if (xunit == null)     throw new RuntimeException("Unknown time unit: "+unit.toString());
 		this.value.addAndGet( xunit.convertTo(value) );
 	}
 	public void add(final String str) {
-		if (this.locked.get())  throw new UnmodifiableObjectException();
 		if (Utils.isEmpty(str)) throw new RequiredArgumentException("str");
 		this.value.addAndGet( ParseToLong(str) );
 	}
 	public void add(final xTime time) {
-		if (this.locked.get()) throw new UnmodifiableObjectException();
 		if (time == null)      throw new RequiredArgumentException("time");
 		this.value.addAndGet( time.ms() );
 	}
