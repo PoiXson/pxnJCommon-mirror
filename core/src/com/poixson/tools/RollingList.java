@@ -1,9 +1,9 @@
 package com.poixson.tools;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 
-public class RollingList<E> extends ArrayList<E> {
+public class RollingList<E> extends LinkedList<E> {
 	private static final long serialVersionUID = 1L;
 
 	private final int maxSize;
@@ -39,11 +39,10 @@ public class RollingList<E> extends ArrayList<E> {
 		final int maxSize = this.maxSize;
 		final int curSize = this.size();
 		final int remSize = curSize - maxSize;
-		if (remSize > 0) {
-			this.removeRange(0, remSize);
-			return remSize;
-		}
-		return 0;
+		if (remSize <= 0)
+			return 0;
+		this.removeRange(0, remSize);
+		return remSize;
 	}
 
 
