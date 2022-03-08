@@ -1,4 +1,4 @@
-package com.poixson.tools;
+package com.poixson.tools.abstractions;
 
 import java.util.concurrent.atomic.AtomicLong;
 
