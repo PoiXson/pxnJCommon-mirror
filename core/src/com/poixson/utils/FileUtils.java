@@ -1,10 +1,12 @@
 package com.poixson.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -349,6 +351,24 @@ public final class FileUtils {
 		} finally {
 			Utils.safeClose(in);
 		}
+	}
+
+
+
+	public static String ReadInputStream(final InputStream in) {
+		if (in == null) return null;
+		final StringBuilder result = new StringBuilder();
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		try {
+			String line;
+			while ( (line=reader.readLine()) != null) {
+				result.append(line).append('\n');
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return result.toString();
 	}
 
 
