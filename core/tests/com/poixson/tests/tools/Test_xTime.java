@@ -62,24 +62,6 @@ public class Test_xTime {
 
 
 	@Test
-	public void testLock() {
-		final xTime time = new xTime(123L);
-		Assert.assertFalse( time.isLocked() );
-		time.lock();
-		Assert.assertTrue( time.isLocked() );
-		final Exception e =
-			Assert.assertThrows(
-				UnmodifiableObjectException.class,
-				() -> {
-					time.set(321L);
-				}
-			);
-		Assert.assertEquals( "Object cannot be modified! xTime->set()", e.getMessage() );
-	}
-
-
-
-	@Test
 	public void testGet() {
 		final xTime time = new xTime(123L);
 		Assert.assertEquals( 123L, time.get(xTimeU.MS) );
@@ -149,7 +131,9 @@ public class Test_xTime {
 
 	@Test
 	public void testParse() {
-		Assert.assertEquals(123L, xTime.ParseLong("123"));
+		Assert.assertEquals(123L,        xTime.ParseToLong("123" ));
+		Assert.assertEquals(123000L,     xTime.ParseToLong("123s"));
+		Assert.assertEquals(123000L*60L, xTime.ParseToLong("123m"));
 		{
 			final xTime time = xTime.Parse("123");
 			Assert.assertNotNull(time);

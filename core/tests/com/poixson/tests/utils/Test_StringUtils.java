@@ -62,14 +62,6 @@ public class Test_StringUtils {
 
 
 	@Test
-	public void testStringToArray() {
-		Assert.assertArrayEquals( new String[] { "Abc" }, StringUtils.StringToArray( "Abc" ) );
-		Assert.assertArrayEquals( null, StringUtils.StringToArray( null ) );
-	}
-
-
-
-	@Test
 	public void testSplitLines() {
 		Assert.assertArrayEquals( new String[] { "Abc"                       }, StringUtils.SplitLines(new String[] { "Abc"                   }) );
 		Assert.assertArrayEquals( new String[] { "A", "b", "c"               }, StringUtils.SplitLines(new String[] { "A\nb\nc"               }) );
@@ -143,48 +135,37 @@ public class Test_StringUtils {
 
 
 	@Test
-	public void testStrEquals() {
-		Assert.assertEquals( true,  StringUtils.StrEquals("Abc", "Abc") );
-		Assert.assertEquals( false, StringUtils.StrEquals("Abc", "abc") );
-		Assert.assertEquals( false, StringUtils.StrEquals("Abc", ""   ) );
-		Assert.assertEquals( false, StringUtils.StrEquals("Abc", null ) );
-		Assert.assertEquals( true,  StringUtils.StrEquals(null,  null ) );
-		Assert.assertEquals( true,  StringUtils.StrEquals("",    ""   ) );
-		Assert.assertEquals( true,  StringUtils.StrEquals("",    null ) );
-		Assert.assertEquals( true,  StringUtils.StrEquals(null,  ""   ) );
+	public void testMatchString() {
+		Assert.assertEquals( true,  StringUtils.MatchString("Abc", "Abc") );
+		Assert.assertEquals( false, StringUtils.MatchString("Abc", "abc") );
+		Assert.assertEquals( false, StringUtils.MatchString("Abc", ""   ) );
+		Assert.assertEquals( false, StringUtils.MatchString("Abc", null ) );
+		Assert.assertEquals( true,  StringUtils.MatchString(null,  null ) );
+		Assert.assertEquals( true,  StringUtils.MatchString("",    ""   ) );
+		Assert.assertEquals( true,  StringUtils.MatchString("",    null ) );
+		Assert.assertEquals( true,  StringUtils.MatchString(null,  ""   ) );
 	}
 	@Test
-	public void testEqualsIgnoreCase() {
-		Assert.assertEquals( true,  StringUtils.StrEqualsIgnoreCase("Abc", "Abc") );
-		Assert.assertEquals( true,  StringUtils.StrEqualsIgnoreCase("Abc", "abc") );
-		Assert.assertEquals( false, StringUtils.StrEqualsIgnoreCase("Abc", ""   ) );
-		Assert.assertEquals( false, StringUtils.StrEqualsIgnoreCase("Abc", null ) );
-		Assert.assertEquals( true,  StringUtils.StrEqualsIgnoreCase(null,  null ) );
-		Assert.assertEquals( true,  StringUtils.StrEqualsIgnoreCase("",    ""   ) );
-		Assert.assertEquals( true,  StringUtils.StrEqualsIgnoreCase("",    null ) );
-		Assert.assertEquals( true,  StringUtils.StrEqualsIgnoreCase(null,  ""   ) );
+	public void testMatchStringIgnoreCase() {
+		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase("Abc", "Abc") );
+		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase("Abc", "abc") );
+		Assert.assertEquals( false, StringUtils.MatchStringIgnoreCase("Abc", ""   ) );
+		Assert.assertEquals( false, StringUtils.MatchStringIgnoreCase("Abc", null ) );
+		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase(null,  null ) );
+		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase("",    ""   ) );
+		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase("",    null ) );
+		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase(null,  ""   ) );
 	}
 	@Test
-	public void testStrEqualsExact() {
-		Assert.assertEquals( true,  StringUtils.StrEqualsExact("Abc", "Abc") );
-		Assert.assertEquals( false, StringUtils.StrEqualsExact("Abc", "abc") );
-		Assert.assertEquals( false, StringUtils.StrEqualsExact("Abc", ""   ) );
-		Assert.assertEquals( false, StringUtils.StrEqualsExact("Abc", null ) );
-		Assert.assertEquals( true,  StringUtils.StrEqualsExact(null,  null ) );
-		Assert.assertEquals( true,  StringUtils.StrEqualsExact("",    ""   ) );
-		Assert.assertEquals( false, StringUtils.StrEqualsExact("",    null ) );
-		Assert.assertEquals( false, StringUtils.StrEqualsExact(null,  ""   ) );
-	}
-	@Test
-	public void testStrEqualsExactIgnoreCase() {
-		Assert.assertEquals( true,  StringUtils.StrEqualsExactIgnoreCase("Abc", "Abc") );
-		Assert.assertEquals( true,  StringUtils.StrEqualsExactIgnoreCase("Abc", "abc") );
-		Assert.assertEquals( false, StringUtils.StrEqualsExactIgnoreCase("Abc", ""   ) );
-		Assert.assertEquals( false, StringUtils.StrEqualsExactIgnoreCase("Abc", null ) );
-		Assert.assertEquals( true,  StringUtils.StrEqualsExactIgnoreCase(null,  null ) );
-		Assert.assertEquals( true,  StringUtils.StrEqualsExactIgnoreCase("",    ""   ) );
-		Assert.assertEquals( false, StringUtils.StrEqualsExactIgnoreCase("",    null ) );
-		Assert.assertEquals( false, StringUtils.StrEqualsExactIgnoreCase(null,  ""   ) );
+	public void testMatchStringExact() {
+		Assert.assertEquals( true,  StringUtils.MatchStringExact("Abc", "Abc") );
+		Assert.assertEquals( false, StringUtils.MatchStringExact("Abc", "abc") );
+		Assert.assertEquals( false, StringUtils.MatchStringExact("Abc", ""   ) );
+		Assert.assertEquals( false, StringUtils.MatchStringExact("Abc", null ) );
+		Assert.assertEquals( true,  StringUtils.MatchStringExact(null,  null ) );
+		Assert.assertEquals( true,  StringUtils.MatchStringExact("",    ""   ) );
+		Assert.assertEquals( false, StringUtils.MatchStringExact("",    null ) );
+		Assert.assertEquals( false, StringUtils.MatchStringExact(null,  ""   ) );
 	}
 
 
@@ -211,19 +192,19 @@ public class Test_StringUtils {
 	@Test
 	public void testTrim() {
 		// strip strings
-		Assert.assertEquals( "Abc",    StringUtils.Trim("-=Abc=-", "=", "-") );
-		Assert.assertEquals( "abc",    StringUtils.Trim("abcdef",  "de","f") );
-		Assert.assertEquals( "abcdef", StringUtils.Trim("abcdef",  "DE","F") );
-		Assert.assertEquals( "",       StringUtils.Trim("-=-=-",   "=", "-") );
-		Assert.assertEquals( "",       StringUtils.Trim("",        "=", "-") );
-		Assert.assertEquals( null,     StringUtils.Trim(null,      "=", "-") );
+		Assert.assertEquals( "Abc",    StringUtils.sTrim("-=Abc=-", "=", "-") );
+		Assert.assertEquals( "abc",    StringUtils.sTrim("abcdef",  "de","f") );
+		Assert.assertEquals( "abcdef", StringUtils.sTrim("abcdef",  "DE","F") );
+		Assert.assertEquals( "",       StringUtils.sTrim("-=-=-",   "=", "-") );
+		Assert.assertEquals( "",       StringUtils.sTrim("",        "=", "-") );
+		Assert.assertEquals( null,     StringUtils.sTrim(null,      "=", "-") );
 		// strip chars
-		Assert.assertEquals( "Abc",    StringUtils.Trim("-=Abc=-", '=', '-'     ) );
-		Assert.assertEquals( "abc",    StringUtils.Trim("abcdef",  'd', 'e', 'f') );
-		Assert.assertEquals( "abcdef", StringUtils.Trim("abcdef",  'D', 'E', 'F') );
-		Assert.assertEquals( "",       StringUtils.Trim("-=-=-",   '=', '-'     ) );
-		Assert.assertEquals( "",       StringUtils.Trim("",        '=', '-'     ) );
-		Assert.assertEquals( null,     StringUtils.Trim(null,      '=', '-'     ) );
+		Assert.assertEquals( "Abc",    StringUtils.cTrim("-=Abc=-", '=', '-'     ) );
+		Assert.assertEquals( "abc",    StringUtils.cTrim("abcdef",  'd', 'e', 'f') );
+		Assert.assertEquals( "abcdef", StringUtils.cTrim("abcdef",  'D', 'E', 'F') );
+		Assert.assertEquals( "",       StringUtils.cTrim("-=-=-",   '=', '-'     ) );
+		Assert.assertEquals( "",       StringUtils.cTrim("",        '=', '-'     ) );
+		Assert.assertEquals( null,     StringUtils.cTrim(null,      '=', '-'     ) );
 	}
 
 
@@ -231,19 +212,19 @@ public class Test_StringUtils {
 	@Test
 	public void testITrim() {
 		// strip strings
-		Assert.assertEquals( "Abc", StringUtils.iTrim("-=Abc=-", "=", "-") );
-		Assert.assertEquals( "abc", StringUtils.iTrim("abcdef",  "de","f") );
-		Assert.assertEquals( "abc", StringUtils.iTrim("abcdef",  "DE","F") );
-		Assert.assertEquals( "",    StringUtils.iTrim("-=-=-",   "=", "-") );
-		Assert.assertEquals( "",    StringUtils.iTrim("",        "=", "-") );
-		Assert.assertEquals( null,  StringUtils.iTrim(null,      "=", "-") );
+		Assert.assertEquals( "Abc", StringUtils.siTrim("-=Abc=-", "=", "-") );
+		Assert.assertEquals( "abc", StringUtils.siTrim("abcdef",  "de","f") );
+		Assert.assertEquals( "abc", StringUtils.siTrim("abcdef",  "DE","F") );
+		Assert.assertEquals( "",    StringUtils.siTrim("-=-=-",   "=", "-") );
+		Assert.assertEquals( "",    StringUtils.siTrim("",        "=", "-") );
+		Assert.assertEquals( null,  StringUtils.siTrim(null,      "=", "-") );
 		// strip chars
-		Assert.assertEquals( "Abc", StringUtils.iTrim("-=Abc=-", '=', '-'     ) );
-		Assert.assertEquals( "abc", StringUtils.iTrim("abcDEF",  'd', 'e', 'f') );
-		Assert.assertEquals( "abc", StringUtils.iTrim("abcDEF",  'D', 'E', 'F') );
-		Assert.assertEquals( "",    StringUtils.iTrim("-=-=-",   '=', '-'     ) );
-		Assert.assertEquals( "",    StringUtils.iTrim("",        '=', '-'     ) );
-		Assert.assertEquals( null,  StringUtils.iTrim(null,      '=', '-'     ) );
+		Assert.assertEquals( "Abc", StringUtils.ciTrim("-=Abc=-", '=', '-'     ) );
+		Assert.assertEquals( "abc", StringUtils.ciTrim("abcDEF",  'd', 'e', 'f') );
+		Assert.assertEquals( "abc", StringUtils.ciTrim("abcDEF",  'D', 'E', 'F') );
+		Assert.assertEquals( "",    StringUtils.ciTrim("-=-=-",   '=', '-'     ) );
+		Assert.assertEquals( "",    StringUtils.ciTrim("",        '=', '-'     ) );
+		Assert.assertEquals( null,  StringUtils.ciTrim(null,      '=', '-'     ) );
 	}
 
 
@@ -251,19 +232,19 @@ public class Test_StringUtils {
 	@Test
 	public void testTrimFront() {
 		// strip strings
-		Assert.assertEquals( "Abc=-",  StringUtils.TrimFront("-=Abc=-", "=", "-") );
-		Assert.assertEquals( "def",    StringUtils.TrimFront("abcdef",  "ab","c") );
-		Assert.assertEquals( "abcdef", StringUtils.TrimFront("abcdef",  "AB","C") );
-		Assert.assertEquals( "",       StringUtils.TrimFront("-=-=-",   "=", "-") );
-		Assert.assertEquals( "",       StringUtils.TrimFront("",        "=", "-") );
-		Assert.assertEquals( null,     StringUtils.TrimFront(null,      "=", "-") );
+		Assert.assertEquals( "Abc=-",  StringUtils.sfTrim("-=Abc=-", "=", "-") );
+		Assert.assertEquals( "def",    StringUtils.sfTrim("abcdef",  "ab","c") );
+		Assert.assertEquals( "abcdef", StringUtils.sfTrim("abcdef",  "AB","C") );
+		Assert.assertEquals( "",       StringUtils.sfTrim("-=-=-",   "=", "-") );
+		Assert.assertEquals( "",       StringUtils.sfTrim("",        "=", "-") );
+		Assert.assertEquals( null,     StringUtils.sfTrim(null,      "=", "-") );
 		// strip chars
-		Assert.assertEquals( "Abc=-",  StringUtils.TrimFront("-=Abc=-", '=', '-'     ) );
-		Assert.assertEquals( "def",    StringUtils.TrimFront("abcdef",  'a', 'b', 'c') );
-		Assert.assertEquals( "abcdef", StringUtils.TrimFront("abcdef",  'A', 'B', 'C') );
-		Assert.assertEquals( "",       StringUtils.TrimFront("-=-=-",   '=', '-'     ) );
-		Assert.assertEquals( "",       StringUtils.TrimFront("",        '=', '-'     ) );
-		Assert.assertEquals( null,     StringUtils.TrimFront(null,      '=', '-'     ) );
+		Assert.assertEquals( "Abc=-",  StringUtils.cfTrim("-=Abc=-", '=', '-'     ) );
+		Assert.assertEquals( "def",    StringUtils.cfTrim("abcdef",  'a', 'b', 'c') );
+		Assert.assertEquals( "abcdef", StringUtils.cfTrim("abcdef",  'A', 'B', 'C') );
+		Assert.assertEquals( "",       StringUtils.cfTrim("-=-=-",   '=', '-'     ) );
+		Assert.assertEquals( "",       StringUtils.cfTrim("",        '=', '-'     ) );
+		Assert.assertEquals( null,     StringUtils.cfTrim(null,      '=', '-'     ) );
 	}
 
 
@@ -271,19 +252,19 @@ public class Test_StringUtils {
 	@Test
 	public void testTrimEnd() {
 		// strip strings
-		Assert.assertEquals( "-=Abc",  StringUtils.TrimEnd("-=Abc=-", "=", "-") );
-		Assert.assertEquals( "abc",    StringUtils.TrimEnd("abcdef",  "de","f") );
-		Assert.assertEquals( "abcdef", StringUtils.TrimEnd("abcdef",  "DE","F") );
-		Assert.assertEquals( "",       StringUtils.TrimEnd("-=-=-",   "=", "-") );
-		Assert.assertEquals( "",       StringUtils.TrimEnd("",        "=", "-") );
-		Assert.assertEquals( null,     StringUtils.TrimEnd(null,      "=", "-") );
+		Assert.assertEquals( "-=Abc",  StringUtils.seTrim("-=Abc=-", "=", "-") );
+		Assert.assertEquals( "abc",    StringUtils.seTrim("abcdef",  "de","f") );
+		Assert.assertEquals( "abcdef", StringUtils.seTrim("abcdef",  "DE","F") );
+		Assert.assertEquals( "",       StringUtils.seTrim("-=-=-",   "=", "-") );
+		Assert.assertEquals( "",       StringUtils.seTrim("",        "=", "-") );
+		Assert.assertEquals( null,     StringUtils.seTrim(null,      "=", "-") );
 		// strip chars
-		Assert.assertEquals( "-=Abc",  StringUtils.TrimEnd("-=Abc=-", '=', '-'     ) );
-		Assert.assertEquals( "abc",    StringUtils.TrimEnd("abcdef",  'd', 'e', 'f') );
-		Assert.assertEquals( "abcdef", StringUtils.TrimEnd("abcdef",  'D', 'E', 'F') );
-		Assert.assertEquals( "",       StringUtils.TrimEnd("-=-=-",   '=', '-'     ) );
-		Assert.assertEquals( "",       StringUtils.TrimEnd("",        '=', '-'     ) );
-		Assert.assertEquals( null,     StringUtils.TrimEnd(null,      '=', '-'     ) );
+		Assert.assertEquals( "-=Abc",  StringUtils.ceTrim("-=Abc=-", '=', '-'     ) );
+		Assert.assertEquals( "abc",    StringUtils.ceTrim("abcdef",  'd', 'e', 'f') );
+		Assert.assertEquals( "abcdef", StringUtils.ceTrim("abcdef",  'D', 'E', 'F') );
+		Assert.assertEquals( "",       StringUtils.ceTrim("-=-=-",   '=', '-'     ) );
+		Assert.assertEquals( "",       StringUtils.ceTrim("",        '=', '-'     ) );
+		Assert.assertEquals( null,     StringUtils.ceTrim(null,      '=', '-'     ) );
 	}
 
 
@@ -598,6 +579,8 @@ public class Test_StringUtils {
 
 
 
+//TODO: remove this?
+/*
 	// -------------------------------------------------------------------------------
 	// replace {} tags
 
@@ -634,6 +617,7 @@ public class Test_StringUtils {
 			StringUtils.ReplaceTags( new String[] {"{}", "{}", "{}"}, tags )
 		);
 	}
+*/
 
 
 
