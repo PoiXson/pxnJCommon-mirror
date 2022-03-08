@@ -1,5 +1,6 @@
-package com.poixson.tools;
 /*
+package com.poixson.tools;
+/ *
  * cron4j - A pure Java cron-like scheduler
  *
  * Copyright (C) 2007-2010 Carlo Pelliccia (www.sauronsoftware.it)
@@ -16,7 +17,7 @@ package com.poixson.tools;
  * You should have received a copy of the GNU Lesser General Public
  * License version 2.1 along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
- */
+ * /
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,12 +32,12 @@ import com.poixson.logger.xLogRoot;
 import com.poixson.utils.Utils;
 
 
-/**
+/ **
  * A package-reserved utility class. It spawns a secondary thread in which the
  * supplied {@link InputStream} instance is read, and the incoming contents are
  * written in the supplied {@link OutputStream}.
  * @author Carlo Pelliccia
- */
+ * /
 public class StreamBridge implements xStartable {
 
 	protected static final CopyOnWriteArraySet<StreamBridge> instances =
@@ -141,17 +142,17 @@ public class StreamBridge implements xStartable {
 
 
 
-	/**
+	/ **
 	 * Waits for this job to die.
 	 * @throws InterruptedException
 	 *             If another thread has interrupted the current thread. The
 	 *             interrupted status of the current thread is cleared when this
 	 *             exception is thrown.
-	 */
+	 * /
 	public void join() throws InterruptedException {
 		this.thread.join();
 	}
-	/**
+	/ **
 	 * Waits at most <code>millis</code> milliseconds for this thread to die. A
 	 * timeout of <code>0</code> means to wait forever.
 	 * @param millis the time to wait in milliseconds.
@@ -159,11 +160,11 @@ public class StreamBridge implements xStartable {
 	 *             If another thread has interrupted the current thread. The
 	 *             interrupted status of the current thread is cleared when this
 	 *             exception is thrown.
-	 */
+	 * /
 	public void join(final long millis) throws InterruptedException {
 		this.thread.join(millis);
 	}
-	/**
+	/ **
 	 * @param millis the time to wait in milliseconds.
 	 * @param nanos 0-999999 additional nanoseconds to wait.
 	 * @throws IllegalArgumentException if the value of millis is negative the
@@ -172,7 +173,7 @@ public class StreamBridge implements xStartable {
 	 *             If another thread has interrupted the current thread. The
 	 *             interrupted status of the current thread is cleared when this
 	 *             exception is thrown.
-	 */
+	 * /
 	public void join(final long millis, final int nanos)
 			throws IllegalArgumentException, InterruptedException {
 		this.thread.join(millis, nanos);
@@ -181,3 +182,4 @@ public class StreamBridge implements xStartable {
 
 
 }
+*/

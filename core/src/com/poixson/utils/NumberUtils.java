@@ -530,6 +530,7 @@ public final class NumberUtils {
 
 
 
+//TODO: does this replace HistoryRND class?
 	public static int GetRandom(final int minNumber, final int maxNumber) {
 		return GetRandom(minNumber, maxNumber, 1L);
 	}

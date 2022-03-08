@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 
+//TODO: be sure this is loaded
 public final class StdIO {
 	private StdIO() {}
 	static { Keeper.add(new StdIO()); }

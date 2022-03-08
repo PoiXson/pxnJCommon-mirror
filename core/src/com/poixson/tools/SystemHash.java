@@ -1,5 +1,7 @@
-package com.poixson.tools;
+//TODO: make new class
 /*
+package com.poixson.tools;
+/ *
  * cron4j - A pure Java cron-like scheduler
  *
  * Copyright (C) 2007-2010 Carlo Pelliccia (www.sauronsoftware.it)
@@ -16,7 +18,7 @@ package com.poixson.tools;
  * You should have received a copy of the GNU Lesser General Public
  * License version 2.1 along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
- */
+ * /
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -26,10 +28,10 @@ import java.util.Enumeration;
 import com.poixson.utils.NumberUtils;
 
 
-/**
+/ **
  * A GUID generator.
  * @author Carlo Pelliccia
- */
+ * /
 public final class SystemHash {
 	private SystemHash() {}
 
@@ -37,10 +39,10 @@ public final class SystemHash {
 
 
 
-	/**
+	/ **
 	 * Generates a GUID (48 chars).
 	 * @return The generated GUID.
-	 */
+	 * /
 	public static String Generate() {
 		final int rnd = NumberUtils.getRandom(0, Integer.MAX_VALUE);
 		final StringBuffer buf = new StringBuffer();
@@ -58,10 +60,10 @@ public final class SystemHash {
 
 
 
-	/**
+	/ **
 	 * Calculates a machine id, as an integer value.
 	 * @return The calculated machine id.
-	 */
+	 * /
 	private static String getMachineDescriptor() {
 		final StringBuffer desc = new StringBuffer();
 		desc
@@ -85,11 +87,11 @@ public final class SystemHash {
 		}
 		return desc.toString();
 	}
-	/**
+	/ **
 	 * Builds a descriptor fragment using the {@link NetworkInterface} class,
 	 * available since Java 1.4.
 	 * @return A descriptor fragment, or null if the method fails.
-	 */
+	 * /
 	private static StringBuffer BuildNetworkInterfaceDescriptor() {
 		final Enumeration<NetworkInterface> e;
 		try {
@@ -119,10 +121,10 @@ public final class SystemHash {
 		}
 		return str;
 	}
-	/**
+	/ **
 	 * Builds a descriptor fragment using the machine MAC address.
 	 * @return A descriptor fragment, or null if the method fails.
-	 */
+	 * /
 	private static StringBuffer getMACAddressDescriptor(final NetworkInterface net) {
 		byte[] haddr = null;
 		try {
@@ -143,10 +145,10 @@ public final class SystemHash {
 		}
 		return str;
 	}
-	/**
+	/ **
 	 * Builds a descriptor fragment using the machine inet address.
 	 * @return A descriptor fragment, or null if the method fails.
-	 */
+	 * /
 	private static StringBuffer getInetAddressDescriptor(NetworkInterface net) {
 		final StringBuffer str = new StringBuffer();
 		final Enumeration<InetAddress> e = net.getInetAddresses();
@@ -166,19 +168,19 @@ public final class SystemHash {
 
 
 
-	/**
+	/ **
 	 * Encodes an object and appends it to the buffer.
 	 * @param str The buffer.
 	 * @param obj The object.
-	 */
+	 * /
 	private static void Encode(final StringBuffer str, final Object obj) {
 		Encode(str, obj.hashCode());
 	}
-	/**
+	/ **
 	 * Encodes an integer value and appends it to the buffer.
 	 * @param str The buffer.
 	 * @param value The value.
-	 */
+	 * /
 	private static void Encode(final StringBuffer str, final int value) {
 		final String hex = Integer.toHexString(value);
 		final int hexSize = hex.length();
@@ -187,11 +189,11 @@ public final class SystemHash {
 		}
 		str.append(hex);
 	}
-	/**
+	/ **
 	 * Encodes a long value and appends it to the buffer.
 	 * @param str The buffer.
 	 * @param value The value.
-	 */
+	 * /
 	private static void Encode(final StringBuffer str, final long value) {
 		final String hex = Long.toHexString(value);
 		final int hexSize = hex.length();
@@ -204,3 +206,4 @@ public final class SystemHash {
 
 
 }
+*/

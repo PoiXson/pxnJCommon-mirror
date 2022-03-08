@@ -1,3 +1,5 @@
+//TODO: does this replace NumberUtils::GetRandom() ?
+/*
 package com.poixson.tools;
 
 import java.util.Random;
@@ -29,9 +31,7 @@ public class HistoryRND {
 			minValue,
 			maxValue,
 			NumberUtils.MinMax(
-				(int)(
-					((double)(maxValue - minValue)) / 1.5
-				),
+				(int)( ((double)(maxValue - minValue)) / 1.5 ),
 				2,
 				1000
 			)
@@ -134,3 +134,4 @@ public class HistoryRND {
 
 
 }
+*/

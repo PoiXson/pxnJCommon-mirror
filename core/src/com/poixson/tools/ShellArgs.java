@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class ShellArgs {
 			}
 		}
 //TODO:
-/*
+/ *
 		// ansi color flags
 		{
 			final Boolean colorVal = argsTool.getFlagBoolean("--color");
@@ -56,7 +57,7 @@ public class ShellArgs {
 			xLog.getConsole()
 				.clear();
 		}
-*/
+* /
 		return argsTool;
 	}
 
@@ -278,3 +279,4 @@ public class ShellArgs {
 
 
 }
+*/
