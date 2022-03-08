@@ -46,13 +46,6 @@ public class AtomicDouble {
 				Double.doubleToLongBits(update)
 			);
 	}
-	public boolean weakCompareAndSet(final double expect, final double update) {
-		return
-			this.value.weakCompareAndSet(
-				Double.doubleToLongBits(expect),
-				Double.doubleToLongBits(update)
-			);
-	}
 
 
 
