@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger;
 
 import java.util.Iterator;
@@ -157,3 +158,4 @@ public enum xLevel {
 
 
 }
+*/

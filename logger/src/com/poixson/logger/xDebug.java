@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -78,3 +79,4 @@ public final class xDebug {
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger;
 
 import java.io.PrintStream;
@@ -55,3 +56,4 @@ public class xLogPrintStream extends PrintStream {
 
 
 }
+*/

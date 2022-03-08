@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger.handlers;
 
 import java.io.File;
@@ -48,3 +49,4 @@ throw new RuntimeException("UNFINISHED CODE");
 
 
 }
+*/

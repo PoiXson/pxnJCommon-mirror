@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger;
 
 import java.io.IOException;
@@ -125,3 +126,4 @@ public class xLogOutputStream extends OutputStream {
 
 
 }
+*/

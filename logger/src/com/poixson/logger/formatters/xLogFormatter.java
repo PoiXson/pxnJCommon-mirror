@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger.formatters;
 
 import java.text.SimpleDateFormat;
@@ -155,3 +156,4 @@ public class xLogFormatter {
 
 
 }
+*/

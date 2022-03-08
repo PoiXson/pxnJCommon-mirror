@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger.formatters;
 
 import com.poixson.logger.records.xLogRecord_Msg;
@@ -22,3 +23,4 @@ public class xLogFormatter_Plain extends xLogFormatter {
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger.records;
 
 import com.poixson.exceptions.RequiredArgumentException;
@@ -69,3 +70,4 @@ return false;
 
 
 }
+*/
