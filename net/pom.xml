@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated: Tue Dec  7 09:45:12 PM EST 2021 -->
+<!-- Generated: Mon Mar 14 12:08:24 AM EDT 2022 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -29,9 +29,9 @@
 
 		<!-- Dependencies -->
 		<common-core-version>4.0.0-SNAPSHOT</common-core-version>
-		<netty-common-version>5.0.0.Alpha2</netty-common-version>
-		<netty-handler-version>5.0.0.Alpha2</netty-handler-version>
-		<netty-codec-version>5.0.0.Alpha2</netty-codec-version>
+		<netty-common-version>4.1.75.Final</netty-common-version>
+		<netty-handler-version>4.1.75.Final</netty-handler-version>
+		<netty-codec-version>4.1.75.Final</netty-codec-version>
 
 	</properties>
 	<scm>
@@ -48,10 +48,10 @@
 		<url>https://ci.poixson.com</url>
 	</ciManagement>
 	<build>
-		<directory>target</directory>
-		<outputDirectory>target</outputDirectory>
+		<directory>target/</directory>
+		<sourceDirectory>src/</sourceDirectory>
+		<outputDirectory>target/classes/</outputDirectory>
 		<finalName>${project.name}-${project.version}</finalName>
-		<sourceDirectory>${project.basedir}/src</sourceDirectory>
 		<plugins>
 
 			<!-- Compiler Plugin -->
@@ -118,7 +118,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+					<dotGitDirectory>.git/</dotGitDirectory>
 				</configuration>
 			</plugin>
 

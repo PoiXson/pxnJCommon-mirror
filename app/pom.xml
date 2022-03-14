@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated: Tue Dec  7 09:45:00 PM EST 2021 -->
+<!-- Generated: Sun Mar 13 11:18:23 PM EDT 2022 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -45,10 +45,10 @@
 		<url>https://ci.poixson.com</url>
 	</ciManagement>
 	<build>
-		<directory>target</directory>
-		<outputDirectory>target</outputDirectory>
+		<directory>target/</directory>
+		<sourceDirectory>src/</sourceDirectory>
+		<outputDirectory>target/classes/</outputDirectory>
 		<finalName>${project.name}-${project.version}</finalName>
-		<sourceDirectory>${project.basedir}/src</sourceDirectory>
 		<plugins>
 
 			<!-- Compiler Plugin -->
@@ -115,7 +115,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+					<dotGitDirectory>.git/</dotGitDirectory>
 				</configuration>
 			</plugin>
 

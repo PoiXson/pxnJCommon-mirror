@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated: Tue Dec  7 09:45:16 PM EST 2021 -->
+<!-- Generated: Mon Mar 14 12:09:21 AM EDT 2022 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -30,8 +30,7 @@
 		<!-- Dependencies -->
 		<common-core-version>4.0.0-SNAPSHOT</common-core-version>
 		<common-config-version>4.0.0-SNAPSHOT</common-config-version>
-		<jcl-core-version>2.8</jcl-core-version>
-		<snakeyaml-version>1.29</snakeyaml-version>
+		<snakeyaml-version>1.30</snakeyaml-version>
 
 	</properties>
 	<scm>
@@ -48,10 +47,10 @@
 		<url>https://ci.poixson.com</url>
 	</ciManagement>
 	<build>
-		<directory>target</directory>
-		<outputDirectory>target</outputDirectory>
+		<directory>target/</directory>
+		<sourceDirectory>src/</sourceDirectory>
+		<outputDirectory>target/classes/</outputDirectory>
 		<finalName>${project.name}-${project.version}</finalName>
-		<sourceDirectory>${project.basedir}/src</sourceDirectory>
 		<plugins>
 
 			<!-- Compiler Plugin -->
@@ -118,7 +117,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+					<dotGitDirectory>.git/</dotGitDirectory>
 				</configuration>
 			</plugin>
 
@@ -135,12 +134,6 @@
 			<artifactId>common-config</artifactId>
 			<groupId>com.poixson</groupId>
 			<version>${common-config-version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<artifactId>jcl-core</artifactId>
-			<groupId>org.xeustechnologies</groupId>
-			<version>${jcl-core-version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
