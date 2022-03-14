@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.scheduler.trigger;
 
 import java.text.DateFormat;
@@ -152,3 +153,4 @@ public class Trigger_Clock extends Trigger {
 
 
 }
+*/

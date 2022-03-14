@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger.handlers;
 
 import java.io.File;
@@ -375,3 +376,4 @@ log.publish("GOT INPUT: "+line);
 
 
 }
+*/

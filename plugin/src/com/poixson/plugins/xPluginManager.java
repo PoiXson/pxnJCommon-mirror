@@ -1,3 +1,4 @@
+/*
 package com.poixson.plugins;
 
 import static com.poixson.logger.xLog.XLog;
@@ -284,11 +285,11 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 
 
 
-	/**
+	/ **
 	 * Adds a plugin to the manager.
 	 * @param plugin The new plugin instance to manage.
 	 * @return true if successful, false if plugin already registered.
-	 */
+	 * /
 	public boolean register(final T plugin) {
 		if (plugin == null) throw new RuntimeException("Missing plugin instance!");
 		final String pluginName = plugin.getPluginName();
@@ -304,7 +305,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 
 
 //TODO:
-/*
+/ *
 	public boolean unregister(final String pluginName) {
 		if (Utils.isBlank(pluginName))
 			return false;
@@ -330,7 +331,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 			this.unregister(plugin);
 		}
 	}
-*/
+* /
 
 
 
@@ -397,3 +398,4 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package org.jline.utils;
 
 import java.util.function.Supplier;
@@ -78,3 +79,4 @@ public final class Log {
 
 
 }
+*/

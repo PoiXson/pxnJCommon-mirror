@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger.formatters;
 
 import com.poixson.logger.xLevel;
@@ -120,3 +121,4 @@ public class xLogFormatter_Color extends xLogFormatter {
 
 
 }
+*/

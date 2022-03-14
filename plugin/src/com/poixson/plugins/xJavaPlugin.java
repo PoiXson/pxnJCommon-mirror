@@ -1,3 +1,4 @@
+/*
 package com.poixson.plugins;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -311,3 +312,4 @@ public abstract class xJavaPlugin implements xStartable, Runnable, AttachedLogge
 
 
 }
+*/

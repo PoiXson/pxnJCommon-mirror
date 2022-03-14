@@ -1,3 +1,4 @@
+/*
 package com.poixson.utils;
 
 import org.fusesource.jansi.Ansi;
@@ -19,7 +20,7 @@ public final class ShellUtils_Extended extends ShellUtils {
 
 
 //TODO
-/*
+/ *
 	// -------------------------------------------------------------------------------
 	// command handler
 
@@ -54,7 +55,7 @@ public final class ShellUtils_Extended extends ShellUtils {
 		if (handler == null) throw new UnsupportedOperationException("Command handler not set");
 		return handler.process(line);
 	}
-*/
+* /
 
 
 
@@ -90,3 +91,4 @@ public final class ShellUtils_Extended extends ShellUtils {
 
 
 }
+*/

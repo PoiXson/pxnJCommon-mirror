@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.scheduler.trigger;
 
 import static com.poixson.logger.xLog.XLog;
@@ -87,3 +88,4 @@ public abstract class Trigger implements xEnableable {
 
 
 }
+*/

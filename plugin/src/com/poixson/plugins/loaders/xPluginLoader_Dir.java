@@ -1,3 +1,4 @@
+/*
 package com.poixson.plugins.loaders;
 
 import java.io.File;
@@ -151,3 +152,4 @@ public class xPluginLoader_Dir<T extends xJavaPlugin> extends xPluginLoader_File
 
 
 }
+*/

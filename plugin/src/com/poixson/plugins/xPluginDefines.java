@@ -1,3 +1,4 @@
+/*
 package com.poixson.plugins;
 
 import com.poixson.tools.Keeper;
@@ -24,3 +25,4 @@ public final class xPluginDefines {
 
 
 }
+*/
