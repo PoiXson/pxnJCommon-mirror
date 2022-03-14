@@ -1,3 +1,4 @@
+/*
 package com.poixson.app.steps;
 
 import com.poixson.app.xAppStep;
@@ -5,10 +6,10 @@ import com.poixson.app.xAppStep.StepType;
 import com.poixson.logger.xLog;
 
 
-/*
+/ *
  * Startup sequence
  *   10  prevent root
- */
+ * /
 public class xAppSteps_Standard {
 
 
@@ -39,3 +40,4 @@ public class xAppSteps_Standard {
 
 
 }
+*/

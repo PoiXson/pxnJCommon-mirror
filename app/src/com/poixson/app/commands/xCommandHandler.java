@@ -1,3 +1,4 @@
+/*
 package com.poixson.app.commands;
 
 import java.lang.reflect.Method;
@@ -138,3 +139,4 @@ public class xCommandHandler extends xHandler<xCommand> {
 
 
 }
+*/

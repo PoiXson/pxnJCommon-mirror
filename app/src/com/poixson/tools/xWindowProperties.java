@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools;
 
 import java.lang.annotation.ElementType;
@@ -16,3 +17,4 @@ public @interface xWindowProperties {
 
 
 }
+*/

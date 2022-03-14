@@ -1,3 +1,4 @@
+/*
 package com.poixson.swing;
 
 import java.awt.Color;
@@ -114,3 +115,4 @@ public class JTextFieldGhostable extends JTextField implements FocusListener {
 
 
 }
+*/
