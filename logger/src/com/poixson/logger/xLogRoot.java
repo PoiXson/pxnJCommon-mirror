@@ -1,54 +1,64 @@
-/*
 package com.poixson.logger;
 
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.poixson.logger.handlers.xLogHandler;
-import com.poixson.logger.handlers.xLogHandler_Console;
+import com.poixson.logger.proxies.LoggerToXLog;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;
 import com.poixson.tools.abstractions.OutputStreamLineRemapper;
-import com.poixson.utils.Utils;
 
 
-public class xLogRoot extends xLog {
+public class xLogRoot extends xLogger {
 
-	protected final AtomicReference<xLogHandler[]> defaultHandlers = new AtomicReference<xLogHandler[]>(null);
+	protected static final AtomicBoolean rootInited = new AtomicBoolean(false);
+
+
+
+	// init root logger
+	public static void init() {
+		if (!rootInited.compareAndSet(false, true))
+			throw new RuntimeException("Logger root already initialized");
+		// override stdio
+		StdIO.init();
+		// root logger
+		final xLog log = new xLogRoot();
+		if (!root.compareAndSet(null, log))
+			throw new RuntimeException("Logger root already initialized");
+		Keeper.add(log);
+		// proxy
+		LoggerToXLog.init();
+	}
 
 
 
 	protected xLogRoot() {
 		super();
-		// override stdio
-		if (OVERRIDE_STDIO) {
-			StdIO.init();
-			// capture std-out
-			System.setOut(
-				OutputStreamLineRemapper.toPrintStream(
-					new OutputStreamLineRemapper() {
-						@Override
-						public void line(final String msg) {
-							xLog.GetRoot()
-								.stdout(msg);
-						}
+		if (root.get() != null)
+			throw new RuntimeException("Logger root already initialized");
+		// capture std-out
+		System.setOut(
+			OutputStreamLineRemapper.toPrintStream(
+				new OutputStreamLineRemapper() {
+					@Override
+					public void line(final String line) {
+						xLog.Get()
+							.stdout(line);
 					}
-				)
-			);
-			// capture std-err
-			System.setErr(
-				OutputStreamLineRemapper.toPrintStream(
-					new OutputStreamLineRemapper() {
-						@Override
-						public void line(final String msg) {
-							xLog.GetRoot()
-								.stderr(msg);
-						}
+				}
+			)
+		);
+		// capture std-err
+		System.setErr(
+			OutputStreamLineRemapper.toPrintStream(
+				new OutputStreamLineRemapper() {
+					@Override
+					public void line(final String line) {
+						xLog.Get()
+							.stderr(line);
 					}
-				)
-			);
-		}
-		// keep in memory
-		Keeper.add(this);
+				}
+			)
+		);
 	}
 
 
@@ -60,31 +70,4 @@ public class xLogRoot extends xLog {
 
 
 
-	// -------------------------------------------------------------------------------
-	// log handlers
-
-
-
-	@Override
-	public xLogHandler[] getLogHandlers() {
-		final xLogHandler[] handlers = super.getLogHandlers();
-		if (Utils.isEmpty(handlers))
-			return this.getDefaultHandlers();
-		return handlers;
-	}
-	public xLogHandler[] getDefaultHandlers() {
-		if (this.defaultHandlers.get() == null) {
-			final xLogHandler[] handlers =
-				new xLogHandler[] {
-					new xLogHandler_Console()
-				};
-			if (this.defaultHandlers.compareAndSet(null, handlers))
-				return handlers;
-		}
-		return this.defaultHandlers.get();
-	}
-
-
-
 }
-*/

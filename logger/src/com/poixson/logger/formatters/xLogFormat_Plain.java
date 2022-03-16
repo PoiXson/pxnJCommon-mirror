@@ -1,26 +1,26 @@
-/*
 package com.poixson.logger.formatters;
 
-import com.poixson.logger.records.xLogRecord_Msg;
+import com.poixson.logger.xLogFormat;
+import com.poixson.logger.xLogRecord;
 
 
-public class xLogFormatter_Plain extends xLogFormatter {
+public class xLogFormat_Plain implements xLogFormat {
 
 
 
-	public xLogFormatter_Plain() {
+	public xLogFormat_Plain() {
 		super();
 	}
 
 
 
 	@Override
-	public String formatMessage(final xLogRecord_Msg record) {
-		if (record == null) return null;
+	public String format(final xLogRecord record) {
+		if (record == null)
+			return null;
 		return record.getMessage();
 	}
 
 
 
 }
-*/

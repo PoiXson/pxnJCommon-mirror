@@ -1,7 +1,8 @@
-/*
 package com.poixson.logger.handlers;
 
 import java.io.File;
+
+import com.poixson.logger.xLogHandler;
 
 
 public class xLogHandler_File extends xLogHandler {
@@ -49,4 +50,3 @@ throw new RuntimeException("UNFINISHED CODE");
 
 
 }
-*/

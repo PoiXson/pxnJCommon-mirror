@@ -1,9 +1,9 @@
-/*
 package com.poixson.logger.handlers;
 
 import java.io.InputStream;
 import java.io.PrintStream;
 
+import com.poixson.logger.xLogHandler;
 import com.poixson.tools.StdIO;
 import com.poixson.utils.ShellUtils;
 import com.poixson.utils.Utils;
@@ -32,7 +32,7 @@ public class xLogHandler_Console extends xLogHandler {
 
 
 	@Override
-	public void publish(final String[] lines) {
+	protected void publish(final String[] lines) {
 		this.getPublishLock();
 		try {
 			if (Utils.isEmpty(lines)) {
@@ -75,4 +75,3 @@ public class xLogHandler_Console extends xLogHandler {
 
 
 }
-*/

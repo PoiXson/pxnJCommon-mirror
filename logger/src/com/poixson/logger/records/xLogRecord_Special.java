@@ -1,13 +1,14 @@
-/*
 package com.poixson.logger.records;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLevel;
+import com.poixson.logger.xLogRecord;
 
 
 public class xLogRecord_Special implements xLogRecord {
 
 	public enum SpecialType {
+		FLUSH,
 		CLEAR_SCREEN,
 		CLEAR_LINE,
 		BEEP
@@ -26,48 +27,32 @@ public class xLogRecord_Special implements xLogRecord {
 
 	@Override
 	public String getMessage() {
-//TODO
-return null;
+		return null;
 	}
-
-
-
 	@Override
 	public xLevel getLevel() {
-//TODO
-return null;
+		return null;
 	}
-
-
-
 	@Override
 	public String[] getNameTree() {
-//TODO
-return null;
+		return null;
 	}
-
-
-
 	@Override
 	public long getTimestamp() {
-//TODO
-return 0L;
+		return 0L;
 	}
 
 
 
 	@Override
 	public boolean isEmpty() {
-//TODO
-return true;
+		return true;
 	}
 	@Override
 	public boolean notEmpty() {
-//TODO
-return false;
+		return false;
 	}
 
 
 
 }
-*/

@@ -1,8 +1,8 @@
-/*
 package com.poixson.logger.records;
 
 import com.poixson.logger.xLevel;
 import com.poixson.logger.xLog;
+import com.poixson.logger.xLogRecord;
 import com.poixson.utils.Utils;
 
 
@@ -77,4 +77,3 @@ public class xLogRecord_Msg implements xLogRecord {
 
 
 }
-*/

@@ -1,4 +1,3 @@
-/*
 package com.poixson.logger.proxies;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -44,19 +43,6 @@ public class LoggerToXLog extends Handler {
 
 
 
-	public static String AliasFor(final String name) {
-		if (Utils.isEmpty(name)) return null;
-		if (name.equals("org.jline"))        return "jline";
-		if (name.startsWith("io.netty"))     return "netty";
-		if (name.startsWith("org.xeustechnologies.jcl")) return "jcl";
-		if (name.startsWith("java.awt."))    return "X11";
-		if (name.startsWith("javax.swing.")) return "X11";
-		if (name.startsWith("sun.awt."))     return "X11";
-		return name;
-	}
-
-
-
 	protected static LoggerToXLog Get() {
 		if (instance.get() == null) {
 			final LoggerToXLog handler = new LoggerToXLog();
@@ -67,6 +53,20 @@ public class LoggerToXLog extends Handler {
 	}
 	protected LoggerToXLog() {
 		Keeper.add(this);
+	}
+
+
+
+	public static String AliasFor(final String name) {
+		if (Utils.isEmpty(name)) return null;
+		if (name.equals("org.jline"))        return "jline";
+		if (name.startsWith("io.netty"))     return "netty";
+//TODO: remove this?
+//		if (name.startsWith("org.xeustechnologies.jcl")) return "jcl";
+		if (name.startsWith("java.awt."))    return "X11";
+		if (name.startsWith("javax.swing.")) return "X11";
+		if (name.startsWith("sun.awt."))     return "X11";
+		return name;
 	}
 
 
@@ -103,10 +103,9 @@ public class LoggerToXLog extends Handler {
 		return xLog.Get(name);
 	}
 	public xLog log() {
-		return xLog.GetRoot();
+		return xLog.Get();
 	}
 
 
 
 }
-*/

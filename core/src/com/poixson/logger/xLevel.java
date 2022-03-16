@@ -1,4 +1,3 @@
-/*
 package com.poixson.logger;
 
 import java.util.Iterator;
@@ -12,7 +11,7 @@ public enum xLevel {
 	OFF     ('x',  "off",    Integer.MAX_VALUE),
 	ALL     ('a',  "all",    Integer.MIN_VALUE),
 	TITLE   ('t',  "title",  9000),
-	DETAIL  ('d',  "detail",  100),
+	DETAIL  ('0',  "detail",  100),
 	FINEST  ('1',  "finest",  200),
 	FINER   ('2',  "finer",   300),
 	FINE    ('3',  "fine",    400),
@@ -23,9 +22,13 @@ public enum xLevel {
 	SEVERE  ('s',  "severe",  900),
 	FATAL   ('f',  "fatal",  1000);
 
+
+
 	public final char   chr;
 	public final String name;
 	public final int    value;
+
+
 
 	private static final CopyOnWriteArrayList<xLevel> levels = new CopyOnWriteArrayList<xLevel>() {
 		private static final long serialVersionUID = 1L;
@@ -56,13 +59,13 @@ public enum xLevel {
 
 
 
-	public static xLevel[] getLevels() {
+	public static xLevel[] Levels() {
 		return levels.toArray(new xLevel[0]);
 	}
-	public static xLevel FindLevel(final String name) {
+	public static xLevel GetLevel(final String name) {
 		if (Utils.isEmpty(name)) return null;
 		if (NumberUtils.IsNumeric(name)) {
-			return FindLevel(NumberUtils.ToInteger(name));
+			return GetLevel(NumberUtils.ToInteger(name));
 		}
 		final Iterator<xLevel> it = levels.iterator();
 		while (it.hasNext()) {
@@ -72,7 +75,7 @@ public enum xLevel {
 		}
 		return null;
 	}
-	public static xLevel FindLevel(final Integer value) {
+	public static xLevel GetLevel(final Integer value) {
 		if (value == null) return null;
 		final int val = value.intValue();
 		if (val == xLevel.ALL.value) return xLevel.ALL;
@@ -92,8 +95,17 @@ public enum xLevel {
 		}
 		return found;
 	}
-	public static xLevel parse(final String value) {
-		return FindLevel(value);
+	public static xLevel FromJavaLevel(final java.util.logging.Level lvl) {
+		if (lvl.equals(java.util.logging.Level.ALL))     return xLevel.ALL;
+		if (lvl.equals(java.util.logging.Level.FINEST))  return xLevel.FINEST;
+		if (lvl.equals(java.util.logging.Level.FINER))   return xLevel.FINER;
+		if (lvl.equals(java.util.logging.Level.FINE))    return xLevel.FINE;
+		if (lvl.equals(java.util.logging.Level.CONFIG))  return xLevel.STATS;
+		if (lvl.equals(java.util.logging.Level.INFO))    return xLevel.INFO;
+		if (lvl.equals(java.util.logging.Level.WARNING)) return xLevel.WARNING;
+		if (lvl.equals(java.util.logging.Level.SEVERE))  return xLevel.SEVERE;
+		if (lvl.equals(java.util.logging.Level.OFF))     return xLevel.OFF;
+		return null;
 	}
 
 
@@ -125,16 +137,6 @@ public enum xLevel {
 
 
 
-//TODO: is this needed?
-//	// to java level
-//	public java.util.logging.Level getJavaLevel() {
-//		return java.util.logging.Level.parse(
-//			Integer.toString(this.value)
-//		);
-//	}
-
-
-
 	@Override
 	public String toString() {
 		return this.name;
@@ -142,20 +144,4 @@ public enum xLevel {
 
 
 
-	public static xLevel FromJavaLevel(final java.util.logging.Level lvl) {
-		if (lvl.equals(java.util.logging.Level.ALL))     return xLevel.ALL;
-		if (lvl.equals(java.util.logging.Level.FINEST))  return xLevel.FINEST;
-		if (lvl.equals(java.util.logging.Level.FINER))   return xLevel.FINER;
-		if (lvl.equals(java.util.logging.Level.FINE))    return xLevel.FINE;
-		if (lvl.equals(java.util.logging.Level.CONFIG))  return xLevel.STATS;
-		if (lvl.equals(java.util.logging.Level.INFO))    return xLevel.INFO;
-		if (lvl.equals(java.util.logging.Level.WARNING)) return xLevel.WARNING;
-		if (lvl.equals(java.util.logging.Level.SEVERE))  return xLevel.SEVERE;
-		if (lvl.equals(java.util.logging.Level.OFF))     return xLevel.OFF;
-		return null;
-	}
-
-
-
 }
-*/

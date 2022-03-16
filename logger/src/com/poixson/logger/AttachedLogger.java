@@ -1,8 +1,4 @@
-/*
 package com.poixson.logger;
-
-import com.poixson.logger.records.xLogRecord;
-
 
 public interface AttachedLogger {
 
@@ -90,4 +86,3 @@ public interface AttachedLogger {
 
 
 }
-*/

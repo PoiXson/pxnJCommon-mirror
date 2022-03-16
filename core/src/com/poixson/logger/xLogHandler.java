@@ -1,26 +1,21 @@
-/*
-package com.poixson.logger.handlers;
+package com.poixson.logger;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.poixson.logger.xLevel;
-import com.poixson.logger.formatters.xLogFormatter;
-import com.poixson.logger.records.xLogRecord;
-import com.poixson.logger.records.xLogRecord_Msg;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
 public abstract class xLogHandler {
 
-	protected final ReentrantLock publishLock = new ReentrantLock(true);
+	// publish lock
+	protected final ReentrantLock lock = new ReentrantLock(true);
 
 	protected final AtomicReference<xLevel> level = new AtomicReference<xLevel>(null);
 
-	protected final AtomicReference<xLogFormatter> formatter        = new AtomicReference<xLogFormatter>(null);
-	protected final AtomicReference<xLogFormatter> defaultFormatter = new AtomicReference<xLogFormatter>(null);
+	protected final AtomicReference<xLogFormat> format = new AtomicReference<xLogFormat>(null);
 
 
 
@@ -33,8 +28,6 @@ public abstract class xLogHandler {
 	// publish
 
 
-
-	public abstract void publish(final String[] lines);
 
 	public void publish() {
 		this.publish( (String[])null );
@@ -60,8 +53,10 @@ public abstract class xLogHandler {
 			this.publish();
 			return;
 		}
-		this.publish( this.formatMessage(record) );
+		this.publish( this.format(record) );
 	}
+
+	protected abstract void publish(final String[] lines);
 
 
 
@@ -77,14 +72,10 @@ public abstract class xLogHandler {
 
 
 	public void getPublishLock() {
-		this.getPublishLock(
-			this.publishLock
-		);
+		this.getPublishLock(this.lock);
 	}
 	public void releasePublishLock() {
-		this.releasePublishLock(
-			this.publishLock
-		);
+		this.releasePublishLock(this.lock);
 	}
 
 	protected void getPublishLock(final ReentrantLock lock) {
@@ -109,46 +100,22 @@ public abstract class xLogHandler {
 
 
 	// -------------------------------------------------------------------------------
-	// formatter
+	// format
 
 
 
-	public String formatMessage(final xLogRecord record) {
-		final xLogFormatter formatter = this.getFormatterOrDefault();
-		if (formatter == null)
+	public String format(final xLogRecord record) {
+		final xLogFormat format = this.format.get();
+		if (format == null)
 			return record.getMessage();
-		if (record instanceof xLogRecord_Msg)
-			return formatter.formatMessage( (xLogRecord_Msg)record );
-		return record.getMessage();
+		return format.format(record);
 	}
 
-
-
-	public xLogFormatter getFormatter() {
-		return this.formatter.get();
+	public xLogFormat getFormat() {
+		return this.format.get();
 	}
-	public xLogFormatter getFormatterOrDefault() {
-		final xLogFormatter formatter = this.formatter.get();
-		if (formatter != null)
-			return formatter;
-		return this.getDefaultFormatter();
-	}
-	public xLogFormatter getDefaultFormatter() {
-		if (this.defaultFormatter.get() == null) {
-			final xLogFormatter formatter = this.newDefaultFormatter();
-			if (this.defaultFormatter.compareAndSet(null, formatter))
-				return formatter;
-		}
-		return this.defaultFormatter.get();
-	}
-	protected xLogFormatter newDefaultFormatter() {
-		return new xLogFormatter();
-	}
-
-
-
-	public void setFormatter(final xLogFormatter formatter) {
-		this.formatter.set(formatter);
+	public void setFormat(final xLogFormat format) {
+		this.format.set(format);
 	}
 
 
@@ -171,10 +138,10 @@ public abstract class xLogHandler {
 	public boolean isLoggable(final xLevel level) {
 		if (level == null)
 			return true;
-		final xLevel currentLevel = this.getLevel();
-		if (currentLevel == null)
+		final xLevel current = this.getLevel();
+		if (current == null)
 			return true;
-		return currentLevel.isLoggable(level);
+		return current.isLoggable(level);
 	}
 	public boolean notLoggable(final xLevel level) {
 		return ! this.isLoggable(level);
@@ -183,4 +150,3 @@ public abstract class xLogHandler {
 
 
 }
-*/
