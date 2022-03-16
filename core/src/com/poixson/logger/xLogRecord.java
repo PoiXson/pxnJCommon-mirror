@@ -4,7 +4,7 @@ package com.poixson.logger;
 public interface xLogRecord {
 
 
-	public String   getMessage();
+	public String   toString();
 	public xLevel   getLevel();
 	public String[] getNameTree();
 	public long     getTimestamp();

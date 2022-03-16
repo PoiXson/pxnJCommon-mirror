@@ -107,7 +107,7 @@ public abstract class xLogHandler {
 	public String format(final xLogRecord record) {
 		final xLogFormat format = this.format.get();
 		if (format == null)
-			return record.getMessage();
+			return record.toString();
 		return format.format(record);
 	}
 

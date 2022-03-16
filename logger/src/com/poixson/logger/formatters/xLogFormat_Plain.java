@@ -18,7 +18,7 @@ public class xLogFormat_Plain implements xLogFormat {
 	public String format(final xLogRecord record) {
 		if (record == null)
 			return null;
-		return record.getMessage();
+		return record.toString();
 	}
 
 

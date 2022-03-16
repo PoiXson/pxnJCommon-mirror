@@ -28,12 +28,8 @@ public class xLogRecord_Msg implements xLogRecord {
 
 
 	@Override
-	public String getMessage() {
-		return String.format(this.msg, this.args);
-	}
-	@Override
 	public String toString() {
-		return this.getMessage();
+		return String.format(this.msg, this.args);
 	}
 
 

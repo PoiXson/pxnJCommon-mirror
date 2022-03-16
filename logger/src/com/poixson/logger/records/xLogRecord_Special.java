@@ -26,7 +26,7 @@ public class xLogRecord_Special implements xLogRecord {
 
 
 	@Override
-	public String getMessage() {
+	public String toString() {
 		return null;
 	}
 	@Override
