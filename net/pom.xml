@@ -29,7 +29,7 @@
 
 		<!-- Dependencies -->
 		<common-core-version>4.0.0-SNAPSHOT</common-core-version>
-		<netty-common-version>4.1.75.Final</netty-common-version>
+		<netty-common-version>4.1.76.Final</netty-common-version>
 		<netty-handler-version>4.1.75.Final</netty-handler-version>
 		<netty-codec-version>4.1.75.Final</netty-codec-version>
 
