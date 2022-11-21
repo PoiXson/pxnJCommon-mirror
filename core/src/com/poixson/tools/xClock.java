@@ -10,13 +10,12 @@ import java.net.UnknownHostException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.poixson.logger.xLog;
-import com.poixson.utils.NumberUtils;
 import com.poixson.utils.Utils;
 
 
@@ -121,7 +120,7 @@ public class xClock {
 								break;
 							if (this.blockingLock.get() == null)
 								break;
-							lock.await(100L, xTimeU.MS);
+							lock.await(100L, TimeUnit.MILLISECONDS);
 						}
 					} catch (InterruptedException ignore) {}
 				}
@@ -135,7 +134,8 @@ public class xClock {
 				return;
 			}
 		}
-		final xLog log = this.log();
+//TODO
+//		final xLog log = this.log();
 		DatagramSocket socket = null;
 		try {
 			socket = new DatagramSocket();
@@ -156,48 +156,38 @@ public class xClock {
 				) / 2.0;
 			// less than 100ms
 			if (this.localOffset < 0.1 && this.localOffset > -0.1) {
-				log.info(
-					"System time only off by %d, ignoring adjustment.",
-					NumberUtils.FormatDecimal(
-						"0.000",
-						this.localOffset
-					)
-				);
+//TODO: might have to change %d
+//				log.info(
+//					"System time only off by %d, ignoring adjustment.",
+//					NumberUtils.FormatDecimal(
+//						"0.000",
+//						this.localOffset
+//					)
+//				);
 				this.localOffset = 0.0;
 			} else {
-				log.info(
-					"Internal time adjusted by %s%s seconds",
-					(
-						this.localOffset > 0
-						? "+"
-						: "-"
-					),
-					NumberUtils.FormatDecimal(
-						"0.000",
-						this.localOffset
-					)
-				);
-				log.info(
-					"System time:   %s",
-					timestampToString(
-						time / 1000.0
-					)
-				);
-				log.info(
-					"Internal time: %s",
-					this.getString()
-				);
+//TODO: change FormatDecimal to a %
+//				log.info(
+//					"Internal time adjusted by %s%s seconds",
+//					(this.localOffset > 0 ? "+" : "-"),
+//					NumberUtils.FormatDecimal("0.000", this.localOffset)
+//				);
+//				log.info(
+//					"System time:   %s",
+//					timestampToString(time / 1000.0)
+//				);
+//				log.info("Internal time: %s", this.getString());
 			}
 		} catch (SocketException e) {
-			log.trace(e);
+//			log.trace(e);
 		} catch (UnknownHostException e) {
-			log.trace(e);
+//			log.trace(e);
 		} catch (IOException e) {
-			log.trace(e);
+//			log.trace(e);
 		} catch (Exception e) {
-			log.trace(e);
+//			log.trace(e);
 		} finally {
-			Utils.safeClose(socket);
+			Utils.SafeClose(socket);
 			this.lastChecked = time;
 			this.running.set(false);
 			this.thread.set(null);
@@ -236,17 +226,17 @@ public class xClock {
 
 
 
-	/**
+	/ **
 	 * Get current time from system.
 	 * @return
-	 */
+	 * /
 	public static long getSystemTime() {
 		return System.currentTimeMillis();
 	}
-	/**
+	/ **
 	 * Get current time adjusted by NTP.
 	 * @return
-	 */
+	 * /
 	public long getCurrentTime() {
 		return getSystemTime() - ((long) this.localOffset);
 	}
@@ -301,10 +291,11 @@ public class xClock {
 
 
 
-	// logger
-	public xLog log() {
-		return Utils.log();
-	}
+//TODO
+//	// logger
+//	public xLog log() {
+//		return Utils.log();
+//	}
 
 
 
