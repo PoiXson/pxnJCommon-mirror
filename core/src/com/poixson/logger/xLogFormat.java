@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger;
 
 
@@ -8,3 +9,4 @@ public interface xLogFormat {
 
 
 }
+*/
