@@ -30,7 +30,7 @@ import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.Utils;
 
 
-/*
+/ *
  * Startup sequence
  *    5  startup time - xApp
  *
@@ -38,7 +38,7 @@ import com.poixson.utils.Utils;
  *   50  stop thread pools - xApp
  *   10  garbage collect   - xApp
  *    5  uptime
- */
+ * /
 public abstract class xApp implements xStartable, Runnable, xFailable, AttachedLogger {
 
 	public static final xTime EXIT_TIMEOUT = new xTime(200L);

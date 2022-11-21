@@ -1,3 +1,4 @@
+/*
 package com.poixson.app.steps;
 
 import com.poixson.app.xAppStep;
@@ -5,10 +6,10 @@ import com.poixson.app.xAppStepMode;
 import com.poixson.utils.Utils;
 
 
-/*
+/ *
  * Startup sequence
  *   10  check user
- */
+ * /
 public interface xAppSteps_UserNotRoot {
 
 
@@ -36,3 +37,4 @@ public interface xAppSteps_UserNotRoot {
 
 
 }
+*/
