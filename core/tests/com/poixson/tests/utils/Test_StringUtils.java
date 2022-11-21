@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.TestUtils;
 
 
 public class Test_StringUtils {

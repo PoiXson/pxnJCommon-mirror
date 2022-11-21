@@ -51,7 +51,7 @@ public class Test_FileUtils {
 					FileUtils.MergePaths( (String) null );
 				}
 			);
-		Assert.assertEquals( null, e.getMessage() );
+		Assert.assertEquals( "Cannot invoke \"String.split(String)\" because \"strings[index]\" is null", e.getMessage() );
 	}
 
 
