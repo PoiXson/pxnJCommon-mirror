@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated: Sun Mar 13 11:18:11 PM EDT 2022 -->
+<!-- Generated: Sun Nov 20 07:29:45 PM EST 2022 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<name>pxnJCommon-Core</name>
 	<artifactId>common-core</artifactId>
@@ -21,16 +21,16 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 
 		<!-- Maven Plugins -->
-		<maven-compiler-plugin-version>3.8.1</maven-compiler-plugin-version>
-		<maven-jar-plugin-version>3.2.0</maven-jar-plugin-version>
+		<maven-compiler-plugin-version>3.10.1</maven-compiler-plugin-version>
+		<maven-jar-plugin-version>3.3.0</maven-jar-plugin-version>
 		<maven-source-plugin-version>3.2.1</maven-source-plugin-version>
 		<maven-eclipse-plugin-version>2.10</maven-eclipse-plugin-version>
 		<git-commit-id-version>4.9.10</git-commit-id-version>
 		<junit-version>4.13.2</junit-version>
-		<surefire-version>3.0.0-M5</surefire-version>
+		<surefire-version>3.0.0-M7</surefire-version>
 		<cobertura-version>2.7</cobertura-version>
-		<jxr-version>3.1.1</jxr-version>
-		<project-info-reports-version>3.1.2</project-info-reports-version>
+		<jxr-version>3.3.0</jxr-version>
+		<project-info-reports-version>3.4.1</project-info-reports-version>
 
 	</properties>
 	<scm>
