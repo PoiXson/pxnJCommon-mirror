@@ -1,5 +1,6 @@
 package com.poixson.threadpool;
 
+import java.lang.ref.SoftReference;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
@@ -137,15 +138,26 @@ public class xThreadPoolTask extends xRunnable {
 
 
 
-	private final AtomicReference<xLog> _log = new AtomicReference<xLog>(null);
+	private final AtomicReference<SoftReference<xLog>> _log = new AtomicReference<SoftReference<xLog>>(null);
 
 	public xLog log() {
-		if (this._log.get() == null) {
+		// cached
+		{
+			final SoftReference<xLog> ref = this._log.get();
+			if (ref != null) {
+				final xLog log = ref.get();
+				if (log != null)
+					return log;
+			}
+		}
+		// new instance
+		{
 			final xLog log = this._log();
-			if (this._log.compareAndSet(null, log))
+			final SoftReference<xLog> ref = new SoftReference<xLog>(log);
+			if (this._log.compareAndSet(null, ref))
 				return log;
 		}
-		return this._log.get();
+		return this.log();
 	}
 	protected xLog _log() {
 		final xThreadPoolWorker worker = this.worker.get();

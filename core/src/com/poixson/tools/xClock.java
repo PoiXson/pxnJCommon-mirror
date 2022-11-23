@@ -15,6 +15,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.poixson.logger.xLog;
+import com.poixson.utils.NumberUtils;
 import com.poixson.utils.Utils;
 
 
@@ -133,8 +135,7 @@ public class xClock {
 				return;
 			}
 		}
-//TODO
-//		final xLog log = this.log();
+		final xLog log = this.log();
 		DatagramSocket socket = null;
 		try {
 			socket = new DatagramSocket();
@@ -155,36 +156,32 @@ public class xClock {
 				) / 2.0;
 			// less than 100ms
 			if (this.localOffset < 0.1 && this.localOffset > -0.1) {
-//TODO: might have to change %d
-//				log.info(
-//					"System time only off by %d, ignoring adjustment.",
-//					NumberUtils.FormatDecimal(
-//						"0.000",
-//						this.localOffset
-//					)
-//				);
+				log.info(
+					"System time only off by %d, ignoring adjustment.",
+					NumberUtils.FormatDecimal("0.000", this.localOffset)
+				);
 				this.localOffset = 0.0;
 			} else {
 //TODO: change FormatDecimal to a %
-//				log.info(
-//					"Internal time adjusted by %s%s seconds",
-//					(this.localOffset > 0 ? "+" : "-"),
-//					NumberUtils.FormatDecimal("0.000", this.localOffset)
-//				);
-//				log.info(
-//					"System time:   %s",
-//					timestampToString(time / 1000.0)
-//				);
-//				log.info("Internal time: %s", this.getString());
+				log.info(
+					"Internal time adjusted by %s%s seconds",
+					(this.localOffset > 0 ? "+" : "-"),
+					NumberUtils.FormatDecimal("0.000", this.localOffset)
+				);
+				log.info(
+					"System time:   %s",
+					timestampToString(time / 1000.0)
+				);
+				log.info("Internal time: %s", this.getString());
 			}
 		} catch (SocketException e) {
-//			log.trace(e);
+			log.trace(e);
 		} catch (UnknownHostException e) {
-//			log.trace(e);
+			log.trace(e);
 		} catch (IOException e) {
-//			log.trace(e);
+			log.trace(e);
 		} catch (Exception e) {
-//			log.trace(e);
+			log.trace(e);
 		} finally {
 			Utils.SafeClose(socket);
 			this.lastChecked = time;
@@ -290,11 +287,10 @@ public class xClock {
 
 
 
-//TODO
-//	// logger
-//	public xLog log() {
-//		return Utils.log();
-//	}
+	// logger
+	public xLog log() {
+		return Utils.log();
+	}
 
 
 

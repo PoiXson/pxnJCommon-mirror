@@ -1,7 +1,5 @@
 package com.poixson.tools;
 
-import static com.poixson.logger.xLog.XLog;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -172,22 +170,26 @@ public class xLockFile {
 	private final AtomicReference<SoftReference<xLog>> _log = new AtomicReference<SoftReference<xLog>>(null);
 
 	public xLog log() {
-		// cached logger
-		final SoftReference<xLog> ref = this._log.get();
-		if (ref != null) {
-			final xLog log = ref.get();
-			if (log != null) return log;
+		// cached
+		{
+			final SoftReference<xLog> ref = this._log.get();
+			if (ref != null) {
+				final xLog log = ref.get();
+				if (log != null)
+					return log;
+			}
 		}
-		// get logger
+		// new instance
 		{
 			final xLog log = this._log();
-			this._log.set( new SoftReference<xLog>(log) );
-			return log;
+			final SoftReference<xLog> ref = new SoftReference<xLog>(log);
+			if (this._log.compareAndSet(null, ref))
+				return log;
 		}
+		return this.log();
 	}
 	protected xLog _log() {
-		final String className = Utils.GetClassName(this);
-		return XLog(className);
+		return xLog.Get( ReflectUtils.GetClassName(this) );
 	}
 
 

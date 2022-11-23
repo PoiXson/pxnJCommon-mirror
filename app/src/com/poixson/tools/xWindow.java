@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JFrame;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.logger.AttachedLogger;
 import com.poixson.logger.xLog;
 import com.poixson.threadpool.types.xThreadPool_GUI;
 import com.poixson.tools.abstractions.RemappedWindowListener;
@@ -21,7 +20,7 @@ import com.poixson.utils.Utils;
 import com.poixson.utils.guiUtils;
 
 
-public abstract class xWindow extends JFrame implements xCloseable, AttachedLogger {
+public abstract class xWindow extends JFrame implements xCloseable {
 	private static final long serialVersionUID = 1L;
 
 	protected static final ConcurrentHashMap<String, xWindow> all = new ConcurrentHashMap<String, xWindow>();

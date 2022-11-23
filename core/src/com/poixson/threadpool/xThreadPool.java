@@ -1,7 +1,6 @@
 package com.poixson.threadpool;
 
-import static com.poixson.logger.xLog.XLog;
-
+import java.lang.ref.SoftReference;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -659,18 +658,31 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 
 
-	private final AtomicReference<xLog> _log = new AtomicReference<xLog>(null);
+	private final AtomicReference<SoftReference<xLog>> _log = new AtomicReference<SoftReference<xLog>>(null);
 
 	public xLog log() {
-		if (this._log.get() == null) {
+		// cached
+		{
+			final SoftReference<xLog> ref = this._log.get();
+			if (ref != null) {
+				final xLog log = ref.get();
+				if (log != null)
+					return log;
+			}
+		}
+		// new instance
+		{
 			final xLog log = this._log();
-			if (this._log.compareAndSet(null, log))
+			final SoftReference<xLog> ref = new SoftReference<xLog>(log);
+			if (this._log.compareAndSet(null, ref))
 				return log;
 		}
-		return this._log.get();
+		return this.log();
 	}
 	protected xLog _log() {
-		return XLog( "thpool-"+this.getPoolName() );
+		final StringBuilder name = new StringBuilder();
+		name.append("thpool-").append(this.getPoolName());
+		return xLog.Get(name.toString());
 	}
 
 

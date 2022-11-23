@@ -9,6 +9,8 @@ import java.util.Formatter;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.poixson.logger.xLog;
+
 
 public final class CryptUtils {
 	private CryptUtils() {}
@@ -69,8 +71,7 @@ public final class CryptUtils {
 			md.update( data.getBytes() );
 			return toHex( md.digest() );
 		} catch (NoSuchAlgorithmException e) {
-e.printStackTrace();
-//			log().trace(e);
+			log().trace(e);
 		}
 		return null;
 	}
@@ -85,11 +86,9 @@ e.printStackTrace();
 			mac.init(new SecretKeySpec(key.getBytes(), typeStr));
 			return toHex( mac.doFinal( data.getBytes() ) );
 		} catch (NoSuchAlgorithmException e) {
-e.printStackTrace();
-//			log().trace(e);
+			log().trace(e);
 		} catch (InvalidKeyException e) {
-e.printStackTrace();
-//			log().trace(e);
+			log().trace(e);
 		}
 		return null;
 	}
@@ -119,11 +118,9 @@ e.printStackTrace();
 			mac.init(new SecretKeySpec(key.getBytes(), typeStr));
 			return toHex( mac.doFinal( data.getBytes() ) );
 		} catch (NoSuchAlgorithmException e) {
-e.printStackTrace();
-//			log().trace(e);
+			log().trace(e);
 		} catch (InvalidKeyException e) {
-e.printStackTrace();
-//			log().trace(e);
+			log().trace(e);
 		}
 		return null;
 	}
@@ -198,6 +195,12 @@ e.printStackTrace();
 			out[i] = (byte) value;
 		}
 		return out;
+	}
+
+
+
+	public static xLog log() {
+		return Utils.log();
 	}
 
 

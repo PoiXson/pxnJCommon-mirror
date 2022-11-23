@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.poixson.exceptions.UnmodifiableObjectException;
-import com.poixson.logger.xLogRoot;
+import com.poixson.logger.xLog;
 
 
 public class DualKeyMap<K, J, V> {
@@ -144,7 +144,7 @@ public class DualKeyMap<K, J, V> {
 			final Entry<K, V> entryK = itK.next();
 			final Entry<J, V> entryJ = itJ.next();
 			if (!entryK.getValue().equals(entryJ.getValue())) {
-				XLog().severe(
+				xLog.Get().severe(
 					"Missmatched values in DualKeyMap object! [ %s : %s ] != [ %s : %s ]",
 					entryK.getKey().toString(),
 					entryK.getValue().toString(),

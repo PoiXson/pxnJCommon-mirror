@@ -1,6 +1,7 @@
 package com.poixson.app;
 
 import java.io.IOException;
+import java.lang.ref.SoftReference;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -9,10 +10,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.app.xAppStep.StepType;
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.logger.AttachedLogger;
 import com.poixson.logger.xDebug;
 import com.poixson.logger.xLog;
-import com.poixson.logger.handlers.xLogHandler;
+import com.poixson.logger.xLogHandler;
 import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.AppProps;
@@ -29,6 +29,8 @@ import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.Utils;
 
 
+//AttachedLogger
+public abstract class xApp implements xStartable, Runnable, xFailable {
 / *
  * Startup sequence
  *    5  startup time - xApp
@@ -38,7 +40,6 @@ import com.poixson.utils.Utils;
  *   10  garbage collect   - xApp
  *    5  uptime
  * /
-public abstract class xApp implements xStartable, Runnable, xFailable, AttachedLogger {
 
 	public static final xTime EXIT_TIMEOUT = new xTime(200L);
 
@@ -93,7 +94,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 			this.props = props;
 		}
 		xDebug.init();
-		xLog.GetRoot();
+		xLog.Get();
 		// search for .debug file
 		if (Utils.notEmpty(xAppDefines.SEARCH_DEBUG_FILES)) {
 			final String result =
@@ -203,9 +204,9 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 
 
 	public void kill() {
-		final xLog log = xLog.GetRoot();
+		final xLog log = xLog.Get();
 		log.flush();
-		final xLogHandler[] handlers = log.getLogHandlers();
+		final xLogHandler[] handlers = log.getHandlers();
 		for (final xLogHandler handler : handlers) {
 			if (handler instanceof xStartable) {
 				((xStartable) handler).stop();
@@ -586,19 +587,29 @@ public abstract class xApp implements xStartable, Runnable, xFailable, AttachedL
 
 
 
-	private final AtomicReference<xLog> _log = new AtomicReference<xLog>(null);
+	private final AtomicReference<SoftReference<xLog>> _log = new AtomicReference<SoftReference<xLog>>(null);
 
-	@Override
 	public xLog log() {
-		if (this._log.get() == null) {
+		// cached
+		{
+			final SoftReference<xLog> ref = this._log.get();
+			if (ref != null) {
+				final xLog log = ref.get();
+				if (log != null)
+					return log;
+			}
+		}
+		// new instance
+		{
 			final xLog log = this._log();
-			if (this._log.compareAndSet(null, log))
+			final SoftReference<xLog> ref = new SoftReference<xLog>(log);
+			if (this._log.compareAndSet(null, ref))
 				return log;
 		}
-		return this._log.get();
+		return this.log();
 	}
 	protected xLog _log() {
-		return xLog.GetRoot();
+		return xLog.Get();
 	}
 
 

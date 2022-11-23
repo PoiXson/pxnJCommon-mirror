@@ -32,7 +32,7 @@ public abstract class xSystemTray {
 		} catch (AWTException e) {
 			throw new RuntimeException(e);
 		}
-		xLog.GetRoot().fine("Loaded system tray icon");
+		xLog.Get().fine("Loaded system tray icon");
 	}
 
 

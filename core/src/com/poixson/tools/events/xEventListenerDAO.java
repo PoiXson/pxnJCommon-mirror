@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.logger.xLogRoot;
+import com.poixson.logger.xLog;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.utils.Utils;
 
@@ -34,7 +34,7 @@ public class xEventListenerDAO {
 		// ensure main thread
 		if (xThreadPool_Main.get().force(this, "invoke"))
 			return;
-		xLog.GetRoot()
+		xLog.Get()
 			.finest(
 				"Invoking event: %s->%s",
 				this.object.getClass().getName(),

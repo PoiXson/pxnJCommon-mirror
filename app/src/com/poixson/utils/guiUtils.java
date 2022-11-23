@@ -11,6 +11,8 @@ import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.lang.ref.SoftReference;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -128,7 +130,28 @@ public final class guiUtils {
 
 
 
+	private static final AtomicReference<SoftReference<xLog>> _log = new AtomicReference<SoftReference<xLog>>(null);
+
 	public static xLog log() {
+		// cached
+		{
+			final SoftReference<xLog> ref = _log.get();
+			if (ref != null) {
+				final xLog log = ref.get();
+				if (log != null)
+					return log;
+			}
+		}
+		// new instance
+		{
+			final xLog log = _log();
+			final SoftReference<xLog> ref = new SoftReference<xLog>(log);
+			if (_log.compareAndSet(null, ref))
+				return log;
+		}
+		return log();
+	}
+	protected static xLog _log() {
 		return xLog.Get(LOG_NAME);
 	}
 

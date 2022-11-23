@@ -107,7 +107,7 @@ public abstract class RemappedEventListener {
 
 	// logger
 	public xLog log() {
-		return guiUtils.log();
+		return Utils.log();
 	}
 
 

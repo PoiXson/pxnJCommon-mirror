@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
+import com.poixson.logger.xLog;
 import com.poixson.tools.Keeper;
 
 
@@ -584,6 +585,17 @@ public final class Utils {
 	 */
 	public static long GetMS() {
 		return System.currentTimeMillis();
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// logger
+
+
+
+	public static xLog log() {
+		return xLog.Get();
 	}
 
 

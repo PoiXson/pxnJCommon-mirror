@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.logger.xLogRoot;
+import com.poixson.logger.xLog;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.events.xEventListenerDAO;
 import com.poixson.utils.Utils;
@@ -30,7 +30,7 @@ public class xCommandDAO extends xEventListenerDAO {
 	public void invoke(final String line) {
 		// only run in main thread
 		if (xThreadPool_Main.get().force(this, "invoke", line)) return;
-		XLog().finest(
+		xLog.Get().finest(
 			"Invoking command: %s->%s %d",
 			super.object.getClass().getName(),
 			super.method.getName(),

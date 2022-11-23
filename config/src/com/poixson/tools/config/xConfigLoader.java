@@ -139,7 +139,7 @@ public final class xConfigLoader {
 				if (cfg != null) {
 					// copy default file
 					try {
-						xLog.GetRoot().info("Creating default file:", fileStr);
+						xLog.Get().info("Creating default file:", fileStr);
 						FileUtils.ExportResource(fileStr, FileUtils.OpenResource(clss, fileStr));
 					} catch (Exception e) {
 						throw new CreateDefaultYmlFileException(fileStr, e);
@@ -148,7 +148,7 @@ public final class xConfigLoader {
 				}
 			}
 		} catch (Exception e) {
-			xLog.GetRoot().trace(e);
+			xLog.Get().trace(e);
 		}
 		return null;
 	}

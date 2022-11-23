@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.logger.ErrorMode;
 import com.poixson.logger.xLog;
 
 
@@ -22,34 +21,24 @@ public final class NativeUtils {
 
 
 
-	public static boolean SafeLoad(final String fileStr, final ErrorMode errorMode) {
+	public static boolean SafeLoad(final String fileStr) {
 		try {
 			NativeUtils.LoadLibrary(fileStr);
 		} catch (SecurityException e) {
 			log().severe( e.getMessage() );
-			if (ErrorMode.EXCEPTION.equals(errorMode)) {
-				throw e;
-			} else
-			if (ErrorMode.LOG.equals(errorMode)) {
-				log().severe(
-					"Failed to load library: %s  %s",
-					fileStr,
-					e.getMessage()
-				);
-			}
+			log().severe(
+				"Failed to load library: %s  %s",
+				fileStr,
+				e.getMessage()
+			);
 			return false;
 		} catch (UnsatisfiedLinkError e) {
 			log().severe( e.getMessage() );
-			if (ErrorMode.EXCEPTION.equals(errorMode)) {
-				throw e;
-			} else
-			if (ErrorMode.LOG.equals(errorMode)) {
-				log().severe(
-					"Failed to load library: %s  %s",
-					fileStr,
-					e.getMessage()
-				);
-			}
+			log().severe(
+				"Failed to load library: %s  %s",
+				fileStr,
+				e.getMessage()
+			);
 			return false;
 		}
 		return true;
