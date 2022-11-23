@@ -8,7 +8,6 @@ import com.poixson.logger.xLog;
 import com.poixson.utils.ReflectUtils;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
-import com.poixson.utils.guiUtils;
 
 
 public abstract class RemappedEventListener {
@@ -100,7 +99,7 @@ public abstract class RemappedEventListener {
 
 
 	public String getListenerName() {
-		return StringUtils.TrimFront( ReflectUtils.GetClassName(this), "Remapped" );
+		return StringUtils.sfTrim(ReflectUtils.GetClassName(this), "Remapped" );
 	}
 
 

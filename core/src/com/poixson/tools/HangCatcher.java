@@ -56,7 +56,7 @@ public class HangCatcher implements xStartable {
 			final String name, final Runnable runWhenHung) {
 		if (runWhenHung == null) throw new RequiredArgumentException("runWhenHung");
 		this.name = name;
-		this.timeout = CoolDown.getNew(
+		this.timeout = new CoolDown(
 			timeout <= 0L
 			? DEFAULT_TIMEOUT
 			: timeout
@@ -112,7 +112,7 @@ public class HangCatcher implements xStartable {
 			while (true) {
 				if (this.canceled.get())  break;
 				if (this.triggered.get()) break;
-				if (this.timeout.runAgain()) {
+				if (this.timeout.again()) {
 					this.trigger();
 					break;
 				}
@@ -148,7 +148,7 @@ public class HangCatcher implements xStartable {
 
 	public void resetTimeout() {
 		this.timeout
-			.resetRun();
+			.reset();
 	}
 
 

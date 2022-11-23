@@ -56,7 +56,7 @@ public final class Failure {
 	public void addMessage(final String msg, final Object...args) {
 		if (Utils.notEmpty(msg)) {
 			this.messages.add(
-				StringUtils.ReplaceTags(msg, args)
+				String.format(msg, args)
 			);
 		}
 	}

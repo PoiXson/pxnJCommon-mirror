@@ -104,9 +104,9 @@ public class xURL {
 			pos = buf.indexOf("//");
 			if (pos != -1) {
 				this.protocol =
-					StringUtils.TrimEnd(
+					StringUtils.ceTrim(
 						buf.substring(0, pos),
-						":"
+						':'
 					);
 				buf = buf.substring(pos + 2);
 			}
@@ -136,7 +136,7 @@ public class xURL {
 				if (pos != -1) {
 					this.host = str.substring(0, pos);
 					final Integer i =
-						NumberUtils.toInteger(
+						NumberUtils.CastInteger(
 							str.substring(pos + 1)
 						);
 					this.port = (

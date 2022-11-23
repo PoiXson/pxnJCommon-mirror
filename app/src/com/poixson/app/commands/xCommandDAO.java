@@ -29,7 +29,8 @@ public class xCommandDAO extends xEventListenerDAO {
 
 	public void invoke(final String line) {
 		// only run in main thread
-		if (xThreadPool_Main.get().force(this, "invoke", line)) return;
+		if (xThreadPool_Main.Get().proper(this, "invoke", line))
+			return;
 		xLog.Get().finest(
 			"Invoking command: %s->%s %d",
 			super.object.getClass().getName(),
@@ -69,7 +70,7 @@ public class xCommandDAO extends xEventListenerDAO {
 	public boolean isAlias(final String cmd) {
 		if (cmd == null)
 			return false;
-		if (Utils.isEmpty(aliases))
+		if (Utils.isEmpty(this.aliases))
 			return false;
 		for (final String alias : this.aliases) {
 			if (cmd.equals(alias))

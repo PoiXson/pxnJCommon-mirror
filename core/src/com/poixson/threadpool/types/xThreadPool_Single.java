@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.xThreadPoolWorker;
-import com.poixson.utils.StringUtils;
 
 
 public abstract class xThreadPool_Single extends xThreadPool {
@@ -98,8 +97,10 @@ public abstract class xThreadPool_Single extends xThreadPool {
 		if (worker == null) throw new RequiredArgumentException("worker");
 		if (!this.worker.compareAndSet(worker, null)) {
 			throw new RuntimeException(
-				StringUtils.ReplaceTags("Cannot unregister worker not owned by pool: ",
-					this.getPoolName(), worker.getWorkerName())
+				String.format(
+					"Cannot unregister worker not owned by pool: ",
+					this.getPoolName(), worker.getWorkerName()
+				)
 			);
 		}
 		// ensure it's stopping

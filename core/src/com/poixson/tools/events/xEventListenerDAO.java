@@ -32,7 +32,7 @@ public class xEventListenerDAO {
 
 	public void invoke() {
 		// ensure main thread
-		if (xThreadPool_Main.get().force(this, "invoke"))
+		if (xThreadPool_Main.Get().proper(this, "invoke"))
 			return;
 		xLog.Get()
 			.finest(

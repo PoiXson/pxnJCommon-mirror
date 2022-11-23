@@ -9,7 +9,6 @@ import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.tools.CoolDown;
 import com.poixson.tools.abstractions.xStartable;
-import com.poixson.utils.StringUtils;
 import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.Utils;
 
@@ -79,10 +78,10 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 				break;
 			// timeout
 			if (cool == null) {
-				cool = CoolDown.getNew(timeout);
-				cool.resetRun();
+				cool = new CoolDown(timeout);
+				cool.reset();
 			} else
-			if (cool.runAgain()) {
+			if (cool.again()) {
 				this.log().warning("Timeout waiting for thread pool to start");
 				break;
 			}

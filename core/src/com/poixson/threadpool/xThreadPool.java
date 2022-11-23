@@ -17,7 +17,6 @@ import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.abstractions.RunnableMethod;
 import com.poixson.tools.abstractions.xStartable;
-import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
@@ -640,7 +639,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 	public String getStatsDisplay() {
 		return
-			StringUtils.ReplaceTags(
+			String.format(
 				"Queued: %d  Threads: %d[%d]  Active/Free: %d/%d  Finished: %d",
 				this.getQueueCount(),
 				this.getWorkerCount(),

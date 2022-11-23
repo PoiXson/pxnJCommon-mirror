@@ -102,7 +102,7 @@ public class xString {
 	public xString trims(final String...strip) {
 		final String data = this.data;
 		if (data != null) {
-			this.data = StringUtils.Trim(data, strip);
+			this.data = StringUtils.sTrim(data, strip);
 		}
 		return this;
 	}

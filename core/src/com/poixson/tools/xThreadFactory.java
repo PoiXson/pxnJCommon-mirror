@@ -61,7 +61,7 @@ public class xThreadFactory implements ThreadFactory {
 
 
 	public void cleanupThreads() {
-		if (!this.cool.runAgain()) return;
+		if (!this.cool.again()) return;
 		final Iterator<Thread> it = this.threads.iterator();
 		while (it.hasNext()) {
 			final Thread thread = it.next();

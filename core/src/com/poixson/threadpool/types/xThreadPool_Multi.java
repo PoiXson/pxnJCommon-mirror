@@ -9,7 +9,6 @@ import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.xThreadPoolWorker;
 import com.poixson.utils.NumberUtils;
-import com.poixson.utils.StringUtils;
 import com.poixson.utils.ThreadUtils;
 
 
@@ -143,8 +142,11 @@ throw new RuntimeException("UNFINISHED CODE");
 		if (worker == null) throw new RequiredArgumentException("worker");
 		if (!this.workers.remove(worker)) {
 			throw new RuntimeException(
-				StringUtils.ReplaceTags("Cannot unregister worker not owned by pool:",
-					this.getPoolName(), worker.getWorkerName())
+				String.format(
+					"Cannot unregister worker not owned by pool:",
+					this.getPoolName(),
+					worker.getWorkerName()
+				)
 			);
 		}
 	}

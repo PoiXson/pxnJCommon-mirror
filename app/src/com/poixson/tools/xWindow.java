@@ -50,8 +50,8 @@ public abstract class xWindow extends JFrame implements xCloseable {
 		// ensure dispatch thread
 		if ( ! xThreadPool_GUI.Get().isCurrentThread() ) {
 			throw new RuntimeException(
-				StringUtils.ReplaceTags(
-					"Cannot load xWindow {} from thread: {}",
+				String.format(
+					"Cannot load xWindow %s from thread: %s",
 					this.getClass().getName(),
 					Thread.currentThread().getName()
 				)

@@ -50,7 +50,7 @@ public class xAppStepDAO implements RunnableNamed {
 			this.title = anno.title();
 		} else {
 			final String name =
-				StringUtils.iTrimFront(
+				StringUtils.sifTrim(
 					method.getName(),
 					"_",
 					"startup",

@@ -126,7 +126,8 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 	public void start() {
 		if (this.hasFailed()) return;
 		// only run in main thread
-		if (xThreadPool_Main.Get().proper(this, "start")) return;
+		if (xThreadPool_Main.Get().proper(this, "start"))
+			return;
 		// check state
 		final int state = this.state.get();
 		if (state == xAppDefines.STATE_RUNNING) return;
@@ -387,7 +388,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 	public long uptime() {
-		final long current = Utils.getSystemMillis();
+		final long current = Utils.GetMS();
 		final long startTime = this.startTime.ms();
 		return current - startTime;
 	}
@@ -515,8 +516,9 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 	@xAppStep(type=StepType.STARTUP, step=5, title="Startup Time")
 	public void __START_uptime() {
 		this.startTime
-			.set( Utils.getSystemMillis(), xTimeU.MS )
-			.lock();
+			.set( Utils.GetMS(), TimeUnit.MILLISECONDS );
+//TODO
+//			.lock();
 	}
 
 
