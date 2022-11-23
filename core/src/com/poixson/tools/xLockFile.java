@@ -100,7 +100,7 @@ public class xLockFile {
 			this.handle = new RandomAccessFile(this.file, "rw");
 		} catch (FileNotFoundException e) {
 			this.log().trace(e);
-			Utils.safeClose(this.handle);
+			Utils.SafeClose(this.handle);
 			this.handle = null;
 			return false;
 		}
@@ -108,8 +108,8 @@ public class xLockFile {
 		try {
 			this.lock = this.channel.tryLock();
 			if (this.lock == null) {
-				Utils.safeClose(this.handle);
-				Utils.safeClose(this.channel);
+				Utils.SafeClose(this.handle);
+				Utils.SafeClose(this.channel);
 				this.handle  = null;
 				this.channel = null;
 				return false;
@@ -120,18 +120,18 @@ public class xLockFile {
 			);
 		} catch (OverlappingFileLockException e) {
 			this.log().trace(e);
-			Utils.safeClose(this.lock);
-			Utils.safeClose(this.handle);
-			Utils.safeClose(this.channel);
+			Utils.SafeClose(this.lock);
+			Utils.SafeClose(this.handle);
+			Utils.SafeClose(this.channel);
 			this.lock    = null;
 			this.handle  = null;
 			this.channel = null;
 			return false;
 		} catch (IOException e) {
 			this.log().trace(e);
-			Utils.safeClose(this.lock);
-			Utils.safeClose(this.handle);
-			Utils.safeClose(this.channel);
+			Utils.SafeClose(this.lock);
+			Utils.SafeClose(this.handle);
+			Utils.SafeClose(this.channel);
 			this.lock    = null;
 			this.handle  = null;
 			this.channel = null;
@@ -146,9 +146,9 @@ public class xLockFile {
 		try {
 			this.lock.release();
 		} catch (Exception ignore) {}
-		Utils.safeClose(this.lock);
-		Utils.safeClose(this.channel);
-		Utils.safeClose(this.handle);
+		Utils.SafeClose(this.lock);
+		Utils.SafeClose(this.channel);
+		Utils.SafeClose(this.handle);
 		this.lock    = null;
 		this.channel = null;
 		this.handle  = null;

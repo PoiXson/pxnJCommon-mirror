@@ -112,8 +112,8 @@ public final class NativeUtils {
 		} catch (FileNotFoundException e) {
 			throw new IOException("Cannot write to file: "+outFilePath, e);
 		} finally {
-			Utils.safeClose(out);
-			Utils.safeClose(in);
+			Utils.SafeClose(out);
+			Utils.SafeClose(in);
 		}
 	}
 

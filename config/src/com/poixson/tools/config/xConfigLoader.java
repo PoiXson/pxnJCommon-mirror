@@ -94,7 +94,7 @@ public final class xConfigLoader {
 			return cfg;
 		} catch (FileNotFoundException ignore) {
 		} finally {
-			Utils.safeClose(in);
+			Utils.SafeClose(in);
 		}
 		return null;
 	}
@@ -115,7 +115,7 @@ public final class xConfigLoader {
 			final T cfg = NewConfig(datamap, clss);
 			return cfg;
 		} finally {
-			Utils.safeClose(in);
+			Utils.SafeClose(in);
 		}
 	}
 
