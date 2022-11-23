@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -22,7 +21,7 @@ public abstract class xLog {
 	// root logger
 	protected static final AtomicReference<xLog> root = new AtomicReference<xLog>(null);
 	// child-loggers
-	protected final ConcurrentMap<String, xLog> loggers = new ConcurrentHashMap<String, xLog>();
+	protected final ConcurrentHashMap<String, SoftReference<xLog>> loggers = new ConcurrentHashMap<String, SoftReference<xLog>>();
 
 	public final xLog parent;
 	public final String logName;
@@ -31,8 +30,7 @@ public abstract class xLog {
 
 	protected final CopyOnWriteArraySet<xLogHandler> handlers = new CopyOnWriteArraySet<xLogHandler>();
 
-	protected final AtomicReference<SoftReference<String[]>> cachedNameTree =
-			new AtomicReference<SoftReference<String[]>>(null);
+	protected final AtomicReference<SoftReference<String[]>> cachedNameTree = new AtomicReference<SoftReference<String[]>>(null);
 
 
 
@@ -61,16 +59,23 @@ public abstract class xLog {
 			return Get();
 		// existing logger instance
 		{
-			final xLog log = this.loggers.get(logName);
-			if (log != null)
-				return log;
+			final SoftReference<xLog> ref = this.loggers.get(logName);
+			if (ref != null) {
+				final xLog log = ref.get();
+				if (log != null)
+					return log;
+			}
 		}
 		// new logger instance
 		{
 			final xLog log = (this.parent==null ? Get() : this.parent).create(logName);
-			final xLog existing = this.loggers.putIfAbsent(logName, log);
-			if (existing != null)
-				return existing;
+			final SoftReference<xLog> ref = new SoftReference<xLog>(log);
+			final SoftReference<xLog> existing = this.loggers.putIfAbsent(logName, ref);
+			if (existing != null) {
+				final xLog lg = existing.get();
+				if (lg != null)
+					return lg;
+			}
 			return log;
 		}
 	}
