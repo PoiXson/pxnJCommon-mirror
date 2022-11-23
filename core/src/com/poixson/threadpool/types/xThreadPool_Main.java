@@ -1,4 +1,3 @@
-/*
 package com.poixson.threadpool.types;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -77,4 +76,3 @@ public class xThreadPool_Main extends xThreadPool_Single {
 
 
 }
-*/

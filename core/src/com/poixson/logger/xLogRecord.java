@@ -1,4 +1,3 @@
-/*
 package com.poixson.logger;
 
 
@@ -15,4 +14,3 @@ public interface xLogRecord {
 
 
 }
-*/

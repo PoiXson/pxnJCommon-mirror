@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools.abstractions;
 
 import java.util.concurrent.Callable;
@@ -32,4 +31,3 @@ public interface RunnableNamed extends Runnable {
 
 
 }
-*/

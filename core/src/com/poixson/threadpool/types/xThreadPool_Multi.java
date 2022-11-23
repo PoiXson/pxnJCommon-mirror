@@ -1,4 +1,3 @@
-/*
 package com.poixson.threadpool.types;
 
 import java.util.Iterator;
@@ -272,4 +271,3 @@ return 0;
 
 
 }
-*/

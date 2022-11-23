@@ -1,4 +1,3 @@
-/*
 package com.poixson.threadpool.types;
 
 
@@ -20,4 +19,3 @@ throw new UnsupportedOperationException("UNFINISHED");
 
 
 }
-*/

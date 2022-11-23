@@ -1,4 +1,3 @@
-/*
 package com.poixson.threadpool;
 
 import static com.poixson.logger.xLog.XLog;
@@ -226,10 +225,10 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 
 
-	/ **
+	/**
 	 * Are task queues empty.
 	 * @return true if all task queues are empty.
-	 * /
+	 */
 	public boolean isEmpty() {
 		if ( ! this.queueLazy.isEmpty()  ) return false;
 		if ( ! this.queueLater.isEmpty() ) return false;
@@ -429,7 +428,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 
 
-	/ **
+	/**
 	 * Forces a method to be called from the correct thread.
 	 * @param callingFrom Class object which contains the method.
 	 * @param methodName The method which is being called.
@@ -446,7 +445,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	 *         return;
 	 *     // do something here
 	 * }
-	 * /
+	 */
 	public boolean proper(
 			final Object callingFrom, final String methodName,
 			final TaskPriority priority, final Object...args) {
@@ -469,7 +468,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 
 
-	/ **
+	/**
 	 * Forces a method to be called from the correct thread.
 	 * @param callingFrom Class object which contains the method.
 	 * @param methodName The method which is being called.
@@ -488,7 +487,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	 *     // do something here
 	 *     return result;
 	 * }
-	 * /
+	 */
 	public <V> V properResult(
 			final Object callingFrom, final String methodName,
 			final TaskPriority priority, final Object...args)
@@ -677,4 +676,3 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 
 }
-*/

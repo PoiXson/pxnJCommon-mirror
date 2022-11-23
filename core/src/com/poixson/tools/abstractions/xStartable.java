@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools.abstractions;
 
 
@@ -13,4 +12,3 @@ public interface xStartable {
 
 
 }
-*/

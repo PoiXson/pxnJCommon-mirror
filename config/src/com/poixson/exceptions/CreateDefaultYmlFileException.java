@@ -1,4 +1,3 @@
-/*
 package com.poixson.exceptions;
 
 
@@ -17,4 +16,3 @@ public class CreateDefaultYmlFileException extends Exception {
 
 
 }
-*/

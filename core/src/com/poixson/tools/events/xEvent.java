@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools.events;
 
 import java.lang.annotation.ElementType;
@@ -13,4 +12,3 @@ public @interface xEvent {
 
 
 }
-*/

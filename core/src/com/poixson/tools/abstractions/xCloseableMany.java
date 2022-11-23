@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools.abstractions;
 
 
@@ -9,4 +8,3 @@ public interface xCloseableMany extends xCloseable {
 
 
 }
-*/

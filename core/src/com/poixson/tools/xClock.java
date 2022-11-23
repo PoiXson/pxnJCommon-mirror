@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools;
 
 import java.io.IOException;
@@ -226,17 +225,17 @@ public class xClock {
 
 
 
-	/ **
+	/**
 	 * Get current time from system.
 	 * @return
-	 * /
+	 */
 	public static long getSystemTime() {
 		return System.currentTimeMillis();
 	}
-	/ **
+	/**
 	 * Get current time adjusted by NTP.
 	 * @return
-	 * /
+	 */
 	public long getCurrentTime() {
 		return getSystemTime() - ((long) this.localOffset);
 	}
@@ -300,4 +299,3 @@ public class xClock {
 
 
 }
-*/

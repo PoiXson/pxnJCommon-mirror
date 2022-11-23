@@ -1,4 +1,3 @@
-/*
 package com.poixson.logger;
 
 import java.lang.ref.SoftReference;
@@ -283,4 +282,3 @@ public abstract class xLog {
 
 
 }
-*/

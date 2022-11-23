@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools.events;
 
 import java.lang.annotation.Annotation;
@@ -60,4 +59,3 @@ public abstract class xHandler <T extends Annotation> {
 
 
 }
-*/

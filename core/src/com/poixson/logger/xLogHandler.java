@@ -1,4 +1,3 @@
-/*
 package com.poixson.logger;
 
 import java.util.concurrent.TimeUnit;
@@ -151,4 +150,3 @@ public abstract class xLogHandler {
 
 
 }
-*/

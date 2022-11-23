@@ -1,4 +1,3 @@
-/*
 package com.poixson.threadpool;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -157,4 +156,3 @@ public class xThreadPoolTask extends xRunnable {
 
 
 }
-*/

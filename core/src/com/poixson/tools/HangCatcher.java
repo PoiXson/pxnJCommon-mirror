@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -155,4 +154,3 @@ public class HangCatcher implements xStartable {
 
 
 }
-*/

@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools;
 
 import static com.poixson.logger.xLog.XLog;
@@ -194,4 +193,3 @@ public class xLockFile {
 
 
 }
-*/

@@ -1,4 +1,3 @@
-/*
 package com.poixson.app;
 
 import java.io.IOException;
