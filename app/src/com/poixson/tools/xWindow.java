@@ -188,7 +188,6 @@ public abstract class xWindow extends JFrame implements xCloseable {
 
 
 
-	@Override
 	public xLog log() {
 		return guiUtils.log();
 	}
