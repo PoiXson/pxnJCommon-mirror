@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools;
 
 import java.awt.LayoutManager;
@@ -197,4 +196,3 @@ public abstract class xWindow extends JFrame implements xCloseable {
 
 
 }
-*/

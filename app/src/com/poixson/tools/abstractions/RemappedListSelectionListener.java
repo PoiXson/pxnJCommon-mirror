@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools.abstractions;
 
 import javax.swing.event.ListSelectionEvent;
@@ -25,4 +24,3 @@ implements ListSelectionListener {
 
 
 }
-*/

@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools;
 
 import java.awt.AWTException;
@@ -54,4 +53,3 @@ public abstract class xSystemTray {
 
 
 }
-*/
