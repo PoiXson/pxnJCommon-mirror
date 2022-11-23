@@ -3,13 +3,13 @@ package com.poixson.tools;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.poixson.abstractions.xStartable;
 import com.poixson.exceptions.RequiredArgumentException;
+import com.poixson.tools.abstractions.xStartable;
 import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.Utils;
 
 
-public class HangCatcher implements xStartable {
+public class HangCatcher implements xStartable, Runnable {
 
 	public static final long DEFAULT_TIMEOUT = 10000L; // 10s
 	public static final long DEFAULT_SLEEP   = 100L;   // 100ms

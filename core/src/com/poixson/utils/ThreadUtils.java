@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.poixson.logger.xLog;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.xTime;
 import com.poixson.tools.abstractions.xCallable;
@@ -71,6 +70,8 @@ public final class ThreadUtils {
 			return -1;
 		return threadNames.length;
 	}
+//TODO
+/*
 	// display threads still running
 	public static void DisplayStillRunning(final xLog log) {
 //TODO
@@ -94,6 +95,7 @@ public final class ThreadUtils {
 		}
 		log.warning( msg.toString() );
 	}
+*/
 
 
 

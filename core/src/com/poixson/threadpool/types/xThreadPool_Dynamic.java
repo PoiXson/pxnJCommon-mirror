@@ -1,7 +1,7 @@
 package com.poixson.threadpool.types;
 
 
-public class xThreadPool_Dynamic extends xThreadPool_MultiWorkers {
+public class xThreadPool_Dynamic extends xThreadPool_Multi {
 
 
 

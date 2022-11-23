@@ -15,6 +15,7 @@ import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.Keeper;
+import com.poixson.tools.xTime;
 import com.poixson.tools.abstractions.RunnableMethod;
 import com.poixson.tools.abstractions.xStartable;
 import com.poixson.utils.Utils;
@@ -25,21 +26,20 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	public static final int  HARD_MAX_WORKERS = 100;
 	public static final int  DEFAULT_THREAD_PRIORITY = Thread.NORM_PRIORITY;
 
+	public final String poolName;
+
 	public enum TaskPriority {
 		NOW,
 		LATER,
 		LAZY
 	};
 
-	protected static final ConcurrentHashMap<String, xThreadPool> pools = new ConcurrentHashMap<String, xThreadPool>(3);
-
-	public final String poolName;
-
 	// pool state
 	protected        final AtomicBoolean running     = new AtomicBoolean(false);
 	protected        final AtomicBoolean stopping    = new AtomicBoolean(false);
 	protected static final AtomicBoolean StoppingAll = new AtomicBoolean(false);
 
+	protected static final ConcurrentHashMap<String, xThreadPool> pools = new ConcurrentHashMap<String, xThreadPool>(3);
 	protected final AtomicBoolean keepOneAlive = new AtomicBoolean(true);
 
 	protected final ThreadGroup threadGroup;
