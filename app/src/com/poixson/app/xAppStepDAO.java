@@ -18,7 +18,8 @@ public class xAppStepDAO implements RunnableNamed {
 	public final xAppStep anno;
 	public final int      step;
 	public final StepType type;
-	public final boolean  multi;
+//TODO
+//	public final boolean  multi;
 	public final PauseWhen pause;
 
 	public final String title;
@@ -44,7 +45,8 @@ public class xAppStepDAO implements RunnableNamed {
 				? anno.step()
 				: 0 - Math.abs(anno.step())
 			);
-		this.multi = anno.multi();
+//TODO
+//		this.multi = anno.multi();
 		this.pause = anno.pause();
 		if (Utils.notEmpty(anno.title())) {
 			this.title = anno.title();
@@ -133,10 +135,11 @@ public class xAppStepDAO implements RunnableNamed {
 
 
 
-	// multi step
-	public boolean isMultiStep() {
-		return this.multi;
-	}
+//TODO
+//	// multi step
+//	public boolean isMultiStep() {
+//		return this.multi;
+//	}
 
 
 

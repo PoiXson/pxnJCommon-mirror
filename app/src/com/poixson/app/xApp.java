@@ -1,26 +1,36 @@
 package com.poixson.app;
+/*
+ * Startup sequence
+ *    5  startup time - xApp
+ *
+ * Shutdown sequence
+ *   50  stop thread pools - xApp
+ *   10  garbage collect   - xApp
+ *    5  uptime            - xApp
+ *    1  exit              - xApp
+ */
 
 import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.app.xAppStep.StepType;
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.logger.xDebug;
 import com.poixson.logger.xLog;
 import com.poixson.logger.xLogHandler;
 import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.AppProps;
 import com.poixson.tools.Failure;
+import com.poixson.tools.HangCatcher;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;
 import com.poixson.tools.xTime;
-import com.poixson.tools.xTimeU;
 import com.poixson.tools.abstractions.RunnableMethod;
 import com.poixson.tools.abstractions.xFailable;
 import com.poixson.tools.abstractions.xStartable;
@@ -29,26 +39,18 @@ import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.Utils;
 
 
-//AttachedLogger
+//TODO: AttachedLogger
 public abstract class xApp implements xStartable, Runnable, xFailable {
-/ *
- * Startup sequence
- *    5  startup time - xApp
- *
- * Shutdown sequence
- *   50  stop thread pools - xApp
- *   10  garbage collect   - xApp
- *    5  uptime
- * /
-
-	public static final xTime EXIT_TIMEOUT = new xTime(200L);
 
 	// app instances
 	protected static final CopyOnWriteArraySet<xApp> apps = new CopyOnWriteArraySet<xApp>();
-	protected final AtomicReference<String[]> args = new AtomicReference<String[]>(null);
+	protected static final xTime EXIT_TIMEOUT = new xTime(200L);
+	protected final AtomicReference<Failure> failed = new AtomicReference<Failure>(null);
+	protected final AtomicReference<HangCatcher> hangcatcher = new AtomicReference<HangCatcher>(null);
 
 	protected final xTime startTime = new xTime();
 	protected final AppProps props;
+	protected final AtomicReference<String[]> args = new AtomicReference<String[]>(null);
 
 	protected final AtomicInteger state  = new AtomicInteger(xAppDefines.STATE_OFF);
 	protected final AtomicBoolean paused = new AtomicBoolean(false);
@@ -57,30 +59,47 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 	protected final AtomicReference<xAppStepLoader> stepLoader = new AtomicReference<xAppStepLoader>(null);
 	protected final AtomicReference<xAppStepDAO>   nextStepDAO = new AtomicReference<xAppStepDAO>(null);
 
-	protected final AtomicReference<Failure> failed = new AtomicReference<Failure>(null);
-
 	protected final CopyOnWriteArraySet<Runnable> hookReady = new CopyOnWriteArraySet<Runnable>();
 
 
 
-	@SuppressWarnings("unchecked")
-	public static <T extends xApp> T getApp(final Class<T> clss) {
-		if (clss == null) throw new RequiredArgumentException("clss");
+	protected static void AddApp(final xApp app) {
+		if (app == null) throw new RequiredArgumentException("app");
+		final String appClassName = app.getClass().getName();
+		synchronized (apps) {
+			final Iterator<xApp> it = apps.iterator();
+			while (it.hasNext()) {
+				final xApp a = it.next();
+				final String clss = a.getClass().getName();
+				if (appClassName.equals(clss))
+					throw new RuntimeException("App of this type already active: " + appClassName);
+			}
+			apps.add(app);
+		}
+	}
+	public static xApp Get(final Class<xApp> classType) {
+		if (classType == null) throw new RequiredArgumentException("classType");
+		return Get(classType.getName());
+	}
+	public static xApp Get(final String classType) {
+		if (Utils.isEmpty(classType)) throw new RequiredArgumentException("classType");
 		final Iterator<xApp> it = apps.iterator();
 		while (it.hasNext()) {
 			final xApp app = it.next();
-			if (clss.isInstance(app))
-				return (T) app;
+			final String clss = app.getClass().getName();
+			if (classType.equals(clss))
+				return app;
 		}
 		return null;
 	}
-	public static xApp[] getApps() {
+	public static xApp[] GetApps() {
 		return apps.toArray(new xApp[0]);
 	}
 
 
 
 	protected xApp() {
+		AddApp(this);
 		// load app.properties
 		{
 			final AppProps props;
@@ -93,7 +112,8 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 			}
 			this.props = props;
 		}
-		xDebug.init();
+//TODO
+//		xDebug.init();
 		xLog.Get();
 		// search for .debug file
 		if (Utils.notEmpty(xAppDefines.SEARCH_DEBUG_FILES)) {
@@ -103,7 +123,8 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 					xAppDefines.SEARCH_DEBUG_PARENTS
 				);
 			if (result != null) {
-				xDebug.setDebug();
+//TODO
+//				xDebug.setDebug();
 			}
 		}
 	}
@@ -152,9 +173,8 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 			return;
 		}
 		this.log().title("Starting %s..", this.getTitle());
-//TODO
-//		// start hang catcher
-//		this.startHangCatcher();
+		// start hang catcher
+		this.startHangCatcher();
 		// queue first step
 		this.nextStepDAO.set(null);
 		this.queueNextStep();
@@ -193,9 +213,8 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 			return;
 		}
 		this.log().title("Stopping %s..", this.getTitle());
-//TODO
-//		// start hang catcher
-//		this.startHangCatcher();
+		// start hang catcher
+		this.startHangCatcher();
 		// queue first step
 		this.nextStepDAO.set(null);
 		this.queueNextStep();
@@ -221,6 +240,10 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 	protected void finishedStartup() {
 	}
 	protected void finishedShutdown() {
+	}
+
+	public void addHookReady(final Runnable run) {
+		this.hookReady.add(run);
 	}
 
 
@@ -256,15 +279,13 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		if (this.hasFailed()) return;
 		if (dao != null) {
 			this.log_loader().fine("@|white,bold %d - %s|@", dao.step, dao.getTaskName());
-//TODO
-//			this.resetHangCatcher();
+			this.resetHangCatcher();
 			try {
 				dao.run();
 			} catch (Exception e) {
 				this.fail(e);
 			}
-//TODO
-//			this.resetHangCatcher();
+			this.resetHangCatcher();
 			if (dao.isPauseAfter()) {
 				this.pause();
 			}
@@ -273,9 +294,10 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		this.queueNextStep();
 		if (dao == null) {
 			this.queue();
-		} else
-		if (!dao.isMultiStep()) {
-			this.queue();
+//TODO
+//		} else
+//		if (!dao.isMultiStep()) {
+//			this.queue();
 		}
 	}
 	public void queue() {
@@ -352,15 +374,6 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 
-	public int getExitCode() {
-		final Failure failure = this.failed.get();
-		if (failure == null)
-			return 0;
-		return failure.getExitCode();
-	}
-
-
-
 	public void pause() {
 		this.paused.set(true);
 		this.log_loader()
@@ -425,8 +438,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 	protected void doFailed() {
-//TODO
-//		this.stopHangCatcher();
+		this.stopHangCatcher();
 		System.exit( this.getExitCode() );
 	}
 	@Override
@@ -436,13 +448,55 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 
+	public int getExitCode() {
+		final Failure failure = this.failed.get();
+		if (failure == null)
+			return 0;
+		return failure.getExitCode();
+	}
+
+
+
 	// -------------------------------------------------------------------------------
-	// hooks
+	// hang catcher
 
 
 
-	public void addHookReady(final Runnable run) {
-		this.hookReady.add(run);
+	protected HangCatcher startHangCatcher() {
+		{
+			final HangCatcher catcher = this.hangcatcher.get();
+			if (catcher != null)
+				return catcher;
+		}
+		{
+			final HangCatcher catcher = new HangCatcher(
+				new Runnable() {
+					@Override
+					public void run() {
+//TODO
+					}
+				}
+			);
+			if (this.hangcatcher.compareAndSet(null, catcher)) {
+				catcher.start();
+				return catcher;
+			}
+		}
+		return this.startHangCatcher();
+	}
+	protected void stopHangCatcher() {
+		final HangCatcher catcher = this.hangcatcher.getAndSet(null);
+		if (catcher != null) {
+			catcher.stop();
+		}
+	}
+	protected boolean resetHangCatcher() {
+		final HangCatcher catcher = this.hangcatcher.get();
+		if (catcher != null) {
+			catcher.resetTimeout();
+			return true;
+		}
+		return false;
 	}
 
 
@@ -570,7 +624,8 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 				poolMain.stopMain();
 				poolMain.join(EXIT_TIMEOUT);
 				ThreadUtils.Sleep(10L);
-				ThreadUtils.DisplayStillRunning( xApp.this.log() );
+//TODO
+//				ThreadUtils.DisplayStillRunning( xApp.this.log() );
 				StdIO.OriginalOut.println();
 			System.exit(this.exitCode);
 				// exit
@@ -626,4 +681,3 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 }
-*/

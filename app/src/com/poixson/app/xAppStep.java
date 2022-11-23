@@ -17,8 +17,6 @@ public @interface xAppStep {
 	int      step()  default 100;
 	String   title() default "";
 
-	boolean  multi() default false;
-
 	public enum PauseWhen {NONE, BEFORE, AFTER};
 	PauseWhen pause() default PauseWhen.NONE;
 
