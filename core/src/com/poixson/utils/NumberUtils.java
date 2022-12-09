@@ -525,6 +525,26 @@ public final class NumberUtils {
 
 
 
+	public static double RotateX(final double x, final double y, final double angle) {
+		final double ang = Math.PI * angle;
+		return (Math.sin(ang) * y) - (Math.cos(ang) * x);
+	}
+	public static double RotateY(final double x, final double y, final double angle) {
+		final double ang = Math.PI * angle;
+		return (Math.sin(ang) * x) + (Math.cos(ang) * y);
+	}
+
+	public static float RotateX(final float x, final float y, final float angle) {
+		final float ang = (float)( Math.PI * ((double)angle) );
+		return (float) ((Math.sin(ang) * y) - (Math.cos(ang) * x));
+	}
+	public static float RotateY(final float x, final float y, final float angle) {
+		final float ang = (float)( Math.PI * ((double)angle) );
+		return (float) ((Math.sin(ang) * x) + (Math.cos(ang) * y));
+	}
+
+
+
 	// -------------------------------------------------------------------------------
 	// random number
 
