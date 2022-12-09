@@ -305,6 +305,14 @@ public class FastNoiseLiteF {
 	}
 
 
+	public float getNoiseRot(float x, float y, float angle) {
+		return this.getNoise(
+			NumberUtils.RotateX(x, y, angle),
+			NumberUtils.RotateY(x, y, angle)
+		);
+	}
+
+
 	/// <summary>
 	/// 2D noise at given position using current settings
 	/// </summary>
