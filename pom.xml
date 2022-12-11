@@ -6,7 +6,7 @@
 	<name>pxnCommon</name>
 	<artifactId>common</artifactId>
 	<groupId>com.poixson</groupId>
-	<version>4.0.0</version>
+	<version>4.0.1</version>
 	<packaging>pom</packaging>
 	<url>http://poixson.com</url>
 	<scm>
