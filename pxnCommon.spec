@@ -1,4 +1,4 @@
-Name            : pxnCommon
+Name            : pxnJCommon
 Summary         : Common library for PoiXson java projects
 Version         : 4.0.1
 Release         : 1
