@@ -3,6 +3,7 @@ package com.poixson.utils;
 import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.poixson.tools.Keeper;
 
@@ -15,6 +16,8 @@ public final class NumberUtils {
 	 * Max valid tcp/udp port number.
 	 */
 	public static final int MAX_PORT = 65535;
+
+	protected static final AtomicInteger Last10K = new AtomicInteger(0);
 
 
 
@@ -578,6 +581,14 @@ public final class NumberUtils {
 			seed += i;
 		}
 		throw new IllegalAccessError("Failed to generate a random number");
+	}
+
+
+
+	public static int Rnd10K() {
+		final int rnd = NumberUtils.GetNewRandom(0, 9999, Last10K.get());
+		Last10K.set(rnd);
+		return rnd;
 	}
 
 
