@@ -1,11 +1,8 @@
 package com.poixson.tools.abstractions;
 
 
-public interface xStartable {
+public interface xStartable extends xStartStop {
 
-
-	public void start();
-	public void stop();
 
 	public boolean isRunning();
 	public boolean isStopping();
