@@ -50,7 +50,7 @@ public class AppProps {
 		return new AppProps(props);
 	}
 	// load app.properties file
-	public AppProps(final Properties props) {
+	protected AppProps(final Properties props) {
 		if (props == null) throw new RequiredArgumentException("props");
 		this.name      = props.getProperty("name");
 		this.title     = props.getProperty("title");
