@@ -578,6 +578,28 @@ public class Test_StringUtils {
 
 
 
+	// -------------------------------------------------------------------------------
+	// compare versions
+
+
+
+	@Test
+	public void testCompareVersions() {
+		Assert.assertEquals(       0, StringUtils.CompareVersions("1.2.3", "1.2.3"));
+		Assert.assertEquals(       1, StringUtils.CompareVersions("1.2.3", "1.2.4"));
+		Assert.assertEquals(      -1, StringUtils.CompareVersions("1.2.3", "1.2.2"));
+		Assert.assertEquals(    1000, StringUtils.CompareVersions("1.2.0", "1.3.0"));
+		Assert.assertEquals(   -1000, StringUtils.CompareVersions("1.2.0", "1.1.0"));
+		Assert.assertEquals( 2000000, StringUtils.CompareVersions("1.2.3", "3.2.3"));
+		Assert.assertEquals(-1000000, StringUtils.CompareVersions("1.2.3", "0.2.3"));
+		Assert.assertEquals(      -3, StringUtils.CompareVersions("1.2.3", "1.2"  ));
+		Assert.assertEquals(       3, StringUtils.CompareVersions("1.2",   "1.2.3"));
+		Assert.assertEquals(    -997, StringUtils.CompareVersions("1.3",   "1.2.3"));
+		Assert.assertEquals(    2003, StringUtils.CompareVersions("1",     "1.2.3"));
+	}
+
+
+
 //TODO: remove this?
 /*
 	// -------------------------------------------------------------------------------

@@ -1112,6 +1112,31 @@ public final class StringUtils {
 
 
 
+	// -------------------------------------------------------------------------------
+	// version strings
+
+
+
+	public static int CompareVersions(final String versionA, final String versionB) {
+		final String[] partsA = versionA.split("[.]");
+		final String[] partsB = versionB.split("[.]");
+		final int num_parts = Math.max(partsA.length, partsB.length);
+		int sizeA = partsA.length;
+		int sizeB = partsB.length;
+		int valA, valB, pow;
+		int diff = 0;
+		for (int i=0; i<num_parts; i++) {
+			pow = (int) Math.pow(10.0, (num_parts-i-1) * 3.0);
+			valA = (i < sizeA ? Integer.parseInt(partsA[i]) : 0);
+			valB = (i < sizeB ? Integer.parseInt(partsB[i]) : 0);
+			if (valA > valB
+			||  valA < valB) { diff += (valB - valA) * pow; continue; }
+		}
+		return diff;
+	}
+
+
+
 //TODO: remove this?
 /*
 	// -------------------------------------------------------------------------------
