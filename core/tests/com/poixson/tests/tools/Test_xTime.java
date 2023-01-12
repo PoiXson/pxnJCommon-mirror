@@ -67,13 +67,6 @@ public class Test_xTime {
 		Assert.assertEquals( 123L, time.get(TimeUnit.MILLISECONDS) );
 		Assert.assertEquals( "123ms", time.toString() );
 		Assert.assertEquals( 123L, time.ms() );
-		Assert.assertEquals( 20, (new xTime(20L, xTimeU.S)).seconds() );
-		Assert.assertEquals( 20, (new xTime(20L, xTimeU.M)).minutes() );
-		Assert.assertEquals( 20, (new xTime(20L, xTimeU.H)).hours()   );
-		Assert.assertEquals( 20, (new xTime(20L, xTimeU.D)).days()    );
-		Assert.assertEquals( 20, (new xTime(20L, xTimeU.W)).weeks()   );
-		Assert.assertEquals( 20, (new xTime(20L, xTimeU.MO)).months() );
-		Assert.assertEquals( 20, (new xTime(20L, xTimeU.Y)).years()   );
 		Assert.assertEquals( 20, (new xTime( 1L, xTimeU.S)).ticks(50L));
 	}
 

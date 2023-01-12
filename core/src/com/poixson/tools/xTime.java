@@ -71,27 +71,6 @@ public class xTime {
 	public long ticks(final long tick_length) {
 		return this.value.get() / tick_length;
 	}
-	public int seconds() {
-		return (int) xTimeU.S.convertFrom( this.value.get() );
-	}
-	public int minutes() {
-		return (int) xTimeU.M.convertFrom( this.value.get() );
-	}
-	public int hours() {
-		return (int) xTimeU.H.convertFrom( this.value.get() );
-	}
-	public int days() {
-		return (int) xTimeU.D.convertFrom( this.value.get() );
-	}
-	public int weeks() {
-		return (int) xTimeU.W.convertFrom( this.value.get() );
-	}
-	public int months() {
-		return (int) xTimeU.MO.convertFrom( this.value.get() );
-	}
-	public int years() {
-		return (int) xTimeU.Y.convertFrom( this.value.get() );
-	}
 
 
 
