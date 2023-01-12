@@ -68,8 +68,8 @@ public class xTime {
 	public long ms() {
 		return this.value.get();
 	}
-	public int ticks() {
-		return (int) xTimeU.T.convertFrom( this.value.get() );
+	public long ticks(final long tick_length) {
+		return this.value.get() / tick_length;
 	}
 	public int seconds() {
 		return (int) xTimeU.S.convertFrom( this.value.get() );
