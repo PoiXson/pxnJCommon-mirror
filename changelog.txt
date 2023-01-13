@@ -2,6 +2,15 @@ pxnJCommon - Common library for PoiXson java projects
 
 
 
+2023-01-13 - 4.0.3
+==================
+* added new StringUtils::CompareVersions() function
+* added xStartStop interface to split uses of xStartable
+* added Rnd10K() convenience function
+* changed xTime->ticks() to take an argument tick_length
+* removed old xTime int getter functions
+
+
 2022-12-29 - 4.0.2
 ==================
 * fixed GetRandom() function
