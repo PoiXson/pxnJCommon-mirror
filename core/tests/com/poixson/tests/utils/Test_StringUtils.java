@@ -22,6 +22,7 @@ public class Test_StringUtils {
 
 
 	@Test
+	@SuppressWarnings("boxing")
 	public void testToString() {
 		Assert.assertEquals( "Abcdef", StringUtils.ToString("Abcdef"         ) );
 		Assert.assertEquals( "Abcdef", StringUtils.ToString((Object) "Abcdef") );
@@ -95,6 +96,7 @@ public class Test_StringUtils {
 
 
 	@Test
+	@SuppressWarnings("boxing")
 	public void testIsAlpha() {
 		Assert.assertEquals( true,  StringUtils.IsAlpha("Abc"    ) );
 		Assert.assertEquals( false, StringUtils.IsAlpha("A b c"  ) );
@@ -104,6 +106,7 @@ public class Test_StringUtils {
 		Assert.assertEquals( false, StringUtils.IsAlpha(null     ) );
 	}
 	@Test
+	@SuppressWarnings("boxing")
 	public void testIsAlphaSpace() {
 		Assert.assertEquals( true,  StringUtils.IsAlphaSpace("Abc"    ) );
 		Assert.assertEquals( true,  StringUtils.IsAlphaSpace("A b c"  ) );
@@ -113,6 +116,7 @@ public class Test_StringUtils {
 		Assert.assertEquals( false, StringUtils.IsAlphaSpace(null     ) );
 	}
 	@Test
+	@SuppressWarnings("boxing")
 	public void testIsAlphaNum() {
 		Assert.assertEquals( true,  StringUtils.IsAlphaNum("Abc"    ) );
 		Assert.assertEquals( false, StringUtils.IsAlphaNum("A b c"  ) );
@@ -122,6 +126,7 @@ public class Test_StringUtils {
 		Assert.assertEquals( false, StringUtils.IsAlphaNum(null     ) );
 	}
 	@Test
+	@SuppressWarnings("boxing")
 	public void testIsAlphaNumSpace() {
 		Assert.assertEquals( true,  StringUtils.IsAlphaNumSpace("Abc"    ) );
 		Assert.assertEquals( true,  StringUtils.IsAlphaNumSpace("A b c"  ) );
@@ -134,6 +139,7 @@ public class Test_StringUtils {
 
 
 	@Test
+	@SuppressWarnings("boxing")
 	public void testMatchString() {
 		Assert.assertEquals( true,  StringUtils.MatchString("Abc", "Abc") );
 		Assert.assertEquals( false, StringUtils.MatchString("Abc", "abc") );
@@ -145,6 +151,7 @@ public class Test_StringUtils {
 		Assert.assertEquals( true,  StringUtils.MatchString(null,  ""   ) );
 	}
 	@Test
+	@SuppressWarnings("boxing")
 	public void testMatchStringIgnoreCase() {
 		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase("Abc", "Abc") );
 		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase("Abc", "abc") );
@@ -156,6 +163,7 @@ public class Test_StringUtils {
 		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase(null,  ""   ) );
 	}
 	@Test
+	@SuppressWarnings("boxing")
 	public void testMatchStringExact() {
 		Assert.assertEquals( true,  StringUtils.MatchStringExact("Abc", "Abc") );
 		Assert.assertEquals( false, StringUtils.MatchStringExact("Abc", "abc") );
