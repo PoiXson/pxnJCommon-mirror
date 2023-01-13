@@ -4,6 +4,7 @@ package com.poixson.logger;
 public interface xLogRecord {
 
 
+	@Override
 	public String   toString();
 	public xLevel   getLevel();
 	public String[] getNameTree();

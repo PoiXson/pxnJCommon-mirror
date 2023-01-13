@@ -288,7 +288,7 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 				String.format(
 					"%s-w%d",
 					this.pool.getPoolName(),
-					this.workerIndex
+					Long.valueOf(this.workerIndex)
 				);
 			this.workerNameCached.set(name);
 		}

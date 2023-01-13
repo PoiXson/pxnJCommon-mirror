@@ -443,7 +443,7 @@ public final class Utils {
 		final Iterator<Boolean> it = collect.iterator();
 		int index = 0;
 		while (it.hasNext()) {
-			result[index++] = it.next();
+			result[index++] = it.next().booleanValue();
 		}
 		return result;
 	}
@@ -456,7 +456,7 @@ public final class Utils {
 		final Iterator<Integer> it = collect.iterator();
 		int index = 0;
 		while (it.hasNext()) {
-			result[index] = it.next();
+			result[index] = it.next().intValue();
 			index++;
 		}
 		return result;
@@ -470,7 +470,7 @@ public final class Utils {
 		final Iterator<Byte> it = collect.iterator();
 		int index = 0;
 		while (it.hasNext()) {
-			result[index] = it.next();
+			result[index] = it.next().byteValue();
 			index++;
 		}
 		return result;
@@ -484,7 +484,7 @@ public final class Utils {
 		final Iterator<Short> it = collect.iterator();
 		int index = 0;
 		while (it.hasNext()) {
-			result[index] = it.next();
+			result[index] = it.next().shortValue();
 			index++;
 		}
 		return result;
@@ -498,7 +498,7 @@ public final class Utils {
 		final Iterator<Long> it = collect.iterator();
 		int index = 0;
 		while (it.hasNext()) {
-			result[index] = it.next();
+			result[index] = it.next().longValue();
 			index++;
 		}
 		return result;
@@ -512,7 +512,7 @@ public final class Utils {
 		final Iterator<Double> it = collect.iterator();
 		int index = 0;
 		while (it.hasNext()) {
-			result[index] = it.next();
+			result[index] = it.next().doubleValue();
 			index++;
 		}
 		return result;
@@ -526,7 +526,7 @@ public final class Utils {
 		final Iterator<Float> it = collect.iterator();
 		int index = 0;
 		while (it.hasNext()) {
-			result[index] = it.next();
+			result[index] = it.next().floatValue();
 			index++;
 		}
 		return result;

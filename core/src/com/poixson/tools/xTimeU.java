@@ -44,7 +44,7 @@ public enum xTimeU {
 
 
 	private xTimeU(final char chr, final String name,
-			final TimeUnit timeUnit, final Long value) {
+			final TimeUnit timeUnit, final long value) {
 		this.chr      = chr;
 		this.name     = name;
 		this.timeUnit = timeUnit;

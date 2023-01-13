@@ -26,7 +26,8 @@ public class RollingList<E> extends LinkedList<E> {
 
 
 
-	public boolean add(E entry) {
+	@Override
+	public boolean add(final E entry) {
 		final boolean result = super.add(entry);
 		if (this.autoPrune)
 			this.prune();

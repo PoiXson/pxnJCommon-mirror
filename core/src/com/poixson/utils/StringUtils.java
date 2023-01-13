@@ -979,8 +979,6 @@ public final class StringUtils {
 	public static String ReplaceEnd(final String data,
 			final char replaceWhat, final char replaceWith) {
 		if (Utils.isEmpty(data))        return data;
-		if (Utils.isEmpty(replaceWhat)) return data;
-		if (Utils.isEmpty(replaceWith)) return data;
 		final int size = data.length();
 		int index = 0;
 		while (true) {

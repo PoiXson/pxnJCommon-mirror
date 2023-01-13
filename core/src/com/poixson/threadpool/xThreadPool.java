@@ -641,12 +641,12 @@ public abstract class xThreadPool implements xStartable, Runnable {
 		return
 			String.format(
 				"Queued: %d  Threads: %d[%d]  Active/Free: %d/%d  Finished: %d",
-				this.getQueueCount(),
-				this.getWorkerCount(),
-				this.getMaxWorkers(),
-				this.getActiveWorkerCount(),
-				this.getInactiveWorkerCount(),
-				this.getRunCount()
+				Integer.valueOf( this.getQueueCount()          ),
+				Integer.valueOf( this.getWorkerCount()         ),
+				Integer.valueOf( this.getMaxWorkers()          ),
+				Integer.valueOf( this.getActiveWorkerCount()   ),
+				Integer.valueOf( this.getInactiveWorkerCount() ),
+				Long.valueOf(    this.getRunCount()            )
 			);
 	}
 

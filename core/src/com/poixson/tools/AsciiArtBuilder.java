@@ -89,13 +89,14 @@ public class AsciiArtBuilder {
 				int lastX = -1;
 				COLOR_LOOP:
 				for (final Integer posX : ordered) {
+					final int posXX = posX.intValue();
 					final String colorStr = colorsMap.get(posX);
 					if (Utils.isEmpty(colorStr))
 						continue COLOR_LOOP;
 					// color doesn't start at front of line
 					if (lastX == -1) {
 						lastX = 0;
-						if (posX > 0) {
+						if (posXX > 0) {
 							if (bgColor != null) {
 								withinTag = true;
 								buf.append("@|")
@@ -105,8 +106,8 @@ public class AsciiArtBuilder {
 						}
 					}
 					// fill up to first color
-					if (posX > 0) {
-						buf.append( line.substring(lastX, posX) );
+					if (posXX > 0) {
+						buf.append( line.substring(lastX, posXX) );
 					}
 					if (withinTag) {
 						buf.append("|@");
@@ -120,7 +121,7 @@ public class AsciiArtBuilder {
 					}
 					buf.append(colorStr)
 						.append(' ');
-					lastX = posX;
+					lastX = posXX;
 				} // end COLOR_LOOP
 				if (lastX < line.length()) {
 					buf.append(
@@ -186,8 +187,8 @@ public class AsciiArtBuilder {
 			throw new IllegalArgumentException(
 				String.format(
 					"posY is out of range: %d > %d",
-					posY,
-					this.colorLocations.size()
+					Integer.valueOf(posY),
+					Integer.valueOf(this.colorLocations.size())
 				)
 			);
 		}

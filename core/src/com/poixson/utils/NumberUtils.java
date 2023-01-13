@@ -364,7 +364,7 @@ public final class NumberUtils {
 		if (obj instanceof Boolean)
 			return (Boolean) obj;
 		if (obj instanceof Integer)
-			return ( ((Integer)obj).intValue() != 0 );
+			return Boolean.valueOf( ((Integer)obj).intValue() != 0 );
 		if (obj instanceof String) {
 			final String str = (String) obj;
 			for (final String entry : TRUE_VALUES) {

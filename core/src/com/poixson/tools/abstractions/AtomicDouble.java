@@ -130,6 +130,7 @@ public class AtomicDouble {
 
 
 
+	@Override
 	public String toString() {
 		return Double.toString( this.get() );
 	}
