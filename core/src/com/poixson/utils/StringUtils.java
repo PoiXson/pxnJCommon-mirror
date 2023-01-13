@@ -1123,21 +1123,28 @@ public final class StringUtils {
 	public static double CompareVersions(final String versionA, final String versionB) {
 		if (versionA.endsWith("-SNAPSHOT")) return CompareVersions(versionA.substring(0, versionA.length()-9), versionB) - 0.5;
 		if (versionB.endsWith("-SNAPSHOT")) return CompareVersions(versionA, versionB.substring(0, versionB.length()-9)) + 0.5;
-		final String[] partsA = versionA.split("[.]");
-		final String[] partsB = versionB.split("[.]");
-		final int num_parts = Math.max(partsA.length, partsB.length);
-		int sizeA = partsA.length;
-		int sizeB = partsB.length;
-		int valA, valB, pow;
-		int diff = 0;
-		for (int i=0; i<num_parts; i++) {
-			pow = (int) Math.pow(10.0, (num_parts-i-1) * 3.0);
-			valA = (i < sizeA ? Integer.parseInt(partsA[i]) : 0);
-			valB = (i < sizeB ? Integer.parseInt(partsB[i]) : 0);
-			if (valA > valB
-			||  valA < valB) { diff += (valB - valA) * pow; continue; }
+		{
+			int pos;
+			pos = versionA.indexOf('-'); if (pos > 0) return CompareVersions(versionA.substring(0, pos), versionB);
+			pos = versionB.indexOf('-'); if (pos > 0) return CompareVersions(versionA, versionB.substring(0, pos));
 		}
-		return (double) diff;
+		{
+			final String[] partsA = versionA.split("[.]");
+			final String[] partsB = versionB.split("[.]");
+			final int num_parts = Math.max(partsA.length, partsB.length);
+			int sizeA = partsA.length;
+			int sizeB = partsB.length;
+			int valA, valB, pow;
+			int diff = 0;
+			for (int i=0; i<num_parts; i++) {
+				pow = (int) Math.pow(10.0, (num_parts-i-1) * 3.0);
+				valA = (i < sizeA ? Integer.parseInt(partsA[i]) : 0);
+				valB = (i < sizeB ? Integer.parseInt(partsB[i]) : 0);
+				if (valA > valB
+				||  valA < valB) { diff += (valB - valA) * pow; continue; }
+			}
+			return (double) diff;
+		}
 	}
 
 

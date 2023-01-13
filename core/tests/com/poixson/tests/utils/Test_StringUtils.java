@@ -599,6 +599,7 @@ public class Test_StringUtils {
 		Assert.assertEquals(       0.5, StringUtils.CompareVersions("1.2.3", "1.2.3-SNAPSHOT"), 0.0);
 		Assert.assertEquals(      -0.5, StringUtils.CompareVersions("1.2.3-SNAPSHOT", "1.2.3"), 0.0);
 		Assert.assertEquals(      -0.5, StringUtils.CompareVersions("1.2.4", "1.2.3-SNAPSHOT"), 0.0);
+		Assert.assertEquals(       0.5, StringUtils.CompareVersions("1.2.3", "1.2.3-R0.1-SNAPSHOT"), 0.0);
 	}
 
 
