@@ -1117,7 +1117,14 @@ public final class StringUtils {
 
 
 
-	public static int CompareVersions(final String versionA, final String versionB) {
+	//   = | a = b
+	//   + | a < b
+	//   - | a > b
+	// +.5 | a = b-snap
+	// -.5 | a-snap = b
+	public static double CompareVersions(final String versionA, final String versionB) {
+		if (versionA.endsWith("-SNAPSHOT")) return CompareVersions(versionA.substring(0, versionA.length()-9), versionB) - 0.5;
+		if (versionB.endsWith("-SNAPSHOT")) return CompareVersions(versionA, versionB.substring(0, versionB.length()-9)) + 0.5;
 		final String[] partsA = versionA.split("[.]");
 		final String[] partsB = versionB.split("[.]");
 		final int num_parts = Math.max(partsA.length, partsB.length);
@@ -1132,7 +1139,7 @@ public final class StringUtils {
 			if (valA > valB
 			||  valA < valB) { diff += (valB - valA) * pow; continue; }
 		}
-		return diff;
+		return (double) diff;
 	}
 
 
