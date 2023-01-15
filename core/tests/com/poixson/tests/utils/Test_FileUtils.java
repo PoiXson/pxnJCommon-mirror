@@ -44,14 +44,7 @@ public class Test_FileUtils {
 		Assert.assertEquals( null, FileUtils.MergePaths() );
 		Assert.assertEquals( FileUtils.cwd()+"/abc", FileUtils.MergePaths(".", "abc") );
 		Assert.assertEquals( FileUtils.pwd()+"/abc", FileUtils.MergePaths(",", "abc") );
-		final Exception e =
-			Assert.assertThrows(
-				NullPointerException.class,
-				() -> {
-					FileUtils.MergePaths( (String) null );
-				}
-			);
-		Assert.assertEquals( "Cannot invoke \"String.split(String)\" because \"strings[index]\" is null", e.getMessage() );
+		Assert.assertEquals( null, FileUtils.MergePaths((String[])null) );
 	}
 
 
