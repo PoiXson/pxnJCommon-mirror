@@ -564,7 +564,7 @@ public final class NumberUtils {
 		if (seed == 0L)
 			return GetRandom(minNumber, maxNumber, 1L);
 		final Random gen = new Random(Utils.GetMS() * seed);
-		return gen.nextInt(minNumber, maxNumber+1);
+		return gen.nextInt(maxNumber - minNumber) + minNumber;
 	}
 
 	public static int GetNewRandom(final int minNumber, final int maxNumber, final int oldNumber) {
