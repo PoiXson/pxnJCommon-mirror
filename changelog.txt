@@ -2,6 +2,12 @@ pxnJCommon - Common library for PoiXson java projects
 
 
 
+2023-01-16 - 4.0.5
+==================
+* fixed NumberUtils::GetRandom() on some versions of java
+* build fixes for latest xbuild and jenkins
+
+
 2023-01-13 - 4.0.3
 ==================
 * added new StringUtils::CompareVersions() function
