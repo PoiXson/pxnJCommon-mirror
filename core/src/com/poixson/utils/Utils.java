@@ -403,10 +403,14 @@ public final class Utils {
 
 
 
-	public static boolean MatchUUID(final UUID expect, final UUID actual) {
-		if (expect == null || actual == null)
+	public static boolean EqualsUUID(final UUID uuidA, final UUID uuidB) {
+		if (uuidA == null || uuidB == null)
 			return false;
-		return (expect.compareTo(actual) == 0);
+		return (uuidA.compareTo(uuidB) == 0);
+	}
+	@Deprecated
+	public static boolean MatchUUID(final UUID uuidA, final UUID uuidB) {
+		return EqualsUUID(uuidA, uuidB);
 	}
 
 
