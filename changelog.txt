@@ -2,7 +2,7 @@ pxnJCommon - Common library for PoiXson java projects
 
 
 
-2023-02-05 - 4.0.7
+2023-02-05 - 4.0.8
 ==================
 * added JsonChunker - to split json streams
 * renamed EqualsUUID() function and deprecated MatchUUID()
