@@ -33,7 +33,7 @@ public class JsonChunker {
 	}
 	public void process(final char chr) {
 		if (chr == '\r') return;
-		if (this.buffer.isEmpty()) {
+		if (this.buffer.length() == 0) {
 			switch (chr) {
 			case '{': break;
 			case '\n': case ',':
