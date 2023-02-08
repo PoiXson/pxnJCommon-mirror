@@ -961,24 +961,24 @@ public final class StringUtils {
 
 
 	// replace with array
-	public static String ReplaceWith(final String data,
+	public static String ReplaceWith(final String str,
 			final String replaceWhat, final String[] withWhat) {
-		if (Utils.isEmpty(data))        return data;
-		if (Utils.isEmpty(replaceWhat)) return data;
-		if (Utils.isEmpty(withWhat))    return data;
+		if (Utils.isEmpty(str))         return str;
+		if (Utils.isEmpty(replaceWhat)) return str;
+		if (Utils.isEmpty(withWhat))    return str;
 		final StringBuilder result = new StringBuilder();
 		final int count = withWhat.length;
 		int currentPos = 0;
 		for (int i = 0; i < count; i++) {
-			final int thisPos = data.indexOf(replaceWhat, currentPos);
+			final int thisPos = str.indexOf(replaceWhat, currentPos);
 			if (thisPos > 0) {
-				result.append(data.substring(currentPos, thisPos));
+				result.append(str.substring(currentPos, thisPos));
 				result.append(withWhat[i]);
 				currentPos = thisPos + replaceWhat.length();
 			}
 		}
-		if (data.length() > currentPos) {
-			result.append( data.substring(currentPos) );
+		if (str.length() > currentPos) {
+			result.append( str.substring(currentPos) );
 		}
 		return result.toString();
 	}
