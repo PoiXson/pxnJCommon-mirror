@@ -982,6 +982,14 @@ public final class StringUtils {
 		}
 		return result.toString();
 	}
+	public static void ReplaceWith(final StringBuilder str,
+			final char replaceWhat, final char withWhat) {
+		final int len = str.length();
+		for (int i=0; i<len; i++) {
+			if (str.charAt(i) == replaceWhat)
+				str.setCharAt(i, withWhat);
+		}
+	}
 
 
 
