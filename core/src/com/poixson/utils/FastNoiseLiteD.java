@@ -112,7 +112,7 @@ public class FastNoiseLiteD {
 	private TransformType3D mTransformType3D = TransformType3D.DefaultOpenSimplex2;
 
 	private FractalType mFractalType = FractalType.None;
-	private int mOctaves = 3;
+	private int mOctaves = 1;
 	private double mLacunarity = 2.0;
 	private double mGain = 0.5;
 	private double mWeightedStrength = 0.0;
