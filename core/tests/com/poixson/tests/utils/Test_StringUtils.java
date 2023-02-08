@@ -485,8 +485,20 @@ public class Test_StringUtils {
 
 
 	@Test
-	public void testReplaceStringRange() {
-		Assert.assertEquals( "ab12ef", StringUtils.ReplaceStringRange("abcdef", "12", 2, 4) );
+	public void testReplaceInString() {
+		// String
+		Assert.assertEquals( "ab12efg", StringUtils.ReplaceInString("abcdefg", "12", 2) );
+		Assert.assertEquals( "ab12",    StringUtils.ReplaceInString("abcd",    "12", 2) );
+		Assert.assertEquals( "ab12",    StringUtils.ReplaceInString("abc",     "12", 2) );
+		Assert.assertEquals( "ab12",    StringUtils.ReplaceInString("ab",      "12", 2) );
+		Assert.assertEquals( "a12",     StringUtils.ReplaceInString("a",       "12", 2) );
+		// StringBuilder
+		final StringBuilder str = new StringBuilder();
+		str.setLength(0); str.append("abcdefg"); StringUtils.ReplaceInString(str, "12", 2); Assert.assertEquals( "ab12efg", str.toString());
+		str.setLength(0); str.append("abcd");    StringUtils.ReplaceInString(str, "12", 2); Assert.assertEquals( "ab12",    str.toString());
+		str.setLength(0); str.append("abc");     StringUtils.ReplaceInString(str, "12", 2); Assert.assertEquals( "ab12",    str.toString());
+		str.setLength(0); str.append("ab");      StringUtils.ReplaceInString(str, "12", 2); Assert.assertEquals( "ab12",    str.toString());
+		str.setLength(0); str.append("a");       StringUtils.ReplaceInString(str, "12", 2); Assert.assertEquals( "a12",     str.toString());
 	}
 
 

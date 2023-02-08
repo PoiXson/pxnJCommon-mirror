@@ -930,23 +930,32 @@ public final class StringUtils {
 
 
 
-	// replace range
-	public static String ReplaceStringRange(
-			final String str, final String chunk,
-			final int startPos, final int endPos) {
+	public static String ReplaceInString(final String str, final String chunk, final int pos) {
 		if (str == null) throw new RequiredArgumentException("str");
 		if (str.length() == 0) return chunk;
 		final StringBuilder result = new StringBuilder();
-		if (startPos > 0) {
-			result.append( str.substring(0, startPos) );
-		}
-		if (Utils.notEmpty(chunk)) {
-			result.append(chunk);
-		}
-		if (endPos < str.length()) {
-			result.append( str.substring(endPos) );
-		}
+		result.append(str);
+		ReplaceInString(result, chunk, pos);
 		return result.toString();
+	}
+	public static void ReplaceInString(final StringBuilder str, final String chunk, final int pos) {
+		if (str == null) throw new RequiredArgumentException("str");
+		if (str.length() == 0) return;
+		final int len_str   = str.length();
+		final int len_chunk = chunk.length();
+		for (int i=0; i<len_chunk; i++) {
+			if (pos+i >= len_str) {
+				str.append(chunk.substring(i));
+				return;
+			}
+			str.setCharAt(pos+i, chunk.charAt(i));
+		}
+	}
+	@Deprecated
+	public static String ReplaceStringRange(
+			final String str, final String chunk,
+			final int startPos, final int endPos) {
+		return ReplaceInString(str, chunk, startPos);
 	}
 
 
