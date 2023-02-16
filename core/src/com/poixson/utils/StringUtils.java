@@ -546,25 +546,39 @@ public final class StringUtils {
 
 
 
-	// ensure starts with
+	public static String ForceStarts(final char start, final String data) {
+		if (data == null)            return null;
+		if (data.isEmpty())          return Character.toString(start);
+		if (data.charAt(0) == start) return data;
+		return (new StringBuilder( data.length() + 1 ))
+				.append(start).append(data).toString();
+	}
+	public static String ForceEnds(final char end, final String data) {
+		if (data == null)   return null;
+		if (data.isEmpty()) return Character.toString(end);
+		final int len = data.length();
+		if (data.charAt(len-1) == end) return data;
+		return (new StringBuilder( data.length() + 1 ))
+				.append(data).append(end).toString();
+	}
+	public static String ForceStartsEnds(final char start, final char end, final String data) {
+		return ForceStarts(start, ForceEnds(end, data));
+	}
+
 	public static String ForceStarts(final String start, final String data) {
 		if (data == null)           return null;
 		if (data.startsWith(start)) return data;
 		return (new StringBuilder( start.length() + data.length() ))
 				.append(start).append(data).toString();
 	}
-	// ensure ends with
 	public static String ForceEnds(final String end, final String data) {
 		if (data == null)       return null;
 		if (data.endsWith(end)) return data;
 		return (new StringBuilder( data.length() + end.length() ))
 				.append(data).append(end).toString();
 	}
-
 	public static String ForceStartsEnds(final String start, final String end, final String data) {
-		return ForceStarts(start,
-				ForceEnds(end, data)
-			);
+		return ForceStarts(start, ForceEnds(end, data));
 	}
 
 

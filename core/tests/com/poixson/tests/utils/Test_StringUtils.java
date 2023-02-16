@@ -293,17 +293,29 @@ public class Test_StringUtils {
 
 	@Test
 	public void testForceStarts() {
+		// string
 		Assert.assertEquals( "aAbc", StringUtils.ForceStarts("a", "Abc") );
 		Assert.assertEquals( "abc",  StringUtils.ForceStarts("a", "abc") );
 		Assert.assertEquals( "a",    StringUtils.ForceStarts("a", ""   ) );
 		Assert.assertEquals( null,   StringUtils.ForceStarts("a", null ) );
+		// char
+		Assert.assertEquals( "aAbc", StringUtils.ForceStarts('a', "Abc") );
+		Assert.assertEquals( "abc",  StringUtils.ForceStarts('a', "abc") );
+		Assert.assertEquals( "a",    StringUtils.ForceStarts('a', ""   ) );
+		Assert.assertEquals( null,   StringUtils.ForceStarts('a', null ) );
 	}
 	@Test
 	public void testForceEnds() {
+		// string
 		Assert.assertEquals( "abcd", StringUtils.ForceEnds("d", "abc") );
 		Assert.assertEquals( "abc",  StringUtils.ForceEnds("c", "abc") );
 		Assert.assertEquals( "c",    StringUtils.ForceEnds("c", ""   ) );
 		Assert.assertEquals( null,   StringUtils.ForceEnds("c", null ) );
+		// char
+		Assert.assertEquals( "abcd", StringUtils.ForceEnds('d', "abc") );
+		Assert.assertEquals( "abc",  StringUtils.ForceEnds('c', "abc") );
+		Assert.assertEquals( "c",    StringUtils.ForceEnds('c', ""   ) );
+		Assert.assertEquals( null,   StringUtils.ForceEnds('c', null ) );
 	}
 
 
