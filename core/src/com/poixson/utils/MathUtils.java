@@ -92,4 +92,28 @@ public final class MathUtils {
 
 
 
+	// -------------------------------------------------------------------------------
+	// interpolation
+
+
+
+	public static double CubicInterpolate(final double p,
+			final double a, final double b, final double c, final double d) {
+		final double e = (d - c - a) + b;
+		final double f = a - b - e;
+		final double g = c - a;
+		return (e * p*p*p) + (f * p*p) + (g * p) + b;
+	}
+
+	public static double CubicInterpolateValuesLoop(final double[] values,
+			final int index, final int count, final double p) {
+		final int a = ((index+count) - 1) % count;
+		final int b = ( index           ) % count;
+		final int c = ( index        + 1) % count;
+		final int d = ( index        + 2) % count;
+		return CubicInterpolate(p, a, b, c, d);
+	}
+
+
+
 }
