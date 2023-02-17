@@ -50,6 +50,10 @@ package com.poixson.utils;
 // VERSION: 1.0.1
 // https://github.com/Auburn/FastNoise
 
+import static com.poixson.utils.MathUtils.RotateX;
+import static com.poixson.utils.MathUtils.RotateY;
+
+
 public class FastNoiseLiteD {
 	public enum NoiseType {
 		OpenSimplex2,
@@ -307,8 +311,8 @@ public class FastNoiseLiteD {
 
 	public double getNoiseRot(double x, double y, double angle) {
 		return this.getNoise(
-			NumberUtils.RotateX(x, y, angle),
-			NumberUtils.RotateY(x, y, angle)
+			RotateX(x, y, angle),
+			RotateY(x, y, angle)
 		);
 	}
 
