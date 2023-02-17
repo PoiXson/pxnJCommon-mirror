@@ -1,9 +1,6 @@
 package com.poixson.utils;
 
-import java.awt.Color;
 import java.text.DecimalFormat;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.poixson.tools.Keeper;
 
@@ -16,8 +13,6 @@ public final class NumberUtils {
 	 * Max valid tcp/udp port number.
 	 */
 	public static final int MAX_PORT = 65535;
-
-	protected static final AtomicInteger Last10K = new AtomicInteger(0);
 
 
 
@@ -470,127 +465,6 @@ public final class NumberUtils {
 	}
 	public static boolean IsMinMax(final float value, final float min, final float max) {
 		return (value == MinMax(value, min, max));
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// remap number between ranges
-
-
-
-	public static int Remap(
-			final int lowA, final int highA,
-			final int lowB, final int highB,
-			final int value) {
-		final double lA = (double) lowA;
-		final double hA = (double) highA;
-		final double lB = (double) lowB;
-		final double hB = (double) highB;
-		double result = (hB - lB) / (hA - lA);
-		result *= (value - lA);
-		result += lB;
-		return (int) result;
-	}
-
-
-
-	public static int Remap(final int low, final int high, final double percent) {
-		double result = ((double)(high - low)) * percent;
-		return ((int)result) + low;
-	}
-
-
-
-	public static Color Remap(final Color colorA, final Color colorB, final double percent) {
-		return
-			new Color(
-				NumberUtils.MinMax(Remap(colorA.getRed(),   colorB.getRed(),   percent), 0, 255),
-				NumberUtils.MinMax(Remap(colorA.getGreen(), colorB.getGreen(), percent), 0, 255),
-				NumberUtils.MinMax(Remap(colorA.getBlue(),  colorB.getBlue(),  percent), 0, 255)
-			);
-	}
-
-
-
-	// rrrgggbb
-	public static Color Remap8BitColor(final int value) {
-		final int r = (value & 0B00000111);
-		final int g = (value & 0B00111000) >> 3;
-		final int b = (value & 0B11000000) >> 6;
-		return
-			new Color(
-				MinMax( Remap(0, 7, 0, 255, r), 0, 255),
-				MinMax( Remap(0, 7, 0, 255, g), 0, 255),
-				MinMax( Remap(0, 3, 0, 255, b), 0, 255)
-			);
-	}
-
-
-
-	public static double RotateX(final double x, final double y, final double angle) {
-		final double ang = Math.PI * angle;
-		return (Math.sin(ang) * y) - (Math.cos(ang) * x);
-	}
-	public static double RotateY(final double x, final double y, final double angle) {
-		final double ang = Math.PI * angle;
-		return (Math.sin(ang) * x) + (Math.cos(ang) * y);
-	}
-
-	public static float RotateX(final float x, final float y, final float angle) {
-		final float ang = (float)( Math.PI * ((double)angle) );
-		return (float) ((Math.sin(ang) * y) - (Math.cos(ang) * x));
-	}
-	public static float RotateY(final float x, final float y, final float angle) {
-		final float ang = (float)( Math.PI * ((double)angle) );
-		return (float) ((Math.sin(ang) * x) + (Math.cos(ang) * y));
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// random number
-
-
-
-//TODO: does this replace HistoryRND class?
-	public static int GetRandom(final int minNumber, final int maxNumber) {
-		return GetRandom(minNumber, maxNumber, 1L);
-	}
-	public static int GetRandom(final int minNumber, final int maxNumber, final int seed) {
-		return GetRandom(minNumber, maxNumber, ((long)seed));
-	}
-	public static int GetRandom(final int minNumber, final int maxNumber, final long seed) {
-		if (minNumber >  maxNumber) return minNumber;
-		if (minNumber == maxNumber) return minNumber;
-		if (seed == 0L)
-			return GetRandom(minNumber, maxNumber, 1L);
-		final Random gen = new Random(Utils.GetMS() * seed);
-		return gen.nextInt(maxNumber - minNumber) + minNumber;
-	}
-
-	public static int GetNewRandom(final int minNumber, final int maxNumber, final int oldNumber) {
-		if (minNumber >  maxNumber) return minNumber;
-		if (minNumber == maxNumber) return minNumber;
-		if ((maxNumber - minNumber) == 1)
-			return (oldNumber == minNumber ? maxNumber : minNumber);
-		int newNumber;
-		int seed = oldNumber;
-		for (int i=0; i<100; i++) {
-			newNumber = GetRandom(minNumber, maxNumber, seed);
-			if (newNumber != oldNumber)
-				return newNumber;
-			seed += i;
-		}
-		throw new IllegalAccessError("Failed to generate a random number");
-	}
-
-
-
-	public static int Rnd10K() {
-		final int rnd = NumberUtils.GetNewRandom(0, 9999, Last10K.get());
-		Last10K.set(rnd);
-		return rnd;
 	}
 
 
