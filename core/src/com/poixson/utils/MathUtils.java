@@ -105,7 +105,7 @@ public final class MathUtils {
 		return (e * p*p*p) + (f * p*p) + (g * p) + b;
 	}
 
-	public static double CubicInterpolateValuesLoop(final double[] values,
+	public static double CubicInterpolateLoopedValues(final double[] values,
 			final int index, final int count, final double p) {
 		final int a = ((index+count) - 1) % count;
 		final int b = ( index           ) % count;
