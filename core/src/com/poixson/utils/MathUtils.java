@@ -111,7 +111,7 @@ public final class MathUtils {
 		final int b = ( index           ) % count;
 		final int c = ( index        + 1) % count;
 		final int d = ( index        + 2) % count;
-		return CubicInterpolate(p, a, b, c, d);
+		return CubicInterpolate(p, values[a], values[b], values[c], values[d]);
 	}
 
 
