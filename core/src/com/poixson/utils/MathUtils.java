@@ -105,6 +105,14 @@ public final class MathUtils {
 		return (e * p*p*p) + (f * p*p) + (g * p) + b;
 	}
 
+	public static double CubicInterpolateValues(final double[] values, final int index, final double p) {
+		final int max = values.length - 1;
+		final int a = MinMax(index-1, 0, max);
+		final int b = MinMax(index,   0, max);
+		final int c = MinMax(index+1, 0, max);
+		final int d = MinMax(index+2, 0, max);
+		return CubicInterpolate(p, values[a], values[b], values[c], values[d]);
+	}
 	public static double CubicInterpolateLoopedValues(final double[] values, final int index, final double p) {
 		final int count = values.length;
 		final int a = ((index+count) - 1) % count;
