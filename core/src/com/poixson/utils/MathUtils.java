@@ -1,5 +1,8 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.ArrayUtils.GetSafeLoopExtend;
+import static com.poixson.utils.ArrayUtils.GetSafeLooped;
+import static com.poixson.utils.ArrayUtils.GetSafeOrNear;
 import static com.poixson.utils.NumberUtils.MinMax;
 
 import java.awt.Color;
@@ -106,20 +109,31 @@ public final class MathUtils {
 	}
 
 	public static double CubicInterpolateValues(final double[] values, final int index, final double p) {
-		final int max = values.length - 1;
-		final int a = MinMax(index-1, 0, max);
-		final int b = MinMax(index,   0, max);
-		final int c = MinMax(index+1, 0, max);
-		final int d = MinMax(index+2, 0, max);
-		return CubicInterpolate(p, values[a], values[b], values[c], values[d]);
+		return CubicInterpolate(
+			p,
+			GetSafeOrNear(values, index-1),
+			GetSafeOrNear(values, index  ),
+			GetSafeOrNear(values, index+1),
+			GetSafeOrNear(values, index+2)
+		);
 	}
 	public static double CubicInterpolateLoopedValues(final double[] values, final int index, final double p) {
-		final int count = values.length;
-		final int a = ((index+count) - 1) % count;
-		final int b = ( index           ) % count;
-		final int c = ( index        + 1) % count;
-		final int d = ( index        + 2) % count;
-		return CubicInterpolate(p, values[a], values[b], values[c], values[d]);
+		return CubicInterpolate(
+			p,
+			GetSafeLooped(values, index-1),
+			GetSafeLooped(values, index  ),
+			GetSafeLooped(values, index+1),
+			GetSafeLooped(values, index+2)
+		);
+	}
+	public static double CubicInterpolateCircularValues(final double[] values, final int index, final double p) {
+		return CubicInterpolate(
+			p,
+			GetSafeLoopExtend(values, index-1),
+			GetSafeLoopExtend(values, index  ),
+			GetSafeLoopExtend(values, index+1),
+			GetSafeLoopExtend(values, index+2)
+		);
 	}
 
 

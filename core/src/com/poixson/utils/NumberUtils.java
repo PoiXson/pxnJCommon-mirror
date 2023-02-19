@@ -15,6 +15,8 @@ public final class NumberUtils {
 	 */
 	public static final int MAX_PORT = 65535;
 
+	public static final double DELTA = 0.0000000000000005;
+
 
 
 	// true;
