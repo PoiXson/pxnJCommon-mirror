@@ -1,14 +1,22 @@
 package com.poixson.tests.utils;
 
+import static com.poixson.utils.MathUtils.CubicInterpolate;
+import static com.poixson.utils.MathUtils.CubicInterpolateValues;
+import static com.poixson.utils.MathUtils.CubicInterpolateLoopedValues;
+import static com.poixson.utils.MathUtils.CubicInterpolateCircularValues;
+
 import java.awt.Color;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.poixson.utils.MathUtils;
+import com.poixson.utils.NumberUtils;
 
 
 public class Test_MathUtils {
+
+	private static final double DELTA = NumberUtils.DELTA;
 
 
 
@@ -30,6 +38,58 @@ public class Test_MathUtils {
 		Assert.assertEquals( 0B00000111,   7);
 		Assert.assertEquals( 0B00111000,  56);
 		Assert.assertEquals( 0B11000000, 192);
+	}
+
+
+
+	@Test
+	public void testCubicInterpolate() {
+		final double a = 1.0;
+		final double b = 0.0;
+		final double c = 2.0;
+		final double d = 3.0;
+		Assert.assertEquals(0.0,  CubicInterpolate( 0.0, a, b, c, d), DELTA);
+		Assert.assertEquals(0.75, CubicInterpolate( 0.5, a, b, c, d), DELTA);
+		Assert.assertEquals(2.0,  CubicInterpolate( 1.0, a, b, c, d), DELTA);
+		Assert.assertEquals(0.0,  CubicInterpolate(-1.0, a, b, c, d), DELTA);
+		Assert.assertEquals(6.0,  CubicInterpolate( 2.0, a, b, c, d), DELTA);
+	}
+	@Test
+	public void testCubicInterpolateValues() {
+		final double[] values = {
+			1.0,
+			0.0,
+			2.0,
+			3.0,
+		};
+//TODO: these are probably not right
+		// CubicInterpolateValues
+		Assert.assertEquals(1.0,  CubicInterpolateValues(values, 0, 0.0), DELTA);
+		Assert.assertEquals(0.25, CubicInterpolateValues(values, 0, 0.5), DELTA);
+		Assert.assertEquals(0.0,  CubicInterpolateValues(values, 0, 1.0), DELTA);
+		Assert.assertEquals(0.0,  CubicInterpolateValues(values, 1, 0.0), DELTA);
+		Assert.assertEquals(0.75, CubicInterpolateValues(values, 1, 0.5), DELTA);
+		Assert.assertEquals(2.0,  CubicInterpolateValues(values, 1, 1.0), DELTA);
+		Assert.assertEquals(1.0,  CubicInterpolateValues(values,-1, 1.0), DELTA);
+		Assert.assertEquals(3.0,  CubicInterpolateValues(values, 4, 1.0), DELTA);
+		// CubicInterpolateLoopedValues
+		Assert.assertEquals(1.0,  CubicInterpolateLoopedValues(values, 0, 0.0), DELTA);
+		Assert.assertEquals(0.0,  CubicInterpolateLoopedValues(values, 0, 0.5), DELTA);
+		Assert.assertEquals(0.0,  CubicInterpolateLoopedValues(values, 0, 1.0), DELTA);
+		Assert.assertEquals(0.0,  CubicInterpolateLoopedValues(values, 1, 0.0), DELTA);
+		Assert.assertEquals(0.75, CubicInterpolateLoopedValues(values, 1, 0.5), DELTA);
+		Assert.assertEquals(2.0,  CubicInterpolateLoopedValues(values, 1, 1.0), DELTA);
+		Assert.assertEquals(1.0,  CubicInterpolateLoopedValues(values,-1, 1.0), DELTA);
+		Assert.assertEquals(0.0,  CubicInterpolateLoopedValues(values, 4, 1.0), DELTA);
+		// CubicInterpolateCircularValues
+		Assert.assertEquals(1.0,  CubicInterpolateCircularValues(values, 0, 0.0), DELTA);
+		Assert.assertEquals(0.0,  CubicInterpolateCircularValues(values, 0, 0.5), DELTA);
+		Assert.assertEquals(0.0,  CubicInterpolateCircularValues(values, 0, 1.0), DELTA);
+		Assert.assertEquals(0.0,  CubicInterpolateCircularValues(values, 1, 0.0), DELTA);
+		Assert.assertEquals(0.75, CubicInterpolateCircularValues(values, 1, 0.5), DELTA);
+		Assert.assertEquals(2.0,  CubicInterpolateCircularValues(values, 1, 1.0), DELTA);
+		Assert.assertEquals(1.0,  CubicInterpolateCircularValues(values,-1, 1.0), DELTA);
+		Assert.assertEquals(1.0,  CubicInterpolateCircularValues(values, 4, 1.0), DELTA);
 	}
 
 
