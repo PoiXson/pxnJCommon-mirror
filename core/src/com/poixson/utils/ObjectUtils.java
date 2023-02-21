@@ -25,8 +25,9 @@ public final class ObjectUtils {
 		if (clss   == null) throw new RequiredArgumentException("clss");
 		if (object == null) return null;
 		try {
-			if ( String.class.equals(clss) && !(object instanceof String) )
-				return (T) object.toString();
+			if (String.class.equals(clss))
+				if (!(object instanceof String))
+					return (T) object.toString();
 			return clss.cast(object);
 		} catch (Exception ignore) {}
 		return null;
@@ -67,10 +68,7 @@ public final class ObjectUtils {
 		if (clss == null) throw new RequiredArgumentException("clss");
 		if (data == null) return null;
 		try {
-			return CastSet(
-					(Collection<T>) data,
-					clss
-			);
+			return CastSet((Collection<T>) data, clss);
 		} catch (Exception ignore) {}
 		return null;
 	}
@@ -110,10 +108,7 @@ public final class ObjectUtils {
 		if (clss == null) throw new RequiredArgumentException("clss");
 		if (data == null) return null;
 		try {
-			return CastList(
-					(Collection<T>) data,
-					clss
-			);
+			return CastList((Collection<T>) data, clss);
 		} catch (Exception ignore) {}
 		return null;
 	}
@@ -137,14 +132,8 @@ public final class ObjectUtils {
 			for (final Entry<?, ?> entry : data.entrySet()) {
 				try {
 					result.put(
-						Cast(
-							entry.getKey(),
-							keyClss
-						),
-						Cast(
-							entry.getValue(),
-							valClss
-						)
+						Cast(entry.getKey(),   keyClss),
+						Cast(entry.getValue(), valClss)
 					);
 				} catch (Exception ignore) {}
 			}
@@ -166,11 +155,7 @@ public final class ObjectUtils {
 		if (valClss == null) throw new RequiredArgumentException("valClss");
 		if (data    == null) return null;
 		try {
-			return CastMap(
-					(Map<K, V>) data,
-					keyClss,
-					valClss
-			);
+			return CastMap((Map<K, V>) data, keyClss, valClss);
 		} catch (Exception ignore) {}
 		return null;
 	}
