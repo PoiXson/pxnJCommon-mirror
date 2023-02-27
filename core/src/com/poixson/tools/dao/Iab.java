@@ -3,32 +3,32 @@ package com.poixson.tools.dao;
 import java.io.Serializable;
 
 
-public class Ixy implements Serializable, Cloneable {
+public class Iab implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 
-	public int x;
-	public int y;
+	public int a;
+	public int b;
 
 
 
-	public Ixy() {
-		this.x = 0;
-		this.y = 0;
+	public Iab() {
+		this.a = 0;
+		this.b = 0;
 	}
-	public Ixy(final int x, final int y) {
-		this.x = x;
-		this.y = y;
+	public Iab(final int a, final int b) {
+		this.a = a;
+		this.b = b;
 	}
-	public Ixy(final Ixy dao) {
-		this.x = dao.x;
-		this.y = dao.y;
+	public Iab(final Iab dao) {
+		this.a = dao.a;
+		this.b = dao.b;
 	}
 
 
 
 	@Override
 	public Object clone() {
-		return new Ixy(this.x, this.y);
+		return new Iab(this.a, this.b);
 	}
 
 
@@ -36,11 +36,11 @@ public class Ixy implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Ixy) {
-			final Ixy dao = (Ixy) obj;
+		if (obj instanceof Iab) {
+			final Iab dao = (Iab) obj;
 			return (
-				this.x == dao.x &&
-				this.y == dao.y
+				this.a == dao.a &&
+				this.b == dao.b
 			);
 		}
 		return false;
@@ -51,15 +51,15 @@ public class Ixy implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		return (new StringBuilder())
-				.append('(') .append(this.x)
-				.append(", ").append(this.y)
+				.append('(') .append(this.a)
+				.append(", ").append(this.b)
 				.append(')')
 				.toString();
 	}
 	@Override
 	public int hashCode() {
-		long bits =    31L  + ((long)this.x);
-		bits = (bits * 31L) + ((long)this.y);
+		long bits =    31L  + ((long)this.a);
+		bits = (bits * 31L) + ((long)this.b);
 		return (int) (bits ^ (bits >> 32L));
 	}
 

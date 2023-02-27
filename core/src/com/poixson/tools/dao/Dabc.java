@@ -3,36 +3,36 @@ package com.poixson.tools.dao;
 import java.io.Serializable;
 
 
-public class Dxyz implements Serializable, Cloneable {
+public class Dabc implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 
-	public double x;
-	public double y;
-	public double z;
+	public double a;
+	public double b;
+	public double c;
 
 
 
-	public Dxyz() {
-		this.x = 0;
-		this.y = 0;
-		this.z = 0;
+	public Dabc() {
+		this.a = 0;
+		this.b = 0;
+		this.c = 0;
 	}
-	public Dxyz(final double x, final double y, final double z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+	public Dabc(final double x, final double y, final double z) {
+		this.a = x;
+		this.b = y;
+		this.c = z;
 	}
-	public Dxyz(final Dxyz dao) {
-		this.x = dao.x;
-		this.y = dao.y;
-		this.z = dao.z;
+	public Dabc(final Dabc dao) {
+		this.a = dao.a;
+		this.b = dao.b;
+		this.c = dao.c;
 	}
 
 
 
 	@Override
 	public Object clone() {
-		return new Dxyz(this.x, this.y, this.z);
+		return new Dabc(this.a, this.b, this.c);
 	}
 
 
@@ -40,12 +40,12 @@ public class Dxyz implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Dxyz) {
-			final Dxyz dao = (Dxyz) obj;
+		if (obj instanceof Dabc) {
+			final Dabc dao = (Dabc) obj;
 			return (
-				this.x == dao.x &&
-				this.y == dao.y &&
-				this.z == dao.z
+				this.a == dao.a &&
+				this.b == dao.b &&
+				this.c == dao.c
 			);
 		}
 		return false;
@@ -56,17 +56,17 @@ public class Dxyz implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		return (new StringBuilder())
-				.append('(') .append(this.x)
-				.append(", ").append(this.y)
-				.append(", ").append(this.z)
+				.append('(') .append(this.a)
+				.append(", ").append(this.b)
+				.append(", ").append(this.c)
 				.append(')')
 				.toString();
 	}
 	@Override
 	public int hashCode() {
-		long bits =    31L  + Double.doubleToLongBits(this.x == 0.0 ? 0.0 : this.x);
-		bits = (bits * 31L) + Double.doubleToLongBits(this.y == 0.0 ? 0.0 : this.y);
-		bits = (bits * 31L) + Double.doubleToLongBits(this.z == 0.0 ? 0.0 : this.z);
+		long bits =    31L  + Double.doubleToLongBits(this.a == 0.0 ? 0.0 : this.a);
+		bits = (bits * 31L) + Double.doubleToLongBits(this.b == 0.0 ? 0.0 : this.b);
+		bits = (bits * 31L) + Double.doubleToLongBits(this.c == 0.0 ? 0.0 : this.c);
 		return (int) (bits ^ (bits >> 32L));
 	}
 

@@ -3,40 +3,40 @@ package com.poixson.tools.dao;
 import java.io.Serializable;
 
 
-public class Fwxyz implements Serializable, Cloneable {
+public class Fabcd implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 
-	public float w;
-	public float x;
-	public float y;
-	public float z;
+	public float a;
+	public float b;
+	public float c;
+	public float d;
 
 
 
-	public Fwxyz() {
-		this.w = 0.0F;
-		this.x = 0.0F;
-		this.y = 0.0F;
-		this.z = 0.0F;
+	public Fabcd() {
+		this.a = 0.0F;
+		this.b = 0.0F;
+		this.c = 0.0F;
+		this.d = 0.0F;
 	}
-	public Fwxyz(final float w, final float x, final float y, final float z) {
-		this.w = w;
-		this.x = x;
-		this.y = y;
-		this.z = z;
+	public Fabcd(final float a, final float b, final float c, final float d) {
+		this.a = a;
+		this.b = b;
+		this.c = c;
+		this.d = d;
 	}
-	public Fwxyz(final Fwxyz dao) {
-		this.w = dao.w;
-		this.x = dao.x;
-		this.y = dao.y;
-		this.z = dao.z;
+	public Fabcd(final Fabcd dao) {
+		this.a = dao.a;
+		this.b = dao.b;
+		this.c = dao.c;
+		this.d = dao.d;
 	}
 
 
 
 	@Override
 	public Object clone() {
-		return new Fwxyz(this.w, this.x, this.y, this.z);
+		return new Fabcd(this.a, this.b, this.c, this.d);
 	}
 
 
@@ -44,13 +44,13 @@ public class Fwxyz implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Fwxyz) {
-			final Fwxyz dao = (Fwxyz) obj;
+		if (obj instanceof Fabcd) {
+			final Fabcd dao = (Fabcd) obj;
 			return (
-				this.w == dao.w &&
-				this.x == dao.x &&
-				this.y == dao.y &&
-				this.z == dao.z
+				this.a == dao.a &&
+				this.b == dao.b &&
+				this.c == dao.c &&
+				this.d == dao.d
 			);
 		}
 		return false;
@@ -61,19 +61,19 @@ public class Fwxyz implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		return (new StringBuilder())
-				.append('(') .append(this.w)
-				.append(", ").append(this.x)
-				.append(", ").append(this.y)
-				.append(", ").append(this.z)
+				.append('(') .append(this.a)
+				.append(", ").append(this.b)
+				.append(", ").append(this.c)
+				.append(", ").append(this.d)
 				.append(')')
 				.toString();
 	}
 	@Override
 	public int hashCode() {
-		long bits =    31L  + Float.floatToIntBits(this.w);
-		bits = (bits * 31L) + Float.floatToIntBits(this.x);
-		bits = (bits * 31L) + Float.floatToIntBits(this.y);
-		bits = (bits * 31L) + Float.floatToIntBits(this.z);
+		long bits =    31L  + Float.floatToIntBits(this.a);
+		bits = (bits * 31L) + Float.floatToIntBits(this.b);
+		bits = (bits * 31L) + Float.floatToIntBits(this.c);
+		bits = (bits * 31L) + Float.floatToIntBits(this.d);
 		return (int) (bits ^ (bits >> 32L));
 	}
 

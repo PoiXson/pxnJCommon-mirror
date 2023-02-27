@@ -3,32 +3,32 @@ package com.poixson.tools.dao;
 import java.io.Serializable;
 
 
-public class Fxy implements Serializable, Cloneable {
+public class Fab implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 
-	public float x;
-	public float y;
+	public float a;
+	public float b;
 
 
 
-	public Fxy() {
-		this.x = 0.0F;
-		this.y = 0.0F;
+	public Fab() {
+		this.a = 0.0F;
+		this.b = 0.0F;
 	}
-	public Fxy(final float x, final float y) {
-		this.x = x;
-		this.y = y;
+	public Fab(final float a, final float b) {
+		this.a = a;
+		this.b = b;
 	}
-	public Fxy(final Fxy dao) {
-		this.x = dao.x;
-		this.y = dao.y;
+	public Fab(final Fab dao) {
+		this.a = dao.a;
+		this.b = dao.b;
 	}
 
 
 
 	@Override
 	public Object clone() {
-		return new Fxy(this.x, this.y);
+		return new Fab(this.a, this.b);
 	}
 
 
@@ -36,11 +36,11 @@ public class Fxy implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Fxy) {
-			final Fxy dao = (Fxy) obj;
+		if (obj instanceof Fab) {
+			final Fab dao = (Fab) obj;
 			return (
-				this.x == dao.x &&
-				this.y == dao.y
+				this.a == dao.a &&
+				this.b == dao.b
 			);
 		}
 		return false;
@@ -51,15 +51,15 @@ public class Fxy implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		return (new StringBuilder())
-				.append('(') .append(this.x)
-				.append(", ").append(this.y)
+				.append('(') .append(this.a)
+				.append(", ").append(this.b)
 				.append(')')
 				.toString();
 	}
 	@Override
 	public int hashCode() {
-		long bits =    31L  + Float.floatToIntBits(this.x);
-		bits = (bits * 31L) + Float.floatToIntBits(this.y);
+		long bits =    31L  + Float.floatToIntBits(this.a);
+		bits = (bits * 31L) + Float.floatToIntBits(this.b);
 		return (int) (bits ^ (bits >> 32L));
 	}
 

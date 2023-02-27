@@ -3,36 +3,36 @@ package com.poixson.tools.dao;
 import java.io.Serializable;
 
 
-public class Lxyz implements Serializable, Cloneable {
+public class Labc implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 
-	public long x;
-	public long y;
-	public long z;
+	public long a;
+	public long b;
+	public long c;
 
 
 
-	public Lxyz() {
-		this.x = 0L;
-		this.y = 0L;
-		this.z = 0L;
+	public Labc() {
+		this.a = 0L;
+		this.b = 0L;
+		this.c = 0L;
 	}
-	public Lxyz(final long x, final long y, final long z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+	public Labc(final long a, final long b, final long c) {
+		this.a = a;
+		this.b = b;
+		this.c = c;
 	}
-	public Lxyz(final Lxyz dao) {
-		this.x = dao.x;
-		this.y = dao.y;
-		this.z = dao.z;
+	public Labc(final Labc dao) {
+		this.a = dao.a;
+		this.b = dao.b;
+		this.c = dao.c;
 	}
 
 
 
 	@Override
 	public Object clone() {
-		return new Lxyz(this.x, this.y, this.z);
+		return new Labc(this.a, this.b, this.c);
 	}
 
 
@@ -40,12 +40,12 @@ public class Lxyz implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Lxyz) {
-			final Lxyz dao = (Lxyz) obj;
+		if (obj instanceof Labc) {
+			final Labc dao = (Labc) obj;
 			return (
-				this.x == dao.x &&
-				this.y == dao.y &&
-				this.z == dao.z
+				this.a == dao.a &&
+				this.b == dao.b &&
+				this.c == dao.c
 			);
 		}
 		return false;
@@ -56,15 +56,15 @@ public class Lxyz implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		return (new StringBuilder())
-				.append('(') .append(this.x)
-				.append(", ").append(this.y)
-				.append(", ").append(this.z)
+				.append('(') .append(this.a)
+				.append(", ").append(this.b)
+				.append(", ").append(this.c)
 				.append(')')
 				.toString();
 	}
 	@Override
 	public int hashCode() {
-		final long bits = ((((31L + this.x) * 31L) + this.y) * 31L) + this.z;
+		final long bits = ((((31L + this.a) * 31L) + this.b) * 31L) + this.c;
 		return (int) (bits ^ (bits >> 32L));
 	}
 

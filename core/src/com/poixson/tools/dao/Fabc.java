@@ -3,36 +3,36 @@ package com.poixson.tools.dao;
 import java.io.Serializable;
 
 
-public class Fxyz implements Serializable, Cloneable {
+public class Fabc implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 
-	public float x;
-	public float y;
-	public float z;
+	public float a;
+	public float b;
+	public float c;
 
 
 
-	public Fxyz() {
-		this.x = 0;
-		this.y = 0;
-		this.z = 0;
+	public Fabc() {
+		this.a = 0;
+		this.b = 0;
+		this.c = 0;
 	}
-	public Fxyz(final float x, final float y, final float z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+	public Fabc(final float a, final float b, final float c) {
+		this.a = a;
+		this.b = b;
+		this.c = c;
 	}
-	public Fxyz(final Fxyz dao) {
-		this.x = dao.x;
-		this.y = dao.y;
-		this.z = dao.z;
+	public Fabc(final Fabc dao) {
+		this.a = dao.a;
+		this.b = dao.b;
+		this.c = dao.c;
 	}
 
 
 
 	@Override
 	public Object clone() {
-		return new Fxyz(this.x, this.y, this.z);
+		return new Fabc(this.a, this.b, this.c);
 	}
 
 
@@ -40,12 +40,12 @@ public class Fxyz implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Fxyz) {
-			final Fxyz dao = (Fxyz) obj;
+		if (obj instanceof Fabc) {
+			final Fabc dao = (Fabc) obj;
 			return (
-				this.x == dao.x &&
-				this.y == dao.y &&
-				this.z == dao.z
+				this.a == dao.a &&
+				this.b == dao.b &&
+				this.c == dao.c
 			);
 		}
 		return false;
@@ -56,17 +56,17 @@ public class Fxyz implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		return (new StringBuilder())
-				.append('(') .append(this.x)
-				.append(", ").append(this.y)
-				.append(", ").append(this.z)
+				.append('(') .append(this.a)
+				.append(", ").append(this.b)
+				.append(", ").append(this.c)
 				.append(')')
 				.toString();
 	}
 	@Override
 	public int hashCode() {
-		long bits =    31L  + Float.floatToIntBits(this.x);
-		bits = (bits * 31L) + Float.floatToIntBits(this.y);
-		bits = (bits * 31L) + Float.floatToIntBits(this.z);
+		long bits =    31L  + Float.floatToIntBits(this.a);
+		bits = (bits * 31L) + Float.floatToIntBits(this.b);
+		bits = (bits * 31L) + Float.floatToIntBits(this.c);
 		return (int) (bits ^ (bits >> 32L));
 	}
 
