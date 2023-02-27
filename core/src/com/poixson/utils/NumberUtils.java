@@ -452,22 +452,22 @@ public final class NumberUtils {
 
 	// is within range
 	public static boolean IsMinMax(final int value, final int min, final int max) {
-		return (value == MinMax(value, min, max));
+		return (value >= min && value <= max);
 	}
 	public static boolean IsMinMax(final byte value, final byte min, final byte max) {
-		return (value == MinMax(value, min, max));
+		return (value >= min && value <= max);
 	}
 	public static boolean IsMinMax(final short value, final short min, final short max) {
-		return (value == MinMax(value, min, max));
+		return (value >= min && value <= max);
 	}
 	public static boolean IsMinMax(final long value, final long min, final long max) {
-		return (value == MinMax(value, min, max));
+		return (value >= min && value <= max);
 	}
 	public static boolean IsMinMax(final double value, final double min, final double max) {
-		return (value == MinMax(value, min, max));
+		return (value >= min && value <= max);
 	}
 	public static boolean IsMinMax(final float value, final float min, final float max) {
-		return (value == MinMax(value, min, max));
+		return (value >= min && value <= max);
 	}
 
 
