@@ -3,7 +3,7 @@ package com.poixson.tools.dao;
 import com.poixson.utils.NumberUtils;
 
 
-public class Tuple2F extends Fxy {
+public class Tuple2F extends Fab {
 	private static final long serialVersionUID = 1L;
 
 
@@ -11,8 +11,8 @@ public class Tuple2F extends Fxy {
 	public Tuple2F() {
 		super();
 	}
-	public Tuple2F(final float x, final float y) {
-		super(x, y);
+	public Tuple2F(final float a, final float b) {
+		super(a, b);
 	}
 	public Tuple2F(final Tuple2F tup) {
 		super(tup);
@@ -22,101 +22,101 @@ public class Tuple2F extends Fxy {
 
 	@Override
 	public Object clone() {
-		return new Tuple2F(this.x, this.y);
+		return new Tuple2F(this.a, this.b);
 	}
 
 
 
 	public void get(final Tuple2F tup) {
-		tup.x = this.x;
-		tup.y = this.y;
+		tup.a = this.a;
+		tup.b = this.b;
 	}
 
 
 
-	public void set(final float x, final float y) {
-		this.x = x;
-		this.y = y;
+	public void set(final float a, final float b) {
+		this.a = a;
+		this.b = b;
 	}
 	public void set(final Tuple2F tup) {
-		this.x = tup.x;
-		this.y = tup.y;
+		this.a = tup.a;
+		this.b = tup.b;
 	}
-	public void setX(final float x) {
-		this.x = x;
+	public void setX(final float a) {
+		this.a = a;
 	}
-	public void setY(final float y) {
-		this.y = y;
+	public void setY(final float b) {
+		this.b = b;
 	}
 
 
 
-	public void add(final float x, final float y) {
-		this.x += x;
-		this.y += y;
+	public void add(final float a, final float b) {
+		this.a += a;
+		this.b += b;
 	}
 	public void add(final Tuple2F tup) {
-		this.x += tup.x;
-		this.y += tup.y;
+		this.a += tup.a;
+		this.b += tup.b;
 	}
 	public void add(final Tuple2F tupA, final Tuple2F tupB) {
-		this.x = tupA.x + tupB.x;
-		this.y = tupA.y + tupB.y;
+		this.a = tupA.a + tupB.a;
+		this.b = tupA.b + tupB.b;
 	}
 
 
 
-	public void sub(final float x, final float y) {
-		this.x -= x;
-		this.y -= y;
+	public void sub(final float a, final float b) {
+		this.a -= a;
+		this.b -= b;
 	}
 	public void sub(final Tuple2F tup) {
-		this.x -= tup.x;
-		this.y -= tup.y;
+		this.a -= tup.a;
+		this.b -= tup.b;
 	}
 	public void sub(final Tuple2F tupA, final Tuple2F tupB) {
-		this.x = tupA.x - tupB.x;
-		this.y = tupA.y - tupB.y;
+		this.a = tupA.a - tupB.a;
+		this.b = tupA.b - tupB.b;
 	}
 
 
 
 	public void abs() {
-		this.x = Math.abs(this.x);
-		this.y = Math.abs(this.y);
+		this.a = Math.abs(this.a);
+		this.b = Math.abs(this.b);
 	}
 
 
 
 	public void neg(final Tuple2F tup) {
-		this.x = 0.0F - tup.x;
-		this.y = 0.0F - tup.y;
+		this.a = 0.0F - tup.a;
+		this.b = 0.0F - tup.b;
 	}
 	public void neg() {
-		this.x = 0.0F - this.x;
-		this.y = 0.0F - this.y;
+		this.a = 0.0F - this.a;
+		this.b = 0.0F - this.b;
 	}
 
 
 
 	public void scale(final float scale) {
-		this.x *= scale;
-		this.y *= scale;
+		this.a *= scale;
+		this.b *= scale;
 	}
 
 
 
 	public void clamp(final float min, final float max) {
-		this.x = NumberUtils.MinMax(this.x, min, max);
-		this.y = NumberUtils.MinMax(this.y, min, max);
+		this.a = NumberUtils.MinMax(this.a, min, max);
+		this.b = NumberUtils.MinMax(this.b, min, max);
 	}
 	public void clampMin(final float min) {
-		if (this.x < min) this.x = min;
-		if (this.y < min) this.y = min;
+		if (this.a < min) this.a = min;
+		if (this.b < min) this.b = min;
 	}
 	public void clampMax(final float max) {
-		if (this.x > max) this.x = max;
-		if (this.y > max) this.y = max;
+		if (this.a > max) this.a = max;
+		if (this.b > max) this.b = max;
 	}
 
 
@@ -127,35 +127,35 @@ public class Tuple2F extends Fxy {
 	}
 	public void normalize() {
 		final float norm = 1.0F / this.vectorLength();
-		this.x *= norm;
-		this.y *= norm;
+		this.a *= norm;
+		this.b *= norm;
 	}
 
 
 
 	public float vectorLength() {
-		return (float) Math.sqrt( (this.x*this.x) + (this.y*this.y) );
+		return (float) Math.sqrt( (this.a*this.a) + (this.b*this.b) );
 	}
 
 
 
 	public void interpolate(final Tuple2F tup, final float alpha) {
-		this.x = ((1.0F-alpha)*this.x) + (alpha*tup.x);
-		this.y = ((1.0F-alpha)*this.y) + (alpha*tup.y);
+		this.a = ((1.0F-alpha)*this.a) + (alpha*tup.a);
+		this.b = ((1.0F-alpha)*this.b) + (alpha*tup.b);
 	}
 	public void interpolate(final Tuple2F tupA, final Tuple2F tupB, final float alpha) {
-		this.x = ((1.0F-alpha)*tupA.x) + (alpha*tupB.x);
-		this.y = ((1.0F-alpha)*tupA.y) + (alpha*tupB.y);
+		this.a = ((1.0F-alpha)*tupA.a) + (alpha*tupB.a);
+		this.b = ((1.0F-alpha)*tupA.b) + (alpha*tupB.b);
 	}
 
 
 
 	public boolean epsilon(final Tuple2F tup, final float epsilon) {
-		float dif = this.x - tup.x;
-		if (Float.isNaN(dif)) return false;
+		float dif = this.a - tup.a;
+		if (Float.isNaN(dif))        return false;
 		if (Math.abs(dif) > epsilon) return false;
-		dif = this.y - tup.y;
-		if (Float.isNaN(dif)) return false;
+		dif = this.b - tup.b;
+		if (Float.isNaN(dif))        return false;
 		if (Math.abs(dif) > epsilon) return false;
 		return true;
 	}

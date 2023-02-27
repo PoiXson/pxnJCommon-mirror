@@ -3,7 +3,7 @@ package com.poixson.tools.dao;
 import com.poixson.utils.NumberUtils;
 
 
-public class Tuple3D extends Dxyz {
+public class Tuple3D extends Dabc {
 	private static final long serialVersionUID = 1L;
 
 
@@ -11,8 +11,8 @@ public class Tuple3D extends Dxyz {
 	public Tuple3D() {
 		super();
 	}
-	public Tuple3D(final double x, final double y, final double z) {
-		super(x, y, z);
+	public Tuple3D(final double a, final double b, final double c) {
+		super(a, b, c);
 	}
 	public Tuple3D(final Tuple3D tup) {
 		super(tup);
@@ -22,120 +22,120 @@ public class Tuple3D extends Dxyz {
 
 	@Override
 	public Object clone() {
-		return new Tuple3D(this.x, this.y, this.z);
+		return new Tuple3D(this.a, this.b, this.c);
 	}
 
 
 
 	public void get(final Tuple3D tup) {
-		tup.x = this.x;
-		tup.y = this.y;
-		tup.z = this.z;
+		tup.a = this.a;
+		tup.b = this.b;
+		tup.c = this.c;
 	}
 
 
 
-	public void set(final double x, final double y, final double z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+	public void set(final double a, final double b, final double c) {
+		this.a = a;
+		this.b = b;
+		this.c = c;
 	}
 	public void set(final Tuple3D tup) {
-		this.x = tup.x;
-		this.y = tup.y;
-		this.z = tup.z;
+		this.a = tup.a;
+		this.b = tup.b;
+		this.c = tup.c;
 	}
-	public void setX(final double x) {
-		this.x = x;
+	public void setX(final double a) {
+		this.a = a;
 	}
-	public void setY(final double y) {
-		this.y = y;
+	public void setY(final double b) {
+		this.b = b;
 	}
-	public void setZ(final double z) {
-		this.z = z;
+	public void setZ(final double c) {
+		this.c = c;
 	}
 
 
 
-	public void add(final double x, final double y, final double z) {
-		this.x += x;
-		this.y += y;
-		this.z += z;
+	public void add(final double a, final double b, final double c) {
+		this.a += a;
+		this.b += b;
+		this.c += c;
 	}
 	public void add(final Tuple3D tup) {
-		this.x += tup.x;
-		this.y += tup.y;
-		this.z += tup.z;
+		this.a += tup.a;
+		this.b += tup.b;
+		this.c += tup.c;
 	}
 	public void add(final Tuple3D tupA, final Tuple3D tupB) {
-		this.x = tupA.x + tupB.x;
-		this.y = tupA.y + tupB.y;
-		this.z = tupA.z + tupB.z;
+		this.a = tupA.a + tupB.a;
+		this.b = tupA.b + tupB.b;
+		this.c = tupA.c + tupB.c;
 	}
 
 
 
-	public void sub(final double x, final double y, final double z) {
-		this.x -= x;
-		this.y -= y;
-		this.z -= z;
+	public void sub(final double a, final double b, final double c) {
+		this.a -= a;
+		this.b -= b;
+		this.c -= c;
 	}
 	public void sub(final Tuple3D tup) {
-		this.x -= tup.x;
-		this.y -= tup.y;
-		this.z -= tup.z;
+		this.a -= tup.a;
+		this.b -= tup.b;
+		this.c -= tup.c;
 	}
 	public void sub(final Tuple3D tupA, final Tuple3D tupB) {
-		this.x = tupA.x - tupB.x;
-		this.y = tupA.y - tupB.y;
-		this.z = tupA.z - tupB.z;
+		this.a = tupA.a - tupB.a;
+		this.b = tupA.b - tupB.b;
+		this.c = tupA.c - tupB.c;
 	}
 
 
 
 	public void abs() {
-		this.x = Math.abs(this.x);
-		this.y = Math.abs(this.y);
-		this.z = Math.abs(this.z);
+		this.a = Math.abs(this.a);
+		this.b = Math.abs(this.b);
+		this.c = Math.abs(this.c);
 	}
 
 
 
 	public void neg(final Tuple3D tup) {
-		this.x = 0.0 - tup.x;
-		this.y = 0.0 - tup.y;
-		this.z = 0.0 - tup.z;
+		this.a = 0.0 - tup.a;
+		this.b = 0.0 - tup.b;
+		this.c = 0.0 - tup.c;
 	}
 	public void neg() {
-		this.x = 0.0 - this.x;
-		this.y = 0.0 - this.y;
-		this.z = 0.0 - this.z;
+		this.a = 0.0 - this.a;
+		this.b = 0.0 - this.b;
+		this.c = 0.0 - this.c;
 	}
 
 
 
 	public void scale(final double scale) {
-		this.x *= scale;
-		this.y *= scale;
-		this.z *= scale;
+		this.a *= scale;
+		this.b *= scale;
+		this.c *= scale;
 	}
 
 
 
 	public void clamp(final double min, final double max) {
-		this.x = NumberUtils.MinMax(this.x, min, max);
-		this.y = NumberUtils.MinMax(this.y, min, max);
-		this.z = NumberUtils.MinMax(this.z, min, max);
+		this.a = NumberUtils.MinMax(this.a, min, max);
+		this.b = NumberUtils.MinMax(this.b, min, max);
+		this.c = NumberUtils.MinMax(this.c, min, max);
 	}
 	public void clampMin(final double min) {
-		if (this.x < min) this.x = min;
-		if (this.y < min) this.y = min;
-		if (this.z < min) this.z = min;
+		if (this.a < min) this.a = min;
+		if (this.b < min) this.b = min;
+		if (this.c < min) this.c = min;
 	}
 	public void clampMax(final double max) {
-		if (this.x > max) this.x = max;
-		if (this.y > max) this.y = max;
-		if (this.z > max) this.z = max;
+		if (this.a > max) this.a = max;
+		if (this.b > max) this.b = max;
+		if (this.c > max) this.c = max;
 	}
 
 
@@ -146,41 +146,41 @@ public class Tuple3D extends Dxyz {
 	}
 	public void normalize() {
 		final double norm = 1.0 / this.vectorLength();
-		this.x *= norm;
-		this.y *= norm;
-		this.z *= norm;
+		this.a *= norm;
+		this.b *= norm;
+		this.c *= norm;
 	}
 
 
 
 	public double vectorLength() {
-		return Math.sqrt( (this.x*this.x) + (this.y*this.y) + (this.z*this.z) );
+		return Math.sqrt( (this.a*this.a) + (this.b*this.b) + (this.c*this.c) );
 	}
 
 
 
 	public void interpolate(final Tuple3D tup, final double alpha) {
-		this.x = ((1.0-alpha)*this.x) + (alpha*tup.x);
-		this.y = ((1.0-alpha)*this.y) + (alpha*tup.y);
-		this.z = ((1.0-alpha)*this.z) + (alpha*tup.z);
+		this.a = ((1.0-alpha)*this.a) + (alpha*tup.a);
+		this.b = ((1.0-alpha)*this.b) + (alpha*tup.b);
+		this.c = ((1.0-alpha)*this.c) + (alpha*tup.c);
 	}
 	public void interpolate(final Tuple3D tupA, final Tuple3D tupB, final double alpha) {
-		this.x = ((1.0-alpha)*tupA.x) + (alpha*tupB.x);
-		this.y = ((1.0-alpha)*tupA.y) + (alpha*tupB.y);
-		this.z = ((1.0-alpha)*tupA.z) + (alpha*tupB.z);
+		this.a = ((1.0-alpha)*tupA.a) + (alpha*tupB.a);
+		this.b = ((1.0-alpha)*tupA.b) + (alpha*tupB.b);
+		this.c = ((1.0-alpha)*tupA.c) + (alpha*tupB.c);
 	}
 
 
 
 	public boolean epsilon(final Tuple3D tup, final double epsilon) {
-		double dif = this.x - tup.x;
-		if (Double.isNaN(dif)) return false;
+		double dif = this.a - tup.a;
+		if (Double.isNaN(dif))       return false;
 		if (Math.abs(dif) > epsilon) return false;
-		dif = this.y - tup.y;
-		if (Double.isNaN(dif)) return false;
+		dif = this.b - tup.b;
+		if (Double.isNaN(dif))       return false;
 		if (Math.abs(dif) > epsilon) return false;
-		dif = this.z - tup.z;
-		if (Double.isNaN(dif)) return false;
+		dif = this.c - tup.c;
+		if (Double.isNaN(dif))       return false;
 		if (Math.abs(dif) > epsilon) return false;
 		return true;
 	}

@@ -3,7 +3,7 @@ package com.poixson.tools.dao;
 import com.poixson.utils.NumberUtils;
 
 
-public class Tuple2L extends Lxy {
+public class Tuple2L extends Lab {
 	private static final long serialVersionUID = 1L;
 
 
@@ -11,8 +11,8 @@ public class Tuple2L extends Lxy {
 	public Tuple2L() {
 		super();
 	}
-	public Tuple2L(final long x, final long y) {
-		super(x, y);
+	public Tuple2L(final long a, final long b) {
+		super(a, b);
 	}
 	public Tuple2L(final Tuple2L tup) {
 		super(tup);
@@ -22,117 +22,117 @@ public class Tuple2L extends Lxy {
 
 	@Override
 	public Object clone() {
-		return new Tuple2L(this.x, this.y);
+		return new Tuple2L(this.a, this.b);
 	}
 
 
 
 	public void get(final Tuple2L tup) {
-		tup.x = this.x;
-		tup.y = this.y;
+		tup.a = this.a;
+		tup.b = this.b;
 	}
 
 
 
-	public void set(final long x, final long y) {
-		this.x = x;
-		this.y = y;
+	public void set(final long a, final long b) {
+		this.a = a;
+		this.b = b;
 	}
 	public void set(final Tuple2L tup) {
-		this.x = tup.x;
-		this.y = tup.y;
+		this.a = tup.a;
+		this.b = tup.b;
 	}
-	public void setX(final long x) {
-		this.x = x;
+	public void setX(final long a) {
+		this.a = a;
 	}
-	public void setY(final long y) {
-		this.y = y;
+	public void setY(final long b) {
+		this.b = b;
 	}
 
 
 
-	public void add(final long x, final long y) {
-		this.x += x;
-		this.y += y;
+	public void add(final long a, final long b) {
+		this.a += a;
+		this.b += b;
 	}
 	public void add(final Tuple2L tup) {
-		this.x += tup.x;
-		this.y += tup.y;
+		this.a += tup.a;
+		this.b += tup.b;
 	}
 	public void add(final Tuple2L tupA, final Tuple2L tupB) {
-		this.x = tupA.x + tupB.x;
-		this.y = tupA.y + tupB.y;
+		this.a = tupA.a + tupB.a;
+		this.b = tupA.b + tupB.b;
 	}
 
 
 
-	public void sub(final long x, final long y) {
-		this.x -= x;
-		this.y -= y;
+	public void sub(final long a, final long b) {
+		this.a -= a;
+		this.b -= b;
 	}
 	public void sub(final Tuple2L tup) {
-		this.x -= tup.x;
-		this.y -= tup.y;
+		this.a -= tup.a;
+		this.b -= tup.b;
 	}
 	public void sub(final Tuple2L tupA, final Tuple2L tupB) {
-		this.x = tupA.x - tupB.x;
-		this.y = tupA.y - tupB.y;
+		this.a = tupA.a - tupB.a;
+		this.b = tupA.b - tupB.b;
 	}
 
 
 
 	public void abs() {
-		this.x = Math.abs(this.x);
-		this.y = Math.abs(this.y);
+		this.a = Math.abs(this.a);
+		this.b = Math.abs(this.b);
 	}
 
 
 
 	public void neg(final Tuple2L tup) {
-		this.x = 0 - tup.x;
-		this.y = 0 - tup.y;
+		this.a = 0 - tup.a;
+		this.b = 0 - tup.b;
 	}
 	public void neg() {
-		this.x = 0 - this.x;
-		this.y = 0 - this.y;
+		this.a = 0 - this.a;
+		this.b = 0 - this.b;
 	}
 
 
 
 	public void scale(final long scale) {
-		this.x *= scale;
-		this.y *= scale;
+		this.a *= scale;
+		this.b *= scale;
 	}
 	public void scale(final double scale) {
-		this.x = (long) ( ((double)this.x) * scale );
-		this.y = (long) ( ((double)this.y) * scale );
+		this.a = (long) ( ((double)this.a) * scale );
+		this.b = (long) ( ((double)this.b) * scale );
 	}
 	public void scale(final float scale) {
-		this.x = (long) ( ((float)this.x) * scale );
-		this.y = (long) ( ((float)this.y) * scale );
+		this.a = (long) ( ((float)this.a) * scale );
+		this.b = (long) ( ((float)this.b) * scale );
 	}
 
 
 
 	public void clamp(final long min, final long max) {
-		this.x = NumberUtils.MinMax(this.x, min, max);
-		this.y = NumberUtils.MinMax(this.y, min, max);
+		this.a = NumberUtils.MinMax(this.a, min, max);
+		this.b = NumberUtils.MinMax(this.b, min, max);
 	}
 	public void clampMin(final long min) {
-		if (this.x < min) this.x = min;
-		if (this.y < min) this.y = min;
+		if (this.a < min) this.a = min;
+		if (this.b < min) this.b = min;
 	}
 	public void clampMax(final long max) {
-		if (this.x > max) this.x = max;
-		if (this.y > max) this.y = max;
+		if (this.a > max) this.a = max;
+		if (this.b > max) this.b = max;
 	}
 
 
 
 	public double vectorLength() {
-		final double x = (double) this.x;
-		final double y = (double) this.y;
-		return Math.sqrt( (x*x) + (y*y) );
+		final double a = (double) this.a;
+		final double b = (double) this.b;
+		return Math.sqrt( (a*a) + (b*b) );
 	}
 
 
