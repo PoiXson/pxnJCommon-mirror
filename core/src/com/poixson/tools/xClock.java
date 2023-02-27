@@ -20,13 +20,12 @@ import com.poixson.utils.NumberUtils;
 import com.poixson.utils.Utils;
 
 
+//TODO: add cooldown to update again
+//TODO: can we do without volatile?
 public class xClock {
 
 	public static final String DEFAULT_TIMESERVER = "pool.ntp.org";
 	public static final boolean DEFAULT_BLOCKING = true;
-
-	private static final AtomicReference<xClock> instance =
-			new AtomicReference<xClock>(null);
 
 	private volatile String timeserver = null;
 	private volatile boolean enableNTP = false;
@@ -42,28 +41,7 @@ public class xClock {
 
 
 
-//TODO: add cooldown to update again
-	public static xClock get(final boolean blocking) {
-		if (instance.get() == null) {
-			// new instance
-			final xClock clock = new xClock();
-			if (instance.compareAndSet(null, clock)) {
-				clock.update(blocking);
-				// just to prevent gc
-				Keeper.add(clock);
-				return clock;
-			}
-		}
-		return instance.get();
-	}
-	public static xClock get() {
-		return get(DEFAULT_BLOCKING);
-	}
-
-
-
-	// new instance
-	private xClock() {
+	public xClock() {
 	}
 	@Override
 	public Object clone() throws CloneNotSupportedException {
