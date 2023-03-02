@@ -1,17 +1,14 @@
-package com.poixson.tests.utils;
+package com.poixson.utils;
 
 import static com.poixson.utils.MathUtils.CubicInterpolate;
-import static com.poixson.utils.MathUtils.CubicInterpolateValues;
-import static com.poixson.utils.MathUtils.CubicInterpolateLoopedValues;
 import static com.poixson.utils.MathUtils.CubicInterpolateCircularValues;
+import static com.poixson.utils.MathUtils.CubicInterpolateLoopedValues;
+import static com.poixson.utils.MathUtils.CubicInterpolateValues;
 
 import java.awt.Color;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.poixson.utils.MathUtils;
-import com.poixson.utils.NumberUtils;
 
 
 public class Test_MathUtils {

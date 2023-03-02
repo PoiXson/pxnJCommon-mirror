@@ -1,12 +1,9 @@
-package com.poixson.tests.tools;
+package com.poixson.tools;
 
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.poixson.tools.xTime;
-import com.poixson.tools.xTimeU;
 
 
 public class Test_xTime {

@@ -1,12 +1,9 @@
-package com.poixson.tests.utils;
+package com.poixson.utils;
 
 import java.io.File;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.poixson.utils.FileUtils;
-import com.poixson.utils.Utils;
 
 
 public class Test_FileUtils {

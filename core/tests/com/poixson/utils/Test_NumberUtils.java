@@ -1,9 +1,7 @@
-package com.poixson.tests.utils;
+package com.poixson.utils;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.poixson.utils.NumberUtils;
 
 
 public class Test_NumberUtils {

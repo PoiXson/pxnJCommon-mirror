@@ -1,11 +1,10 @@
-package com.poixson.tests.tools;
+package com.poixson.tools;
 
 import java.util.LinkedList;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.poixson.tools.JsonChunker;
 import com.poixson.tools.JsonChunker.ChunkProcessor;
 
 

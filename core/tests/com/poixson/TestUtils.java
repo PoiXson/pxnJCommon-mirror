@@ -1,9 +1,12 @@
-package com.poixson.utils;
+package com.poixson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
+
+import com.poixson.utils.StringUtils;
+import com.poixson.utils.Utils;
 
 
 public final class TestUtils {

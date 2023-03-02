@@ -1,4 +1,4 @@
-package com.poixson.tests.utils;
+package com.poixson.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.poixson.utils.StringUtils;
 
 
 public class Test_StringUtils {

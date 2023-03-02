@@ -1,11 +1,9 @@
-package com.poixson.tests.utils;
+package com.poixson.utils;
 
 import static com.poixson.utils.NumberUtils.DELTA;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.poixson.utils.ArrayUtils;
 
 
 public class Test_ArrayUtils {
