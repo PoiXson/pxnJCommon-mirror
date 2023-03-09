@@ -61,12 +61,11 @@ public class Labcd implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		return (new StringBuilder())
-				.append('(') .append(this.a)
-				.append(", ").append(this.b)
-				.append(", ").append(this.c)
-				.append(", ").append(this.d)
-				.append(')')
-				.toString();
+			.append(this.a).append(", ")
+			.append(this.b).append(", ")
+			.append(this.c).append(", ")
+			.append(this.d)
+			.toString();
 	}
 	@Override
 	public int hashCode() {

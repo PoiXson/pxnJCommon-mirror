@@ -56,11 +56,10 @@ public class Labc implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		return (new StringBuilder())
-				.append('(') .append(this.a)
-				.append(", ").append(this.b)
-				.append(", ").append(this.c)
-				.append(')')
-				.toString();
+			.append(this.a).append(", ")
+			.append(this.b).append(", ")
+			.append(this.c)
+			.toString();
 	}
 	@Override
 	public int hashCode() {

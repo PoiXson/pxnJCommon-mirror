@@ -51,10 +51,9 @@ public class Iab implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		return (new StringBuilder())
-				.append('(') .append(this.a)
-				.append(", ").append(this.b)
-				.append(')')
-				.toString();
+			.append(this.a).append(", ")
+			.append(this.b)
+			.toString();
 	}
 	@Override
 	public int hashCode() {
