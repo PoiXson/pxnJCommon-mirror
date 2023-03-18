@@ -112,7 +112,7 @@ public class FastNoiseLiteD {
 	private int mSeed = 1337;
 	private double mFrequency = 0.01;
 	private NoiseType mNoiseType = NoiseType.OpenSimplex2;
-	private RotationType3D mRotationType3D = RotationType3D.None;
+	private RotationType3D mRotationType3D = RotationType3D.ImproveXZPlanes;
 	private TransformType3D mTransformType3D = TransformType3D.DefaultOpenSimplex2;
 
 	private FractalType mFractalType = FractalType.None;
