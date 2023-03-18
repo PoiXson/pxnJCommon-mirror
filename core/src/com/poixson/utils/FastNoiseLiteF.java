@@ -136,12 +136,16 @@ public class FastNoiseLiteF {
 	/// Create new FastNoise object with default seed
 	/// </summary>
 	public FastNoiseLiteF() {
+		this.CalculateFractalBounding();
+		this.UpdateTransformType3D();
+		this.UpdateWarpTransformType3D();
 	}
 
 	/// <summary>
 	/// Create new FastNoise object with specified seed
 	/// </summary>
 	public FastNoiseLiteF(int seed) {
+		this();
 		setSeed(seed);
 	}
 
