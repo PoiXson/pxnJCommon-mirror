@@ -8,7 +8,7 @@
 	<groupId>com.poixson</groupId>
 	<version>4.0.3</version>
 	<packaging>pom</packaging>
-	<url>http://poixson.com</url>
+	<url>https://poixson.com</url>
 	<scm>
 		<url>https://git.poixson.com/summary/pxn!pxnCommon.git</url>
 		<connection>scm:git:https://lorenzop@git.poixson.com/r/pxn/pxnCommon.git</connection>
@@ -20,7 +20,7 @@
 	</ciManagement>
 	<organization>
 		<name>PoiXson</name>
-		<url>http://poixson.com</url>
+		<url>https://poixson.com</url>
 	</organization>
 	<issueManagement>
 		<url>https://git.poixson.com/tickets/pxn!pxnCommon.git</url>
