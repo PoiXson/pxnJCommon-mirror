@@ -406,6 +406,16 @@ public final class NumberUtils {
 
 
 
+	public static String PadZeros(final int value, final int len) {
+		final String str = Integer.toString(value);
+		final int zeros = len - str.length();
+		if (zeros < 1)
+			return str;
+		return StringUtils.Repeat(zeros, '0');
+	}
+
+
+
 	// -------------------------------------------------------------------------------
 	// min/max
 
