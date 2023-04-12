@@ -48,6 +48,7 @@ public final class RandomUtils {
 
 
 
+	@Deprecated
 	public static int Rnd10K() {
 		final int rnd = GetNewRandom(0, 9999, Last10K.get());
 		Last10K.set(rnd);

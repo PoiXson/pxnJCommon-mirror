@@ -51,7 +51,7 @@ public class xCallable<V> extends xRunnable implements Callable<V> {
 
 
 	@Override
-	@SuppressWarnings("removal")
+	@Deprecated
 	public void finalize() throws Throwable {
 		super.finalize();
 		this.releaseCallDepth();
