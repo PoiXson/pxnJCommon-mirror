@@ -164,17 +164,17 @@ public final class FileUtils {
 
 
 
-	public static long LastModified(final String fileStr) throws IOException {
+	public static long GetLastModified(final String fileStr) throws IOException {
 		if (Utils.isEmpty(fileStr))
 			return 0;
-		return LastModified( Paths.get(fileStr) );
+		return GetLastModified( Paths.get(fileStr) );
 	}
-	public static long LastModified(final File file) throws IOException {
+	public static long GetLastModified(final File file) throws IOException {
 		if (file == null)
 			return 0;
-		return LastModified( file.toPath() );
+		return GetLastModified( file.toPath() );
 	}
-	public static long LastModified(final Path path) throws IOException {
+	public static long GetLastModified(final Path path) throws IOException {
 		BasicFileAttributes attr =
 			Files.readAttributes(path, BasicFileAttributes.class);
 		if (attr == null) throw new IOException("Failed to get file attributes: " + path.toString());
