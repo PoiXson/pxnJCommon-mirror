@@ -408,10 +408,6 @@ public final class Utils {
 			return false;
 		return (uuidA.compareTo(uuidB) == 0);
 	}
-	@Deprecated
-	public static boolean MatchUUID(final UUID uuidA, final UUID uuidB) {
-		return EqualsUUID(uuidA, uuidB);
-	}
 
 
 

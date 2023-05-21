@@ -1,6 +1,5 @@
 package com.poixson.utils;
 
-import java.awt.Color;
 import java.text.DecimalFormat;
 
 import com.poixson.tools.Keeper;
@@ -478,74 +477,6 @@ public final class NumberUtils {
 	}
 	public static boolean IsMinMax(final float value, final float min, final float max) {
 		return (value >= min && value <= max);
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-
-
-
-	@Deprecated
-	public static double RotateX(final double x, final double y, final double angle) {
-		return MathUtils.RotateX(x, y, angle);
-	}
-	@Deprecated
-	public static double RotateY(final double x, final double y, final double angle) {
-		return MathUtils.RotateY(x, y, angle);
-	}
-	@Deprecated
-	public static float RotateX(final float x, final float y, final float angle) {
-		return MathUtils.RotateX(x, y, angle);
-	}
-	@Deprecated
-	public static float RotateY(final float x, final float y, final float angle) {
-		return MathUtils.RotateY(x, y, angle);
-	}
-
-
-
-	@Deprecated
-	public static int Remap(
-			final int lowA, final int highA,
-			final int lowB, final int highB,
-			final int value) {
-		return MathUtils.Remap(lowA, highA, lowB, highB, value);
-	}
-	@Deprecated
-	public static int Remap(final int low, final int high, final double percent) {
-		return MathUtils.Remap(low, high, percent);
-	}
-	@Deprecated
-	public static Color Remap(final Color colorA, final Color colorB, final double percent) {
-		return MathUtils.Remap(colorA, colorB, percent);
-	}
-	@Deprecated
-	public static Color Remap8BitColor(final int value) {
-		return MathUtils.Remap8BitColor(value);
-	}
-
-
-
-	@Deprecated
-	public static int GetRandom(final int minNumber, final int maxNumber) {
-		return RandomUtils.GetRandom(minNumber, maxNumber);
-	}
-	@Deprecated
-	public static int GetRandom(final int minNumber, final int maxNumber, final int seed) {
-		return RandomUtils.GetRandom(minNumber, maxNumber, seed);
-	}
-	@Deprecated
-	public static int GetRandom(final int minNumber, final int maxNumber, final long seed) {
-		return RandomUtils.GetRandom(minNumber, maxNumber, seed);
-	}
-	@Deprecated
-	public static int GetNewRandom(final int minNumber, final int maxNumber, final int oldNumber) {
-		return RandomUtils.GetNewRandom(minNumber, maxNumber, oldNumber);
-	}
-	@Deprecated
-	public static int Rnd10K() {
-		return RandomUtils.Rnd10K();
 	}
 
 

@@ -965,12 +965,6 @@ public final class StringUtils {
 			str.setCharAt(pos+i, chunk.charAt(i));
 		}
 	}
-	@Deprecated
-	public static String ReplaceStringRange(
-			final String str, final String chunk,
-			final int startPos, final int endPos) {
-		return ReplaceInString(str, chunk, startPos);
-	}
 
 
 
