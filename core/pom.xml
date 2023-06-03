@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated: Fri Jun  2 12:04:36 AM EDT 2023 -->
+<!-- Generated: Fri Jun  2 11:26:54 PM EDT 2023 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -18,6 +18,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>
+		<maven.compiler.release>17</maven.compiler.release>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 
@@ -29,8 +30,6 @@
 		<git-commit-id-version>4.9.10</git-commit-id-version>
 		<junit-version>4.13.2</junit-version>
 		<surefire-version>3.1.0</surefire-version>
-		<jxr-version>3.3.0</jxr-version>
-		<project-info-reports-version>3.4.4</project-info-reports-version>
 
 	</properties>
 	<scm>
@@ -131,20 +130,6 @@
 				</configuration>
 			</plugin>
 
-			<!-- JXR - Cross Reference -->
-			<plugin>
-				<groupId>org.apache.maven.jxr</groupId>
-				<artifactId>jxr</artifactId>
-				<version>${jxr-version}</version>
-			</plugin>
-
-			<!-- Reports -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>${project-info-reports-version}</version>
-			</plugin>
-
 		</plugins>
 	</build>
 	<dependencies>
@@ -155,23 +140,4 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<reporting>
-		<plugins>
-			<!-- Reports Plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>${project-info-reports-version}</version>
-				<configuration>
-					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-				</configuration>
-			</plugin>
-			<!-- Cross-Reference Plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jxr-plugin</artifactId>
-				<version>${jxr-version}</version>
-			</plugin>
-		</plugins>
-	</reporting>
 </project>
