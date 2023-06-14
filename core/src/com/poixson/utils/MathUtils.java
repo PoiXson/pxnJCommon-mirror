@@ -1,8 +1,5 @@
 package com.poixson.utils;
 
-import static com.poixson.utils.ArrayUtils.GetSafeLoopExtend;
-import static com.poixson.utils.ArrayUtils.GetSafeLooped;
-import static com.poixson.utils.ArrayUtils.GetSafeOrNear;
 import static com.poixson.utils.NumberUtils.MinMax;
 
 import java.awt.Color;
@@ -100,6 +97,7 @@ public final class MathUtils {
 
 
 
+/*
 	public static double CubicInterpolate(final double p,
 			final double a, final double b, final double c, final double d) {
 		final double e = (d - c - a) + b;
@@ -135,6 +133,7 @@ public final class MathUtils {
 			GetSafeLoopExtend(values, index+2)
 		);
 	}
+*/
 
 
 

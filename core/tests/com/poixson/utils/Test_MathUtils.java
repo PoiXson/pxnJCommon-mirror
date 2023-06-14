@@ -1,9 +1,9 @@
 package com.poixson.utils;
 
-import static com.poixson.utils.MathUtils.CubicInterpolate;
-import static com.poixson.utils.MathUtils.CubicInterpolateCircularValues;
-import static com.poixson.utils.MathUtils.CubicInterpolateLoopedValues;
-import static com.poixson.utils.MathUtils.CubicInterpolateValues;
+//import static com.poixson.utils.MathUtils.CubicInterpolate;
+//import static com.poixson.utils.MathUtils.CubicInterpolateCircularValues;
+//import static com.poixson.utils.MathUtils.CubicInterpolateLoopedValues;
+//import static com.poixson.utils.MathUtils.CubicInterpolateValues;
 
 import java.awt.Color;
 
@@ -13,7 +13,17 @@ import org.junit.Test;
 
 public class Test_MathUtils {
 
-	private static final double DELTA = NumberUtils.DELTA;
+//	private static final double DELTA = NumberUtils.DELTA;
+
+
+
+/*
+	@Test
+	public void testCeilDiv() {
+		Assert.assertEquals(4, MathUtils.ceilDiv(10, 3));
+		Assert.assertEquals(2, MathUtils.ceilDiv( 3, 2));
+	}
+*/
 
 
 
@@ -39,6 +49,7 @@ public class Test_MathUtils {
 
 
 
+/*
 	@Test
 	public void testCubicInterpolate() {
 		final double a = 1.0;
@@ -88,6 +99,7 @@ public class Test_MathUtils {
 		Assert.assertEquals(1.0,  CubicInterpolateCircularValues(values,-1, 1.0), DELTA);
 		Assert.assertEquals(1.0,  CubicInterpolateCircularValues(values, 4, 1.0), DELTA);
 	}
+*/
 
 
 
