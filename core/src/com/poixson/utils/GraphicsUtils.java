@@ -14,7 +14,7 @@ public class GraphicsUtils {
 
 
 
-	public static Image LoadImage(final InputStream stream) {
+	public static BufferedImage LoadImage(final InputStream stream) {
 		if (stream != null) {
 			try {
 				return ImageIO.read(stream);
