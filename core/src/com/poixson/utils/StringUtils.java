@@ -326,6 +326,14 @@ public final class StringUtils {
 
 
 
+	// c | char
+	// s | string
+	// i | ignore case
+	// f | trim front
+	// e | trim end
+
+
+
 	public static String TrimToNull(final String str, final String...strip) {
 		if (Utils.isEmpty(str)) return null;
 		//                            front end   case

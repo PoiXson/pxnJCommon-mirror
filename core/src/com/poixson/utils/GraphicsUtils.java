@@ -9,7 +9,7 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 
-public class GraphicsUtils {
+public final class GraphicsUtils {
 	private GraphicsUtils() {}
 
 
