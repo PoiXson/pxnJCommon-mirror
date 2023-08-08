@@ -1,11 +1,18 @@
 package com.poixson.utils;
 
+import java.util.Set;
+
 import com.poixson.tools.Keeper;
 
 
 public final class ArrayUtils {
 	private ArrayUtils() {}
 	static { Keeper.add(new ArrayUtils()); }
+
+
+
+	// -------------------------------------------------------------------------------
+	// safe array
 
 
 
@@ -37,6 +44,22 @@ public final class ArrayUtils {
 		if (index >= count)
 			return GetSafeLooped(array, index-1) + GetSafeLooped(array, index);
 		return array[index];
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// set/list to primitive array
+
+
+
+	public static int[] SetToArray(final Set<Integer> set) {
+		final Integer[] copy = set.toArray(new Integer[0]);
+		final int size = copy.length;
+		final int[] result = new int[size];
+		for (int i=0; i<size; i++)
+			result[i] = copy[i].intValue();
+		return result;
 	}
 
 
