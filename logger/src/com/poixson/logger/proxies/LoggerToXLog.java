@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger.proxies;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -109,3 +110,4 @@ public class LoggerToXLog extends Handler {
 
 
 }
+*/

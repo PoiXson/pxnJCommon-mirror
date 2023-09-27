@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger.handlers;
 
 import java.io.InputStream;
@@ -75,3 +76,4 @@ public class xLogHandler_Console extends xLogHandler {
 
 
 }
+*/

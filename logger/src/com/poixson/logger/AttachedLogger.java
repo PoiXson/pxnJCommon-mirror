@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger;
 
 public interface AttachedLogger {
@@ -86,3 +87,4 @@ public interface AttachedLogger {
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.poixson.threadpool.types;
 
 import java.awt.EventQueue;
@@ -103,3 +104,4 @@ public class xThreadPool_GUI extends xThreadPool_Single {
 
 
 }
+*/

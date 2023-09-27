@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -86,3 +87,4 @@ public final class Failure {
 
 
 }
+*/

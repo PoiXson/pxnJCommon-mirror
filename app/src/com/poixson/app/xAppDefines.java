@@ -1,3 +1,4 @@
+/*
 package com.poixson.app;
 
 import com.poixson.tools.Keeper;
@@ -30,3 +31,4 @@ public final class xAppDefines {
 
 
 }
+*/

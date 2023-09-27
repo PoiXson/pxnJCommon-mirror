@@ -1,5 +1,6 @@
-package com.poixson.app;
 /*
+package com.poixson.app;
+/ *
  * Startup sequence
  *    5  startup time - xApp
  *
@@ -8,7 +9,7 @@ package com.poixson.app;
  *   10  garbage collect   - xApp
  *    5  uptime            - xApp
  *    1  exit              - xApp
- */
+ * /
 
 import java.io.IOException;
 import java.lang.ref.SoftReference;
@@ -681,3 +682,4 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 }
+*/

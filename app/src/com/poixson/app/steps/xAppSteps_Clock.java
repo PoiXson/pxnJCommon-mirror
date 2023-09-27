@@ -1,13 +1,15 @@
+/*
+/*
 package com.poixson.app.steps;
 
 import com.poixson.app.xAppStep;
 import com.poixson.app.xAppStep.StepType;
 
 
-/*
+/ *
  * Startup sequence
  *   55  sync clock
- */
+ * /
 public class xAppSteps_Clock {
 
 
@@ -27,3 +29,4 @@ public class xAppSteps_Clock {
 
 
 }
+*/

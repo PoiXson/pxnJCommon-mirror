@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.events;
 
 import java.lang.reflect.Method;
@@ -92,3 +93,4 @@ public class xHandlerGeneric extends xHandler<xEvent> {
 
 
 }
+*/

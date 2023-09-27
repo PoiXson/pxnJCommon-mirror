@@ -1,3 +1,4 @@
+/*
 package com.poixson.app.steps;
 
 import java.util.Iterator;
@@ -15,10 +16,10 @@ import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
-/*
+/ *
  * Startup sequence
  *   50  display logo
- */
+ * /
 public class xAppSteps_Logo {
 
 	protected static final int INDENT        = 2;
@@ -240,3 +241,4 @@ public class xAppSteps_Logo {
 
 
 }
+*/
