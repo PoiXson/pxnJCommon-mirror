@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated: Tue Mar 15 06:27:38 AM EDT 2022 -->
+<!-- Generated: Tue Sep 26 08:17:57 PM EDT 2023 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<name>pxnJCommon-Logger</name>
 	<artifactId>common-logger</artifactId>
 	<groupId>com.poixson</groupId>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>4.0.26-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<url>https://poixson.com</url>
 	<description>Common utilities and tools for PoiXson projects</description>
@@ -17,19 +17,21 @@
 	</organization>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<java.version>17</java.version>
+		<maven.compiler.release>17</maven.compiler.release>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
 
 		<!-- Maven Plugins -->
-		<maven-compiler-plugin-version>3.8.1</maven-compiler-plugin-version>
-		<maven-jar-plugin-version>3.2.0</maven-jar-plugin-version>
-		<maven-source-plugin-version>3.2.1</maven-source-plugin-version>
+		<maven-compiler-plugin-version>3.11.0</maven-compiler-plugin-version>
+		<maven-jar-plugin-version>3.3.0</maven-jar-plugin-version>
+		<maven-source-plugin-version>3.3.0</maven-source-plugin-version>
 		<maven-eclipse-plugin-version>2.10</maven-eclipse-plugin-version>
 		<git-commit-id-version>4.9.10</git-commit-id-version>
 
 		<!-- Dependencies -->
-		<common-core-version>4.0.0-SNAPSHOT</common-core-version>
-		<slf4j-api-version>1.7.36</slf4j-api-version>
+		<common-core-version>[4.0.0,)</common-core-version>
+		<slf4j-api-version>2.0.7</slf4j-api-version>
 
 	</properties>
 	<scm>
@@ -57,10 +59,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${maven-compiler-plugin-version}</version>
-				<configuration>
-					<source>11</source>
-					<target>11</target>
-				</configuration>
 			</plugin>
 
 			<!-- Jar Plugin -->
