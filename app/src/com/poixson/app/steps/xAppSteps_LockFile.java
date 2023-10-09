@@ -8,10 +8,10 @@ import com.poixson.tools.xLockFile;
 
 / *
  * Startup sequence
- *   20  lock file
+ *  20 | lock file
  *
  * Shutdown sequence
- *   20  release lock file
+ *  20 | release lock file
  * /
 public class xAppSteps_LockFile {
 
@@ -32,7 +32,7 @@ public class xAppSteps_LockFile {
 
 	// lock file
 	@xAppStep(type=StepType.STARTUP, step=20, title="Lock File")
-	public void __START_lockfile() {
+	public void __START__lockfile() {
 		final xLockFile lock = xLockFile.Get(this.filename);
 		if ( ! lock.acquire() )
 			throw new RuntimeException("Failed to get lock on file: "+this.filename);
@@ -47,7 +47,7 @@ public class xAppSteps_LockFile {
 
 	// release lock file
 	@xAppStep(type=StepType.SHUTDOWN, step=20, title="Lock File")
-	public void __STOP_lockfile() {
+	public void __STOP__lockfile() {
 		xLockFile.Release(this.filename);
 	}
 

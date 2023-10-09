@@ -1,16 +1,15 @@
-/*
 package com.poixson.app.steps;
 
 import com.poixson.app.xAppStep;
-import com.poixson.app.xAppStep.StepType;
+import com.poixson.app.xAppStepType;
 import com.poixson.utils.Utils;
 
 
-/ *
+/*
  * Startup sequence
- *   10  check user
- * /
-public interface xAppSteps_UserNotRoot {
+ *  5 | check user
+ */
+public class xAppSteps_UserNotRoot {
 
 
 
@@ -20,8 +19,8 @@ public interface xAppSteps_UserNotRoot {
 
 
 	// ensure not root
-	@xAppStep(type=StepType.STARTUP, step=10, title="Check User")
-	default void __START_user_not_root() {
+	@xAppStep(type=xAppStepType.STARTUP, step=5, title="Check User")
+	public void __START__user_not_root() {
 		final String user = System.getProperty("user.name");
 		if (Utils.isEmpty(user))
 			return;
@@ -37,4 +36,3 @@ public interface xAppSteps_UserNotRoot {
 
 
 }
-*/

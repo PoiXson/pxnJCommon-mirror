@@ -8,7 +8,7 @@ import com.poixson.app.xAppStep.StepType;
 
 / *
  * Startup sequence
- *   55  sync clock
+ *  55 | sync clock
  * /
 public class xAppSteps_Clock {
 
@@ -21,7 +21,7 @@ public class xAppSteps_Clock {
 
 	// ensure not root
 	@xAppStep(type=StepType.STARTUP, step=55, title="Clock Sync")
-	public void __START_clock_sync() {
+	public void __START__clock_sync() {
 //TODO
 //		xClock.get(true);
 	}

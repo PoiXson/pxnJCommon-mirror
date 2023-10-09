@@ -1,4 +1,3 @@
-/*
 package com.poixson.app.steps;
 
 import java.util.Iterator;
@@ -16,10 +15,10 @@ import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
-/ *
+/*
  * Startup sequence
- *   50  display logo
- * /
+ *  15 | display logo
+ */
 public class xAppSteps_Logo {
 
 	protected static final int INDENT        = 2;
@@ -55,7 +54,7 @@ public class xAppSteps_Logo {
 
 
 
-	protected void displayLegal(final xLog log) {
+	protected void display_legal(final xLog log) {
 		log.publish(" This program comes with absolutely no warranty. This is free ");
 		log.publish(" software and you are welcome to modify it or redistribute it ");
 		log.publish(" under certain conditions. Type 'show license' at the command ");
@@ -124,7 +123,7 @@ public class xAppSteps_Logo {
 //10 |/////////////////////////////////////////////////////////////////|
 //   0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6
 //             1         2         3         4         5         6
-	protected void displayLogo(final xLog log) {
+	protected void display_logo(final xLog log) {
 		// define colors
 		final String COLOR_BG = "black";
 		final String COLOR_PXN_P       = "bold,green";
@@ -241,4 +240,3 @@ public class xAppSteps_Logo {
 
 
 }
-*/
