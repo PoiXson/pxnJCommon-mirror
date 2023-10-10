@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated: Wed Jun 14 04:17:12 AM EDT 2023 -->
+<!-- Generated: Tue Oct 10 02:06:23 AM EDT 2023 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -31,7 +31,7 @@
 
 		<!-- Dependencies -->
 		<common-core-version>[4.0.0,)</common-core-version>
-		<snakeyaml-version>2.0</snakeyaml-version>
+		<snakeyaml-version>2.2</snakeyaml-version>
 
 	</properties>
 	<scm>
