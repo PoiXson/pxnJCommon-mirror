@@ -1,5 +1,7 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.Utils.GetMS;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -14,6 +16,12 @@ public class xTime {
 
 	// stored value in ms
 	public final AtomicLong value = new AtomicLong(0L);
+
+
+
+	public static xTime Now() {
+		return new xTime(GetMS());
+	}
 
 
 
