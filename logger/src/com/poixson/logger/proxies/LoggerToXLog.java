@@ -1,4 +1,3 @@
-/*
 package com.poixson.logger.proxies;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -9,7 +8,7 @@ import java.util.logging.Logger;
 
 import com.poixson.logger.xLevel;
 import com.poixson.logger.xLog;
-import com.poixson.logger.records.xLogRecord_Msg;
+import com.poixson.logger.xLogRecord_Msg;
 import com.poixson.tools.Keeper;
 import com.poixson.utils.Utils;
 
@@ -20,7 +19,7 @@ public class LoggerToXLog extends Handler {
 
 
 
-	public static void init() {
+	public static void Init() {
 		Logger logger = Logger.getLogger("");
 		logger.setLevel(Level.ALL);
 		final Handler[] handlers = logger.getHandlers();
@@ -32,9 +31,8 @@ public class LoggerToXLog extends Handler {
 			}
 			logger.removeHandler(handler);
 		}
-		if (!found) {
+		if (!found)
 			logger.addHandler( Get() );
-		}
 		// default log levels
 		xLog.Get("jline").setLevel(xLevel.INFO);
 		xLog.Get("netty").setLevel(xLevel.INFO);
@@ -110,4 +108,3 @@ public class LoggerToXLog extends Handler {
 
 
 }
-*/

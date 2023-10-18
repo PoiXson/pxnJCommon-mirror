@@ -1,4 +1,3 @@
-/*
 package com.poixson.logger.formatters;
 
 import java.text.SimpleDateFormat;
@@ -6,13 +5,13 @@ import java.text.SimpleDateFormat;
 import com.poixson.logger.xLevel;
 import com.poixson.logger.xLogFormat;
 import com.poixson.logger.xLogRecord;
-import com.poixson.logger.records.xLogRecord_Msg;
+import com.poixson.logger.xLogRecord_Msg;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
 public class xLogFormat_Tagged implements xLogFormat {
-	public static final String DEFAULT_FORMAT = " {time} [{level}]{crumbs} {msg}";
+	public static final String DEFAULT_FORMAT       = " {time} [{level}]{crumbs} {msg}";
 	public static final String DEFAULT_FORMAT_CRUMB = " [{][}]";
 	public static final String DEFAULT_FORMAT_TIME  = "D yyyy-MM-dd HH:mm:ss";
 
@@ -26,16 +25,13 @@ public class xLogFormat_Tagged implements xLogFormat {
 
 
 
-	public xLogFormat_Tagged() {
-		this(null, null, null);
-	}
 	public xLogFormat_Tagged(final String format,
 			final String formatCrumbs, final String formatTime) {
 		this.format      = Utils.ifEmpty(format,       DEFAULT_FORMAT);
 		this.formatTime  = Utils.ifEmpty(formatTime,   DEFAULT_FORMAT_TIME);
 		this.formatCrumb = Utils.ifEmpty(formatCrumbs, DEFAULT_FORMAT_CRUMB);
-		this.containsTime   = this.format.contains("{time}");
-		this.containsLevel  = this.format.contains("{level}");
+		this.containsTime   = this.format.contains("{time}"  );
+		this.containsLevel  = this.format.contains("{level}" );
 		this.containsCrumbs = this.format.contains("{crumbs}");
 	}
 
@@ -64,62 +60,18 @@ public class xLogFormat_Tagged implements xLogFormat {
 					result = result.replace("{level}", StringUtils.PadCenter(7, levelStr, ' '));
 			}
 			if (this.containsCrumbs)
-				result = result.replace("{crumbs}", this.genCrumbs(record));
+				result = result.replace("{crumbs}", this.genCrumbs(record, this.formatCrumb));
 			return result.replace("{msg}", record.toString());
 		}
 	}
 
 
 
-	// title
-	protected String genTitle(final xLogRecord_Msg record) {
-		return this.genTitle(record, " [[ ", " ]] ");
-	}
-	protected String genTitle(final xLogRecord_Msg record,
-			final String preStr, final String postStr) {
-		if (record.isEmpty()) {
-			return (new StringBuilder())
-					.append(preStr)
-					.append("<null>")
-					.append(postStr)
-					.toString();
-		}
-		final String msg = record.toString();
-		final String[] lines = msg.split("\n");
-		final int length = StringUtils.FindLongestLine(lines);
-		final StringBuilder result = new StringBuilder();
-		for (final String line : lines) {
-			if (result.length() == 0)
-				result.append('\n');
-			result.append(preStr)
-				.append( StringUtils.PadEnd(length, line, ' ') )
-				.append(postStr);
-		}
-		return result.toString();
-	}
-
-
-
-	// timestamp
-	protected String genTimestamp(final xLogRecord_Msg record) {
-		return this.genTimestamp(record, null);
-	}
-	protected String genTimestamp(final xLogRecord_Msg record, final String format) {
-		final SimpleDateFormat dateFormat =
-			new SimpleDateFormat(
-				Utils.ifEmpty(format, DEFAULT_FORMAT_TIME)
-			);
-		return dateFormat.format( Long.valueOf(record.timestamp) );
-	}
-
-
-
-	// crumbs
-	protected String genCrumbs(final xLogRecord_Msg record) {
+	protected String genCrumbs(final xLogRecord_Msg record, final String formatCrumb) {
 		final String[] tree = record.getNameTree();
 		if (Utils.isEmpty(tree))
 			return "";
-		final String[] parts = StringUtils.Split(this.formatCrumb, '{', '}');
+		final String[] parts = StringUtils.Split(formatCrumb, '{', '}');
 		final String start, mid, end;
 		if (Utils.isEmpty(parts)) {
 			start = "";
@@ -157,5 +109,47 @@ public class xLogFormat_Tagged implements xLogFormat {
 
 
 
+	// title
+	protected String genTitle(final xLogRecord_Msg record) {
+		return this.genTitle(record, " [[ ", " ]] ");
+	}
+	protected String genTitle(final xLogRecord_Msg record,
+			final String strPre, final String strPost) {
+		if (record.isEmpty()) {
+			return (new StringBuilder())
+					.append(strPre)
+					.append("<null>")
+					.append(strPost)
+					.toString();
+		}
+		final String msg = record.toString();
+		final String[] lines = msg.split("\n");
+		final int length = StringUtils.FindLongestLine(lines);
+		final StringBuilder result = new StringBuilder();
+		for (final String line : lines) {
+			if (result.length() == 0)
+				result.append('\n');
+			result.append(strPre)
+				.append( StringUtils.PadEnd(length, line, ' ') )
+				.append(strPost);
+		}
+		return result.toString();
+	}
+
+
+
+	// timestamp
+	protected String genTimestamp(final xLogRecord_Msg record) {
+		return this.genTimestamp(record, null);
+	}
+	protected String genTimestamp(final xLogRecord_Msg record, final String format) {
+		final SimpleDateFormat dateFormat =
+			new SimpleDateFormat(
+				Utils.ifEmpty(format, DEFAULT_FORMAT_TIME)
+			);
+		return dateFormat.format( Long.valueOf(record.timestamp) );
+	}
+
+
+
 }
-*/

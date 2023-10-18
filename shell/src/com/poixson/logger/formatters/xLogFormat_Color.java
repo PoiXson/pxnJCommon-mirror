@@ -1,28 +1,30 @@
-/*
 package com.poixson.logger.formatters;
 
 import com.poixson.logger.xLevel;
-import com.poixson.logger.records.xLogRecord_Msg;
+import com.poixson.logger.xLogRecord_Msg;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
-public class xLogFormatter_Color extends xLogFormatter {
+public class xLogFormat_Color extends xLogFormat_Tagged {
 
 
 
-	public xLogFormatter_Color() {
-		super();
+	public xLogFormat_Color() {
+		this(null, null, null);
+	}
+	public xLogFormat_Color(final String format,
+			final String formatCrumbs, final String formatTime) {
+		super(format, formatCrumbs, formatTime);
 	}
 
 
 
-	@Override
-	public String[] formatMessage(final xLogRecord_Msg record) {
+	public String format_msg(final xLogRecord_Msg record) {
 		final xLevel level = record.getLevel();
 		// publish plain message
 		if (level == null) {
-			return record.getLines();
+			return record.toString();
 		}
 		// [[ title ]]
 		if (xLevel.TITLE.equals(level)) {
@@ -34,29 +36,27 @@ public class xLogFormatter_Color extends xLogFormatter {
 				);
 		}
 		// format message lines
-		final String[] lines = record.getLines();
+		final String[] lines = record.toString().split("\n");
 		final String[] result = new String[ lines.length ];
 		for (int index = 0; index < lines.length; index++) {
 			// timestamp [level] [crumbs] message
-			result[index] =
-				StringUtils.MergeStrings(
-					' ',
-					// timestamp
-					this.genTimestamp(
-						record,
-						"D yyyy-MM-dd HH:mm:ss",
-						"@|FG_WHITE ",
-						"|@"
-					),
-					// [level]
-					this.genLevelColored(record),
-					// [crumbs]
-					this.genCrumbsColored(record),
-					// message
-					lines[index]
-				);
+			result[index] = (new StringBuilder())
+				.append(" @|FG_WHITE ")
+				// timestamp
+				.append(this.genTimestamp(
+					record,
+					"D yyyy-MM-dd HH:mm:ss"
+				))
+				.append("|@")
+				// [level]
+				.append(this.genLevelColored(record))
+				// [crumbs]
+				.append(this.genCrumbsColored(record))
+				// message
+				.append(lines[index])
+				.toString();
 		}
-		return result;
+		return StringUtils.MergeStrings('\n', result);
 	}
 
 
@@ -72,7 +72,7 @@ public class xLogFormatter_Color extends xLogFormatter {
 			.append("@|FG_BLACK,BOLD [|@@|")
 			.append( this.getLevelColor(record.level) )
 			.append(' ')
-			.append( StringUtils.PadCenter(7, record.getLevelStr(), ' ') )
+			.append( StringUtils.PadCenter(7, record.getLevelName(), ' ') )
 			.append("|@@|FG_BLACK,BOLD ]|@")
 			.toString();
 	}
@@ -94,12 +94,13 @@ public class xLogFormatter_Color extends xLogFormatter {
 		// fatal
 		if (level.isLoggable(xLevel.FATAL))
 			return "FG_RED,BOLD,UNDERLINE";
-		// stdout
-		if (level.isLoggable(xLevel.STDOUT))
-			return "FG_GREEN";
-		// stderr
-		if (level.isLoggable(xLevel.STDERR))
-			return "FG_YELLOW";
+//TODO: remove this?
+//		// stdout
+//		if (level.isLoggable(xLevel.STDOUT))
+//			return "FG_GREEN";
+//		// stderr
+//		if (level.isLoggable(xLevel.STDERR))
+//			return "FG_YELLOW";
 		// off
 		return "FG_BLACK,BOLD";
 	}
@@ -108,8 +109,8 @@ public class xLogFormatter_Color extends xLogFormatter {
 
 	// crumbs
 	protected String genCrumbsColored(final xLogRecord_Msg record) {
-		final String crumbStr = super.genCrumbs(record, "[", "] [", "]");
-		if (Utils.isBlank(crumbStr))
+		final String crumbStr = super.genCrumbs(record, "[{][}]");
+		if (Utils.isEmpty(crumbStr))
 			return "";
 		return (new StringBuilder())
 			.append("@|FG_BLACK,BOLD ")
@@ -121,4 +122,3 @@ public class xLogFormatter_Color extends xLogFormatter {
 
 
 }
-*/

@@ -1,8 +1,8 @@
-/*
 package com.poixson.logger;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.poixson.logger.handlers.xLogHandler_Console;
 import com.poixson.logger.proxies.LoggerToXLog;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;
@@ -15,19 +15,30 @@ public class xLogRoot extends xLogger {
 
 
 
+	static {
+		InitRoot();
+	}
+
+
+
 	// init root logger
-	public static void init() {
+	public static void InitRoot() {
 		if (!rootInited.compareAndSet(false, true))
-			throw new RuntimeException("Logger root already initialized");
+			return;
 		// override stdio
-		StdIO.init();
+		StdIO.Init();
 		// root logger
 		final xLog log = new xLogRoot();
+//TODO: remove this
+		// default log to console
+		log.setDefaultHandlerIfEmpty(
+			new xLogHandler_Console()
+		);
 		if (!root.compareAndSet(null, log))
 			throw new RuntimeException("Logger root already initialized");
 		Keeper.add(log);
 		// proxy
-		LoggerToXLog.init();
+		LoggerToXLog.Init();
 	}
 
 
@@ -42,8 +53,9 @@ public class xLogRoot extends xLogger {
 				new OutputStreamLineRemapper() {
 					@Override
 					public void line(final String line) {
-						xLog.Get()
-							.stdout(line);
+						final xLog log = xLog.Get();
+						if (log == null) StdIO.OriginalOut().println(line);
+						else             log.stdout(line);
 					}
 				}
 			)
@@ -54,8 +66,9 @@ public class xLogRoot extends xLogger {
 				new OutputStreamLineRemapper() {
 					@Override
 					public void line(final String line) {
-						xLog.Get()
-							.stderr(line);
+						final xLog log = xLog.Get();
+						if (log == null) StdIO.OriginalErr().println(line);
+						else             log.stderr(line);
 					}
 				}
 			)
@@ -72,4 +85,3 @@ public class xLogRoot extends xLogger {
 
 
 }
-*/

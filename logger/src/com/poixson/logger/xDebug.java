@@ -1,4 +1,3 @@
-/*
 package com.poixson.logger;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -16,13 +15,13 @@ public final class xDebug {
 
 
 
-	public static void init() {}
+	public static void Init() {}
 
 	static {
 		boolean isDefault = true;
 		if (ProcUtils.isDebugWireEnabled()) {
 			setDebug(true);
-			final xLogRoot log = xLogRoot.Peek();
+			final xLog log = xLog.Get();
 			if (log != null) {
 				log.fine("Detected IDE");
 			}
@@ -34,7 +33,7 @@ public final class xDebug {
 	}
 
 	private xDebug() {
-		xDebug.init();
+		xDebug.Init();
 	}
 
 
@@ -67,7 +66,7 @@ public final class xDebug {
 
 
 	private static void debugEnableDisable(final boolean value) {
-		final xLogRoot log = xLogRoot.Peek();
+		final xLog log = xLog.Get();
 		if (log != null) {
 			if (value) {
 				log.setLevel(xLevel.ALL);
@@ -79,4 +78,3 @@ public final class xDebug {
 
 
 }
-*/

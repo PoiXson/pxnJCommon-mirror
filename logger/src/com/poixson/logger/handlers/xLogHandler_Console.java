@@ -1,10 +1,11 @@
-/*
 package com.poixson.logger.handlers;
 
 import java.io.InputStream;
 import java.io.PrintStream;
 
+import com.poixson.logger.xConsole;
 import com.poixson.logger.xLogHandler;
+import com.poixson.logger.xLogRecord;
 import com.poixson.tools.StdIO;
 import com.poixson.utils.ShellUtils;
 import com.poixson.utils.Utils;
@@ -20,9 +21,16 @@ public class xLogHandler_Console extends xLogHandler {
 
 	public xLogHandler_Console() {
 		super();
-		this.out = StdIO.OriginalOut;
-		this.err = StdIO.OriginalErr;
-		this.in  = StdIO.OriginalIn;
+		this.out = StdIO.OriginalOut();
+		this.err = StdIO.OriginalErr();
+		this.in  = StdIO.OriginalIn();
+	}
+	// with console prompt
+	public xLogHandler_Console(final xConsole console) {
+		super();
+		this.out = console;
+		this.err = console;
+		this.in  = StdIO.OriginalIn();
 	}
 
 
@@ -33,22 +41,24 @@ public class xLogHandler_Console extends xLogHandler {
 
 
 	@Override
-	protected void publish(final String[] lines) {
+	public void publish(final xLogRecord record) {
 		this.getPublishLock();
 		try {
-			if (Utils.isEmpty(lines)) {
+			final String msg = this.format(record);
+			if (Utils.isEmpty(msg)) {
 				this.out.println();
-			} else
-			// single line
-			if (lines.length == 1) {
-				this.out.println( ShellUtils.RenderAnsi(lines[0]) );
-			// multiple lines
 			} else {
-				for (final String line : lines) {
-					this.out.println( ShellUtils.RenderAnsi(line) );
+				final String[] lines = msg.split("\n");
+				// single line
+				if (lines.length == 1) {
+					this.out.println( ShellUtils.RenderAnsi(lines[0]) );
+				// multiple lines
+				} else {
+					for (final String line : lines)
+						this.out.println( ShellUtils.RenderAnsi(line) );
 				}
+				this.out.flush();
 			}
-			this.out.flush();
 		} finally {
 			this.releasePublishLock();
 		}
@@ -56,24 +66,24 @@ public class xLogHandler_Console extends xLogHandler {
 
 
 
-	@Override
-	public void flush() {
-		this.getPublishLock();
-		try {
-			this.out.flush();
-			this.err.flush();
-		} finally {
-			this.releasePublishLock();
-		}
-	}
-	@Override
-	public void clearScreen() {
-	}
-	@Override
-	public void beep() {
-	}
+//TODO
+//	@Override
+//	public void flush() {
+//		this.getPublishLock();
+//		try {
+//			this.out.flush();
+//			this.err.flush();
+//		} finally {
+//			this.releasePublishLock();
+//		}
+//	}
+//	@Override
+//	public void clearScreen() {
+//	}
+//	@Override
+//	public void beep() {
+//	}
 
 
 
 }
-*/
