@@ -1,8 +1,6 @@
-package com.poixson.logger.records;
+package com.poixson.logger;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.logger.xLevel;
-import com.poixson.logger.xLogRecord;
 
 
 public class xLogRecord_Special implements xLogRecord {

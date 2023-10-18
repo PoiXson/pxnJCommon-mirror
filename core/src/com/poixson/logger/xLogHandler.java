@@ -1,12 +1,8 @@
-/*
 package com.poixson.logger;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
-
-import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 
 public abstract class xLogHandler {
@@ -14,9 +10,8 @@ public abstract class xLogHandler {
 	// publish lock
 	protected final ReentrantLock lock = new ReentrantLock(true);
 
-	protected final AtomicReference<xLevel> level = new AtomicReference<xLevel>(null);
-
 	protected final AtomicReference<xLogFormat> format = new AtomicReference<xLogFormat>(null);
+	protected final AtomicReference<xLevel>     level  = new AtomicReference<xLevel>    (null);
 
 
 
@@ -27,6 +22,15 @@ public abstract class xLogHandler {
 
 	// -------------------------------------------------------------------------------
 	// publish
+
+
+
+	public abstract void publish(final xLogRecord record);
+
+
+
+/*
+	protected abstract void publish(final String[] lines);
 
 
 
@@ -47,7 +51,7 @@ public abstract class xLogHandler {
 		this.publish(lines);
 	}
 	public void publish(final xLogRecord record) {
-		if (this.notLoggable(record.getLevel()))
+		if (!this.isLoggable(record.getLevel()))
 			return;
 		// blank line
 		if (record == null || record.isEmpty()) {
@@ -57,13 +61,12 @@ public abstract class xLogHandler {
 		this.publish( this.format(record) );
 	}
 
-	protected abstract void publish(final String[] lines);
-
 
 
 	public abstract void flush();
 	public abstract void clearScreen();
 	public abstract void beep();
+*/
 
 
 
@@ -144,11 +147,7 @@ public abstract class xLogHandler {
 			return true;
 		return current.isLoggable(level);
 	}
-	public boolean notLoggable(final xLevel level) {
-		return ! this.isLoggable(level);
-	}
 
 
 
 }
-*/
