@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 import com.poixson.app.xApp;
 import com.poixson.app.xAppStep;
-import com.poixson.app.xAppStep.StepType;
+import com.poixson.app.xAppStepType;
 import com.poixson.logger.xLog;
 import com.poixson.tools.AsciiArtBuilder;
 import com.poixson.utils.ProcUtils;
@@ -40,13 +40,13 @@ public class xAppSteps_Logo {
 
 
 	// display logo
-	@xAppStep(type=StepType.STARTUP, step=50, title="Display Logo")
-	public void __START_display_logo() {
+	@xAppStep(type=xAppStepType.STARTUP, step=15, title="Display Logo")
+	public void __START__display_logo() {
 		final xLog log = this.app.log();
 		log.publish();
-		this.displayLogo(log);
+		this.display_logo(log);
 		log.publish();
-		this.displayLegal(log);
+		this.display_legal(log);
 		log.publish();
 		DisplayStartupVars(this.app, log);
 		log.publish();

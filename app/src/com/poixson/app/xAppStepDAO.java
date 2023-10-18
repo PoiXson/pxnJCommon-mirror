@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import com.poixson.app.xAppStep.PauseWhen;
-import com.poixson.app.xAppStep.StepType;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.tools.abstractions.RunnableNamed;
@@ -17,9 +16,9 @@ public class xAppStepDAO implements RunnableNamed {
 	public final xApp     app;
 	public final xAppStep anno;
 	public final int      step;
-	public final StepType type;
-//TODO
-//	public final boolean  multi;
+	public final xAppStepType type;
+
+	public final boolean  multi;
 	public final PauseWhen pause;
 
 	public final String title;
@@ -39,14 +38,12 @@ public class xAppStepDAO implements RunnableNamed {
 		this.app  = app;
 		this.anno = anno;
 		this.type = anno.type();
-		this.step =
-			(
-				StepType.STARTUP.equals(this.type)
-				? anno.step()
-				: 0 - Math.abs(anno.step())
-			);
-//TODO
-//		this.multi = anno.multi();
+		this.step = (
+			xAppStepType.STARTUP.equals(this.type)
+			? anno.step()
+			: 0 - Math.abs(anno.step())
+		);
+		this.multi = anno.multi();
 		this.pause = anno.pause();
 		if (Utils.notEmpty(anno.title())) {
 			this.title = anno.title();
@@ -116,46 +113,34 @@ public class xAppStepDAO implements RunnableNamed {
 
 
 	// -------------------------------------------------------------------------------
+	// step params
 
 
 
 	// startup/shutdown type
-	public boolean isType(final StepType type) {
+	public boolean isType(final xAppStepType type) {
 		if (type == null)
 			return false;
 		return type.equals(this.type);
 	}
-
-
 
 	// step value
 	public boolean isStepValue(final int step) {
 		return (this.step == step);
 	}
 
-
-
-//TODO
-//	// multi step
-//	public boolean isMultiStep() {
-//		return this.multi;
-//	}
-
-
-
-	// pause before/after
-	public boolean noPause() {
-		return PauseWhen.NONE.equals(this.pause);
-	}
-	public boolean isPauseBefore() {
-		return PauseWhen.BEFORE.equals(this.pause);
-	}
-	public boolean isPauseAfter() {
-		return PauseWhen.AFTER.equals(this.pause);
+	// multi step
+	public boolean isMultiStep() {
+		return this.multi;
 	}
 
 
+
+	// -------------------------------------------------------------------------------
 	// step name
+
+
+
 	@Override
 	public String getTaskName() {
 		return this.titleFull;
@@ -168,6 +153,23 @@ public class xAppStepDAO implements RunnableNamed {
 	public boolean equalsTaskName(final String name) {
 		return StringUtils.MatchString(name, this.title)
 			|| StringUtils.MatchString(name, this.titleFull);
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// pause before/after
+
+
+
+	public boolean noPause() {
+		return PauseWhen.NONE.equals(this.pause);
+	}
+	public boolean isPauseBefore() {
+		return PauseWhen.BEFORE.equals(this.pause);
+	}
+	public boolean isPauseAfter() {
+		return PauseWhen.AFTER.equals(this.pause);
 	}
 
 

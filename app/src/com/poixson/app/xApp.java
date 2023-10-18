@@ -1,5 +1,7 @@
 package com.poixson.app;
 
+import static com.poixson.app.xAppDefines.EXIT_HUNG;
+
 import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.Iterator;
@@ -9,8 +11,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.poixson.app.xAppStep.StepType;
 import com.poixson.exceptions.RequiredArgumentException;
+import com.poixson.logger.xDebug;
+import com.poixson.logger.xLevel;
 import com.poixson.logger.xLog;
 import com.poixson.logger.xLogHandler;
 import com.poixson.threadpool.xThreadPool;
@@ -39,27 +42,65 @@ import com.poixson.utils.Utils;
  *  10 | garbage collect
  *   1 | exit
  */
-//TODO: AttachedLogger
 public abstract class xApp implements xStartable, Runnable, xFailable {
 
 	// app instances
 	protected static final CopyOnWriteArraySet<xApp> apps = new CopyOnWriteArraySet<xApp>();
-	protected static final xTime EXIT_TIMEOUT = new xTime(200L);
+
+	protected final AppProps props;
+
+	protected final xTime time_start = new xTime();
+
+	protected final AtomicReference<String[]> args = new AtomicReference<String[]>(null);
+
+	// app state
+	protected final AtomicInteger state = new AtomicInteger(xAppState.OFF.value);
+	protected final AtomicBoolean paused = new AtomicBoolean(false);
 	protected final AtomicReference<Failure> failed = new AtomicReference<Failure>(null);
 	protected final AtomicReference<HangCatcher> hangcatcher = new AtomicReference<HangCatcher>(null);
 
-	protected final xTime startTime = new xTime();
-	protected final AppProps props;
-	protected final AtomicReference<String[]> args = new AtomicReference<String[]>(null);
-
-	protected final AtomicInteger state  = new AtomicInteger(xAppDefines.STATE_OFF);
-	protected final AtomicBoolean paused = new AtomicBoolean(false);
-	protected final AtomicBoolean queued = new AtomicBoolean(false);
-
-	protected final AtomicReference<xAppStepLoader> stepLoader = new AtomicReference<xAppStepLoader>(null);
-	protected final AtomicReference<xAppStepDAO>   nextStepDAO = new AtomicReference<xAppStepDAO>(null);
+	protected final AtomicReference<xAppStepLoader> step_loader = new AtomicReference<xAppStepLoader>(null);
+	protected final AtomicReference<xAppStepDAO>    nextStepDAO = new AtomicReference<xAppStepDAO>(null);
 
 	protected final CopyOnWriteArraySet<Runnable> hookReady = new CopyOnWriteArraySet<Runnable>();
+
+	protected static final xTime EXIT_TIMEOUT = new xTime(200L);
+
+
+
+	public xApp(final String[] args) {
+		StdIO.Init();
+		AddApp(this);
+		// load app.properties
+		{
+			final AppProps props;
+			try {
+				props = AppProps.LoadFromClassRef( this.getClass() );
+			} catch (IOException e) {
+				this.props = null;
+				this.fail("Failed to load app.properties file", e);
+				return;
+			}
+			this.props = props;
+		}
+		xDebug.Init();
+		// search for .debug file
+		if (!xDebug.isDebug()) {
+			if (Utils.notEmpty(xAppDefines.SEARCH_DEBUG_FILES)) {
+				final String result =
+					FileUtils.SearchLocalFile(
+						xAppDefines.SEARCH_DEBUG_FILES,
+						xAppDefines.SEARCH_DEBUG_PARENTS
+					);
+				if (result != null)
+					xDebug.setDebug();
+			}
+		}
+		if (xDebug.isDebug())
+			xLog.Get().setLevel(xLevel.ALL);
+		xThreadPool_Main.Get()
+			.runTaskNow( new RunnableMethod<Object>(this, "start") );
+	}
 
 
 
@@ -98,48 +139,8 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 
-	protected xApp() {
-		AddApp(this);
-		// load app.properties
-		{
-			final AppProps props;
-			try {
-				props = AppProps.LoadFromClassRef( this.getClass() );
-			} catch (IOException e) {
-				this.props = null;
-				this.fail("Failed to load app.properties file", e);
-				return;
-			}
-			this.props = props;
-		}
-//TODO
-//		xDebug.init();
-		xLog.Get();
-		// search for .debug file
-		if (Utils.notEmpty(xAppDefines.SEARCH_DEBUG_FILES)) {
-			final String result =
-				FileUtils.SearchLocalFile(
-					xAppDefines.SEARCH_DEBUG_FILES,
-					xAppDefines.SEARCH_DEBUG_PARENTS
-				);
-			if (result != null) {
-//TODO
-//				xDebug.setDebug();
-			}
-		}
-	}
-
-
-
 	// -------------------------------------------------------------------------------
 	// start/stop app
-
-
-
-	// note: override this to add steps
-	protected Object[] getStepObjects(final StepType type) {
-		return null;
-	}
 
 
 
@@ -150,23 +151,23 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		if (xThreadPool_Main.Get().proper(this, "start"))
 			return;
 		// check state
-		final int state = this.state.get();
-		if (state == xAppDefines.STATE_RUNNING) return;
-		if (state <  xAppDefines.STATE_OFF)
-			throw new RuntimeException("Cannot start app, currently stopping");
+		final xAppState state = xAppState.FromInt(this.state.get());
+		switch (state) {
+		case RUNNING: return;
+		case STOPPING: throw new RuntimeException("Cannot start app, currently stopping");
+		default: break;
+		}
 		// set starting state
-		if (!this.state.compareAndSet(xAppDefines.STATE_OFF, xAppDefines.STATE_START))
+		if (!this.state.compareAndSet(xAppState.OFF.value, xAppState.STARTING.value))
 			throw new RuntimeException("Cannot start, invalid state: "+this.state.toString());
 		// load steps
-		if (this.stepLoader.get() != null)
+		if (this.step_loader.get() != null)
 			throw new RuntimeException("App is already starting or stopping");
-		final xAppStepLoader loader = new xAppStepLoader(this, StepType.STARTUP);
-		if (!this.stepLoader.compareAndSet(null, loader))
+		final xAppStepLoader loader = new xAppStepLoader(this, xAppStepType.STARTUP);
+		if (!this.step_loader.compareAndSet(null, loader))
 			throw new RuntimeException("App is already starting or stopping");
 		if (this.hasFailed()) return;
-		loader.scanObjects(
-			this.getStepObjects(StepType.STARTUP)
-		);
+		loader.scan(this);
 		if (this.hasFailed()) return;
 		if (loader.isEmpty()) {
 			this.fail("No startup steps were found!");
@@ -181,32 +182,32 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		this.queue();
 	}
 
-
-
 	@Override
 	public void stop() {
 		if (this.hasFailed()) return;
 		// only run in main thread
-		if (xThreadPool_Main.Get().proper(this, "stop")) return;
+		if (xThreadPool_Main.Get().proper(this, "stop"))
+			return;
 		// check state
 		final int state = this.state.get();
-		if (state == xAppDefines.STATE_OFF) return;
-		if (state <  xAppDefines.STATE_OFF) return;
+		switch (xAppState.FromInt(state)) {
+		case OFF:      return;
+		case STOPPING: return;
+		default: break;
+		}
 		// set stopping state
-		if (!this.state.compareAndSet(state, xAppDefines.STATE_STOP)) {
+		if (!this.state.compareAndSet(state, xAppState.STOPPING.value)) {
 			this.stop();
 			return;
 		}
 		// load steps
-		if (this.stepLoader.get() != null)
+		if (this.step_loader.get() != null)
 			throw new RuntimeException("App is already starting or stopping");
-		final xAppStepLoader loader = new xAppStepLoader(this, StepType.SHUTDOWN);
-		if (!this.stepLoader.compareAndSet(null, loader))
+		final xAppStepLoader loader = new xAppStepLoader(this, xAppStepType.SHUTDOWN);
+		if (!this.step_loader.compareAndSet(null, loader))
 			throw new RuntimeException("App is already starting or stopping");
 		if (this.hasFailed()) return;
-		loader.scanObjects(
-			this.getStepObjects(StepType.SHUTDOWN)
-		);
+		loader.scan(this);
 		if (this.hasFailed()) return;
 		if (loader.isEmpty()) {
 			this.fail("No shutdown steps were found!");
@@ -223,53 +224,30 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 
-	public void kill() {
-		final xLog log = xLog.Get();
-		log.flush();
-		final xLogHandler[] handlers = log.getHandlers();
-		for (final xLogHandler handler : handlers) {
-			if (handler instanceof xStartable) {
-				((xStartable) handler).stop();
-			}
-		}
-		System.exit(1);
-	}
-
-
-
-	protected void finishedStartup() {
-	}
-	protected void finishedShutdown() {
-	}
-
-	public void addHookReady(final Runnable run) {
-		this.hookReady.add(run);
-	}
-
-
-
 	// run next step
 	@Override
 	public void run() {
-		this.queued.set(false);
-		if (this.hasFailed()) return;
+		if (this.hasFailed())  return;
 		if (this.paused.get()) return;
 		// finished starting
 		if (this.isRunning()) {
-			this.stepLoader.set(null);
+			this.stopHangCatcher();
+			this.step_loader.set(null);
+//TODO: improve this
 			this.finishedStartup();
 			this.log_loader().title("%s is ready", this.getTitle());
 			final Iterator<Runnable> it = this.hookReady.iterator();
 			while (it.hasNext()) {
 				final Runnable run = it.next();
-				xThreadPool_Main.Get().runTaskLater(run);
+				xThreadPool_Main.Get()
+					.runTaskLater(run);
 			}
 			this.hookReady.clear();
 			return;
 		}
-		// finished shutdown
+		// finished stopping
 		if (this.isStopped()) {
-			this.stepLoader.set(null);
+			this.step_loader.set(null);
 			this.finishedShutdown();
 			this.log_loader().title("%s finished shutdown", this.getTitle());
 			return;
@@ -294,43 +272,64 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		this.queueNextStep();
 		if (dao == null) {
 			this.queue();
-//TODO
-//		} else
-//		if (!dao.isMultiStep()) {
-//			this.queue();
+		} else
+		if (!dao.isMultiStep()) {
+			this.queue();
 		}
 	}
 	public void queue() {
-		if (this.queued.compareAndSet(false, true)) {
-			xThreadPool_Main.Get()
-				.runTaskLater("Next-App-Step", this);
-		}
+		xThreadPool_Main.Get()
+			.runTaskLater("Next-App-Step", this);
 	}
 	protected void queueNextStep() {
 		if (this.hasFailed()) return;
 		if (this.paused.get()) return;
 		if (this.nextStepDAO.get() != null) return;
-		final xAppStepLoader loader = this.stepLoader.get();
+		final xAppStepLoader loader = this.step_loader.get();
 		if (loader == null) throw new NullPointerException("Step loader not found");
 		final xAppStepDAO dao = loader.getNextStep();
 		if (dao == null) {
 			final int state = this.state.get();
 			this.state.set(
-				state > xAppDefines.STATE_OFF
-				? xAppDefines.STATE_RUNNING
-				: xAppDefines.STATE_OFF
+				state > xAppState.OFF.value
+				? xAppState.RUNNING.value
+				: xAppState.OFF.value
 			);
 			return;
 		}
 		// revert back into queue
 		if (!this.nextStepDAO.compareAndSet(null, dao)) {
-			loader.addStep(dao);
+			loader.add(dao);
 			return;
 		}
 		this.state.set(dao.step);
-		if (dao.isPauseBefore()) {
+		if (dao.isPauseBefore())
 			this.pause();
+	}
+
+
+
+	public void kill() {
+		final xLog log = xLog.Get();
+		log.flush();
+		final xLogHandler[] handlers = log.getHandlersOrDefault();
+		for (final xLogHandler handler : handlers) {
+			if (handler instanceof xStartable) {
+				((xStartable) handler).stop();
+			}
 		}
+		System.exit(1);
+	}
+
+
+
+	protected void finishedStartup() {
+	}
+	protected void finishedShutdown() {
+	}
+
+	public void addHookReady(final Runnable run) {
+		this.hookReady.add(run);
 	}
 
 
@@ -342,34 +341,38 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 	@Override
 	public boolean isRunning() {
-		return (this.state.get() == xAppDefines.STATE_RUNNING);
+		return (this.state.get() == xAppState.RUNNING.value);
 	}
 	public boolean isStopped() {
-		return (this.state.get() == xAppDefines.STATE_OFF);
+		return (this.state.get() == xAppState.OFF.value);
 	}
 
-
-
 	public boolean isStarting() {
-		if (this.state.get() == xAppDefines.STATE_RUNNING)
-			return false;
-		final xAppStepLoader loader = this.stepLoader.get();
-		if (loader == null)
-			return false;
-		if (!loader.isStartup())
-			return false;
-		return true;
+		final xAppState state = xAppState.FromInt(this.state.get());
+		switch (state) {
+		case STARTING: {
+			final xAppStepLoader loader = this.step_loader.get();
+			if (loader == null)      return false;
+			if (!loader.isStartup()) return false;
+			return true;
+		}
+		default: break;
+		}
+		return false;
 	}
 	@Override
 	public boolean isStopping() {
-		if (this.state.get() == xAppDefines.STATE_OFF)
-			return false;
-		final xAppStepLoader loader = this.stepLoader.get();
-		if (loader == null)
-			return false;
-		if (!loader.isShutdown())
-			return false;
-		return true;
+		final xAppState state = xAppState.FromInt(this.state.get());
+		switch (state) {
+		case STOPPING: {
+			final xAppStepLoader loader = this.step_loader.get();
+			if (loader == null)       return false;
+			if (!loader.isShutdown()) return false;
+			return true;
+		}
+		default: break;
+		}
+		return false;
 	}
 
 
@@ -400,59 +403,78 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 
-	public long uptime() {
-		final long current = Utils.GetMS();
-		final long startTime = this.startTime.ms();
-		return current - startTime;
+	// -------------------------------------------------------------------------------
+	// startup steps
+
+
+
+	// start time
+	@xAppStep(type=xAppStepType.STARTUP, step=10, title="Startup Time")
+	public void __START__uptime() {
+		this.time_start
+			.set( Utils.GetMS(), TimeUnit.MILLISECONDS );
 	}
 
 
 
 	// -------------------------------------------------------------------------------
-	// failure
+	// shutdown steps
 
 
 
-	@Override
-	public void fail(final Throwable e) {
-		final Throwable cause = Utils.RootCause(e);
-		this.fail(cause.getMessage(), e);
-	}
-	@Override
-	public void fail(final String msg, final Object...args) {
-		if (Failure.AtomicFail(this.failed, this.log(), msg, args)) {
-			this.state.set(xAppDefines.STATE_OFF);
-			this.stepLoader.set(null);
-			xThreadPool_Main.Get().runTaskLazy(
-				new RunnableMethod<Object>(this, "doFailed")
-			);
-			this.doFailed();
-		}
-	}
-	@Override
-	public void fail(final int exitCode, final String msg, final Object...args) {
-		this.fail(msg, args);
-		this.failed.get().setExitCode(exitCode);
+	// display uptime
+	@xAppStep(type=xAppStepType.SHUTDOWN, step=60, title="Uptime")
+	public void __STOP__uptime(final xLog log) {
+//TODO: display total time running
 	}
 
 
 
-	protected void doFailed() {
-		this.stopHangCatcher();
-		System.exit( this.getExitCode() );
-	}
-	@Override
-	public boolean hasFailed() {
-		return (this.failed.get() != null);
+	// stop thread pools
+	@xAppStep(type=xAppStepType.SHUTDOWN, step=50, title="Stop Thread Pools")
+	public void __STOP__threadpools() {
+		xThreadPool.StopAll();
 	}
 
 
 
-	public int getExitCode() {
-		final Failure failure = this.failed.get();
-		if (failure == null)
-			return 0;
-		return failure.getExitCode();
+	// garbage collect
+	@xAppStep(type=xAppStepType.SHUTDOWN, step=10, title="Garbage Collect")
+	public void __STOP__garbage() {
+		StdIO.OriginalOut().flush();
+		StdIO.OriginalErr().flush();
+		Keeper.removeAll();
+		System.gc();
+	}
+
+
+
+	// exit
+	@xAppStep(type=xAppStepType.SHUTDOWN, step=1, title="Exit")
+	public void __STOP__exit() {
+		final Thread thread = new Thread() {
+			private volatile int exitCode = 0;
+			public Thread init(final int exitCode) {
+				this.exitCode = exitCode;
+				return this;
+			}
+			@Override
+			public void run() {
+				final xThreadPool_Main poolMain = xThreadPool_Main.Get();
+				poolMain.stopMain();
+				poolMain.join(EXIT_TIMEOUT);
+				ThreadUtils.Sleep(10L);
+//TODO
+//				ThreadUtils.DisplayStillRunning( xApp.this.log() );
+				StdIO.OriginalOut().println();
+			System.exit(this.exitCode);
+				// exit
+				System.exit( xApp.this.getExitCode() );
+			}
+		}.init(this.getExitCode());
+		thread.setName("EndThread");
+		thread.setDaemon(false);
+		thread.start();
 	}
 
 
@@ -473,7 +495,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 				new Runnable() {
 					@Override
 					public void run() {
-//TODO
+						xApp.this.fail(EXIT_HUNG, "app hung");
 					}
 				}
 			);
@@ -561,86 +583,74 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 
-	// -------------------------------------------------------------------------------
-	// startup steps
-
-
-
-	// start time
-	@xAppStep(type=StepType.STARTUP, step=5, title="Startup Time")
-	public void __START_uptime() {
-		this.startTime
-			.set( Utils.GetMS(), TimeUnit.MILLISECONDS );
-//TODO
-//			.lock();
+	public long uptime() {
+		final long current = Utils.GetMS();
+		final long time_start = this.time_start.ms();
+		return current - time_start;
 	}
 
 
 
 	// -------------------------------------------------------------------------------
-	// shutdown steps
+	// failure
 
 
 
-	// stop thread pools
-	@xAppStep(type=StepType.SHUTDOWN, step=50, title="Stop Thread Pools")
-	public void __STOP_threadpools() {
-		xThreadPool.StopAll();
+	@Override
+	public void fail(final Throwable e) {
+		final Throwable cause = Utils.RootCause(e);
+		this.fail(cause.getMessage(), e);
+	}
+	@Override
+	public void fail(final String msg, final Object...args) {
+		if (Failure.AtomicFail(this.failed, this.log(), msg, args)) {
+			this.state.set(xAppState.OFF.value);
+			this.step_loader.set(null);
+			xThreadPool_Main.Get().runTaskLazy(
+				new RunnableMethod<Object>(this, "doFailed")
+			);
+			this.doFailed();
+		}
+	}
+	@Override
+	public void fail(final int exitCode, final String msg, final Object...args) {
+		this.fail(msg, args);
+		this.failed.get().setExitCode(exitCode);
 	}
 
 
 
-	// garbage collect
-	@xAppStep(type=StepType.SHUTDOWN, step=10, title="Garbage Collect")
-	public void __STOP_garbage() {
-		StdIO.OriginalOut.flush();
-		StdIO.OriginalErr.flush();
-		Keeper.removeAll();
-		System.gc();
+	public void doFailed() {
+		this.stopHangCatcher();
+		System.exit( this.getExitCode() );
+	}
+	@Override
+	public boolean hasFailed() {
+		return (this.failed.get() != null);
 	}
 
 
 
-	// display uptime
-	@xAppStep(type=StepType.SHUTDOWN, step=5, title="Uptime")
-	public void __STOP_uptime(final xLog log) {
-//TODO: display total time running
-	}
-
-
-
-	// exit
-	@xAppStep(type=StepType.SHUTDOWN, step=1, title="Exit")
-	public void __STOP_exit() {
-		final Thread thread = new Thread() {
-			private volatile int exitCode = 0;
-			public Thread init(final int exitCode) {
-				this.exitCode = exitCode;
-				return this;
-			}
-			@Override
-			public void run() {
-				final xThreadPool_Main poolMain = xThreadPool_Main.Get();
-				poolMain.stopMain();
-				poolMain.join(EXIT_TIMEOUT);
-				ThreadUtils.Sleep(10L);
-//TODO
-//				ThreadUtils.DisplayStillRunning( xApp.this.log() );
-				StdIO.OriginalOut.println();
-			System.exit(this.exitCode);
-				// exit
-				System.exit( xApp.this.getExitCode() );
-			}
-		}.init(this.getExitCode());
-		thread.setName("EndThread");
-		thread.setDaemon(false);
-		thread.start();
+	public int getExitCode() {
+		final Failure failure = this.failed.get();
+		if (failure == null)
+			return 0;
+		return failure.getExitCode();
 	}
 
 
 
 	// -------------------------------------------------------------------------------
 	// logger
+
+
+
+	public xLog log_loader() {
+		final xAppStepLoader loader = this.step_loader.get();
+		if (loader == null)
+			return this.log();
+		return loader.log();
+	}
 
 
 
@@ -671,14 +681,4 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 
-	public xLog log_loader() {
-		final xAppStepLoader loader = this.stepLoader.get();
-		if (loader == null)
-			return this.log();
-		return loader.log();
-	}
-
-
-
 }
-*/
