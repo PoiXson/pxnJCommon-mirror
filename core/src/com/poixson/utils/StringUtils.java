@@ -7,6 +7,7 @@ import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -51,27 +52,13 @@ public final class StringUtils {
 			}
 			return result.toString();
 		}
-		// string
-		if (obj instanceof String)
-			return (String) obj;
-		// boolean
-		if (obj instanceof Boolean)
-			return ( ((Boolean)obj).booleanValue() ? "TRUE" : "false" );
-		// int
-		if (obj instanceof Integer)
-			return ((Integer) obj).toString();
-		// long
-		if (obj instanceof Long)
-			return ((Long) obj).toString();
-		// double
-		if (obj instanceof Double)
-			return ((Double) obj).toString();
-		// float
-		if (obj instanceof Float)
-			return ((Float) obj).toString();
-		// exception
-		if (obj instanceof Exception)
-			return ExceptionToString((Exception) obj);
+		if (obj instanceof String   ) return (String) obj;
+		if (obj instanceof Boolean  ) return ( ((Boolean)obj).booleanValue() ? "TRUE" : "false" );
+		if (obj instanceof Integer  ) return ((Integer) obj).toString();
+		if (obj instanceof Long     ) return ((Long) obj).toString();
+		if (obj instanceof Double   ) return ((Double) obj).toString();
+		if (obj instanceof Float    ) return ((Float) obj).toString();
+		if (obj instanceof Exception) return ExceptionToString((Exception) obj);
 		// unknown object
 		return obj.toString();
 	}
@@ -156,9 +143,8 @@ public final class StringUtils {
 			}
 			final String[] split = line.split("\n");
 			if (Utils.notEmpty(split)) {
-				for (final String str : split) {
+				for (final String str : split)
 					result.add(str);
-				}
 			}
 		}
 		return result.toArray(new String[0]);
@@ -186,15 +172,13 @@ public final class StringUtils {
 			} // end DELIM_LOOP
 			// delim not found
 			if (next == len) {
-				if (last < len) {
+				if (last < len)
 					result.add(line.substring(last));
-				}
 				break SPLIT_LOOP;
 			}
 			// delim found
-			if (last != next) {
+			if (last != next)
 				result.add(line.substring(last, next));
-			}
 			last = next + 1;
 		} // end SPLIT_LOOP
 		return result.toArray(new String[0]);
@@ -227,15 +211,13 @@ public final class StringUtils {
 			} // end DELIM_LOOP
 			// delim not found
 			if (next == lenLine) {
-				if (last < lenLine) {
+				if (last < lenLine)
 					result.add(line.substring(last));
-				}
 				break SPLIT_LOOP;
 			}
 			// delim found
-			if (last != next) {
+			if (last != next)
 				result.add(line.substring(last, next));
-			}
 			last = next + lenNext;
 		} // end SPLIT_LOOP
 		return result.toArray(new String[0]);
@@ -334,6 +316,13 @@ public final class StringUtils {
 
 
 
+	public static String TrimToNull(final String str) {
+		if (Utils.isEmpty(str)) return null;
+		//                            front end   case
+		final String result = doTrim( true, true, false, str, new char[0]);
+		if (Utils.isEmpty(result)) return null;
+		return result;
+	}
 	public static String TrimToNull(final String str, final String...strip) {
 		if (Utils.isEmpty(str)) return null;
 		//                            front end   case
@@ -423,9 +412,8 @@ public final class StringUtils {
 		final String strPrep;
 		if (ignoreCase) {
 			stripChars = new char[stripCount];
-			for (int i=0; i<stripCount; i++) {
+			for (int i=0; i<stripCount; i++)
 				stripChars[i] = Character.toLowerCase(strip[i]);
-			}
 			strPrep = str.toLowerCase();
 		} else {
 			stripChars = strip;
@@ -474,6 +462,16 @@ public final class StringUtils {
 		if (Utils.isEmpty(str))     return str;
 		if (Utils.isEmpty(strip))   return str;
 		final int stripCount = strip.length;
+		// default strip
+		if (stripCount == 0) {
+			final String[] strip_def = Arrays.asList(
+				" ",
+				"\t",
+				"\r",
+				"\n"
+			).toArray(new String[0]);
+			return doTrim(trimFront, trimEnd, ignoreCase, str, strip_def);
+		}
 		final String[] stripStrings;
 		final String strPrep;
 		final int[] stripLen = new int[stripCount];
@@ -703,20 +701,16 @@ public final class StringUtils {
 		final StringBuilder buf = new StringBuilder();
 		// no delim
 		if (dlm == null) {
-			for (final String part : addThis) {
+			for (final String part : addThis)
 				buf.append(part);
-			}
 			return buf.toString();
 		}
 		// merge with delim
 		boolean first = true;
 		for (final String part : addThis) {
 			if (Utils.isEmpty(part)) continue;
-			if (first) {
-				first = false;
-			} else {
-				buf.append(dlm);
-			}
+			if (first) first = false;
+			else       buf.append(dlm);
 			buf.append(part);
 		}
 		return buf.toString();
@@ -727,13 +721,11 @@ public final class StringUtils {
 		boolean first = true;
 		for (final String line : addThis) {
 			if (Utils.isEmpty(line)) continue;
-			if (!first) {
+			if (!first)
 				buf.append(delim);
-			}
 			buf.append(line);
-			if (first && buf.length() > 0) {
+			if (first && buf.length() > 0)
 				first = false;
-			}
 		}
 		return buf.toString();
 	}
@@ -861,9 +853,8 @@ public final class StringUtils {
 			// delim not found
 			if (p == -1) continue;
 			// later delim
-			if (p > pos) {
+			if (p > pos)
 				pos = p;
-			}
 		}
 		return (pos == Integer.MIN_VALUE ? -1 : pos);
 	}
@@ -876,9 +867,8 @@ public final class StringUtils {
 			// delim not found
 			if (p == -1) continue;
 			// later delim
-			if (p > pos) {
+			if (p > pos)
 				pos = p;
-			}
 		}
 		return (pos == Integer.MIN_VALUE ? -1 : pos);
 	}
@@ -891,9 +881,8 @@ public final class StringUtils {
 		int len = 0;
 		for (final String line : lines) {
 			if (line == null) continue;
-			if (line.length() > len) {
+			if (line.length() > len)
 				len = line.length();
-			}
 		}
 		return len;
 	}
@@ -993,9 +982,8 @@ public final class StringUtils {
 				currentPos = thisPos + replaceWhat.length();
 			}
 		}
-		if (str.length() > currentPos) {
+		if (str.length() > currentPos)
 			result.append( str.substring(currentPos) );
-		}
 		return result.toString();
 	}
 	public static void ReplaceWith(final StringBuilder str,
@@ -1059,9 +1047,8 @@ public final class StringUtils {
 		final StringBuilder result = new StringBuilder();
 		// repeat string
 		if (Utils.isEmpty(delim)) {
-			for (int i = 0; i < count; i++) {
+			for (int i = 0; i < count; i++)
 				result.append(str);
-			}
 		} else {
 			// repeat string with delim
 			boolean b = false;
@@ -1077,9 +1064,8 @@ public final class StringUtils {
 		if (count < 1) return "";
 		final StringBuilder result = new StringBuilder();
 		// repeat string
-		for (int i = 0; i < count; i++) {
+		for (int i = 0; i < count; i++)
 			result.append(chr);
-		}
 		return result.toString();
 	}
 

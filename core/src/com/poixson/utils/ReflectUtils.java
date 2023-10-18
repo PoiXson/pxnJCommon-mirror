@@ -27,11 +27,14 @@ public final class ReflectUtils {
 
 
 
+	@SuppressWarnings("unchecked")
 	public static <T> Class<T> GetClass(final String classStr) {
 		try {
-			@SuppressWarnings("unchecked")
-			final Class<T> clss = (Class<T>) Class.forName(classStr);
-			return clss;
+			final ClassLoader loader = ReflectUtils.class.getClassLoader();
+			return (Class<T>) loader.loadClass(classStr);
+//			@SuppressWarnings("unchecked")
+//			final Class<T> clss = (Class<T>) Class.forName(classStr);
+//			return clss;
 		} catch (ClassNotFoundException ignore) {}
 		return null;
 	}
@@ -47,9 +50,9 @@ public final class ReflectUtils {
 				construct = clss.getConstructor( ArgsToClasses(args) );
 			}
 		} catch (NoSuchMethodException e) {
-			throw new IllegalArgumentException(e);
+			throw new RuntimeException(e);
 		} catch (SecurityException e) {
-			throw new IllegalArgumentException(e);
+			throw new RuntimeException(e);
 		}
 		final T instance;
 		try {
@@ -59,11 +62,11 @@ public final class ReflectUtils {
 				instance = construct.newInstance(args);
 			}
 		} catch (InstantiationException e) {
-			throw new IllegalArgumentException(e);
+			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
-			throw new IllegalArgumentException(e);
+			throw new RuntimeException(e);
 		} catch (InvocationTargetException e) {
-			throw new IllegalArgumentException(e);
+			throw new RuntimeException(e);
 		}
 		return instance;
 	}
@@ -75,7 +78,7 @@ public final class ReflectUtils {
 
 
 
-	public static Method getMethodByName(final String className,
+	public static Method GetMethodByName(final String className,
 			final String methodName, final Class<?>...args) {
 		final Class<?> clss;
 		try {
@@ -84,20 +87,20 @@ public final class ReflectUtils {
 			return null;
 		}
 		if (clss == null) return null;
-		return getMethodByName(clss, methodName, args);
+		return GetMethodByName(clss, methodName, args);
 	}
-	public static Method getMethodByName(final Object container,
+	public static Method GetMethodByName(final Object container,
 			final String methodName, final Class<?>...args) {
-		if (container == null)         throw new IllegalArgumentException("container");
-		if (Utils.isEmpty(methodName)) throw new IllegalArgumentException("methodName");
+		if (container == null)         throw new RequiredArgumentException("container");
+		if (Utils.isEmpty(methodName)) throw new RequiredArgumentException("methodName");
 		final Class<?> clss = ( container instanceof Class ? (Class<?>) container : container.getClass() );
 		if (clss == null) return null;
 		try {
 			return clss.getMethod( methodName, args);
 		} catch (NoSuchMethodException e) {
-			throw new IllegalArgumentException("Invalid method: "+methodName, e);
+			throw new RuntimeException("Invalid method: "+methodName, e);
 		} catch (SecurityException e) {
-			throw new IllegalArgumentException("Error accessing method: "+methodName, e);
+			throw new RuntimeException("Error accessing method: "+methodName, e);
 		}
 	}
 
@@ -118,7 +121,7 @@ public final class ReflectUtils {
 			final String methodName, final Object...args) {
 		return InvokeMethod(
 			container,
-			getMethodByName(
+			GetMethodByName(
 				container,
 				methodName,
 				ArgsToClasses(args)
@@ -128,16 +131,14 @@ public final class ReflectUtils {
 	}
 	public static Object InvokeMethod(final Object container,
 			final Method method, final Object...args) {
-		if (container == null) throw new IllegalArgumentException("container");
-		if (method == null)    throw new IllegalArgumentException("method");
+		if (container == null) throw new RequiredArgumentException("container");
+		if (method == null)    throw new RequiredArgumentException("method");
 		try {
 			return method.invoke(container, args);
 		} catch (IllegalAccessException e) {
-			throw new IllegalArgumentException("Failed to call method: "+method.getName(), e);
-		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException("Failed to call method: "+method.getName(), e);
+			throw new RuntimeException("Failed to call method: "+method.getName(), e);
 		} catch (InvocationTargetException e) {
-			throw new IllegalArgumentException("Failed to call method: "+method.getName(), e);
+			throw new RuntimeException("Failed to call method: "+method.getName(), e);
 		}
 	}
 
@@ -164,7 +165,7 @@ public final class ReflectUtils {
 
 
 
-	public static String getStaticString(final Class<?> clss, final String name) {
+	public static String GetStaticString(final Class<?> clss, final String name) {
 		if (clss == null)        throw new RequiredArgumentException("clss");
 		if (Utils.isEmpty(name)) throw new RequiredArgumentException("name");
 		final Field field;
@@ -174,13 +175,11 @@ public final class ReflectUtils {
 			final Object o = field.get(null);
 			value = (String) o;
 		} catch (NoSuchFieldException e) {
-			throw new IllegalArgumentException("Invalid field: "+name, e);
+			throw new RuntimeException("Invalid field: "+name, e);
 		} catch (SecurityException e) {
-			throw new IllegalArgumentException("Error accessing field: "+name, e);
-		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException("Failed to get field: "+name, e);
+			throw new RuntimeException("Error accessing field: "+name, e);
 		} catch (IllegalAccessException e) {
-			throw new IllegalArgumentException("Error accessing field: "+name, e);
+			throw new RuntimeException("Error accessing field: "+name, e);
 		}
 		return value;
 	}
