@@ -14,8 +14,7 @@ public class HangCatcher implements xStartable, Runnable {
 	public static final long DEFAULT_TIMEOUT = 10000L; // 10s
 	public static final long DEFAULT_SLEEP   = 100L;   // 100ms
 
-	protected final AtomicReference<Thread> thread =
-			new AtomicReference<Thread>(null);
+	protected final AtomicReference<Thread> thread = new AtomicReference<Thread>(null);
 
 	protected final String name;
 

@@ -297,6 +297,7 @@ public class TextIcon implements Icon, PropertyChangeListener {
 
 
 
+	@Override
 	public void propertyChange(final PropertyChangeEvent event) {
 		if (this.font == null) {
 				calculateIconDimensions();
