@@ -1,4 +1,3 @@
-/*
 package com.poixson.app.commands;
 
 import java.lang.annotation.ElementType;
@@ -17,4 +16,3 @@ public @interface xCommand {
 
 
 }
-*/

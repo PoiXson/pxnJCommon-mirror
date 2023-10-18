@@ -1,4 +1,3 @@
-/*
 package com.poixson.utils;
 
 import org.fusesource.jansi.Ansi;
@@ -11,16 +10,20 @@ public final class ShellUtils_Extended extends ShellUtils {
 
 
 
-	protected ShellUtils_Extended() {
+	public ShellUtils_Extended() {
 		super();
-		StdIO.init();
-		AnsiConsole.systemInstall();
+		StdIO.Init();
+		try {
+			AnsiConsole.systemInstall();
+		} catch (Exception e) {
+			e.printStackTrace(StdIO.OriginalErr());
+		}
 	}
 
 
 
 //TODO
-/ *
+/*
 	// -------------------------------------------------------------------------------
 	// command handler
 
@@ -43,19 +46,14 @@ public final class ShellUtils_Extended extends ShellUtils {
 				throw new IllegalStateException("Command handler already set!");
 		}
 	}
-	@Override
-	public void registerCommands(final Object...objects) {
-		final xCommandHandler handler = this.handler.get();
-		if (handler == null) throw new UnsupportedOperationException("Command handler not set");
-		handler.register(objects);
-	}
+
 	@Override
 	public boolean process(final String line) {
 		final xCommandHandler handler = this.handler.get();
 		if (handler == null) throw new UnsupportedOperationException("Command handler not set");
 		return handler.process(line);
 	}
-* /
+*/
 
 
 
@@ -91,4 +89,3 @@ public final class ShellUtils_Extended extends ShellUtils {
 
 
 }
-*/

@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools;
 
 import java.util.ArrayList;
@@ -9,57 +8,18 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import com.poixson.app.xVars;
-import com.poixson.utils.NumberUtils;
+import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
-
 
 public class ShellArgs {
 
 	protected boolean allowShortFlagValues = false;
-//TODO:
+//TODO
 //	protected Boolean hasUnknownFlags      = null;
+//	protected final List<String> knownFlags = new ArrayList<String>();
 
 	protected final Map<String, String> flags;
 	protected final List<String> commands;
-
-//TODO:
-//	protected final List<String> knownFlags = new ArrayList<String>();
-
-
-
-	public static ShellArgs Init(final String[] argsArray) {
-		final ShellArgs argsTool = new ShellArgs(argsArray);
-		// debug flag
-		{
-			final Boolean debugVal = argsTool.getFlagBoolean("-d", "--debug");
-			if (debugVal != null) {
-				xVars.setDebug( debugVal.booleanValue() );
-			}
-		}
-//TODO:
-/ *
-		// ansi color flags
-		{
-			final Boolean colorVal = argsTool.getFlagBoolean("--color");
-			final Boolean nocolVal = argsTool.getFlagBoolean("--no-color");
-			if (nocolVal != null) {
-				xVars.setConsoleColor( ! nocolVal.booleanValue() );
-			} else
-			if (colorVal != null) {
-				xVars.setConsoleColor( colorVal.booleanValue() );
-			}
-		}
-		// detect color support
-//TODO:
-		// clear screen
-		if (xVars.isConsoleColorEnabled()) {
-			xLog.getConsole()
-				.clear();
-		}
-* /
-		return argsTool;
-	}
 
 
 
@@ -101,7 +61,7 @@ public class ShellArgs {
 					// peek next arg
 					final String nextArg = it.next();
 					// blank value
-					if (Utils.isBlank(nextArg)) {
+					if (Utils.isEmpty(StringUtils.TrimToNull(nextArg))) {
 						flags.put(
 							arg,
 							"true"
@@ -175,6 +135,46 @@ public class ShellArgs {
 		this.flags    = Collections.unmodifiableMap(  flags    );
 		this.commands = Collections.unmodifiableList( commands );
 	}
+
+
+
+}
+/*
+	public static ShellArgs Init(final String[] argsArray) {
+		final ShellArgs argsTool = new ShellArgs(argsArray);
+		// debug flag
+		{
+			final Boolean debugVal = argsTool.getFlagBoolean("-d", "--debug");
+			if (debugVal != null) {
+				xVars.setDebug( debugVal.booleanValue() );
+			}
+		}
+//TODO:
+/ *
+		// ansi color flags
+		{
+			final Boolean colorVal = argsTool.getFlagBoolean("--color");
+			final Boolean nocolVal = argsTool.getFlagBoolean("--no-color");
+			if (nocolVal != null) {
+				xVars.setConsoleColor( ! nocolVal.booleanValue() );
+			} else
+			if (colorVal != null) {
+				xVars.setConsoleColor( colorVal.booleanValue() );
+			}
+		}
+		// detect color support
+//TODO:
+		// clear screen
+		if (xVars.isConsoleColorEnabled()) {
+			xLog.getConsole()
+				.clear();
+		}
+* /
+		return argsTool;
+	}
+
+
+
 
 
 

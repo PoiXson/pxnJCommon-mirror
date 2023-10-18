@@ -31,13 +31,13 @@ public class ShellUtils {
 				ReflectUtils.GetClass(
 					"com.poixson.utils.ShellUtils_Extended"
 				);
-				if (clss != null) {
-					final ShellUtils utility = (ShellUtils) ReflectUtils.NewInstance(clss);
-					if (utility == null) throw new RuntimeException("Unable to initialize ShellUtils instance");
-					if (instance.compareAndSet(null, utility))
-						return utility;
-					return instance.get();
-				}
+			if (clss != null) {
+				final ShellUtils utility = (ShellUtils) ReflectUtils.NewInstance(clss);
+				if (utility == null) throw new RuntimeException("Unable to initialize ShellUtils instance");
+				if (instance.compareAndSet(null, utility))
+					return utility;
+				return instance.get();
+			}
 			// default utility
 			final ShellUtils utility = new ShellUtils();
 			if (instance.compareAndSet(null, utility))

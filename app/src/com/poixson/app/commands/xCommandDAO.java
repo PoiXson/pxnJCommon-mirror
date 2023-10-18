@@ -1,4 +1,3 @@
-/*
 package com.poixson.app.commands;
 
 import java.lang.reflect.InvocationTargetException;
@@ -83,4 +82,3 @@ public class xCommandDAO extends xEventListenerDAO {
 
 
 }
-*/

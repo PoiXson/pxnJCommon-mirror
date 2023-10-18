@@ -1,4 +1,3 @@
-/*
 package com.poixson.app.commands;
 
 import java.lang.reflect.Method;
@@ -8,7 +7,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.logger.xLogRoot;
+import com.poixson.logger.xLog;
 import com.poixson.tools.events.xHandler;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
@@ -16,8 +15,7 @@ import com.poixson.utils.Utils;
 
 public class xCommandHandler extends xHandler<xCommand> {
 
-	protected final CopyOnWriteArrayList<xCommandDAO> commands =
-			new CopyOnWriteArrayList<xCommandDAO>();
+	protected final CopyOnWriteArrayList<xCommandDAO> commands = new CopyOnWriteArrayList<xCommandDAO>();
 
 
 
@@ -31,9 +29,8 @@ public class xCommandHandler extends xHandler<xCommand> {
 	public int register(final Object...objects) {
 		final int count =
 			super.register(objects);
-		if (count > 0) {
-			XLog().fine("Found %d commands", count);
-		}
+		if (count > 0)
+			xLog.Get().fine("Found %d commands", count);
 		return count;
 	}
 
@@ -51,7 +48,7 @@ public class xCommandHandler extends xHandler<xCommand> {
 		final xCommandDAO dao =
 			new xCommandDAO(
 				cmd.Name(),
-				StringUtils.SplitByDelims(anno.Aliases(), ','),
+				StringUtils.Split(anno.Aliases(), ','),
 				object, method
 			);
 		this.commands.add(dao);
@@ -103,13 +100,14 @@ public class xCommandHandler extends xHandler<xCommand> {
 
 	public boolean process(final String line) {
 		if (Utils.isEmpty(line)) return false;
-		final xCommandDAO dao =
-			this.findCommand(
-				StringUtils.PeekFirstPart(line, ' ')
-			);
-		if (dao == null)
-			return false;
-		dao.invoke(line);
+//TODO
+//		final xCommandDAO dao =
+//			this.findCommand(
+//				StringUtils.PeekFirstPart(line, ' ')
+//			);
+//		if (dao == null)
+//			return false;
+//		dao.invoke(line);
 		return true;
 	}
 	protected xCommandDAO findCommand(final String cmd) {
@@ -139,4 +137,3 @@ public class xCommandHandler extends xHandler<xCommand> {
 
 
 }
-*/
