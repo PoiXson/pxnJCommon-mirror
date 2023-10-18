@@ -1,4 +1,3 @@
-/*
 package com.poixson.threadpool;
 
 import java.lang.ref.SoftReference;
@@ -25,25 +24,15 @@ import com.poixson.utils.Utils;
 public abstract class xThreadPool implements xStartable, Runnable {
 
 	public static final int  HARD_MAX_WORKERS = 100;
+	public static final long WORKER_START_TIMEOUT = 500L;
 	public static final int  DEFAULT_THREAD_PRIORITY = Thread.NORM_PRIORITY;
-
-	public final String poolName;
-
-	public enum TaskPriority {
-		NOW,
-		LATER,
-		LAZY
-	};
-
-	// pool state
-	protected        final AtomicBoolean running     = new AtomicBoolean(false);
-	protected        final AtomicBoolean stopping    = new AtomicBoolean(false);
-	protected static final AtomicBoolean StoppingAll = new AtomicBoolean(false);
 
 	protected static final ConcurrentHashMap<String, xThreadPool> pools = new ConcurrentHashMap<String, xThreadPool>(3);
 	protected final AtomicBoolean keepOneAlive = new AtomicBoolean(true);
 
-	protected final ThreadGroup threadGroup;
+	public final String pool_name;
+
+	protected final ThreadGroup thread_group;
 	protected final AtomicInteger threadPriority = new AtomicInteger(DEFAULT_THREAD_PRIORITY);
 
 	// run now queue
@@ -53,27 +42,32 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	// run lazy queue
 	protected final LinkedBlockingDeque<xThreadPoolTask> queueLazy  = new LinkedBlockingDeque  <xThreadPoolTask>();
 
+	// pool state
+	protected        final AtomicBoolean running     = new AtomicBoolean(false);
+	protected        final AtomicBoolean stopping    = new AtomicBoolean(false);
+	protected static final AtomicBoolean StoppingAll = new AtomicBoolean(false);
+
 	// stats
-	protected final AtomicLong countNow   = new AtomicLong(0L);
-	protected final AtomicLong countLater = new AtomicLong(0L);
-	protected final AtomicLong countLazy  = new AtomicLong(0L);
-	protected final AtomicLong idleLoopCount  = new AtomicLong(0);
-	protected final AtomicLong taskIndexCount = new AtomicLong(0L);
+	protected final AtomicLong count_now   = new AtomicLong(0L);
+	protected final AtomicLong count_later = new AtomicLong(0L);
+	protected final AtomicLong count_lazy  = new AtomicLong(0L);
+	protected final AtomicLong count_idle_loops = new AtomicLong(0);
+	protected final AtomicLong count_task_index = new AtomicLong(0L);
 
 
 
-	public static xThreadPool get(final String poolName) {
-		return pools.get(poolName);
+	public static xThreadPool get(final String pool_name) {
+		return pools.get(pool_name);
 	}
 
 
 
-	protected xThreadPool(final String poolName) {
-		if (Utils.isEmpty(poolName)) throw new RequiredArgumentException("poolName");
+	protected xThreadPool(final String pool_name) {
+		if (Utils.isEmpty(pool_name)) throw new RequiredArgumentException("pool_name");
 		if (StoppingAll.get())
 			throw new IllegalStateException("Cannot create new thread pool, already stopping all!");
-		this.poolName = poolName;
-		this.threadGroup = new ThreadGroup(poolName);
+		this.pool_name = pool_name;
+		this.thread_group = new ThreadGroup(pool_name);
 		Keeper.add(this);
 	}
 
@@ -91,13 +85,8 @@ public abstract class xThreadPool implements xStartable, Runnable {
 		Keeper.add(this);
 	}
 
-	// start with current thread
-	public abstract void go();
-
 	@Override
-	public void run() {
-		this.go();
-	}
+	public abstract void run();
 
 	protected boolean okStart() {
 		if (StoppingAll.get()) return false;
@@ -113,13 +102,11 @@ public abstract class xThreadPool implements xStartable, Runnable {
 				@Override
 				public void run() {
 					xThreadPool.this.log()
-						.fine("Thread queue is running..");
+						.finer("Thread queue is running..");
 				}
 			};
 		this.queueLater.addFirst(task);
 	}
-
-
 
 	@Override
 	public void stop() {
@@ -194,6 +181,19 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 
 
+	/**
+	 * Are task queues empty.
+	 * @return true if all task queues are empty.
+	 */
+	public boolean isEmpty() {
+		if (!this.queueLazy.isEmpty() ) return false;
+		if (!this.queueLater.isEmpty()) return false;
+		if (!this.queueNow.isEmpty()  ) return false;
+		return true;
+	}
+
+
+
 	public boolean isMainPool() {
 		return false;
 	}
@@ -213,7 +213,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 	// next task index
 	public long getNextTaskIndex() {
-		return this.taskIndexCount
+		return this.count_task_index
 				.incrementAndGet();
 	}
 
@@ -221,19 +221,6 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 	public abstract xThreadPoolWorker getCurrentThreadWorker();
 	public abstract boolean isCurrentThread();
-
-
-
-	/ **
-	 * Are task queues empty.
-	 * @return true if all task queues are empty.
-	 * /
-	public boolean isEmpty() {
-		if ( ! this.queueLazy.isEmpty()  ) return false;
-		if ( ! this.queueLater.isEmpty() ) return false;
-		if ( ! this.queueNow.isEmpty()   ) return false;
-		return true;
-	}
 
 
 
@@ -252,7 +239,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 			{
 				final xThreadPoolTask task = this.queueNow.poll();
 				if (task != null) {
-					this.countNow.incrementAndGet();
+					this.count_now.incrementAndGet();
 					return task;
 				}
 			}
@@ -260,18 +247,18 @@ public abstract class xThreadPool implements xStartable, Runnable {
 			{
 				final xThreadPoolTask task = this.queueLater.poll();
 				if (task != null) {
-					this.countLater.incrementAndGet();
+					this.count_later.incrementAndGet();
 					return task;
 				}
 			}
 			// low priority tasks (before waiting on high)
 			{
-				final int index = (int) (this.idleLoopCount.incrementAndGet() % ((long)this.getLowLoopCount()));
-				if (index == 0) {
+				final int mod_low = (int) (this.count_idle_loops.incrementAndGet() % ((long)this.getLowLoopCount()));
+				if (mod_low == 0) {
 					final xThreadPoolTask task = this.queueLazy.poll();
 					if (task != null) {
-						this.idleLoopCount.set(-1);
-						this.countLazy.incrementAndGet();
+						this.count_idle_loops.set(-1);
+						this.count_lazy.incrementAndGet();
 						return task;
 					}
 				}
@@ -284,7 +271,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 					TimeUnit.MILLISECONDS
 				);
 				if (task != null) {
-					this.countNow.incrementAndGet();
+					this.count_now.incrementAndGet();
 					return task;
 				}
 			}
@@ -293,11 +280,11 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 
 
-	public xThreadPoolTask addTask(final TaskPriority priority,
+	public xThreadPoolTask addTask(final xThreadTaskPriority priority,
 			final Runnable run) {
 		return this.addTask(priority, null, run);
 	}
-	public xThreadPoolTask addTask(final TaskPriority priority,
+	public xThreadPoolTask addTask(final xThreadTaskPriority priority,
 			final String taskName, final Runnable run) {
 		if (run instanceof xThreadPoolTask) {
 			final xThreadPoolTask task = (xThreadPoolTask) run;
@@ -316,7 +303,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 			return task;
 		}
 	}
-	public void addTask(final TaskPriority priority,
+	public void addTask(final xThreadTaskPriority priority,
 			final xThreadPoolTask task) {
 		if (task == null) throw new RequiredArgumentException("task");
 		// pass to main thread pool
@@ -325,8 +312,8 @@ public abstract class xThreadPool implements xStartable, Runnable {
 				.addTask(priority, task);
 			return;
 		}
-		final TaskPriority pri = (priority == null ? TaskPriority.LATER : priority);
-//TODO: remove this
+		final xThreadTaskPriority pri = (priority == null ? xThreadTaskPriority.LATER : priority);
+//TODO: remove this?
 //		// run now as current thread
 //		if (TaskPriority.NOW.equals(pri)) {
 //			final xThreadPoolWorker worker = this.getCurrentThreadWorker();
@@ -346,9 +333,8 @@ public abstract class xThreadPool implements xStartable, Runnable {
 				if (success)
 					break QUEUE_LOOP;
 			} // end QUEUE_LOOP
-			if (this.isRunning()) {
+			if (this.isRunning())
 				this.startNewWorkerIfNeededAndAble();
-			}
 			// timeout adding to queue
 			if (!success) {
 				this.log().warning("Thread queue %s jammed!", pri.name());
@@ -356,11 +342,11 @@ public abstract class xThreadPool implements xStartable, Runnable {
 				switch (priority) {
 				case NOW:
 					this.log().warning("Thread queue jammed, trying a lower priority.. (high->norm)", task.getTaskName());
-					this.addTask(TaskPriority.LATER, task);
+					this.addTask(xThreadTaskPriority.LATER, task);
 					return;
 				case LATER:
 					this.log().warning("Thread queue jammed, trying a lower priority.. (norm->low)", task.getTaskName());
-					this.addTask(TaskPriority.LAZY, task);
+					this.addTask(xThreadTaskPriority.LAZY, task);
 					return;
 				default: break;
 				}
@@ -370,7 +356,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 			throw new RuntimeException("Interrupted queueing task: "+task.getTaskName());
 		}
 	}
-	protected LinkedBlockingDeque<xThreadPoolTask> getQueueByPriority(final TaskPriority priority) {
+	protected LinkedBlockingDeque<xThreadPoolTask> getQueueByPriority(final xThreadTaskPriority priority) {
 		if (priority == null) throw new RequiredArgumentException("priority");
 		switch (priority) {
 		case NOW:   return this.queueNow;
@@ -385,49 +371,49 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 	// now
 	public void runTaskNow(final Runnable run) {
-		this.addTask( TaskPriority.NOW, run );
+		this.addTask( xThreadTaskPriority.NOW, run );
 	}
 	public void runTaskNow(final String taskName, final Runnable run) {
-		this.addTask( TaskPriority.NOW, taskName, run );
+		this.addTask( xThreadTaskPriority.NOW, taskName, run );
 	}
 	public void runTaskNow(final xThreadPoolTask task) {
-		this.addTask( TaskPriority.NOW, task );
+		this.addTask( xThreadTaskPriority.NOW, task );
 	}
 
 
 
 	// later
 	public void runTaskLater(final Runnable run) {
-		this.addTask( TaskPriority.LATER, run );
+		this.addTask( xThreadTaskPriority.LATER, run );
 	}
 	public void runTaskLater(final String taskName, final Runnable run) {
-		this.addTask( TaskPriority.LATER, taskName, run );
+		this.addTask( xThreadTaskPriority.LATER, taskName, run );
 	}
 	public void runTaskLater(final xThreadPoolTask task) {
-		this.addTask( TaskPriority.LATER, task );
+		this.addTask( xThreadTaskPriority.LATER, task );
 	}
 
 
 
 	// lazy
 	public void runTaskLazy(final Runnable run) {
-		this.addTask( TaskPriority.LAZY, run );
+		this.addTask( xThreadTaskPriority.LAZY, run );
 	}
 	public void runTaskLazy(final String taskName, final Runnable run) {
-		this.addTask( TaskPriority.LAZY, taskName, run );
+		this.addTask( xThreadTaskPriority.LAZY, taskName, run );
 	}
 	public void runTaskLazy(final xThreadPoolTask task) {
-		this.addTask( TaskPriority.LAZY, task );
+		this.addTask( xThreadTaskPriority.LAZY, task );
 	}
 
 
 
 	// -------------------------------------------------------------------------------
-	// force thread
+	// force proper thread
 
 
 
-	/ **
+	/**
 	 * Forces a method to be called from the correct thread.
 	 * @param callingFrom Class object which contains the method.
 	 * @param methodName The method which is being called.
@@ -444,10 +430,10 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	 *         return;
 	 *     // do something here
 	 * }
-	 * /
+	 */
 	public boolean proper(
 			final Object callingFrom, final String methodName,
-			final TaskPriority priority, final Object...args) {
+			final xThreadTaskPriority priority, final Object...args) {
 		if (callingFrom == null)       throw new RequiredArgumentException("callingFrom");
 		if (Utils.isEmpty(methodName)) throw new RequiredArgumentException("methodName");
 		if (priority == null)          throw new RequiredArgumentException("priority");
@@ -462,12 +448,12 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	public boolean proper(
 			final Object callingFrom, final String methodName,
 			final Object...args) {
-		return this.proper(callingFrom, methodName, TaskPriority.LATER, args);
+		return this.proper(callingFrom, methodName, xThreadTaskPriority.LATER, args);
 	}
 
 
 
-	/ **
+	/**
 	 * Forces a method to be called from the correct thread.
 	 * @param callingFrom Class object which contains the method.
 	 * @param methodName The method which is being called.
@@ -486,10 +472,10 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	 *     // do something here
 	 *     return result;
 	 * }
-	 * /
+	 */
 	public <V> V properResult(
 			final Object callingFrom, final String methodName,
-			final TaskPriority priority, final Object...args)
+			final xThreadTaskPriority priority, final Object...args)
 			throws ContinueException {
 		if (callingFrom == null)       throw new RequiredArgumentException("callingFrom");
 		if (Utils.isEmpty(methodName)) throw new RequiredArgumentException("methodName");
@@ -505,7 +491,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	public <V> V properResult(
 			final Object callingFrom, final String methodName,
 			final Object...args) throws ContinueException {
-		return this.properResult(callingFrom, methodName, TaskPriority.NOW, args);
+		return this.properResult(callingFrom, methodName, xThreadTaskPriority.NOW, args);
 	}
 
 
@@ -527,7 +513,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 
 	public String getPoolName() {
-		return this.poolName;
+		return this.pool_name;
 	}
 
 
@@ -542,13 +528,13 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	}
 	public void setThreadPriority(final int priority) {
 		this.threadPriority.set(priority);
-		this.threadGroup.setMaxPriority(priority);
+		this.thread_group.setMaxPriority(priority);
 	}
 
 
 
 	public ThreadGroup getThreadGroup() {
-		return this.threadGroup;
+		return this.thread_group;
 	}
 
 
@@ -574,31 +560,31 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 
 	public long getQueueCountNow() {
-		return this.countNow.get();
+		return this.count_now.get();
 	}
 	public long getQueueCountLater() {
-		return this.countLater.get();
+		return this.count_later.get();
 	}
 	public long getQueueCountLazy() {
-		return this.countLazy.get();
+		return this.count_lazy.get();
 	}
-	public long getQueueCount(final TaskPriority priority) {
+	public long getQueueCount(final xThreadTaskPriority priority) {
 		switch (priority) {
 		case NOW:
-			return this.countNow.get();
+			return this.count_now.get();
 		case LATER:
-			return this.countLater.get();
+			return this.count_later.get();
 		case LAZY:
-			return this.countLazy.get();
+			return this.count_lazy.get();
 		default: break;
 		}
 		return -1L;
 	}
 	public long getTaskCountTotal() {
 		long count = 0L;
-		count += this.countLazy.get();
-		count += this.countLater.get();
-		count += this.countNow.get();
+		count += this.count_lazy.get();
+		count += this.count_later.get();
+		count += this.count_now.get();
 		return count;
 	}
 
@@ -624,7 +610,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 
 	public long getIdleLoops() {
-		return this.idleLoopCount.get();
+		return this.count_idle_loops.get();
 	}
 
 
@@ -681,11 +667,10 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	}
 	protected xLog _log() {
 		final StringBuilder name = new StringBuilder();
-		name.append("thpool-").append(this.getPoolName());
+		name.append("threadpool-").append(this.getPoolName());
 		return xLog.Get(name.toString());
 	}
 
 
 
 }
-*/

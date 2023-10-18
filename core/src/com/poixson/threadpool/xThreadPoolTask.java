@@ -1,4 +1,3 @@
-/*
 package com.poixson.threadpool;
 
 import java.lang.ref.SoftReference;
@@ -14,15 +13,15 @@ import com.poixson.tools.abstractions.xRunnable;
 public class xThreadPoolTask extends xRunnable {
 
 	protected final xThreadPool pool;
+
 	// worker owning this task
-	protected final AtomicReference<xThreadPoolWorker> worker =
-			new AtomicReference<xThreadPoolWorker>(null);
+	protected final AtomicReference<xThreadPoolWorker> worker = new AtomicReference<xThreadPoolWorker>(null);
 
 	// state
 	protected final AtomicBoolean active = new AtomicBoolean(false);
-
-	public final long taskIndex;
-	protected final AtomicLong runIndex = new AtomicLong(-1L);
+	protected final long task_index;
+	protected final AtomicLong run_index = new AtomicLong(0L);
+	protected final AtomicLong count_runs = new AtomicLong(-1L);
 
 	// task exception
 	protected final AtomicReference<Exception> e = new AtomicReference<Exception>(null);
@@ -36,7 +35,7 @@ public class xThreadPoolTask extends xRunnable {
 			final Runnable run) {
 		super(taskName, run);
 		this.pool = pool;
-		this.taskIndex = this.pool.getNextTaskIndex();
+		this.task_index = this.pool.getNextTaskIndex();
 	}
 
 
@@ -98,16 +97,16 @@ public class xThreadPoolTask extends xRunnable {
 
 
 	public long getTaskIndex() {
-		return this.taskIndex;
+		return this.task_index;
 	}
 
 
 
 	public long getRunIndex() {
-		return this.runIndex.get();
+		return this.run_index.get();
 	}
 	public void setRunIndex(final long index) {
-		this.runIndex.set(index);
+		this.run_index.set(index);
 	}
 
 
@@ -169,4 +168,3 @@ public class xThreadPoolTask extends xRunnable {
 
 
 }
-*/

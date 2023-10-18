@@ -1,4 +1,3 @@
-/*
 package com.poixson.threadpool.types;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -12,13 +11,19 @@ public class xThreadPool_Main extends xThreadPool_Single {
 
 	public static final String MAIN_POOL_NAME = "main";
 
-	protected final static AtomicReference<xThreadPool_Main> instance =
-			new AtomicReference<xThreadPool_Main>(null);
+	protected final static AtomicReference<xThreadPool_Main> instance = new AtomicReference<xThreadPool_Main>(null);
 
 
 
 	public static xThreadPool_Main Get() {
-		if (instance.get() == null) {
+		// existing instance
+		{
+			final xThreadPool_Main pool = instance.get();
+			if (pool != null)
+				return pool;
+		}
+		// new instance
+		{
 			final xThreadPool_Main pool = new xThreadPool_Main();
 			if (instance.compareAndSet(null, pool)) {
 				final xThreadPool existing = pools.putIfAbsent(MAIN_POOL_NAME, pool);
@@ -61,9 +66,8 @@ public class xThreadPool_Main extends xThreadPool_Single {
 
 
 	public void stopMain() {
-		if (this.stopping.compareAndSet(false, true)) {
+		if (this.stopping.compareAndSet(false, true))
 			this.stopWorkers();
-		}
 		Keeper.remove(this);
 	}
 
@@ -77,4 +81,3 @@ public class xThreadPool_Main extends xThreadPool_Single {
 
 
 }
-*/

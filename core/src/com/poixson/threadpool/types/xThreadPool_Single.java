@@ -1,4 +1,3 @@
-/*
 package com.poixson.threadpool.types;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -10,8 +9,7 @@ import com.poixson.threadpool.xThreadPoolWorker;
 
 public abstract class xThreadPool_Single extends xThreadPool {
 
-	protected final AtomicReference<xThreadPoolWorker> worker =
-			new AtomicReference<xThreadPoolWorker>(null);
+	protected final AtomicReference<xThreadPoolWorker> worker = new AtomicReference<xThreadPoolWorker>(null);
 
 
 
@@ -28,10 +26,9 @@ public abstract class xThreadPool_Single extends xThreadPool {
 
 	// start with current thread
 	@Override
-	public void go() {
-		if (!this.okStart()) return;
-		if (!this.running.compareAndSet(false, true))
-			return;
+	public void run() {
+		if (!this.okStart())                          return;
+		if (!this.running.compareAndSet(false, true)) return;
 		if (this.worker.get() == null) {
 			final xThreadPoolWorker worker =
 				new xThreadPoolWorker(
@@ -39,9 +36,8 @@ public abstract class xThreadPool_Single extends xThreadPool {
 					Thread.currentThread(),
 					this.getPoolName()
 				);
-			if (this.worker.compareAndSet(null, worker)) {
+			if (this.worker.compareAndSet(null, worker))
 				worker.run();
-			}
 		}
 	}
 
@@ -86,9 +82,8 @@ public abstract class xThreadPool_Single extends xThreadPool {
 	@Override
 	protected void stopWorkers() {
 		final xThreadPoolWorker worker = this.worker.get();
-		if (worker != null) {
+		if (worker != null)
 			worker.stop();
-		}
 	}
 
 
@@ -171,9 +166,8 @@ public abstract class xThreadPool_Single extends xThreadPool {
 	@Override
 	public boolean isCurrentThread() {
 		final xThreadPoolWorker worker = this.worker.get();
-		if (worker != null) {
+		if (worker != null)
 			return worker.isCurrentThread();
-		}
 		return false;
 	}
 
@@ -188,19 +182,15 @@ public abstract class xThreadPool_Single extends xThreadPool {
 	@Override
 	public int getActiveWorkerCount() {
 		final xThreadPoolWorker worker = this.worker.get();
-		if (worker == null)
-			return 0;
-		if (worker.isActive())
-			return 1;
+		if (worker == null)    return 0;
+		if (worker.isActive()) return 1;
 		return 0;
 	}
 	@Override
 	public int getInactiveWorkerCount() {
 		final xThreadPoolWorker worker = this.worker.get();
-		if (worker == null)
-			return 0;
-		if (worker.isActive())
-			return 0;
+		if (worker == null)    return 0;
+		if (worker.isActive()) return 0;
 		return 1;
 	}
 
@@ -228,12 +218,10 @@ public abstract class xThreadPool_Single extends xThreadPool {
 	public void setThreadPriority(final int priority) {
 		super.setThreadPriority(priority);
 		final xThreadPoolWorker worker = this.worker.get();
-		if (worker != null) {
+		if (worker != null)
 			worker.setPriority(priority);
-		}
 	}
 
 
 
 }
-*/

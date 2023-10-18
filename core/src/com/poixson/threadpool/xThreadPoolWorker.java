@@ -1,5 +1,6 @@
-/*
 package com.poixson.threadpool;
+
+import static com.poixson.threadpool.xThreadPool.WORKER_START_TIMEOUT;
 
 import java.lang.ref.SoftReference;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -16,14 +17,12 @@ import com.poixson.utils.Utils;
 
 public class xThreadPoolWorker implements xStartable, Runnable {
 
-	public static final long WORKER_START_TIMEOUT = 500L;
-
 	protected final xThreadPool pool;
 	protected final AtomicReference<Thread> thread = new AtomicReference<Thread>(null);
 
-	protected final long workerIndex;
-	protected final String workerName;
-	protected final AtomicReference<String> workerNameCached = new AtomicReference<String>(null);
+	protected final long   worker_index;
+	protected final String worker_name;
+	protected final AtomicReference<String> worker_name_cached = new AtomicReference<String>(null);
 
 	// state
 	protected final AtomicBoolean running  = new AtomicBoolean(false);
@@ -33,15 +32,15 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 	protected final AtomicBoolean keepAlive = new AtomicBoolean(false);
 
 	// stats
-	protected final AtomicLong runCount = new AtomicLong(0L);
+	protected final AtomicLong count_runs = new AtomicLong(0L);
 
 
 
 	public xThreadPoolWorker(final xThreadPool pool, final Thread thread, final String workerName) {
 		if (pool == null) throw new RequiredArgumentException("pool");
 		this.pool = pool;
-		this.workerIndex = pool.getNextWorkerIndex();
-		this.workerName = workerName;
+		this.worker_index = pool.getNextWorkerIndex();
+		this.worker_name = workerName;
 		if (thread != null) {
 			this.thread.set(thread);
 			this.configureThread(thread);
@@ -116,9 +115,8 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 		}
 		if (this.thread.get() == null) {
 			final Thread thread = Thread.currentThread();
-			if (this.thread.compareAndSet(null, thread)) {
+			if (this.thread.compareAndSet(null, thread))
 				this.configureThread(thread);
-			}
 		}
 		if ( ! this.thread.get().equals(Thread.currentThread()) )
 			throw new IllegalStateException("Invalid thread state!");
@@ -136,7 +134,7 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 				}
 				// run the task
 				if (task != null) {
-					final long runIndex = this.runCount.incrementAndGet();
+					final long runIndex = this.count_runs.incrementAndGet();
 					this.runTask(task, runIndex);
 					continue WORKER_LOOP;
 				}
@@ -154,15 +152,18 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 		if (task == null) throw new RequiredArgumentException("task");
 		this.active.set(true);
 		try {
+			this.log().finer(
+				"Run Task: %s",
+				task.getTaskName()
+			);
 			task.setWorker(this);
 			task.setRunIndex(runIndex);
 			task.run();
 		} finally {
 			this.active.set(false);
 		}
-		if (task.hasException()) {
+		if (task.hasException())
 			this.log().trace(task.e());
-		}
 	}
 
 
@@ -262,13 +263,13 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 
 
 	public long getWorkerIndex() {
-		return this.workerIndex;
+		return this.worker_index;
 	}
 
 
 
 	public long getRunCount() {
-		return this.runCount.get();
+		return this.count_runs.get();
 	}
 
 
@@ -280,20 +281,20 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 
 	public String getWorkerName() {
 		// custom name
-		if (Utils.notEmpty(this.workerName)) {
-			return this.workerName;
+		if (Utils.notEmpty(this.worker_name)) {
+			return this.worker_name;
 		}
 		// generated name
-		if (this.workerNameCached.get() == null) {
+		if (this.worker_name_cached.get() == null) {
 			final String name =
 				String.format(
 					"%s-w%d",
 					this.pool.getPoolName(),
-					Long.valueOf(this.workerIndex)
+					Long.valueOf(this.worker_index)
 				);
-			this.workerNameCached.set(name);
+			this.worker_name_cached.set(name);
 		}
-		return this.workerNameCached.get();
+		return this.worker_name_cached.get();
 	}
 
 
@@ -343,17 +344,16 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 		return this.log();
 	}
 	protected xLog _log() {
-		final String poolName = this.pool.poolName;
-		final String workerName = this.getWorkerName();
+		final String pool_name = this.pool.pool_name;
+		final String worker_name = this.getWorkerName();
 		final StringBuilder name = new StringBuilder();
-		name.append("pool:").append(poolName);
-		if (!workerName.isEmpty())
-			if (!workerName.equalsIgnoreCase(poolName))
-				name.append(":").append(workerName);
+		name.append("pool:").append(pool_name);
+		if (!worker_name.isEmpty())
+			if (!worker_name.equalsIgnoreCase(pool_name))
+				name.append(":").append(worker_name);
 		return xLog.Get(name.toString());
 	}
 
 
 
 }
-*/
