@@ -54,6 +54,19 @@ public final class Failure {
 		this.exitCode.set( NumberUtils.MinMax(exitCode, 0, 255) );
 	}
 	public void addMessage(final String msg, final Object...args) {
+		if (args.length > 0) {
+			if (args[0] instanceof Exception) {
+				this.messages.add(
+					(new StringBuilder())
+					.append(msg)
+					.append('\n')
+//TODO: exception to string
+//					.append( Utils.    ((Exception)args[0]) )
+					.toString()
+				);
+				return;
+			}
+		}
 		if (Utils.notEmpty(msg)) {
 			this.messages.add(
 				String.format(msg, args)
