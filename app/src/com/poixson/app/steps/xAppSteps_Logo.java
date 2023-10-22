@@ -81,7 +81,7 @@ public class xAppSteps_Logo {
 
 	public static Map<String, String> GetStartupVars(final xApp app) {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
-		result.put( "Pid",         Integer.toString(ProcUtils.getPid()) );
+		result.put( "Pid",         Integer.toString(ProcUtils.GetPid()) );
 		result.put( "Version",     app.getVersion()                     );
 		result.put( "Commit",      app.getCommitHashShort()             );
 		result.put( "Running as",  System.getProperty("user.name")      );

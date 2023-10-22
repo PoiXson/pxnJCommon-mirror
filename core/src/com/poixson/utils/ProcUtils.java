@@ -14,14 +14,14 @@ public final class ProcUtils {
 
 	private static final AtomicInteger pid = new AtomicInteger(Integer.MIN_VALUE);
 
-	private static final boolean debugWireEnabled = initDebugWire();
+	private static final boolean debugWireEnabled = InitDebugWire();
 
 
 
 	public static boolean isDebugWireEnabled() {
 		return debugWireEnabled;
 	}
-	private static boolean initDebugWire() {
+	private static boolean InitDebugWire() {
 		final RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
 		if (bean != null) {
 			final List<String> args = bean.getInputArguments();
@@ -40,7 +40,7 @@ public final class ProcUtils {
 	 * Get the pid for the jvm process.
 	 * @return process id number (pid)
 	 */
-	public static int getPid() {
+	public static int GetPid() {
 		if (pid.get() == Integer.MIN_VALUE) {
 			int value = -1;
 			final RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
