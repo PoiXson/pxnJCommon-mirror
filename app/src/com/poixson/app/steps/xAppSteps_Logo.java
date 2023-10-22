@@ -43,8 +43,14 @@ public class xAppSteps_Logo {
 	@xAppStep(type=xAppStepType.STARTUP, step=15, title="Display Logo")
 	public void __START__display_logo() {
 		final xLog log = this.app.log();
-		log.publish();
-		this.display_logo(log);
+		{
+			final String[] logo = this.display_logo(log);
+			if (Utils.notEmpty(logo)) {
+				log.publish();
+				for (final String line : logo)
+					log.publish(line);
+			}
+		}
 		log.publish();
 		this.display_legal(log);
 		log.publish();
@@ -123,7 +129,7 @@ public class xAppSteps_Logo {
 //10 |/////////////////////////////////////////////////////////////////|
 //   0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6
 //             1         2         3         4         5         6
-	protected void display_logo(final xLog log) {
+	protected String[] display_logo(final xLog log) {
 		// define colors
 		final String COLOR_BG = "black";
 		final String COLOR_PXN_P       = "bold,green";
@@ -234,7 +240,7 @@ public class xAppSteps_Logo {
 		// line 11   color               x   y
 		art.setColor(COLOR_GRASS,        0, 10);
 		// display generated art
-		log.publish(art.build());
+		return art.build();
 	}
 
 
