@@ -51,19 +51,15 @@ public class xLogger extends xLog {
 			this.publish();
 			return;
 		}
-		this.publish( new xLogRecord_Msg(this, (xLevel)null, msg, (Object[])null) );
+		this.publish(new xLogRecord_Msg(this, (xLevel)null, msg, (Object[])null));
 	}
-	@Override
-	public void publish(final String[] msg) {
-	}
+
 	@Override
 	public void publish(final xLogRecord record) {
-		if (record == null) {
-			this.publish();
-			return;
+		if (record != null) {
+			if (this.notLoggable(record.getLevel()))
+				return;
 		}
-		if (this.notLoggable(record.getLevel()))
-			return;
 		{
 			final xLogHandler[] handlers = this.getHandlersOrDefault();
 			if (Utils.notEmpty(handlers)) {

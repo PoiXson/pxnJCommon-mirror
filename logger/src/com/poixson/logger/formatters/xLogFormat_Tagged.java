@@ -39,6 +39,8 @@ public class xLogFormat_Tagged implements xLogFormat {
 
 	@Override
 	public String format(final xLogRecord record) {
+		if (record == null)
+			return "\n";
 		if (record instanceof xLogRecord_Msg)
 			return this.format((xLogRecord_Msg)record );
 		return record.toString();
@@ -46,6 +48,8 @@ public class xLogFormat_Tagged implements xLogFormat {
 	public String format(final xLogRecord_Msg record) {
 		if (record.isEmpty())
 			return null;
+		if (record.level == null)
+			return record.toString();
 		// [[ title ]]
 		if (xLevel.TITLE.equals(record.level))
 			return this.genTitle(record);

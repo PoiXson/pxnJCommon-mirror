@@ -254,7 +254,6 @@ public abstract class xLog {
 		this.publish( (xLogRecord)null );
 	}
 	public abstract void publish(final String msg);
-	public abstract void publish(final String[] msg);
 	public abstract void publish(final xLogRecord record);
 
 	public abstract void flush();

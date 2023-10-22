@@ -46,6 +46,8 @@ public class xLogHandler_Console extends xLogHandler {
 		try {
 			final String msg = this.format(record);
 			if (Utils.isEmpty(msg)) {
+			} else
+			if ("\n".equals(msg)) {
 				this.out.println();
 			} else {
 				final String[] lines = msg.split("\n");
