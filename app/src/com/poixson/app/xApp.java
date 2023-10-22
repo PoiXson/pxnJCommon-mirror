@@ -28,6 +28,7 @@ import com.poixson.tools.abstractions.RunnableMethod;
 import com.poixson.tools.abstractions.xFailable;
 import com.poixson.tools.abstractions.xStartable;
 import com.poixson.utils.FileUtils;
+import com.poixson.utils.ProcUtils;
 import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.Utils;
 
@@ -490,7 +491,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 			if (catcher != null)
 				return catcher;
 		}
-		{
+		if (!ProcUtils.isDebugWireEnabled()) {
 			final HangCatcher catcher = new HangCatcher(
 				new Runnable() {
 					@Override
@@ -504,7 +505,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 				return catcher;
 			}
 		}
-		return this.startHangCatcher();
+		return this.hangcatcher.get();
 	}
 	protected void stopHangCatcher() {
 		final HangCatcher catcher = this.hangcatcher.getAndSet(null);
