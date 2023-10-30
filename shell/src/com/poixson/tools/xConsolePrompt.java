@@ -16,6 +16,7 @@ import org.jline.reader.UserInterruptException;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
+import com.poixson.app.xApp;
 import com.poixson.exceptions.IORuntimeException;
 import com.poixson.logger.xConsole;
 import com.poixson.logger.xLog;
@@ -25,6 +26,8 @@ import com.poixson.utils.Utils;
 
 public class xConsolePrompt extends xConsole {
 	protected static final String THREAD_NAME = "Console-Input";
+
+	protected final xApp app;
 
 	protected static final AtomicReference<Terminal>   terminal = new AtomicReference<Terminal>(null);
 	protected static final AtomicReference<LineReader> reader   = new AtomicReference<LineReader>(null);
@@ -39,11 +42,12 @@ public class xConsolePrompt extends xConsole {
 
 
 
-	public xConsolePrompt() {
-		this(StdIO.OriginalOut(), StdIO.OriginalIn());
+	public xConsolePrompt(final xApp app) {
+		this(app, StdIO.OriginalOut(), StdIO.OriginalIn());
 	}
-	protected xConsolePrompt(final OutputStream out, final InputStream in) {
+	protected xConsolePrompt(final xApp app, final OutputStream out, final InputStream in) {
 		super(out);
+		this.app = app;
 		this.out = out;
 		this.in  = in;
 		Keeper.add(this);
@@ -147,7 +151,10 @@ StdIO.OriginalOut().println("LINE: " + line);
 //		}
 //		this.log().fine("Console prompt stopped");
 		this.thread.set(null);
+		this.stop();
 		StdIO.OriginalOut().flush();
+		if (!this.app.isStopping())
+			this.app.stop();
 	}
 
 

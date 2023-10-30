@@ -106,13 +106,8 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 
 	@Override
 	public void run() {
-		if (this.isStopping()) return;
 		if (!this.running.compareAndSet(false, true))
 			throw new RuntimeException("Thread pool worker already running: "+this.getWorkerName());
-		if (this.isStopping()) {
-			this.running.set(false);
-			return;
-		}
 		if (this.thread.get() == null) {
 			final Thread thread = Thread.currentThread();
 			if (this.thread.compareAndSet(null, thread))

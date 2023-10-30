@@ -231,10 +231,11 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 	public xThreadPoolTask grabNextTask() throws InterruptedException {
 		// loop a few times
-		//PRIORITY_LOOP:
+		PRIORITY_LOOP:
 		while (true) {
-			if (this.isStopping())
-				return null;
+			if (this.isStopping()
+			&&  this.isEmpty())
+				break PRIORITY_LOOP;
 			// high priority tasks
 			{
 				final xThreadPoolTask task = this.queueNow.poll();
@@ -276,6 +277,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 				}
 			}
 		} // end PRIORITY_LOOP
+		return null;
 	}
 
 
@@ -286,6 +288,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	}
 	public xThreadPoolTask addTask(final xThreadTaskPriority priority,
 			final String taskName, final Runnable run) {
+		if (this.isStopping()) return null;
 		if (run instanceof xThreadPoolTask) {
 			final xThreadPoolTask task = (xThreadPoolTask) run;
 			if (Utils.notEmpty(taskName))
@@ -305,6 +308,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	}
 	public void addTask(final xThreadTaskPriority priority,
 			final xThreadPoolTask task) {
+		if (this.isStopping()) return;
 		if (task == null) throw new RequiredArgumentException("task");
 		// pass to main thread pool
 		if (this.getMaxWorkers() == 0) {

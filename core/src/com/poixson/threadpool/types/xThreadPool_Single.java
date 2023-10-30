@@ -60,7 +60,6 @@ public abstract class xThreadPool_Single extends xThreadPool {
 
 	@Override
 	protected void startNewWorkerIfNeededAndAble() {
-		if (this.isStopping()) return;
 		if (!this.isRunning()) return;
 		if (this.worker.get() == null) {
 			// new worker
