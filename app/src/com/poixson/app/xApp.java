@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.poixson.app.commands.xCommandProcessor;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xDebug;
 import com.poixson.logger.xLevel;
@@ -136,6 +137,12 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 	}
 	public static xApp[] GetApps() {
 		return apps.toArray(new xApp[0]);
+	}
+
+
+
+	public xCommandProcessor getCommandProcessor() {
+		return null;
 	}
 
 

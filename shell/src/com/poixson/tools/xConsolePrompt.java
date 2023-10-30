@@ -13,13 +13,17 @@ import org.jline.reader.History;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.UserInterruptException;
+import org.jline.reader.impl.history.DefaultHistory;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
+import com.poixson.ShellDefines;
 import com.poixson.app.xApp;
+import com.poixson.app.commands.xCommandProcessor;
 import com.poixson.exceptions.IORuntimeException;
 import com.poixson.logger.xConsole;
 import com.poixson.logger.xLog;
+import com.poixson.utils.FileUtils;
 import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.Utils;
 
@@ -45,7 +49,8 @@ public class xConsolePrompt extends xConsole {
 	public xConsolePrompt(final xApp app) {
 		this(app, StdIO.OriginalOut(), StdIO.OriginalIn());
 	}
-	protected xConsolePrompt(final xApp app, final OutputStream out, final InputStream in) {
+	protected xConsolePrompt(final xApp app,
+			final OutputStream out, final InputStream in) {
 		super(out);
 		this.app = app;
 		this.out = out;
@@ -91,7 +96,7 @@ public class xConsolePrompt extends xConsole {
 	public void run() {
 		if (this.isStopping()) return;
 		this.log().fine("Console prompt started..");
-		final LineReader read = getReader();
+		final LineReader reader = getReader();
 		final Thread thread = Thread.currentThread();
 		READER_LOOP:
 		while (true) {
@@ -100,28 +105,28 @@ public class xConsolePrompt extends xConsole {
 			final String line;
 			try {
 				// read console input
-				line = read.readLine(
+				line = reader.readLine(
 //TODO
-" > ", null
+					ShellDefines.DEFAULT_PROMPT,
+					null
 //					this.getPrompt(),
 //					this.getMask()
 				);
 				// handle line
-//TODO
 				if (Utils.notEmpty(line)) {
-StdIO.OriginalOut().println("LINE: " + line);
-//					final xCommandHandler handler = ShellUtils.GetCommandHandler();
-//					if (handler == null)
-//						this.log().warning("No command handler set!");
-//					final boolean result = handler.process(line);
-//					if (!result)
-//						log().warning("Unknown command:", line);
+					final xCommandProcessor processor = this.app.getCommandProcessor();
+					if (processor == null) {
+						this.log().warning("No command processor to handle command: %s", line);
+						continue READER_LOOP;
+					}
+					final boolean result = processor.process(line);
+					if (!result)
+						log().warning("Unknown command: %s", line);
 				}
 			} catch (UserInterruptException ignore) {
 				break READER_LOOP;
 			} catch (Exception e) {
-//TODO
-//				this.log().trace(e);
+				this.log().trace(e);
 				try {
 					Thread.sleep(100L);
 				} catch (InterruptedException ignore) {
@@ -130,28 +135,24 @@ StdIO.OriginalOut().println("LINE: " + line);
 				continue READER_LOOP;
 			}
 		} // end READER_LOOP
-//TODO
-//		if ( ! this.stopping.get() ) {
-//			xApp.kill();
-//			this.stopping.set(true);
-//		}
-//		// save command history
-//		{
-//			final History history = history.get();
-//			if (history != null) {
-//				if (history instanceof DefaultHistory) {
-//					try {
-//						((DefaultHistory) history)
-//							.save();
-//					} catch (IOException e) {
-//						this.log().trace(e);
-//					}
-//				}
-//			}
-//		}
-//		this.log().fine("Console prompt stopped");
+		// save command history
+		{
+			final History history = xConsolePrompt.history.get();
+			if (history != null) {
+				if (history instanceof DefaultHistory) {
+					try {
+						((DefaultHistory) history)
+							.save();
+					} catch (IOException e) {
+						this.log().trace(e);
+					}
+				}
+			}
+		}
+		this.log().fine("Console prompt stopped");
 		this.thread.set(null);
 		this.stop();
+		StdIO.OriginalOut().println();
 		StdIO.OriginalOut().flush();
 		if (!this.app.isStopping())
 			this.app.stop();
@@ -236,18 +237,16 @@ StdIO.OriginalOut().println("LINE: " + line);
 			if (hist != null)
 				return hist;
 		}
-//TODO
-//		{
-//			final String historyFile = FileUtils.MergePaths(",", xShellDefines.HISTORY_FILE);
-//			final LineReader read = getReader();
-//			read.setVariable(LineReader.HISTORY_FILE, historyFile);
-//			read.setVariable(LineReader.HISTORY_SIZE, xShellDefines.HISTORY_SIZE);
-//			final History hist = new DefaultHistory(read);
-//			if ( ! history.compareAndSet(null, hist) )
-//				return history.get();
-//			return hist;
-//		}
-return null;
+		{
+			final String historyFile = FileUtils.MergePaths(",", ShellDefines.HISTORY_FILE);
+			final LineReader read = getReader();
+			read.setVariable(LineReader.HISTORY_FILE, historyFile);
+			read.setVariable(LineReader.HISTORY_SIZE, ShellDefines.HISTORY_SIZE);
+			final History hist = new DefaultHistory(read);
+			if ( ! history.compareAndSet(null, hist) )
+				return history.get();
+			return hist;
+		}
 	}
 
 

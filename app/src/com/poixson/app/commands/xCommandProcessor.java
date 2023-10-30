@@ -64,14 +64,12 @@ public class xCommandProcessor extends xHandler<xCommand> {
 		final Iterator<xCommandDAO> it = this.commands.iterator();
 		while (it.hasNext()) {
 			final xCommandDAO dao = it.next();
-			if (dao.isObject(object)) {
+			if (dao.isObject(object))
 				remove.add(dao);
-			}
 		}
 		if (!remove.isEmpty()) {
-			for (final xCommandDAO dao : remove) {
+			for (final xCommandDAO dao : remove)
 				this.commands.remove(dao);
-			}
 		}
 	}
 	@Override
@@ -81,14 +79,12 @@ public class xCommandProcessor extends xHandler<xCommand> {
 		final Iterator<xCommandDAO> it = this.commands.iterator();
 		while (it.hasNext()) {
 			final xCommandDAO dao = it.next();
-			if (dao.isMethod(object, methodName)) {
+			if (dao.isMethod(object, methodName))
 				remove.add(dao);
-			}
 		}
 		if (!remove.isEmpty()) {
-			for (final xCommandDAO dao : remove) {
+			for (final xCommandDAO dao : remove)
 				this.commands.remove(dao);
-			}
 		}
 	}
 	@Override
@@ -99,15 +95,15 @@ public class xCommandProcessor extends xHandler<xCommand> {
 
 
 	public boolean process(final String line) {
-		if (Utils.isEmpty(line)) return false;
-//TODO
-//		final xCommandDAO dao =
-//			this.findCommand(
-//				StringUtils.PeekFirstPart(line, ' ')
-//			);
-//		if (dao == null)
-//			return false;
-//		dao.invoke(line);
+		if (Utils.isEmpty(line))
+			return false;
+		final xCommandDAO dao =
+			this.findCommand(
+				StringUtils.FirstPart(line, ' ')
+			);
+		if (dao == null)
+			return false;
+		dao.invoke(line);
 		return true;
 	}
 	protected xCommandDAO findCommand(final String cmd) {
