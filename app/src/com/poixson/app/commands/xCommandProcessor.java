@@ -13,13 +13,13 @@ import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
-public class xCommandHandler extends xHandler<xCommand> {
+public class xCommandProcessor extends xHandler<xCommand> {
 
 	protected final CopyOnWriteArrayList<xCommandDAO> commands = new CopyOnWriteArrayList<xCommandDAO>();
 
 
 
-	public xCommandHandler() {
+	public xCommandProcessor() {
 		super(xCommand.class);
 	}
 
