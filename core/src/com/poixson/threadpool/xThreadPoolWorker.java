@@ -147,7 +147,7 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 		if (task == null) throw new RequiredArgumentException("task");
 		this.active.set(true);
 		try {
-			this.log().finer(
+			this.log().finest(
 				"Run Task: %s",
 				task.getTaskName()
 			);

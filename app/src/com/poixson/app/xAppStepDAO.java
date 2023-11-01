@@ -16,6 +16,7 @@ public class xAppStepDAO implements RunnableNamed {
 	public final xApp     app;
 	public final xAppStep anno;
 	public final int      step;
+	public final int      step_abs;
 	public final xAppStepType type;
 
 	public final boolean  multi;
@@ -38,10 +39,11 @@ public class xAppStepDAO implements RunnableNamed {
 		this.app  = app;
 		this.anno = anno;
 		this.type = anno.type();
+		this.step_abs = Math.abs(anno.step());
 		this.step = (
 			xAppStepType.STARTUP.equals(this.type)
 			? anno.step()
-			: 0 - Math.abs(anno.step())
+			: 0 - this.step_abs
 		);
 		this.multi = anno.multi();
 		this.pause = anno.pause();
@@ -64,9 +66,10 @@ public class xAppStepDAO implements RunnableNamed {
 			}
 		}
 		this.titleFull =
-			StringUtils.MergeStrings('-',
+			String.format(
+				"%s-%d-%s",
 				this.type.name(),
-				Integer.toString(this.step),
+				this.step_abs,
 				this.title
 			);
 		this.container = container;
