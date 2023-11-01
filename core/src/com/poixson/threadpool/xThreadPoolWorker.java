@@ -118,8 +118,6 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 		try {
 			WORKER_LOOP:
 			while (true) {
-				if (this.isStopping())
-					break WORKER_LOOP;
 				// get task from queues
 				final xThreadPoolTask task;
 				try {
@@ -133,6 +131,8 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 					this.runTask(task, runIndex);
 					continue WORKER_LOOP;
 				}
+				if (this.isStopping())
+					break WORKER_LOOP;
 				// idle worker
 				this.log().detail("Idle thread..");
 //TODO: idle thread may stop
