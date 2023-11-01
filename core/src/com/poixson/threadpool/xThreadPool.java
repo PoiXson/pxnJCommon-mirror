@@ -110,9 +110,8 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 	@Override
 	public void stop() {
-		if (this.stopping.compareAndSet(false, true)) {
+		if (this.stopping.compareAndSet(false, true))
 			this.stopWorkers();
-		}
 		Keeper.remove(this);
 	}
 	public static void StopAll() {
@@ -121,8 +120,8 @@ public abstract class xThreadPool implements xStartable, Runnable {
 		WORKERS_LOOP:
 		while (it.hasNext()) {
 			final xThreadPool pool = it.next();
-			if ( pool.isMainPool() || pool.isGraphicsPool() )
-				continue WORKERS_LOOP;
+			if (pool.isMainPool())     continue WORKERS_LOOP;
+			if (pool.isGraphicsPool()) continue WORKERS_LOOP;
 			pool.stop();
 		} // end WORKERS_LOOP
 	}
@@ -142,11 +141,8 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 
 	public void join(final xTime time) {
-		if (time == null) {
-			this.join(0L);
-		} else {
-			this.join(time.ms());
-		}
+		if (time == null) this.join(0L);
+		else              this.join(time.ms());
 	}
 	public void join() {
 		this.join(0L);

@@ -72,10 +72,11 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 		// wait for worker to start
 		long sleep = 0L;
 		CoolDown cool = null;
+		WAIT_LOOP:
 		while (true) {
 			// is running
 			if (this.isRunning())
-				break;
+				break WAIT_LOOP;
 			// timeout
 			if (cool == null) {
 				cool = new CoolDown(timeout);
@@ -83,11 +84,11 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 			} else
 			if (cool.again()) {
 				this.log().warning("Timeout waiting for thread pool to start");
-				break;
+				break WAIT_LOOP;
 			}
 			sleep += 5L;
 			ThreadUtils.Sleep(sleep);
-		}
+		} // end WAIT_LOOP
 	}
 
 
@@ -204,13 +205,9 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 
 	public void join(final long timeout) throws InterruptedException {
 		final Thread thread = this.thread.get();
-		if (thread == null)
-			return;
-		if (timeout > 0L) {
-			thread.join(timeout);
-		} else {
-			thread.join();
-		}
+		if (thread == null) return;
+		if (timeout > 0L) thread.join(timeout);
+		else              thread.join();
 	}
 	public void join() throws InterruptedException {
 		this.join(0L);
@@ -296,9 +293,8 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 
 	public void setPriority(final int priority) {
 		final Thread thread = this.thread.get();
-		if (thread != null) {
+		if (thread != null)
 			thread.setPriority(priority);
-		}
 	}
 
 
@@ -343,9 +339,10 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 		final String worker_name = this.getWorkerName();
 		final StringBuilder name = new StringBuilder();
 		name.append("pool:").append(pool_name);
-		if (!worker_name.isEmpty())
+		if (!worker_name.isEmpty()) {
 			if (!worker_name.equalsIgnoreCase(pool_name))
 				name.append(":").append(worker_name);
+		}
 		return xLog.Get(name.toString());
 	}
 

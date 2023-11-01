@@ -272,9 +272,8 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 				this.fail(e);
 			}
 			this.resetHangCatcher();
-			if (dao.isPauseAfter()) {
+			if (dao.isPauseAfter())
 				this.pause();
-			}
 		}
 		// queue next step
 		this.queueNextStep();
