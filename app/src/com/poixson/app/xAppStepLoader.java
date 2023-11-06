@@ -47,24 +47,18 @@ public class xAppStepLoader {
 	public void scan(final Object container) {
 		if (container == null) return;
 		final Class<?> clss = container.getClass();
+		this.scan(clss, container);
+	}
+	public void scan(final Class<?> clss, final Object container) {
 		if (clss == null) throw new RuntimeException("Failed to get step container class");
 		final Method[] methods = clss.getMethods();
 		if (Utils.isEmpty(methods)) throw new RuntimeException("No methods found in step container class: "+clss.getSimpleName());
 		//METHODS_LOOP:
 		for (final Method m : methods) {
+
 			// @xAppMoreSteps
 			final xAppMoreSteps anno_more = m.getAnnotation(xAppMoreSteps.class);
 			if (anno_more != null) {
-//				if (this.type.equals(anno_more.type())) {
-//					final xAppStepDAO dao =
-//						new xAppStepDAO(
-//							this.app,
-//							anno_step,
-//							container,
-//							m
-//						);
-//					this.add(dao);
-//				}
 				try {
 					final Object[] results = (Object[]) m.invoke(container, this.type);
 					if (results != null && results.length > 0) {
@@ -77,6 +71,7 @@ public class xAppStepLoader {
 					this.log().trace(e);
 				}
 			}
+
 			// @xAppStep(..)
 			final xAppStep anno_step = m.getAnnotation(xAppStep.class);
 			if (anno_step != null) {
@@ -92,14 +87,14 @@ public class xAppStepLoader {
 					this.add(dao);
 				}
 			}
+
 		} // end METHODS_LOOP
 	}
 
 
 
 	public void add(final xAppStepDAO dao) {
-//TODO: remove this
-//System.out.println("FOUND STEP: " + dao.getTaskName());
+		this.log().finest("Found step: %s", dao.getTaskName());
 		// add to list or new list
 		this.steps.computeIfAbsent(
 			Integer.valueOf(dao.step),
