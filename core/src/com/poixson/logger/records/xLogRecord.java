@@ -1,4 +1,6 @@
-package com.poixson.logger;
+package com.poixson.logger.records;
+
+import com.poixson.logger.xLevel;
 
 
 public interface xLogRecord {

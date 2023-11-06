@@ -11,6 +11,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
+import com.poixson.logger.records.xLogRecord;
+import com.poixson.logger.records.xLogRecord_Msg;
 import com.poixson.tools.StdIO;
 import com.poixson.utils.ReflectUtils;
 import com.poixson.utils.StringUtils;

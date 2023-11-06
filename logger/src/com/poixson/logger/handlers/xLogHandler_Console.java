@@ -5,7 +5,7 @@ import java.io.PrintStream;
 
 import com.poixson.logger.xConsole;
 import com.poixson.logger.xLogHandler;
-import com.poixson.logger.xLogRecord;
+import com.poixson.logger.records.xLogRecord;
 import com.poixson.tools.StdIO;
 import com.poixson.utils.ShellUtils;
 import com.poixson.utils.Utils;

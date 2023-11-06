@@ -1,7 +1,10 @@
 package com.poixson.logger;
 
-import com.poixson.logger.xLogRecord_Special.SpecialType;
 import com.poixson.logger.handlers.xLogHandler_Console;
+import com.poixson.logger.records.xLogRecord;
+import com.poixson.logger.records.xLogRecord_Msg;
+import com.poixson.logger.records.xLogRecord_Special;
+import com.poixson.logger.records.xLogRecord_Special.SpecialType;
 import com.poixson.tools.StdIO;
 import com.poixson.utils.Utils;
 

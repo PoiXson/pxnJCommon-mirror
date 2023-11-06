@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 import com.poixson.logger.xLevel;
 import com.poixson.logger.xLog;
-import com.poixson.logger.xLogRecord_Msg;
+import com.poixson.logger.records.xLogRecord_Msg;
 import com.poixson.tools.Keeper;
 import com.poixson.utils.Utils;
 

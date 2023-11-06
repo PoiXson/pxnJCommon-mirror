@@ -1,5 +1,7 @@
-package com.poixson.logger;
+package com.poixson.logger.records;
 
+import com.poixson.logger.xLevel;
+import com.poixson.logger.xLog;
 import com.poixson.utils.Utils;
 
 

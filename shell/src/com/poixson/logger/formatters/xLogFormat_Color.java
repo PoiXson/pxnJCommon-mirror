@@ -1,7 +1,7 @@
 package com.poixson.logger.formatters;
 
 import com.poixson.logger.xLevel;
-import com.poixson.logger.xLogRecord_Msg;
+import com.poixson.logger.records.xLogRecord_Msg;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
