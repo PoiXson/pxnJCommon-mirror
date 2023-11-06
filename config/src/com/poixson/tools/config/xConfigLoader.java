@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools.config;
 
 import java.io.File;
@@ -42,9 +41,7 @@ public final class xConfigLoader {
 			throw new RuntimeException("xConfig constructor not found!");
 		// get new instance
 		try {
-			return CastConfig(
-				construct.newInstance(datamap)
-			);
+			return CastConfig( construct.newInstance(datamap) );
 		} catch (InstantiationException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
@@ -63,12 +60,11 @@ public final class xConfigLoader {
 
 
 
-	/ **
+	/**
 	 * Load and parse yaml data from an input stream. 
 	 * @param in InputStream to read from.
 	 * @return Map<String, Object> datamap contents of yml file.
-	 * /
-	@SuppressWarnings("unchecked")
+	 */
 	public static Map<String, Object> LoadYamlFromStream(final InputStream in) {
 		if (in == null) throw new RequiredArgumentException("in");
 		final Yaml yml = new Yaml();
@@ -157,4 +153,3 @@ public final class xConfigLoader {
 
 
 }
-*/

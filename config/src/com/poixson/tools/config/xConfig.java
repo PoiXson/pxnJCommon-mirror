@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools.config;
 
 import java.util.ArrayList;
@@ -206,8 +205,7 @@ public class xConfig {
 		final Iterator<Object> it = datalist.iterator();
 		while (it.hasNext()) {
 			final Object obj = it.next();
-			final Map<String, Object> datamap =
-				ObjectUtils.CastMap(obj, String.class, Object.class);
+			final Map<String, Object> datamap = ObjectUtils.CastMap(obj, String.class, Object.class);
 			if (datamap == null)
 				throw new RuntimeException("Failed to get Map constructor for class: "+cfgClass.getName());
 			final T cfg = xConfigLoader.NewConfig(datamap, cfgClass);
@@ -219,4 +217,3 @@ public class xConfig {
 
 
 }
-*/
