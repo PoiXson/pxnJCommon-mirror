@@ -177,8 +177,8 @@ public class xLockFile {
 			final SoftReference<xLog> ref = this._log.get();
 			if (ref != null) {
 				final xLog log = ref.get();
-				if (log != null)
-					return log;
+				if (log == null) this._log.set(null);
+				else             return log;
 			}
 		}
 		// new instance
