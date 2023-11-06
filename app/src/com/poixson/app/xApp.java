@@ -144,6 +144,9 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 	public xCommandProcessor getCommandProcessor() {
 		return null;
 	}
+	public Object[] getCommands() {
+		return null;
+	}
 
 
 

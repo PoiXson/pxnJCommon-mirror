@@ -12,7 +12,7 @@ public @interface xCommand {
 
 
 	String Name();
-	String Aliases();
+	String Aliases() default "";
 
 
 }

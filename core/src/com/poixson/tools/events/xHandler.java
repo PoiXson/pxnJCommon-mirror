@@ -21,19 +21,19 @@ public abstract class xHandler <T extends Annotation> {
 
 
 	public int register(final Object...objects) {
-		if (Utils.isEmpty(objects)) return -1;
+		if (Utils.isEmpty(objects)) return 0;
 		int count = 0;
 		OBJECTS_LOOP:
 		for (final Object obj : objects) {
 			if (obj == null) continue OBJECTS_LOOP;
-			count += this.registerObject(obj);
+			count += this.register(obj);
 		}
 		return count;
 	}
-	protected int registerObject(final Object object) {
-		if (object == null) return -1;
+	protected int register(final Object object) {
+		if (object == null) return 0;
 		final Method[] methods = object.getClass().getMethods();
-		if (Utils.isEmpty(methods)) return -1;
+		if (Utils.isEmpty(methods)) return 0;
 		int count = 0;
 		METHODS_LOOP:
 		for (final Method m : methods) {
@@ -41,19 +41,17 @@ public abstract class xHandler <T extends Annotation> {
 			final T anno = m.getAnnotation(this.type);
 			if (anno == null) continue METHODS_LOOP;
 			// found annotation
-			if (this.registerMethod(object, m, anno)) {
+			if (this.register(object, m, anno))
 				count++;
-			}
 		}
 		return count;
 	}
-	protected abstract boolean registerMethod(
-			final Object object, final Method method, final T anno);
+	protected abstract boolean register(final Object object, final Method method, final T anno);
 
 
 
-	public abstract void unregisterObject(final Object object);
-	public abstract void unregisterMethod(final Object object, final String methodName);
+	public abstract void unregister(final Object object);
+	public abstract void unregister(final Object object, final String methodName);
 	public abstract void unregisterAll();
 
 

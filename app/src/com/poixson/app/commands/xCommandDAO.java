@@ -32,19 +32,27 @@ public class xCommandDAO extends xEventListenerDAO {
 		if (xThreadPool_Main.Get().proper(this, "invoke", line))
 			return;
 		xLog.Get().finest(
-			"Invoking command: %s->%s %d",
+			"Invoking command: %s->%s >> %s",
 			super.object.getClass().getName(),
 			super.method.getName(),
 			line
 		);
-		// method(object, line)
+		// method(event)
+		try {
+			final xCommandEvent event = new xCommandEvent(line);
+			this.method.invoke(this.object, event);
+			return;
+		} catch (IllegalAccessException ignore) {
+		} catch (IllegalArgumentException ignore) {
+		} catch (InvocationTargetException ignore) {}
+		// method(line)
 		try {
 			this.method.invoke(this.object, line);
 			return;
 		} catch (IllegalAccessException ignore) {
 		} catch (IllegalArgumentException ignore) {
 		} catch (InvocationTargetException ignore) {}
-		// method(object)
+		// method()
 		try {
 			this.method.invoke(this.object);
 			return;

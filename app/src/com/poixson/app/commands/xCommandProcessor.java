@@ -1,11 +1,10 @@
 package com.poixson.app.commands;
 
 import java.lang.reflect.Method;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicReference;
 
+import com.poixson.app.xApp;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.tools.events.xHandler;
@@ -15,12 +14,15 @@ import com.poixson.utils.Utils;
 
 public class xCommandProcessor extends xHandler<xCommand> {
 
-	protected final CopyOnWriteArrayList<xCommandDAO> commands = new CopyOnWriteArrayList<xCommandDAO>();
+	protected final xApp app;
+
+	protected final AtomicReference<xCommandDAO[]> commands = new AtomicReference<xCommandDAO[]>(null);
 
 
 
-	public xCommandProcessor() {
+	public xCommandProcessor(final xApp app) {
 		super(xCommand.class);
+		this.app = app;
 	}
 
 
@@ -37,7 +39,7 @@ public class xCommandProcessor extends xHandler<xCommand> {
 
 
 	@Override
-	protected boolean registerMethod(
+	protected boolean register(
 			final Object object, final Method method, final xCommand anno) {
 		if (object == null) throw new RequiredArgumentException("object");
 		if (method == null) throw new RequiredArgumentException("method");
@@ -51,45 +53,85 @@ public class xCommandProcessor extends xHandler<xCommand> {
 				StringUtils.Split(anno.Aliases(), ','),
 				object, method
 			);
-		this.commands.add(dao);
-		return true;
+		//ADD_LOOP:
+		for (int loops=0; loops<10; loops++) {
+			final xCommandDAO[] previous = this.commands.get();
+			if (previous == null) {
+				final xCommandDAO[] result = new xCommandDAO[] { dao };
+				if (this.commands.compareAndSet(previous, result))
+					return true;
+			} else {
+				final int len = previous.length;
+				final xCommandDAO[] result = new xCommandDAO[len+1];
+				for (int i=0; i<len; i++)
+					result[i] = previous[i];
+				result[len] = dao;
+				if (this.commands.compareAndSet(previous, result))
+					return true;
+			}
+		} // end ADD_LOOP
+		throw new RuntimeException("Failed to add command to array");
 	}
 
 
 
 	@Override
-	public void unregisterObject(final Object object) {
+	public void unregister(final Object object) {
 		if (object == null) return;
-		final Set<xCommandDAO> remove = new HashSet<xCommandDAO>();
-		final Iterator<xCommandDAO> it = this.commands.iterator();
-		while (it.hasNext()) {
-			final xCommandDAO dao = it.next();
-			if (dao.isObject(object))
-				remove.add(dao);
-		}
-		if (!remove.isEmpty()) {
-			for (final xCommandDAO dao : remove)
-				this.commands.remove(dao);
-		}
+		//REMOVE_LOOP:
+		for (int loops=0; loops<10; loops++) {
+			final xCommandDAO[] previous = this.commands.get();
+			if (previous == null)
+				return;
+			final LinkedList<xCommandDAO> result = new LinkedList<xCommandDAO>();
+			for (final xCommandDAO cmd : previous) {
+				if (!cmd.isObject(object))
+					result.add(cmd);
+			}
+			if (this.commands.compareAndSet(previous, result.toArray(new xCommandDAO[0])))
+				return;
+		} // end ADD_LOOP
+		throw new RuntimeException("Failed to remove command from array");
 	}
 	@Override
-	public void unregisterMethod(final Object object, final String methodName) {
+	public void unregister(final Object object, final String methodName) {
 		if (object == null || Utils.isEmpty(methodName)) return;
-		final Set<xCommandDAO> remove = new HashSet<xCommandDAO>();
-		final Iterator<xCommandDAO> it = this.commands.iterator();
-		while (it.hasNext()) {
-			final xCommandDAO dao = it.next();
-			if (dao.isMethod(object, methodName))
-				remove.add(dao);
-		}
-		if (!remove.isEmpty()) {
-			for (final xCommandDAO dao : remove)
-				this.commands.remove(dao);
-		}
+		//REMOVE_LOOP:
+		for (int loops=0; loops<10; loops++) {
+			final xCommandDAO[] previous = this.commands.get();
+			if (previous == null)
+				return;
+			final LinkedList<xCommandDAO> result = new LinkedList<xCommandDAO>();
+			for (final xCommandDAO cmd : previous) {
+				if (!cmd.isMethod(object, methodName))
+					result.add(cmd);
+			}
+			if (this.commands.compareAndSet(previous, result.toArray(new xCommandDAO[0])))
+				return;
+		} // end ADD_LOOP
+		throw new RuntimeException("Failed to remove command from array");
 	}
 	@Override
 	public void unregisterAll() {
-		this.commands.clear();
+		this.commands.set(null);
+	}
+
+	public void replace(final xCommandDAO[] commands) {
+		this.commands.set(commands);
+	}
+
+
+
+	public xCommandDAO[] getCommands() {
+		// stored commands
+		{
+			final xCommandDAO[] cmds = this.commands.get();
+			if (cmds != null)
+				return cmds;
+		}
+		// load root commands
+		this.register(this.app.getCommands());
+		return this.commands.get();
 	}
 
 
@@ -110,18 +152,16 @@ public class xCommandProcessor extends xHandler<xCommand> {
 		if (Utils.isEmpty(cmd)) return null;
 		// find matching command
 		{
-			final Iterator<xCommandDAO> it = this.commands.iterator();
-			while (it.hasNext()) {
-				final xCommandDAO dao = it.next();
+			final xCommandDAO[] cmds = this.getCommands();
+			for (final xCommandDAO dao : cmds) {
 				if (dao.isCommand(cmd))
 					return dao;
 			}
 		}
 		// find matching alias
 		{
-			final Iterator<xCommandDAO> it = this.commands.iterator();
-			while (it.hasNext()) {
-				final xCommandDAO dao = it.next();
+			final xCommandDAO[] cmds = this.getCommands();
+			for (final xCommandDAO dao : cmds) {
 				if (dao.isAlias(cmd))
 					return dao;
 			}
