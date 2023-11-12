@@ -63,6 +63,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 	protected final AtomicReference<xAppStepLoader> step_loader = new AtomicReference<xAppStepLoader>(null);
 	protected final AtomicReference<xAppStepDAO>    nextStepDAO = new AtomicReference<xAppStepDAO>(null);
+	protected final AtomicInteger                   step_count  = new AtomicInteger(0);
 
 	protected final CopyOnWriteArraySet<Runnable> hookReady = new CopyOnWriteArraySet<Runnable>();
 
@@ -184,6 +185,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 			this.fail("No startup steps were found!");
 			return;
 		}
+		this.step_count.set(0);
 		this.log().title("Starting %s..", this.getTitle());
 		// start hang catcher
 		this.startHangCatcher();
@@ -224,6 +226,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 			this.fail("No shutdown steps were found!");
 			return;
 		}
+		this.step_count.set(0);
 		this.log().title("Stopping %s..", this.getTitle());
 		// start hang catcher
 		this.startHangCatcher();
@@ -246,6 +249,8 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 			this.step_loader.set(null);
 //TODO: improve this
 			this.finishedStartup();
+			final int count = this.step_count.get();
+			this.log_loader().fine("Ran %d startup steps", Integer.valueOf(count));
 			this.log_loader().title("%s is ready", this.getTitle());
 			final Iterator<Runnable> it = this.hookReady.iterator();
 			while (it.hasNext()) {
@@ -260,6 +265,8 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		if (this.isStopped()) {
 			this.step_loader.set(null);
 			this.finishedShutdown();
+			final int count = this.step_count.get();
+			this.log_loader().fine("Ran %d shutdown steps", Integer.valueOf(count));
 			this.log_loader().title("%s finished shutdown", this.getTitle());
 			return;
 		}
@@ -270,6 +277,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 			this.log_loader().fine("@|white,bold %d - %s|@", dao.step_abs, dao.getTaskName());
 			this.resetHangCatcher();
 			try {
+				this.step_count.incrementAndGet();
 				dao.run();
 			} catch (Exception e) {
 				this.fail(e);
