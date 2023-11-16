@@ -193,7 +193,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		// queue first step
 		this.nextStepDAO.set(null);
 		this.queueNextStep();
-		this.queue();
+		this.queueNextTask();
 	}
 
 	@Override
@@ -234,7 +234,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		// queue first step
 		this.nextStepDAO.set(null);
 		this.queueNextStep();
-		this.queue();
+		this.queueNextTask();
 	}
 
 
@@ -290,10 +290,10 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		// queue next step
 		this.queueNextStep();
 		if (dao == null) {
-			this.queue();
+			this.queueNextTask();
 		} else
 		if (!dao.isMultiStep()) {
-			this.queue();
+			this.queueNextTask();
 		}
 	}
 	public void queue() {
@@ -414,7 +414,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 				this.state.get()
 			);
 		this.queueNextStep();
-		this.queue();
+		this.queueNextTask();
 	}
 	public boolean isPaused() {
 		return this.paused.get();
