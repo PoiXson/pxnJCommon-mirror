@@ -30,6 +30,7 @@ import com.poixson.tools.abstractions.xFailable;
 import com.poixson.tools.abstractions.xStartable;
 import com.poixson.utils.FileUtils;
 import com.poixson.utils.ProcUtils;
+import com.poixson.utils.StringUtils;
 import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.Utils;
 
@@ -616,8 +617,14 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 	@Override
 	public void fail(final Throwable e) {
-		final Throwable cause = Utils.RootCause(e);
-		this.fail(cause.getMessage(), e);
+		this.fail(
+			(new StringBuilder())
+				.append(e.getMessage())
+				.append('\n')
+				.append(StringUtils.ExceptionToString(e))
+				.toString(),
+			e
+		);
 	}
 	@Override
 	public void fail(final String msg, final Object...args) {
