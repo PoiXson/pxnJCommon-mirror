@@ -66,6 +66,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 	protected final AtomicReference<xAppStepDAO>    nextStepDAO = new AtomicReference<xAppStepDAO>(null);
 	protected final AtomicInteger                   step_count  = new AtomicInteger(0);
 
+//TODO: replace with event listeners
 	protected final CopyOnWriteArraySet<Runnable> hookReady = new CopyOnWriteArraySet<Runnable>();
 
 	protected static final xTime EXIT_TIMEOUT = new xTime(200L);
@@ -302,9 +303,9 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		if (!this.paused.get())
 			this.queueNextTask();
 	}
-	public void queue() {
+	public void queueNextTask() {
 		xThreadPool_Main.Get()
-			.runTaskLater("AppStep", this);
+			.runTaskLater("xAppStep", this);
 	}
 	protected void queueNextStep() {
 		if (this.isFailed())   return;
@@ -406,6 +407,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 	public void pause() {
 		this.paused.set(true);
+		this.stopHangCatcher();
 		this.log_loader()
 			.fine(
 				"Paused %s at step: %d",
@@ -415,6 +417,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 	}
 	public void resume() {
 		this.paused.set(false);
+		this.startHangCatcher();
 		this.log_loader()
 			.fine(
 				"Resumed %s from step: %d",

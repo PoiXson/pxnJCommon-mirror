@@ -100,9 +100,14 @@ public class xAppStepDAO implements RunnableNamed {
 				// (log)
 				try {
 					this.method.invoke(this.container, log);
-				} catch (IllegalArgumentException e) {
-					// method with arguments not found/supported
-					throw new RuntimeException("Method arguments not supported: "+this.method.getName(), e);
+				} catch (IllegalArgumentException ignore2) {
+					// (xAppStepDAO)
+					try {
+						this.method.invoke(this.container, this);
+					} catch (IllegalArgumentException e) {
+						// method with arguments not found/supported
+						throw new RuntimeException("Method arguments not supported: "+this.method.getName(), e);
+					} // end (xAppStepDAO)
 				} // end (log)
 			} // end ()
 		} catch (xAppStepMultiFinishedException e) {
@@ -116,8 +121,9 @@ public class xAppStepDAO implements RunnableNamed {
 			if (cause instanceof xAppStepMultiFinishedException)
 				throw (xAppStepMultiFinishedException) cause;
 			throw new RuntimeException(e);
+		} finally {
+			currentThread.setName(originalThreadName);
 		}
-		currentThread.setName(originalThreadName);
 	}
 
 
@@ -147,6 +153,7 @@ public class xAppStepDAO implements RunnableNamed {
 	public boolean isFirstLoop() {
 		return (this.loop_count.get() == 1);
 	}
+
 
 
 	// -------------------------------------------------------------------------------
