@@ -1,69 +1,34 @@
-/*
 package com.poixson.plugins;
 
-import static com.poixson.logger.xLog.XLog;
-
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.poixson.abstractions.xStartable;
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.logger.xLevel;
 import com.poixson.logger.xLog;
 import com.poixson.plugins.loaders.xPluginLoader;
-import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.utils.Utils;
 
 
-public abstract class xPluginManager<T extends xJavaPlugin> implements xStartable, Runnable {
-	private static final String DEFAULT_LOG_NAME = "xPluginManager";
+public abstract class xPluginManager<T extends xJavaPlugin> {
 
-	protected final String logName;
-
-	// loaders
-	protected final CopyOnWriteArraySet<xPluginLoader<T>> loaders =
-			new CopyOnWriteArraySet<xPluginLoader<T>>();
-	// unloaders
-//	protected final AtomicReference<xPluginUnloader> unloader =
-//			new AtomicReference<xPluginUnloader>(null);
+	protected final CopyOnWriteArraySet<xPluginLoader<T>> loaders = new CopyOnWriteArraySet<xPluginLoader<T>>();
 
 	// loaded plugins
-	protected final ConcurrentHashMap<String, T> plugins =
-			new ConcurrentHashMap<String, T>();
+	protected final ConcurrentHashMap<String, T> plugins = new ConcurrentHashMap<String, T>();
 
 	// state queue
-	protected final Map<xPluginState, Set<T>> queues =
-			new HashMap<xPluginState, Set<T>>();
-	protected AtomicInteger countCache = new AtomicInteger(0);
-
-	protected final AtomicBoolean stopping = new AtomicBoolean(false);
-	protected final AtomicBoolean restartAfterUnload = new AtomicBoolean(false);
-
-	static {
-		xLog.GetRoot("jcl")
-			.setLevel(xLevel.INFO);
-	}
+	protected final LinkedList<T> queue_init  = new LinkedList<T>();
+	protected final LinkedList<T> queue_term  = new LinkedList<T>();
+	protected final LinkedList<T> queue_start = new LinkedList<T>();
+	protected final LinkedList<T> queue_stop  = new LinkedList<T>();
 
 
 
-	public xPluginManager(final String logName) {
-		if (Utils.isEmpty(logName)) throw new RequiredArgumentException("logName");
-		this.logName = ( Utils.isEmpty(logName) ? DEFAULT_LOG_NAME : logName );
-		this.queues.put( xPluginState.INIT,   new HashSet<T>() );
-		this.queues.put( xPluginState.START,  new HashSet<T>() );
-		this.queues.put( xPluginState.STOP,   new HashSet<T>() );
-		this.queues.put( xPluginState.UNLOAD, new HashSet<T>() );
-	}
 	public xPluginManager() {
-		this(null);
 	}
 
 
@@ -73,209 +38,197 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 
 
 
-	@Override
-	public void start() {
-		// only run in main thread
-		if ( xThreadPool_Main.get().force(this, "start") ) return;
-		synchronized (this.queues) {
-			// run plugin loaders
-			{
-				final Iterator<xPluginLoader<T>> it = this.loaders.iterator();
-				//LOAD_LOOP:
-				while (it.hasNext()) {
-//					if ( ! xPluginState.INIT.equals(this.state.get()) ) {
-//						this.log().warning( "Plugin loading interrupted by state:", this.state.get().toString() );
-//						return;
-//					}
-					final xPluginLoader<T> loader = it.next();
-					loader.run();
-				} // end LOAD_LOOP
-			}
-			// count loaded plugins
-			{
-				int count = 0;
-				final Iterator<T> it = this.plugins.values().iterator();
-				final Set<T> initQueue = this.queues.get(xPluginState.INIT);
-				//COUNT_LOOP:
-				while (it.hasNext()) {
-					final T plugin = it.next();
-					if (plugin.isState(null)) {
-						count++;
-						initQueue.add(plugin);
-					}
-				} // end COUNT_LOOP
-				this.countCache.set(count);
-				if (count == 0) {
-					this.log().warning("No plugins found to load");
-				} else {
-					this.log().info( "Loading [ %d ] plugin%s..", count, (count == 1 ? "" : "s") );
-					this.queueRun("Init-Plugins");
-				}
-			}
-		} // end sync
-	}
-
-
-
-	@Override
-	public void stop() {
-		// only run in main thread
-		if ( xThreadPool_Main.get().force(this, "stop") ) return;
-		if ( ! this.stopping.compareAndSet(false, true) )
-			return;
-//TODO:
-//		// unload plugins
-//		synchronized (this.plugins) {
-//			final Collection<T> list = this.plugins.values();
-//			if ( ! list.isEmpty() ) {
-//				this.log().info("Unloading [ %d ] plugins..", list.size());
-//				final Iterator<T> it = this.plugins.values().iterator();
-//				while (it.hasNext()) {
-//					final T plugin = it.next();
-//					this.unload(plugin);
-//				}
-//			}
-//		}
-	}
-
-
-
-	@Override
-	public void run() {
-		synchronized (this.queues) {
-			// init next plugin
-			INIT_BLOCK:
-			{
-				final T plugin = this.findNextToRun(xPluginState.INIT);
-				if (plugin == null)
-					break INIT_BLOCK;
-				final xLog log = plugin.log();
-				try {
-					log.finest("Init plugin:", plugin.getPluginName());
-					plugin.init();
-					if (plugin.notFailed()) {
-						if (plugin.setState( null, xPluginState.INIT )) {
-							this.queues.get(xPluginState.START)
-								.add(plugin);
-						}
-					}
-				} catch (Exception e) {
-					final xPluginState previousState =
-						plugin.setState(xPluginState.FAILED);
-					log.trace(e);
-					if ( ! xPluginState.FAILED.equals(previousState) ) {
-						try {
-							plugin.failed();
-						} catch (Exception e2) {
-							log.trace(e2);
-						}
-					}
-				} // end catch e
-				// queue run again
-				this.queueRun("Start-Plugins");
-				return;
-			}
-			// start next plugin
-			START_BLOCK:
-			{
-				final T plugin = this.findNextToRun(xPluginState.START);
-				if (plugin == null)
-					break START_BLOCK;
-				final xLog log = plugin.log();
-				try {
-					log.finest("Starting plugin:", plugin.getPluginName());
-					if (plugin.setState( xPluginState.INIT, xPluginState.START)) {
-						plugin.start();
-						if (plugin.notFailed()) {
-							plugin.setState( xPluginState.INIT, xPluginState.RUNNING);
-						}
-					}
-				} catch (Exception e) {
-					final xPluginState previousState =
-						plugin.setState(xPluginState.FAILED);
-					log.trace(e);
-					if ( ! xPluginState.FAILED.equals(previousState) ) {
-						try {
-							plugin.failed();
-						} catch (Exception e2) {
-							log.trace(e2);
-						}
-					}
-				} // end catch e
-				// queue run again
-				this.queueRun("Finished-Loading-Plugins");
-				return;
-			}
-			// finished loading plugins
-			{
-				final int count = this.countCache.getAndSet(0);
-				this.log().info( "Loaded [ %d ] plugin%s", count, (count == 1 ? "" : "s") );
+	public int load() {
+		// plugin loaders
+		int count = 0;
+		final Iterator<xPluginLoader<T>> it = this.loaders.iterator();
+		while (it.hasNext()) {
+			final xPluginLoader<T> loader = it.next();
+			try {
+				count += loader.load();
+			} catch (Exception e) {
+				this.log().trace(e);
 			}
 		}
+		if (count > 0) this.log().fine("Found %d plugin%s", Integer.valueOf(count), count==0?"":"s");
+		else           this.log().notice("No plugins found to load");
+		return count;
 	}
-	protected void queueRun(final String name) {
-		// queue run again
-		xThreadPool_Main.get()
-			.runTaskLater(name, this);
+//TODO
+//	public int unload() {
+//return 0;
+//	}
+
+
+
+	public boolean run() {
+		// stop plugins
+		STOP_BLOCK:
+		{
+			final T plugin;
+			try { plugin = this.queue_stop.removeFirst();
+			} catch (NoSuchElementException ignore) { break STOP_BLOCK; }
+			if (plugin == null) break STOP_BLOCK;
+			try {
+				this.log().finer("Stop plugin: %s", plugin.getPluginName());
+				plugin.setState(xPluginState.STOPPING);
+				plugin.stop();
+				plugin.setState(xPluginState.STOPPED);
+			} catch (Exception e) {
+				this.log().trace(e);
+				plugin.fail(e);
+			}
+			return false;
+		}
+		// terminate plugins
+		TERM_BLOCK:
+		{
+			final T plugin;
+			try { plugin = this.queue_term.removeFirst();
+			} catch (NoSuchElementException ignore) { break TERM_BLOCK; }
+			if (plugin == null) break TERM_BLOCK;
+			try {
+				this.log().finer("Terminate plugin: %s", plugin.getPluginName());
+				plugin.setState(xPluginState.TERMINATING);
+				plugin.term();
+				plugin.setState(null);
+			} catch (Exception e) {
+				this.log().trace(e);
+				plugin.fail(e);
+			}
+			return false;
+		}
+		// init plugins
+		INIT_BLOCK:
+		{
+			final T plugin;
+			try { plugin = this.queue_init.removeFirst();
+			} catch (NoSuchElementException ignore) { break INIT_BLOCK; }
+			if (plugin == null)     break INIT_BLOCK;
+			if (plugin.isFailed()) break INIT_BLOCK;
+			try {
+				this.log().finer("Init plugin: %s", plugin.getPluginName());
+				plugin.setState(xPluginState.INITING);
+				plugin.init();
+				plugin.setState(xPluginState.INITED);
+			} catch (Exception e) {
+				this.log().trace(e);
+				plugin.fail(e);
+			}
+			return false;
+		}
+		// start plugins
+		START_BLOCK:
+		{
+			final T plugin;
+			try { plugin = this.queue_start.removeFirst();
+			} catch (NoSuchElementException ignore) { break START_BLOCK; }
+			if (plugin == null)     break START_BLOCK;
+			if (plugin.isFailed()) break START_BLOCK;
+			try {
+				this.log().finer("Start plugin: %s", plugin.getPluginName());
+				plugin.setState(xPluginState.STARTING);
+				plugin.start();
+				plugin.setState(xPluginState.RUNNING);
+			} catch (Exception e) {
+				this.log().trace(e);
+				plugin.fail(e);
+			}
+			return false;
+		}
+		// finished plugin queues
+		return true;
 	}
-	protected T findNextToRun(final xPluginState state) {
-		if (state == null) throw new RequiredArgumentException("state");
-		synchronized (this.queues) {
-			final xPluginState previousState = state.previous();
-			final Set<T> plugins = this.queues.get(state);
-			final Iterator<T> it = plugins.iterator();
-			PLUGINS_LOOP:
-			while (it.hasNext()) {
-				final T plugin = it.next();
-				// failed
-				if (plugin.isFailed())
-					continue PLUGINS_LOOP;
-				if (plugin.isState(previousState)) {
-					it.remove();
-					return plugin;
-				}
-			} // end PLUGINS_LOOP
-		} // end sync
-		return null;
+
+
+
+	public int initAll() {
+		int count = 0;
+		final Iterator<T> it = this.plugins.values().iterator();
+		while (it.hasNext()) {
+			final T plugin = it.next();
+			this.queue_init.addLast(plugin);
+			count++;
+		}
+		return count;
+	}
+	public int termAll() {
+		int count = 0;
+		final Iterator<T> it = this.plugins.values().iterator();
+		while (it.hasNext()) {
+			final T plugin = it.next();
+			this.queue_term.addLast(plugin);
+			count++;
+		}
+		return count;
+	}
+
+	public int startAll() {
+		int count = 0;
+		final Iterator<T> it = this.plugins.values().iterator();
+		while (it.hasNext()) {
+			final T plugin = it.next();
+			this.queue_start.addLast(plugin);
+			count++;
+		}
+		return count;
+	}
+	public int stopAll() {
+		int count = 0;
+		final Iterator<T> it = this.plugins.values().iterator();
+		while (it.hasNext()) {
+			final T plugin = it.next();
+			this.queue_stop.addLast(plugin);
+			count++;
+		}
+		return count;
+	}
+
+
+
+	public void init(final T plugin) {
+		this.queue_init.addLast(plugin);
+	}
+	public void term(final T plugin) {
+		this.queue_term.addLast(plugin);
+	}
+
+	public void start(final T plugin) {
+		this.queue_start.addLast(plugin);
+	}
+	public void stop(final T plugin) {
+		this.queue_stop.addLast(plugin);
 	}
 
 
 
 	// -------------------------------------------------------------------------------
-	// loaders/unloaders
+	// loaders and plugins
 
 
 
 	public void addLoader(final xPluginLoader<T> loader) {
-		if (loader == null) throw new RequiredArgumentException("loader");
 		this.loaders.add(loader);
 	}
 	public boolean removeLoader(final xPluginLoader<T> loader) {
-		if (loader == null) throw new RequiredArgumentException("loader");
 		return this.loaders.remove(loader);
 	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// plugins
-
-
-
-	public boolean isPluginLoaded(final String pluginName) {
-		if (Utils.isBlank(pluginName)) throw new RequiredArgumentException("pluginName");
-		return this.plugins
-				.containsKey(pluginName);
-	}
-	public boolean isPluginLoaded(final T plugin) {
-		if (plugin == null) throw new RequiredArgumentException("plugin");
-		return
-			this.isPluginLoaded(
-				plugin.getPluginName()
-			);
+	public int removeAllLoaders() {
+		int count = 0;
+		final Iterator<xPluginLoader<T>> it = this.loaders.iterator();
+		while (it.hasNext()) {
+			it.remove();
+			count++;
+		}
+		return count;
 	}
 
 
+
+	public void register(final T plugin) {
+		final String name = plugin.getPluginName();
+		this.plugins.put(name, plugin);
+	}
 
 	public T getPlugin(final String pluginName) {
 		if (Utils.isEmpty(pluginName))
@@ -285,93 +238,32 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 
 
 
-	/ **
-	 * Adds a plugin to the manager.
-	 * @param plugin The new plugin instance to manage.
-	 * @return true if successful, false if plugin already registered.
-	 * /
-	public boolean register(final T plugin) {
-		if (plugin == null) throw new RuntimeException("Missing plugin instance!");
-		final String pluginName = plugin.getPluginName();
-		final T existing =
-			this.plugins.putIfAbsent(pluginName, plugin);
-		if (existing != null) {
-			plugin.log().warning("Plugin already loaded:", pluginName);
-			return false;
-		}
-		return true;
+	public boolean isPluginLoaded(final String plugin_name) {
+		if (Utils.isEmpty(plugin_name)) throw new RequiredArgumentException("plugin_name");
+		return this.plugins.containsKey(plugin_name);
+	}
+	public boolean isPluginLoaded(final T plugin) {
+		if (plugin == null) throw new RequiredArgumentException("plugin");
+		return this.isPluginLoaded( plugin.getPluginName() );
 	}
 
 
 
-//TODO:
-/ *
-	public boolean unregister(final String pluginName) {
-		if (Utils.isBlank(pluginName))
-			return false;
-		final T existing = this.plugins.remove(pluginName);
-		if (existing != null) {
-			existing.doUnload();
-			return true;
-		}
-		return false;
-	}
-	public boolean unregister(final T plugin) {
-		if (plugin == null)
-			return false;
-		final String pluginName = plugin.getPluginName();
-		return this.unregister(pluginName);
-	}
-	public void unloadAll() {
-		final Iterator<Entry<String, T>> it = this.plugins.entrySet().iterator();
-		while (it.hasNext()) {
-			final Entry<String, T> entry = it.next();
-			final T plugin = entry.getValue();
-			this.disable(plugin);
-			this.unregister(plugin);
-		}
-	}
-* /
-
-
-
-	// -------------------------------------------------------------------------------
-	// state
-
-
-
-	@Override
-	public boolean isRunning() {
-		if (this.stopping.get())
-			return false;
-		return ! this.plugins.isEmpty();
-	}
-	@Override
-	public boolean isStopping() {
-		return this.stopping.get();
-	}
-
-
-
-	public String[] getPluginNames() {
-		final Set<String> names = new HashSet<String>();
+	public int getPluginCount(final xPluginState state) {
+		int count = 0;
 		final Iterator<T> it = this.plugins.values().iterator();
 		while (it.hasNext()) {
 			final T plugin = it.next();
-			if (plugin.isRunning())
-				names.add( plugin.getPluginName() );
+			if (plugin.isState(state))
+				count++;
 		}
-		return names.toArray(new String[0]);
+		return count;
 	}
-	public String[] getPluginTitles() {
-		final Set<String> titles = new HashSet<String>();
-		final Iterator<T> it = this.plugins.values().iterator();
-		while (it.hasNext()) {
-			final T plugin = it.next();
-			if (plugin.isRunning())
-				titles.add( plugin.getPluginName() );
-		}
-		return titles.toArray(new String[0]);
+	public int getPluginsRunning() {
+		return this.getPluginCount(xPluginState.RUNNING);
+	}
+	public int getPluginCount() {
+		return this.plugins.size();
 	}
 
 
@@ -392,10 +284,9 @@ public abstract class xPluginManager<T extends xJavaPlugin> implements xStartabl
 		return this._log.get();
 	}
 	protected xLog _log() {
-		return XLog("plugin");
+		return xLog.Get("plugin");
 	}
 
 
 
 }
-*/

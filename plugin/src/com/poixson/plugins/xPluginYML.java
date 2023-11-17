@@ -1,4 +1,3 @@
-/*
 package com.poixson.plugins;
 
 import java.util.Map;
@@ -8,16 +7,24 @@ import com.poixson.tools.config.xConfig;
 
 public class xPluginYML extends xConfig {
 
-	public final String pluginName;
+	// plugin.yml keys
+	public static final String PLUGIN_YML_NAME        = "Plugin Name";
+	public static final String PLUGIN_YML_VERSION     = "Plugin Version";
+	public static final String PLUGIN_YML_APP_VERSION = "App Version";
+	public static final String PLUGIN_YML_COMMIT      = "Commit";
+	public static final String PLUGIN_YML_AUTHOR      = "Author";
+	public static final String PLUGIN_YML_WEBSITE     = "Website";
 
-	public final String pluginVersion;
-	public final String appVersion;
+	public final String plugin_name;
+
+	public final String plugin_version;
+	public final String app_version;
 
 	public final String commit;
 	public final String author;
 	public final String website;
 
-	public final String mainClass;
+	public final String class_main;
 
 
 
@@ -25,15 +32,15 @@ public class xPluginYML extends xConfig {
 		this(datamap, null);
 	}
 	public xPluginYML(final Map<String, Object> datamap,
-			final String mainClassKey) {
+			final String keyClassMain) {
 		super(datamap);
-		this.pluginName    = this.getString(xPluginDefines.PLUGIN_YML_NAME);
-		this.pluginVersion = this.getString(xPluginDefines.PLUGIN_YML_VERSION);
-		this.appVersion    = this.getString(xPluginDefines.PLUGIN_YML_APP_VERSION);
-		this.commit        = this.getString(xPluginDefines.PLUGIN_YML_COMMIT);
-		this.author        = this.getString(xPluginDefines.PLUGIN_YML_AUTHOR);
-		this.website       = this.getString(xPluginDefines.PLUGIN_YML_WEBSITE);
-		this.mainClass     = this.getStr(mainClassKey, null);
+		this.plugin_name    = this.getString(PLUGIN_YML_NAME       );
+		this.plugin_version = this.getString(PLUGIN_YML_VERSION    );
+		this.app_version    = this.getString(PLUGIN_YML_APP_VERSION);
+		this.commit         = this.getString(PLUGIN_YML_COMMIT     );
+		this.author         = this.getString(PLUGIN_YML_AUTHOR     );
+		this.website        = this.getString(PLUGIN_YML_WEBSITE    );
+		this.class_main     = this.getStr(keyClassMain, null);
 	}
 
 
@@ -45,22 +52,22 @@ public class xPluginYML extends xConfig {
 	public String getPluginTitle() {
 		return
 			(new StringBuilder())
-				.append(this.pluginName)
+				.append(this.plugin_name)
 				.append('-')
-				.append(this.pluginVersion)
+				.append(this.plugin_version)
 				.toString();
 	}
 	public String getPluginName() {
-		return this.pluginName;
+		return this.plugin_name;
 	}
 
 
 
 	public String getPluginVersion() {
-		return this.pluginVersion;
+		return this.plugin_version;
 	}
 	public String getRequiredAppVersion() {
-		return this.appVersion;
+		return this.app_version;
 	}
 
 
@@ -92,13 +99,12 @@ public class xPluginYML extends xConfig {
 
 	public String getMainClass() {
 		return (
-			this.mainClass.endsWith(".class")
-			? this.mainClass.substring(0, this.mainClass.length() - 6)
-			: this.mainClass
+			this.class_main.endsWith(".class")
+			? this.class_main.substring(0, this.class_main.length() - 6)
+			: this.class_main
 		);
 	}
 
 
 
 }
-*/
