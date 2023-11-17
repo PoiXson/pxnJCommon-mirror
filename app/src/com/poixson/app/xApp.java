@@ -159,7 +159,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 	@Override
 	public void start() {
-		if (this.hasFailed()) return;
+		if (this.isFailed()) return;
 		// only run in main thread
 		if (xThreadPool_Main.Get().proper(this, "start"))
 			return;
@@ -179,9 +179,9 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		final xAppStepLoader loader = new xAppStepLoader(this, xAppStepType.STARTUP);
 		if (!this.step_loader.compareAndSet(null, loader))
 			throw new RuntimeException("App is already starting or stopping");
-		if (this.hasFailed()) return;
+		if (this.isFailed()) return;
 		loader.scan(this);
-		if (this.hasFailed()) return;
+		if (this.isFailed()) return;
 		if (loader.isEmpty()) {
 			this.fail("No startup steps were found!");
 			return;
@@ -198,7 +198,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 	@Override
 	public void stop() {
-		if (this.hasFailed()) return;
+		if (this.isFailed()) return;
 		// only run in main thread
 		if (xThreadPool_Main.Get().proper(this, "stop"))
 			return;
@@ -220,9 +220,9 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		final xAppStepLoader loader = new xAppStepLoader(this, xAppStepType.SHUTDOWN);
 		if (!this.step_loader.compareAndSet(null, loader))
 			throw new RuntimeException("App is already starting or stopping");
-		if (this.hasFailed()) return;
+		if (this.isFailed()) return;
 		loader.scan(this);
-		if (this.hasFailed()) return;
+		if (this.isFailed()) return;
 		if (loader.isEmpty()) {
 			this.fail("No shutdown steps were found!");
 			return;
@@ -242,7 +242,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 	// run next step
 	@Override
 	public void run() {
-		if (this.hasFailed())  return;
+		if (this.isFailed())   return;
 		if (this.paused.get()) return;
 		// finished starting
 		if (this.isRunning()) {
@@ -271,7 +271,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 			this.log_loader().title("%s finished shutdown", this.getTitle());
 			return;
 		}
-		if (this.hasFailed()) return;
+		if (this.isFailed()) return;
 		// run step
 		final xAppStepDAO dao = this.nextStepDAO.getAndSet(null);
 		if (dao != null) {
@@ -301,7 +301,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 			.runTaskLater("AppStep", this);
 	}
 	protected void queueNextStep() {
-		if (this.hasFailed()) return;
+		if (this.isFailed())   return;
 		if (this.paused.get()) return;
 		if (this.nextStepDAO.get() != null) return;
 		final xAppStepLoader loader = this.step_loader.get();
@@ -653,7 +653,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		System.exit( this.getExitCode() );
 	}
 	@Override
-	public boolean hasFailed() {
+	public boolean isFailed() {
 		return (this.failure.get() != null);
 	}
 

@@ -85,7 +85,7 @@ public class xAppStepDAO implements RunnableNamed {
 
 	@Override
 	public void run() {
-		if (this.app.hasFailed()) return;
+		if (this.app.isFailed()) return;
 		final Thread currentThread = Thread.currentThread();
 		final String originalThreadName = currentThread.getName();
 		currentThread.setName(this.getTaskName());

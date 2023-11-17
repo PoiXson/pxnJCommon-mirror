@@ -141,7 +141,7 @@ public class ShutdownTask implements Runnable {
 			ThreadUtils.Sleep(50L);
 			// end
 			System.exit(
-				Failure.hasFailed()
+				Failure.isFailed()
 				? 1
 				: 0
 			);
