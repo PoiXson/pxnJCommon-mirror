@@ -2,6 +2,7 @@ package com.poixson.app;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.poixson.app.xAppStep.PauseWhen;
 import com.poixson.exceptions.RequiredArgumentException;
@@ -19,8 +20,9 @@ public class xAppStepDAO implements RunnableNamed {
 	public final int      step_abs;
 	public final xAppStepType type;
 
-	public final boolean  multi;
+	public final boolean multi;
 	public final PauseWhen pause;
+	public final AtomicInteger loop_count = new AtomicInteger(0);
 
 	public final String title;
 	public final String titleFull;
@@ -142,6 +144,9 @@ public class xAppStepDAO implements RunnableNamed {
 		return this.multi;
 	}
 
+	public boolean isFirstLoop() {
+		return (this.loop_count.get() == 1);
+	}
 
 
 	// -------------------------------------------------------------------------------

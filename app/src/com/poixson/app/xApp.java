@@ -278,6 +278,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		if (dao != null) {
 			this.log_loader().fine("@|white,bold %d - %s|@", dao.step_abs, dao.getTaskName());
 			this.resetHangCatcher();
+			dao.loop_count.getAndIncrement();
 			try {
 				this.step_count.incrementAndGet();
 				dao.run();
@@ -321,8 +322,10 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 			);
 			return;
 		}
-		// revert back into queue
-		if (!this.nextStepDAO.compareAndSet(null, dao)) {
+		// set or revert back into queue
+		if (this.nextStepDAO.compareAndSet(null, dao)) {
+			dao.loop_count.set(0);
+		} else {
 			loader.add(dao);
 			return;
 		}
