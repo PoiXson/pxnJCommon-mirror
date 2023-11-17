@@ -274,12 +274,15 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		if (this.isFailed()) return;
 		// run step
 		final xAppStepDAO dao = this.nextStepDAO.getAndSet(null);
+		boolean multi_finished = false;
 		if (dao != null) {
 			this.log_loader().fine("@|white,bold %d - %s|@", dao.step_abs, dao.getTaskName());
 			this.resetHangCatcher();
 			try {
 				this.step_count.incrementAndGet();
 				dao.run();
+			} catch (xAppStepMultiFinishedException ignore) {
+				multi_finished = true;
 			} catch (Exception e) {
 				this.fail(e);
 			}
@@ -287,14 +290,16 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 			if (dao.isPauseAfter())
 				this.pause();
 		}
+		// queue step again
+		if (dao.isMultiStep()
+		&& !multi_finished) {
+			this.nextStepDAO.set(dao);
 		// queue next step
-		this.queueNextStep();
-		if (dao == null) {
-			this.queueNextTask();
-		} else
-		if (!dao.isMultiStep()) {
-			this.queueNextTask();
+		} else {
+			this.queueNextStep();
 		}
+		if (!this.paused.get())
+			this.queueNextTask();
 	}
 	public void queue() {
 		xThreadPool_Main.Get()

@@ -103,11 +103,16 @@ public class xAppStepDAO implements RunnableNamed {
 					throw new RuntimeException("Method arguments not supported: "+this.method.getName(), e);
 				} // end (log)
 			} // end ()
+		} catch (xAppStepMultiFinishedException e) {
+			throw e;
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
 		} catch (InvocationTargetException e) {
+			final Throwable cause = e.getCause();
+			if (cause instanceof xAppStepMultiFinishedException)
+				throw (xAppStepMultiFinishedException) cause;
 			throw new RuntimeException(e);
 		}
 		currentThread.setName(originalThreadName);
