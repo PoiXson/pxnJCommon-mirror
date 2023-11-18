@@ -2,6 +2,7 @@ package com.poixson.app.steps;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -17,7 +18,7 @@ import com.poixson.utils.Utils;
 
 /*
  * Startup sequence
- *  15 | display logo
+ *  20 | display logo
  */
 public class xAppSteps_Logo {
 
@@ -34,47 +35,46 @@ public class xAppSteps_Logo {
 
 
 
+	protected String getAppVersion() {
+		return this.app.getVersion();
+	}
+	protected String getAppVersionPadded() {
+		return StringUtils.PadCenter(VERSION_WIDTH, this.getAppVersion(), ' ');
+	}
+
+
+
 	// -------------------------------------------------------------------------------
 	// startup steps
 
 
 
 	// display logo
-	@xAppStep(type=xAppStepType.STARTUP, step=15, title="Display Logo")
+	@xAppStep(type=xAppStepType.STARTUP, step=20, title="Display Logo")
 	public void __START__display_logo() {
 		final xLog log = this.app.log();
-		{
-			final String[] logo = this.display_logo(log);
-			if (Utils.notEmpty(logo)) {
-				log.publish();
-				for (final String line : logo)
-					log.publish(line);
-			}
-		}
+		log.publish(this.display_logo());
 		log.publish();
-		this.display_legal(log);
+		log.publish(this.display_legal());
 		log.publish();
-		DisplayStartupVars(this.app, log);
+		log.publish(this.display_startup_vars());
 		log.publish();
 	}
 
 
 
-	protected void display_legal(final xLog log) {
-		log.publish(" This program comes with absolutely no warranty. This is free ");
-		log.publish(" software and you are welcome to modify it or redistribute it ");
-		log.publish(" under certain conditions. Type 'show license' at the command ");
-		log.publish(" prompt for license details, or go to www.growcontrol.com for ");
-		log.publish(" more information.                                            ");
-	}
+	// -------------------------------------------------------------------------------
 
 
 
-	protected String getAppVersion() {
-		return this.app.getVersion();
-	}
-	protected String getAppVersionPadded() {
-		return StringUtils.PadCenter(VERSION_WIDTH, this.getAppVersion(), ' ');
+	public String[] display_legal() {
+		return new String[] {
+			" This program comes with absolutely no warranty. This is free ",
+			" software and you are welcome to modify it or redistribute it ",
+			" under certain conditions. Type 'show license' at the command ",
+			" prompt for license details, or go to www.growcontrol.com for ",
+			" more information.                                            ",
+		};
 	}
 
 
@@ -93,25 +93,28 @@ public class xAppSteps_Logo {
 		}
 		return result;
 	}
-	public static void DisplayStartupVars(final xApp app, final xLog log) {
-		final Map<String, String> varsMap = GetStartupVars(app);
+	public String[] display_startup_vars() {
+		final LinkedList<String> lines = new LinkedList<String>();
+		final Map<String, String> varsMap = GetStartupVars(this.app);
 		final Iterator<Entry<String, String>> it = varsMap.entrySet().iterator();
 		final int maxLineSize =
 			StringUtils.FindLongestLine(
 				varsMap.keySet().toArray(new String[0])
 			) + 1;
-		final StringBuilder str = new StringBuilder();
 		while (it.hasNext()) {
 			final Entry<String, String> entry = it.next();
 			final String key = entry.getKey();
 			final String val = entry.getValue();
-			str.setLength(0);
-			str.append(key)
+			lines.addLast(
+				(new StringBuilder())
+				.append(key)
 				.append(':')
 				.append( StringUtils.Repeat(maxLineSize - key.length(), ' ') )
-				.append(val);
-			log.publish( str.toString() );
+				.append(val)
+				.toString()
+			);
 		}
+		return lines.toArray(new String[0]);
 	}
 
 
@@ -129,15 +132,16 @@ public class xAppSteps_Logo {
 //10 |/////////////////////////////////////////////////////////////////|
 //   0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6
 //             1         2         3         4         5         6
-	protected String[] display_logo(final xLog log) {
+	public String[] display_logo() {
+		final String version = this.getAppVersionPadded();
 		// define colors
 		final String COLOR_BG = "black";
+		final String COLOR_SOFTWARE    = "bold,black";
+		final String COLOR_VERSION     = "cyan";
 		final String COLOR_PXN_P       = "bold,green";
 		final String COLOR_PXN_OI      = "bold,blue";
 		final String COLOR_PXN_X       = "bold,green";
 		final String COLOR_PXN_SON     = "bold,blue";
-		final String COLOR_SOFTWARE    = "bold,black";
-		final String COLOR_VERSION     = "cyan";
 		final String COLOR_GRASS       = "green";
 		final String COLOR_DOG         = "yellow";
 		final String COLOR_DOG_EYES    = "cyan";
@@ -155,7 +159,6 @@ public class xAppSteps_Logo {
 		final String COLOR_CAT_COLLAR  = "blue";
 		final String COLOR_CAT_NOSE    = "bold,black";
 		// ascii art
-		final String version = this.getAppVersionPadded();
 		final AsciiArtBuilder art =
 			new AsciiArtBuilder(
 				"                                     _/\\_                        ",
