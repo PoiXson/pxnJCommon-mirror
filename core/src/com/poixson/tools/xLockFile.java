@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools;
 
 import java.io.File;
@@ -116,7 +115,7 @@ public class xLockFile {
 				this.channel = null;
 				return false;
 			}
-			final int pid = ProcUtils.getPid();
+			final int pid = ProcUtils.GetPid();
 			this.handle.write(
 				Integer.toString(pid).getBytes()
 			);
@@ -197,4 +196,3 @@ public class xLockFile {
 
 
 }
-*/
