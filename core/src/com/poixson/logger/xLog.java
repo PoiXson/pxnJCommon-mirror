@@ -258,6 +258,12 @@ public abstract class xLog {
 	public abstract void publish(final String msg);
 	public abstract void publish(final xLogRecord record);
 
+	public void publish(final String[] lines) {
+		if (Utils.isEmpty(lines)) return;
+		for (final String line : lines)
+			this.publish(line);
+	}
+
 	public abstract void flush();
 	public abstract void clearScreen();
 	public abstract void beep();
