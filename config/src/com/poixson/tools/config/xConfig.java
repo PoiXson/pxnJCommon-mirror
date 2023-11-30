@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.utils.NumberUtils;
 import com.poixson.utils.ObjectUtils;
 import com.poixson.utils.Utils;
@@ -21,8 +20,8 @@ public class xConfig {
 
 	public xConfig(final Map<String, Object> datamap) {
 		this();
-		if (datamap == null) throw new RequiredArgumentException("datamap");
-		this.datamap.putAll(datamap);
+		if (datamap != null)
+			this.datamap.putAll(datamap);
 	}
 	protected xConfig() {
 	}

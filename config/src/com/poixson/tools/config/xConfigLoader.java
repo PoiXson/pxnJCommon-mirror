@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
@@ -26,7 +27,12 @@ public final class xConfigLoader {
 	// new xConfig child instance
 	public static <T extends xConfig> T NewConfig(
 			final Map<String, Object> datamap, final Class<T> cfgClass) {
-		if (datamap == null)  throw new RequiredArgumentException("datamap");
+		if (datamap == null) {
+			return NewConfig(
+				new HashMap<String, Object>(),
+				cfgClass
+			);
+		}
 		if (cfgClass == null) throw new RequiredArgumentException("cfgClass");
 		// get construct
 		final Constructor<? extends xConfig> construct;
@@ -80,20 +86,19 @@ public final class xConfigLoader {
 		if (clss == null)            throw new RequiredArgumentException("clss");
 		final String fileStr = StringUtils.ForceEnds(".yml", filePath);
 		final File file = new File(fileStr);
-		if (!file.isFile()) return null;
-		InputStream in = null;
-		try {
-			in = new FileInputStream(fileStr);
-			final Map<String, Object> datamap = LoadYamlFromStream(in);
-			if (datamap == null)
-				return null;
-			final T cfg = NewConfig(datamap, clss);
-			return cfg;
-		} catch (FileNotFoundException ignore) {
-		} finally {
-			Utils.SafeClose(in);
+
+		Map<String, Object> datamap = null;
+		if (file.isFile()) {
+			InputStream in = null;
+			try {
+				in = new FileInputStream(fileStr);
+				datamap = LoadYamlFromStream(in);
+			} catch (FileNotFoundException ignore) {
+			} finally {
+				Utils.SafeClose(in);
+			}
 		}
-		return null;
+		return NewConfig(datamap, clss);
 	}
 
 
@@ -109,8 +114,7 @@ public final class xConfigLoader {
 			if (in == null) return null;
 			final Map<String, Object> datamap = LoadYamlFromStream(in);
 			if (datamap == null) return null;
-			final T cfg = NewConfig(datamap, clss);
-			return cfg;
+			return NewConfig(datamap, clss);
 		} finally {
 			Utils.SafeClose(in);
 		}
