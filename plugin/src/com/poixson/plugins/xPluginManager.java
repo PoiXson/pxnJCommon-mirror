@@ -147,7 +147,8 @@ public abstract class xPluginManager<T extends xJavaPlugin> {
 		final Iterator<T> it = this.plugins.values().iterator();
 		while (it.hasNext()) {
 			final T plugin = it.next();
-			this.queue_init.addLast(plugin);
+			if (plugin.isState(null))
+				this.queue_init.addLast(plugin);
 			count++;
 		}
 		return count;
@@ -157,7 +158,8 @@ public abstract class xPluginManager<T extends xJavaPlugin> {
 		final Iterator<T> it = this.plugins.values().iterator();
 		while (it.hasNext()) {
 			final T plugin = it.next();
-			this.queue_term.addLast(plugin);
+			if (plugin.isState(xPluginState.STOPPED))
+				this.queue_term.addLast(plugin);
 			count++;
 		}
 		return count;
@@ -168,7 +170,8 @@ public abstract class xPluginManager<T extends xJavaPlugin> {
 		final Iterator<T> it = this.plugins.values().iterator();
 		while (it.hasNext()) {
 			final T plugin = it.next();
-			this.queue_start.addLast(plugin);
+			if (plugin.isState(xPluginState.INITED))
+					this.queue_start.addLast(plugin);
 			count++;
 		}
 		return count;
@@ -178,7 +181,8 @@ public abstract class xPluginManager<T extends xJavaPlugin> {
 		final Iterator<T> it = this.plugins.values().iterator();
 		while (it.hasNext()) {
 			final T plugin = it.next();
-			this.queue_stop.addLast(plugin);
+			if (plugin.isState(xPluginState.RUNNING))
+				this.queue_stop.addLast(plugin);
 			count++;
 		}
 		return count;
