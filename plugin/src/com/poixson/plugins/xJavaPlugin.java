@@ -2,7 +2,6 @@ package com.poixson.plugins;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.Failure;
@@ -15,8 +14,8 @@ import com.poixson.utils.Utils;
 
 public abstract class xJavaPlugin implements xStartStop, Runnable, xFailable {
 
-	protected final AtomicReference<xPluginManager<?>> manager = new AtomicReference<xPluginManager<?>>(null);
-	protected final AtomicReference<xPluginYML>        yml     = new AtomicReference<xPluginYML>(null);
+	protected final xPluginManager<?> manager;
+	protected final xPluginYML        yml;
 
 	// state
 	protected final AtomicReference<xPluginState> state = new AtomicReference<xPluginState>(null);
@@ -24,16 +23,9 @@ public abstract class xJavaPlugin implements xStartStop, Runnable, xFailable {
 
 
 
-	public xJavaPlugin() {
-	}
-
-
-
-	public void setVars(final xPluginManager<?> manager, final xPluginYML yml) {
-		if (manager == null) throw new RequiredArgumentException("manager");
-		if (yml     == null) throw new RequiredArgumentException("yml");
-		if (!this.manager.compareAndSet(null, manager)) throw new RuntimeException("manager already set");
-		if (!this.yml    .compareAndSet(null, yml    )) throw new RuntimeException("yml already set");
+	public xJavaPlugin(final xPluginManager<?> manager, final xPluginYML yml) {
+		this.manager = manager;
+		this.yml     = yml;
 	}
 
 
@@ -135,9 +127,7 @@ public abstract class xJavaPlugin implements xStartStop, Runnable, xFailable {
 
 
 	public String getPluginName() {
-		final xPluginYML yml = this.yml.get();
-		if (yml == null) throw new RuntimeException("yml not set!");
-		return yml.getPluginName();
+		return this.yml.getPluginName();
 	}
 	public String getPluginNameSafe() {
 		try {

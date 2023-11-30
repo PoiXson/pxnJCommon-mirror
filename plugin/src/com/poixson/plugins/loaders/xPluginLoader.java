@@ -2,8 +2,6 @@ package com.poixson.plugins.loaders;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
@@ -29,14 +27,17 @@ public abstract class xPluginLoader<T extends xJavaPlugin> {
 	public static final boolean VERBOSE_CLASSGRAPH = false;
 
 	protected final xPluginManager<T> manager;
+	protected final xPluginFactory<T> factory;
 
 	protected final String keyClassMain;
 
 
 
-	public xPluginLoader(final xPluginManager<T> manager, final String keyClassMain) {
+	public xPluginLoader(final xPluginManager<T> manager,
+			final xPluginFactory<T> factory, final String keyClassMain) {
 		this.manager      = manager;
 		this.keyClassMain = Utils.ifEmpty(keyClassMain, DEFAULT_KEY_CLASS_MAIN);
+		this.factory = factory;
 	}
 
 
@@ -88,27 +89,7 @@ public abstract class xPluginLoader<T extends xJavaPlugin> {
 			classgraph.loadClass(class_main, true)
 		);
 		if (clss == null) throw new IOException("Plugin class not found: " + class_main);
-		final Constructor<T> construct;
-		try {
-			construct = clss.getConstructor();
-		} catch (NoSuchMethodException e) {
-			throw new IOException(e);
-		} catch (SecurityException e) {
-			throw new IOException(e);
-		}
-		if (construct == null)
-			throw new IOException("Failed to get instance constructor: " + class_main);
-		final T plugin;
-		try {
-			plugin = construct.newInstance();
-		} catch (InstantiationException    e) { throw new IOException(e);
-		} catch (IllegalAccessException    e) { throw new IOException(e);
-		} catch (IllegalArgumentException  e) { throw new IOException(e);
-		} catch (InvocationTargetException e) { throw new IOException(e); }
-		if (plugin == null)
-			throw new IOException("Failed to create new instance of plugin class: " + class_main);
-		plugin.setVars(this.manager, yml);
-		return plugin;
+		return this.factory.build(this.manager, yml, clss, class_main);
 	}
 
 

@@ -18,8 +18,8 @@ public class xPluginLoader_Dir<T extends xJavaPlugin> extends xPluginLoader<T> {
 
 
 	public xPluginLoader_Dir(final xPluginManager<T> manager,
-			final String keyClassMain, final String dir) {
-		super(manager, keyClassMain);
+			final xPluginFactory<T> factory, final String keyClassMain, final String dir) {
+		super(manager, factory, keyClassMain);
 		this.dir = Utils.ifEmpty(dir, DEFAULT_PLUGINS_DIR);
 	}
 
