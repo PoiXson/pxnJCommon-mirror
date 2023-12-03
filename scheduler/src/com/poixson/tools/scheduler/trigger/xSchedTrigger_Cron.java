@@ -77,49 +77,4 @@ public class xSchedTrigger_Cron extends xSchedTrigger {
 
 
 
-	// ------------------------------------------------------------------------------- //
-	// factory
-
-
-
-	public static class TriggerFactory_Cron extends TriggerFactory<Trigger_Cron> {
-
-		protected CronExpression pattern;
-
-
-
-		public static TriggerFactory_Cron New() {
-			return new TriggerFactory_Cron();
-		}
-		public TriggerFactory_Cron() {}
-
-
-
-		@Override
-		public Trigger_Cron build() {
-			return
-				new Trigger_Cron(
-					this.pattern
-				);
-		}
-
-
-
-		public TriggerFactory_Cron pattern(final String patternStr)
-				throws ParseException {
-			final CronExpression pattern = new CronExpression(patternStr);
-			return this.pattern(pattern);
-		}
-		public TriggerFactory_Cron pattern(final CronExpression pattern) {
-			if (pattern == null) throw new RequiredArgumentException("pattern");
-			this.pattern = pattern;
-			return this;
-		}
-
-
-
-	}
-
-
-
 }
