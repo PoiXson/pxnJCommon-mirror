@@ -1,29 +1,24 @@
-/*
 package com.poixson.tools.scheduler.trigger;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.tools.xTime;
-import com.poixson.tools.xTimeU;
-import com.poixson.utils.Utils;
+import com.poixson.logger.xLog;
 
 
 public class xSchedTrigger_Clock extends xSchedTrigger {
-	public static final String DEFAULT_DATE_FORMAT = "yy/MM/dd HH:mm:ss";
-	public static final long  DEFAULT_GRACE_TIME  = 1000L;
+
+//TODO: remove this?
+//	public static final String DEFAULT_DATE_FORMAT = "yy/MM/dd HH:mm:ss";
+//	public static final long  DEFAULT_GRACE_TIME  = 1000L;
 
 	protected final Date date;
 	protected final long grace;
 
 
 
-	public Trigger_Clock(final Date date, final long grace)
+	public xSchedTrigger_Clock(final Date date, final long grace)
 			throws ParseException {
 		super();
 		if (date == null) throw new RequiredArgumentException("date");
@@ -34,30 +29,30 @@ public class xSchedTrigger_Clock extends xSchedTrigger {
 
 
 
-	// ------------------------------------------------------------------------------- //
+	// -------------------------------------------------------------------------------
 	// calculate time
 
 
 
 	@Override
-	public long untilNext(final long now) {
-		if (this.notEnabled())
+	public long getUntilNext(final long now) {
+		if (!this.isEnabled())
 			return Long.MIN_VALUE;
 		if (this.date == null) throw new RequiredArgumentException("date");
 		final long time = this.date.getTime();
 		final long last = this.last.get();
 		if (last == Long.MIN_VALUE) {
 			this.last.compareAndSet(Long.MIN_VALUE, now);
-			return this.untilNext(now);
+			return this.getUntilNext(now);
 		}
 		// until next trigger
-		final long untilNext = time - now;
-		if (0 - untilNext > this.grace) {
+		final long until_next = time - now;
+		if (0 - until_next > this.grace) {
 			this.log().warning("Skipping old scheduled clock trigger..");
 			this.setEnabled(false);
 			return Long.MIN_VALUE;
 		}
-		return untilNext;
+		return until_next;
 	}
 
 
@@ -145,12 +140,16 @@ public class xSchedTrigger_Clock extends xSchedTrigger {
 			this.grace.set(time);
 			return this;
 		}
+	// -------------------------------------------------------------------------------
+	// logger
 
 
 
+//TODO: change and move this
+	public xLog log() {
+		return xLog.Get();
 	}
 
 
 
 }
-*/

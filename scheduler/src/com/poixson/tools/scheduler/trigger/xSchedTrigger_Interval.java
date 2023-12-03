@@ -1,10 +1,4 @@
-/*
 package com.poixson.tools.scheduler.trigger;
-
-import java.util.concurrent.TimeUnit;
-
-import com.poixson.tools.xTime;
-import com.poixson.tools.xTimeU;
 
 
 public class xSchedTrigger_Interval extends xSchedTrigger {
@@ -15,7 +9,7 @@ public class xSchedTrigger_Interval extends xSchedTrigger {
 
 
 	public xSchedTrigger_Interval(final long interval) {
-		this(delay, 0L);
+		this(interval, interval);
 	}
 	public xSchedTrigger_Interval(final long delay, final long interval) {
 		super();
@@ -28,14 +22,14 @@ public class xSchedTrigger_Interval extends xSchedTrigger {
 
 
 
-	// ------------------------------------------------------------------------------- //
+	// -------------------------------------------------------------------------------
 	// calculate time
 
 
 
 	@Override
-	public long untilNext(final long now) {
-		if (this.notEnabled())
+	public long getUntilNext(final long now) {
+		if (!this.isEnabled())
 			return Long.MIN_VALUE;
 		final long last = this.last.get();
 		// delay until first trigger
@@ -146,4 +140,3 @@ public class xSchedTrigger_Interval extends xSchedTrigger {
 
 
 }
-*/

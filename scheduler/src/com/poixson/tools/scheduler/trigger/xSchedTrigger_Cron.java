@@ -1,7 +1,5 @@
-/*
 package com.poixson.tools.scheduler.trigger;
 
-import java.text.ParseException;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -11,15 +9,15 @@ import org.quartz.impl.triggers.CronTriggerImpl;
 import com.poixson.exceptions.RequiredArgumentException;
 
 
-/ *
-1 | Seconds
-2 | Minutes
-3 | Hours
-4 | Day-of-Month
-5 | Month
-6 | Day-of-Week
-7 | Year (optional field)
-* /
+/*
+  1 | Seconds
+  2 | Minutes
+  3 | Hours
+  4 | Day-of-Month
+  5 | Month
+  6 | Day-of-Week
+  7 | Year (optional field)
+ */
 public class xSchedTrigger_Cron extends xSchedTrigger {
 
 	protected final CronTriggerImpl trigger;
@@ -28,14 +26,14 @@ public class xSchedTrigger_Cron extends xSchedTrigger {
 
 
 
-	public Trigger_Cron(final CronExpression pattern) {
+	public xSchedTrigger_Cron(final CronExpression pattern) {
 		super();
 		if (pattern == null) throw new RequiredArgumentException("pattern");
 		this.trigger = new CronTriggerImpl();
 		this.trigger.setCronExpression(pattern);
 		this.setRepeat(true);
 	}
-	public Trigger_Cron(final CronTriggerImpl trigger) {
+	public xSchedTrigger_Cron(final CronTriggerImpl trigger) {
 		super();
 		if (trigger == null) throw new RequiredArgumentException("trigger");
 		this.trigger = trigger;
@@ -44,31 +42,31 @@ public class xSchedTrigger_Cron extends xSchedTrigger {
 
 
 
-	// ------------------------------------------------------------------------------- //
+	// -------------------------------------------------------------------------------
 	// calculate time
 
 
 
 	@Override
-	public long untilNext(long now) {
-		if (this.notEnabled())
+	public long getUntilNext(long now) {
+		if (!this.isEnabled())
 			return Long.MIN_VALUE;
 		final long next = this.next.get();
 		if (next == Long.MIN_VALUE) {
 			this.update(now);
-			return this.untilNext(now);
+			return this.getUntilNext(now);
 		}
-		final long untilNext = next - now;
-		if (untilNext <= 0L) {
+		final long until_next = next - now;
+		if (until_next <= 0L) {
 			this.update(now + 1L);
 		}
-		return untilNext;
+		return until_next;
 	}
 
 
 
+	// calculate time until next trigger
 	public void update(final long now) {
-		// calculate time until next trigger
 		final Date nextDate = this.trigger.getFireTimeAfter( new Date(now) );
 		if (nextDate == null) {
 			this.setDisabled();
@@ -125,4 +123,3 @@ public class xSchedTrigger_Cron extends xSchedTrigger {
 
 
 }
-*/
