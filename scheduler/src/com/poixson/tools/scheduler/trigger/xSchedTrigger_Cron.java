@@ -20,7 +20,7 @@ import com.poixson.exceptions.RequiredArgumentException;
 6 | Day-of-Week
 7 | Year (optional field)
 * /
-public class Trigger_Cron extends Trigger {
+public class xSchedTrigger_Cron extends xSchedTrigger {
 
 	protected final CronTriggerImpl trigger;
 

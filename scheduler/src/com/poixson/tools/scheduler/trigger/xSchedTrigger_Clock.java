@@ -14,7 +14,7 @@ import com.poixson.tools.xTimeU;
 import com.poixson.utils.Utils;
 
 
-public class Trigger_Clock extends Trigger {
+public class xSchedTrigger_Clock extends xSchedTrigger {
 	public static final String DEFAULT_DATE_FORMAT = "yy/MM/dd HH:mm:ss";
 	public static final long  DEFAULT_GRACE_TIME  = 1000L;
 

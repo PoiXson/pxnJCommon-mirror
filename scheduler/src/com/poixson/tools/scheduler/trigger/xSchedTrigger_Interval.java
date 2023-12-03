@@ -7,17 +7,17 @@ import com.poixson.tools.xTime;
 import com.poixson.tools.xTimeU;
 
 
-public class Trigger_Interval extends Trigger {
+public class xSchedTrigger_Interval extends xSchedTrigger {
 
 	protected final long delay;
 	protected final long interval;
 
 
 
-	public Trigger_Interval(final long delay) {
+	public xSchedTrigger_Interval(final long interval) {
 		this(delay, 0L);
 	}
-	public Trigger_Interval(final long delay, final long interval) {
+	public xSchedTrigger_Interval(final long delay, final long interval) {
 		super();
 		if (delay    < 0L) throw new IllegalArgumentException("Invalid delay value: "+Long.toString(delay));
 		if (interval < 0L) throw new IllegalArgumentException("Invalid interval value: "+Long.toString(interval));

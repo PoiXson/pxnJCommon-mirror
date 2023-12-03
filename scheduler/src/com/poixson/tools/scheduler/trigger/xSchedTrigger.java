@@ -10,7 +10,7 @@ import com.poixson.logger.xLog;
 import com.poixson.tools.abstractions.xEnableable;
 
 
-public abstract class Trigger implements xEnableable {
+public abstract class xSchedTrigger {
 
 	protected final AtomicBoolean enabled   = new AtomicBoolean(true);
 	protected final AtomicBoolean repeating = new AtomicBoolean(false);
@@ -19,7 +19,7 @@ public abstract class Trigger implements xEnableable {
 
 
 
-	public Trigger() {
+	public xSchedTrigger() {
 	}
 
 
