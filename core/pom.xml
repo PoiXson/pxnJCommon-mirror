@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated: Wed Jun 14 04:07:44 AM EDT 2023 -->
+<!-- Generated: Sat Dec  2 09:18:11 PM EST 2023 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -29,7 +29,7 @@
 		<maven-eclipse-plugin-version>2.10</maven-eclipse-plugin-version>
 		<git-commit-id-version>4.9.10</git-commit-id-version>
 		<junit-version>4.13.2</junit-version>
-		<surefire-version>3.1.0</surefire-version>
+		<surefire-version>3.2.2</surefire-version>
 
 	</properties>
 	<scm>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated: Tue Oct 10 02:06:59 AM EDT 2023 -->
+<!-- Generated: Sat Dec  2 09:08:14 PM EST 2023 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -33,8 +33,8 @@
 		<common-core-version>[4.0.0,)</common-core-version>
 		<common-logger-version>[4.0.0,)</common-logger-version>
 		<common-app-version>[4.0.0,)</common-app-version>
-		<jansi-version>2.4.0</jansi-version>
-		<jline-version>3.23.0</jline-version>
+		<jansi-version>[2,)</jansi-version>
+		<jline-version>[3,)</jline-version>
 
 	</properties>
 	<scm>
