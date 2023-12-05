@@ -1,16 +1,16 @@
-package com.poixson.tools.dao;
+package com.poixson.tools.abstractions;
 
 
-public class Tuple<X, Y> {
+public class Tuple<K, V> {
 
-	public final X x;
-	public final Y y;
+	public final K key;
+	public final V val;
 
 
 
-	public Tuple(final X x, final Y y) {
-		this.x = x;
-		this.y = y;
+	public Tuple(final K key, final V val) {
+		this.key = key;
+		this.val = val;
 	}
 
 
@@ -20,18 +20,18 @@ public class Tuple<X, Y> {
 		if (this == match)             return true;
 		if (!(match instanceof Tuple)) return false;
 		@SuppressWarnings("unchecked")
-		final Tuple<X, Y> tup = (Tuple<X, Y>) match;
+		final Tuple<K, V> tup = (Tuple<K, V>) match;
 		int i = 0;
-		if (this.x == null && tup.x == null) i++;
-		if (this.y == null && tup.y == null) i++;
+		if (this.key == null && tup.key == null) i++;
+		if (this.val == null && tup.val == null) i++;
 		if (i == 2) return true;
 		if (i == 1) {
-			if (this.x == null) return this.y.equals(tup.y);
-			else                return this.x.equals(tup.x);
+			if (this.key == null) return this.val.equals(tup.val);
+			else                  return this.key.equals(tup.key);
 		}
 		return (
-			this.x.equals(tup.x) &&
-			this.y.equals(tup.y)
+			this.key.equals(tup.key) &&
+			this.val.equals(tup.val)
 		);
 	}
 
@@ -41,9 +41,9 @@ public class Tuple<X, Y> {
 	public String toString() {
 		return (new StringBuilder())
 			.append('[')
-			.append(this.x)
+			.append(this.key)
 			.append(',')
-			.append(this.y)
+			.append(this.val)
 			.append(']')
 			.toString();
 	}
@@ -51,8 +51,8 @@ public class Tuple<X, Y> {
 	@Override
 	public int hashCode() {
 		int result = 1;
-		result = (result * 31) + (this.x == null ? 0 : this.x.hashCode());
-		result = (result * 31) + (this.y == null ? 0 : this.y.hashCode());
+		result = (result * 31) + (this.key == null ? 0 : this.key.hashCode());
+		result = (result * 31) + (this.val == null ? 0 : this.val.hashCode());
 		return result;
 	}
 
