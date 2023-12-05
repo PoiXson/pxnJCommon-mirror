@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.poixson.app.commands.xCommandProcessor;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xDebug;
-import com.poixson.logger.xLevel;
 import com.poixson.logger.xLog;
 import com.poixson.logger.xLogHandler;
 import com.poixson.threadpool.xThreadPool;
@@ -29,7 +28,6 @@ import com.poixson.tools.xTime;
 import com.poixson.tools.abstractions.RunnableMethod;
 import com.poixson.tools.abstractions.xFailable;
 import com.poixson.tools.abstractions.xStartable;
-import com.poixson.utils.FileUtils;
 import com.poixson.utils.ProcUtils;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.ThreadUtils;
@@ -91,20 +89,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 			this.props = props;
 		}
 		xDebug.Init();
-		// search for .debug file
-		if (!xDebug.isDebug()) {
-			if (!IsEmpty(xAppDefines.SEARCH_DEBUG_FILES)) {
-				final String result =
-					FileUtils.SearchLocalFile(
-						xAppDefines.SEARCH_DEBUG_FILES,
-						xAppDefines.SEARCH_DEBUG_PARENTS
-					);
-				if (!IsEmpty(result))
-					xDebug.setDebug();
-			}
-		}
-		if (xDebug.isDebug())
-			xLog.Get().setLevel(xLevel.ALL);
+		// queue app->start()
 		xThreadPool_Main.Get()
 			.runTaskNow( new RunnableMethod<Object>(this, "start") );
 	}
