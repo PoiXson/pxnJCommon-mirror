@@ -152,9 +152,6 @@ public class xAppStepLoader {
 	public boolean isEmpty() {
 		return this.steps.isEmpty();
 	}
-	public boolean notEmpty() {
-		return ! this.steps.isEmpty();
-	}
 
 
 

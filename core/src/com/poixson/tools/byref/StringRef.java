@@ -37,10 +37,6 @@ public class StringRef implements StringRefInterface {
 	public boolean isEmpty() {
 		return IsEmpty(this.value);
 	}
-	@Override
-	public boolean notEmpty() {
-		return Utils.notEmpty(this.value);
-	}
 
 
 

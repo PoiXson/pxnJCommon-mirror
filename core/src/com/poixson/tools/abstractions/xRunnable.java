@@ -141,17 +141,11 @@ public class xRunnable implements RunnableNamed {
 	public boolean hasRun() {
 		return (this.runCount.get() > 0);
 	}
-	public boolean notRun() {
-		return (this.runCount.get() == 0);
-	}
 
 
 
 	public boolean isActive() {
 		return (this.active.get() > 0);
-	}
-	public boolean notActive() {
-		return (this.active.get() == 0);
 	}
 	public int getActive() {
 		return this.active.get();

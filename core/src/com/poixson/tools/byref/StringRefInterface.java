@@ -9,7 +9,6 @@ public interface StringRefInterface {
 	public String value();
 
 	public boolean isEmpty();
-	public boolean notEmpty();
 
 	public int length();
 

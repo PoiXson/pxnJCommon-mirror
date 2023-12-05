@@ -70,10 +70,6 @@ public class xThreadPoolTask extends xRunnable {
 		return this.active.get();
 	}
 	@Override
-	public boolean notActive() {
-		return ! this.active.get();
-	}
-	@Override
 	public int getActive() {
 		return (this.isActive() ? 1 : 0);
 	}

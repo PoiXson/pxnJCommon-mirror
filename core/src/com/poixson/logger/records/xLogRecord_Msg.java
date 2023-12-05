@@ -66,10 +66,6 @@ public class xLogRecord_Msg implements xLogRecord {
 	public boolean isEmpty() {
 		return IsEmpty(this.msg);
 	}
-	@Override
-	public boolean notEmpty() {
-		return Utils.notEmpty(this.msg);
-	}
 
 
 

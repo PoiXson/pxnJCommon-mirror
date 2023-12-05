@@ -47,10 +47,6 @@ public class xLogRecord_Special implements xLogRecord {
 	public boolean isEmpty() {
 		return true;
 	}
-	@Override
-	public boolean notEmpty() {
-		return false;
-	}
 
 
 

@@ -46,9 +46,6 @@ public class xString {
 	public boolean isEmpty() {
 		return IsEmpty(this.data);
 	}
-	public boolean notEmpty() {
-		return Utils.notEmpty(this.data);
-	}
 
 
 

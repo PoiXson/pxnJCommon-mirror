@@ -13,7 +13,6 @@ public interface xLogRecord {
 	public long     getTimestamp();
 
 	public boolean isEmpty();
-	public boolean notEmpty();
 
 
 }
