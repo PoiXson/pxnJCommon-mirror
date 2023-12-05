@@ -28,297 +28,239 @@ public final class Utils {
 
 
 	// string
-	public static boolean isEmpty(final String str) {
+	public static boolean IsEmpty(final String str) {
 		if (str == null) return true;
 		return (str.length() == 0);
 	}
-	public static String ifEmpty(final String value, final String def) {
-		if (isEmpty(value)) return def;
-		return value;
+	public static String IfEmpty(final String value, final String def) {
+		return (IsEmpty(value) ? def : value);
 	}
 
 
 
 	// string builder
-	public static boolean isEmpty(final StringBuilder str) {
+	public static boolean IsEmpty(final StringBuilder str) {
 		if (str == null) return true;
 		return (str.length() == 0);
 	}
+	public static StringBuilder IfEmpty(final StringBuilder value, final String def) {
+		return (IsEmpty(value) ? (new StringBuilder()).append(def) : value);
 	}
 
 
 
 	// string array
-	public static boolean isEmpty(final String[] array) {
-		if (array == null)
-			return true;
+	public static boolean IsEmpty(final String[] array) {
+		if (array == null) return true;
 		return (array.length == 0);
 	}
-	public static String[] ifEmpty(final String[] array, final String[] def) {
-		if (isEmpty(array))
-			return def;
-		return array;
+	public static String[] IfEmpty(final String[] array, final String[] def) {
+		return (IsEmpty(array) ? def : array);
 	}
 
 
 
 	// object
-	public static <T extends Object> T ifEmpty(final T obj, final T def) {
-		if (obj == null)
-			return def;
-		return obj;
+	public static <T extends Object> T IfEmpty(final T obj, final T def) {
+		return (obj == null ? def : obj);
 	}
 
 
 
 	// object array
-	public static boolean isEmpty(final Object[] array) {
-		if (array == null)
-			return true;
+	public static boolean IsEmpty(final Object[] array) {
+		if (array == null) return true;
 		return (array.length == 0);
 	}
-	public static <T extends Object> T[] ifEmpty(final T[] array, final T[] def) {
-		if (isEmpty(array))
-			return def;
-		return array;
+	public static <T extends Object> T[] IfEmpty(final T[] array, final T[] def) {
+		return (IsEmpty(array) ? def : array);
 	}
 
 
 
 	// collection
-	public static boolean isEmpty(final Collection<?> collect) {
-		if (collect == null)
-			return true;
+	public static boolean IsEmpty(final Collection<?> collect) {
+		if (collect == null) return true;
 		return (collect.size() == 0);
 	}
-	public static Collection<?> ifEmpty(final Collection<?> collect, final Collection<?> def) {
-		if (isEmpty(collect))
-			return def;
-		return collect;
+	public static Collection<?> IfEmpty(final Collection<?> collect, final Collection<?> def) {
+		return (IsEmpty(collect) ? def : collect);
 	}
 
 
 
 	// map
-	public static boolean isEmpty(final Map<?, ?> map) {
-		if (map == null)
-			return true;
+	public static boolean IsEmpty(final Map<?, ?> map) {
+		if (map == null) return true;
 		return (map.size() == 0);
 	}
-	public static Map<?, ?> ifEmpty(final Map<?, ?> map, final Map<?, ?> def) {
-		if (isEmpty(map))
-			return def;
-		return map;
+	public static Map<?, ?> IfEmpty(final Map<?, ?> map, final Map<?, ?> def) {
+		return (IsEmpty(map) ? def : map);
 	}
 
 
 
 	// byte
-	public static Byte ifEmpty(final Byte byt, final Byte def) {
-		if (byt == null)
-			return def;
-		return byt;
+	public static Byte IfEmpty(final Byte byt, final Byte def) {
+		return (byt == null ? def : byt);
 	}
 
 
 
 	// byte array
-	public static boolean isEmpty(final byte[] bytes) {
-		if (bytes == null)
-			return true;
+	public static boolean IsEmpty(final byte[] bytes) {
+		if (bytes == null) return true;
 		return (bytes.length == 0);
 	}
-	public static byte[] ifEmpty(final byte[] bytes, final byte[] def) {
-		if (isEmpty(bytes))
-			return def;
-		return bytes;
+	public static byte[] IfEmpty(final byte[] bytes, final byte[] def) {
+		return (IsEmpty(bytes) ? def : bytes);
 	}
 
 
 
 	// char
-	public static char ifEmpty(final char chr, final char def) {
-		if (chr == 0)
-			return def;
-		return chr;
+	public static char IfEmpty(final char chr, final char def) {
+		return (chr == 0 ? def : chr);
 	}
 
 
 
 	// char array
-	public static boolean isEmpty(final char[] chars) {
-		if (chars == null)
-			return true;
+	public static boolean IsEmpty(final char[] chars) {
+		if (chars == null) return true;
 		return (chars.length == 0);
 	}
-	public static char[] ifEmpty(final char[] chars, final char[] def) {
-		if (isEmpty(chars))
-			return def;
-		return chars;
+	public static char[] IfEmpty(final char[] chars, final char[] def) {
+		return (IsEmpty(chars) ? def : chars);
 	}
 
 
 
 	// character
-	public static boolean isEmpty(final Character chr) {
+	public static boolean IsEmpty(final Character chr) {
 		return (chr == null);
 	}
-	public static Character ifEmpty(final Character chr, final Character def) {
-		if (isEmpty(chr))
-			return def;
-		return chr;
+	public static Character IfEmpty(final Character chr, final Character def) {
+		return (IsEmpty(chr) ? def : chr);
 	}
 
 
 
 	// character array
-	public static boolean isEmpty(final Character[] chars) {
-		if (chars == null)
-			return true;
+	public static boolean IsEmpty(final Character[] chars) {
+		if (chars == null) return true;
 		return (chars.length == 0);
 	}
-	public static Character[] ifEmpty(final Character[] chars, final Character[] def) {
-		if (isEmpty(chars))
-			return def;
-		return chars;
+	public static Character[] IfEmpty(final Character[] chars, final Character[] def) {
+		return (IsEmpty(chars) ? def : chars);
 	}
 
 
 
 	// short
-	public static Short ifEmpty(final Short value, final Short def) {
-		if (value == null)
-			return def;
-		return value;
+	public static Short IfEmpty(final Short value, final Short def) {
+		return (value == null ? def : value);
 	}
 
 
 
 	// short array
-	public static boolean isEmpty(final short[] shorts) {
-		if (shorts == null)
-			return true;
+	public static boolean IsEmpty(final short[] shorts) {
+		if (shorts == null) return true;
 		return (shorts.length == 0);
 	}
-	public static short[] ifEmpty(final short[] shorts, final short[] def) {
-		if (isEmpty(shorts))
-			return def;
-		return shorts;
+	public static short[] IfEmpty(final short[] shorts, final short[] def) {
+		return (IsEmpty(shorts) ? def : shorts);
 	}
 
 
 
 	// integer
-	public static Integer ifEmpty(final Integer value, final Integer def) {
-		if (value == null)
-			return def;
-		return value;
+	public static Integer IfEmpty(final Integer value, final Integer def) {
+		return (value == null ? def : value);
 	}
 
 
 
 	// integer array
-	public static boolean isEmpty(final int[] ints) {
-		if (ints == null)
-			return true;
+	public static boolean IsEmpty(final int[] ints) {
+		if (ints == null) return true;
 		return (ints.length == 0);
 	}
-	public static int[] ifEmpty(final int[] ints, final int[] def) {
-		if (isEmpty(ints))
-			return def;
-		return ints;
+	public static int[] IfEmpty(final int[] ints, final int[] def) {
+		return (IsEmpty(ints) ? def : ints);
 	}
 
 
 
 	// long
-	public static Long ifEmpty(final Long value, final Long def) {
-		if (value == null)
-			return def;
-		return value;
+	public static Long IfEmpty(final Long value, final Long def) {
+		return (value == null ? def : value);
 	}
 
 
 
 	// long array
-	public static boolean isEmpty(final long[] longs) {
-		if (longs == null)
-			return true;
+	public static boolean IsEmpty(final long[] longs) {
+		if (longs == null) return true;
 		return (longs.length == 0);
 	}
-	public static long[] ifEmpty(final long[] longs, final long[] def) {
-		if (isEmpty(longs))
-			return def;
-		return longs;
+	public static long[] IfEmpty(final long[] longs, final long[] def) {
+		return (IsEmpty(longs) ? def : longs);
 	}
 
 
 
 	// double
-	public static Double ifEmpty(final Double value, final Double def) {
-		if (value == null)
-			return def;
-		return value;
+	public static Double IfEmpty(final Double value, final Double def) {
+		return (value == null ? def : value);
 	}
 
 
 
 	// double array
-	public static boolean isEmpty(final double[] doubles) {
-		if (doubles == null)
-			return true;
+	public static boolean IsEmpty(final double[] doubles) {
+		if (doubles == null) return true;
 		return (doubles.length == 0);
 	}
-	public static double[] ifEmpty(final double[] doubles, final double[] def) {
-		if (isEmpty(doubles))
-			return def;
-		return doubles;
+	public static double[] IfEmpty(final double[] doubles, final double[] def) {
+		return (IsEmpty(doubles) ? def : doubles);
 	}
 
 
 
 	// float
-	public static Float ifEmpty(final Float value, final Float def) {
-		if (value == null)
-			return def;
-		return value;
+	public static Float IfEmpty(final Float value, final Float def) {
+		return (value == null ? def : value);
 	}
 
 
 
 	// float array
-	public static boolean isEmpty(final float[] floats) {
-		if (floats == null)
-			return true;
+	public static boolean IsEmpty(final float[] floats) {
+		if (floats == null) return true;
 		return (floats.length == 0);
 	}
-	public static float[] ifEmpty(final float[] floats, final float[] def) {
-		if (isEmpty(floats))
-			return def;
-		return floats;
+	public static float[] IfEmpty(final float[] floats, final float[] def) {
+		return (IsEmpty(floats) ? def : floats);
 	}
 
 
 
 	// boolean
-	public static Boolean ifEmpty(final Boolean bool, final Boolean def) {
-		if (bool == null)
-			return def;
-		return bool;
+	public static Boolean IfEmpty(final Boolean bool, final Boolean def) {
+		return (bool == null ? def : bool);
 	}
 
 
 
 	// boolean array
-	public static boolean isEmpty(final boolean[] bools) {
-		if (bools == null)
-			return true;
+	public static boolean IsEmpty(final boolean[] bools) {
+		if (bools == null) return true;
 		return (bools.length == 0);
 	}
-	public static boolean[] ifEmpty(final boolean[] bools, final boolean[] def) {
-		if (isEmpty(bools))
-			return def;
-		return bools;
+	public static boolean[] IfEmpty(final boolean[] bools, final boolean[] def) {
+		return (IsEmpty(bools) ? def : bools);
 	}
 
 
@@ -341,9 +283,8 @@ public final class Utils {
 
 
 
-	public static boolean isArray(final Object obj) {
-		if (obj == null)
-			return false;
+	public static boolean IsArray(final Object obj) {
+		if (obj == null) return false;
 		return obj.getClass().isArray();
 	}
 
