@@ -1,6 +1,5 @@
 package com.poixson.app;
 
-import static com.poixson.app.xAppDefines.EXIT_HUNG;
 import static com.poixson.utils.Utils.GetMS;
 import static com.poixson.utils.Utils.IsEmpty;
 
@@ -47,6 +46,8 @@ import com.poixson.utils.ThreadUtils;
  *   1 | exit
  */
 public abstract class xApp implements xStartable, Runnable, xFailable {
+
+	public static final int EXIT_HUNG = 3;
 
 	// app instances
 	protected static final CopyOnWriteArraySet<xApp> apps = new CopyOnWriteArraySet<xApp>();

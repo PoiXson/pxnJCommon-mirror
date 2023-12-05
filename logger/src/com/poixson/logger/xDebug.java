@@ -10,6 +10,12 @@ public final class xDebug {
 	static { Keeper.add(new xDebug()); }
 
 	public static final boolean DEFAULT_DEBUG = false;
+	public static final int SEARCH_DEBUG_PARENTS = 2;
+	public static final String[] SEARCH_DEBUG_FILES =
+		new String[] {
+			".debug",
+			"debug"
+		};
 
 	private static final AtomicReference<Boolean> debugValue = new AtomicReference<Boolean>(null);
 
