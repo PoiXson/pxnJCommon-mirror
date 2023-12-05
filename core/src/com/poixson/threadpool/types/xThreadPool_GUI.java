@@ -53,7 +53,7 @@ public class xThreadPool_GUI extends xThreadPool_Single {
 		throw new UnsupportedOperationException();
 	}
 	@Override
-	public void go() {
+	public void run() {
 		throw new UnsupportedOperationException();
 	}
 	@Override

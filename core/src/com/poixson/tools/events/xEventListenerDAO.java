@@ -70,12 +70,10 @@ public class xEventListenerDAO {
 		return object.equals(this.object);
 	}
 	public boolean isMethod(final Object object, final String methodName) {
-		if (object == null) return false;
-		if ( ! object.equals(this.object) )
-			return false;
-		if ( ! methodName.equals(this.method.getName()) )
-			return false;
+		if (object == null)      return false;
 		if (IsEmpty(methodName)) return false;
+		if ( ! object.equals(this.object)               ) return false;
+		if ( ! methodName.equals(this.method.getName()) ) return false;
 		return true;
 	}
 

@@ -98,7 +98,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 						xAppDefines.SEARCH_DEBUG_FILES,
 						xAppDefines.SEARCH_DEBUG_PARENTS
 					);
-				if (result != null)
+				if (!IsEmpty(result))
 					xDebug.setDebug();
 			}
 		}

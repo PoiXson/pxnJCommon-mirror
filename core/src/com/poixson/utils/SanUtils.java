@@ -23,8 +23,7 @@ public final class SanUtils {
 		);
 	}
 	public static boolean SafeAlphaNum(final String text) {
-		if (text == null)
-			return true;
+		if (text == null) return true;
 		final String safeText = AlphaNum(text, null);
 		return text.equals(safeText);
 	}
@@ -43,8 +42,7 @@ public final class SanUtils {
 		);
 	}
 	public static boolean SafeAlphaNumUnderscore(final String text) {
-		if (text == null)
-			return true;
+		if (text == null) return true;
 		final String safeText = AlphaNumUnderscore(text, null);
 		return text.equals(safeText);
 	}
@@ -71,8 +69,7 @@ public final class SanUtils {
 		);
 	}
 	public static boolean SafeFileName(final String text) {
-		if (text == null)
-			return true;
+		if (text == null) return true;
 		final String safeText = FileName(text, null);
 		return text.equals(safeText);
 	}

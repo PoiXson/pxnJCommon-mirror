@@ -78,8 +78,7 @@ public class xCommandDAO extends xEventListenerDAO {
 		return cmd.equals(this.name);
 	}
 	public boolean isAlias(final String cmd) {
-		if (cmd == null)
-			return false;
+		if (cmd == null)           return false;
 		if (IsEmpty(this.aliases)) return false;
 		for (final String alias : this.aliases) {
 			if (cmd.equals(alias))

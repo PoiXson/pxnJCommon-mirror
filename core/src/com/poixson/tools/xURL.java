@@ -241,20 +241,12 @@ public class xURL {
 
 	// port
 	public xURL setPort(final int port) {
-		this.port = (
-			port > 0
-			? port
-			: -1
-		);
+		this.port = (port > 0 ? port : -1);
 		return this;
 	}
 	public int getPort() {
 		final int port = this.port;
-		return (
-			port > 0
-			? port
-			: -1
-		);
+		return (port > 0 ? port : -1);
 	}
 	public boolean hasPort() {
 		return (this.port > 0);

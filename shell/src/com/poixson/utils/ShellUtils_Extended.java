@@ -78,13 +78,8 @@ public final class ShellUtils_Extended extends ShellUtils {
 		if (IsEmpty(lines))
 			return lines;
 		String[] result = new String[ lines.length ];
-		for (int index=0; index<lines.length; index++) {
-			result[index] = (
-				Utils.isEmpty(lines[index])
-				? ""
-				: Ansi.ansi().render( lines[index] ).toString()
-			);
-		}
+		for (int index=0; index<lines.length; index++)
+			result[index] = (IsEmpty(lines[index]) ? "" : Ansi.ansi().render( lines[index] ).toString());
 		return result;
 	}
 

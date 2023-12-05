@@ -20,9 +20,8 @@ public final class TestUtils {
 		if (expect == null) { Assert.fail(StringUtils.ToString(actual)); return; }
 		if (actual == null) { Assert.fail(StringUtils.ToString(expect)); return; }
 		final List<Object> actualList = new ArrayList<Object>();
-		for (int index=0; index<actual.length; index++) {
+		for (int index=0; index<actual.length; index++)
 			actualList.add(actual[index]);
-		}
 		final List<Object> foundList = new ArrayList<Object>();
 		for (int index=0; index<expect.length; index++) {
 			final Object obj = expect[index];
@@ -32,9 +31,8 @@ public final class TestUtils {
 			}
 			foundList.add(obj);
 		}
-		for (final Object obj : foundList) {
+		for (final Object obj : foundList)
 			actualList.remove(obj);
-		}
 		if (!IsEmpty(actualList))
 			Assert.fail("Entries not in expected array: "+StringUtils.MergeObjects(", ", actualList));
 	}

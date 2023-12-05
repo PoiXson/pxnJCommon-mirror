@@ -11,7 +11,7 @@ import com.poixson.tools.abstractions.OutputStreamLineRemapper;
 
 public class xLogRoot extends xLogger {
 
-	protected static final AtomicBoolean rootInited = new AtomicBoolean(false);
+	protected static final AtomicBoolean RootInited = new AtomicBoolean(false);
 
 
 
@@ -23,7 +23,7 @@ public class xLogRoot extends xLogger {
 
 	// init root logger
 	public static void InitRoot() {
-		if (!rootInited.compareAndSet(false, true))
+		if (!RootInited.compareAndSet(false, true))
 			return;
 		// override stdio
 		StdIO.Init();
