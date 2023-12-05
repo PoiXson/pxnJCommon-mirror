@@ -32,10 +32,6 @@ public final class Utils {
 		if (str == null) return true;
 		return (str.length() == 0);
 	}
-	public static boolean notEmpty(final String str) {
-		if (str == null) return false;
-		return (str.length() > 0);
-	}
 	public static String ifEmpty(final String value, final String def) {
 		if (isEmpty(value)) return def;
 		return value;
@@ -48,9 +44,6 @@ public final class Utils {
 		if (str == null) return true;
 		return (str.length() == 0);
 	}
-	public static boolean notEmpty(final StringBuilder str) {
-		if (str == null) return false;
-		return (str.length() > 0);
 	}
 
 
@@ -60,11 +53,6 @@ public final class Utils {
 		if (array == null)
 			return true;
 		return (array.length == 0);
-	}
-	public static boolean notEmpty(final String[] array) {
-		if (array == null)
-			return false;
-		return (array.length > 0);
 	}
 	public static String[] ifEmpty(final String[] array, final String[] def) {
 		if (isEmpty(array))
@@ -89,11 +77,6 @@ public final class Utils {
 			return true;
 		return (array.length == 0);
 	}
-	public static boolean notEmpty(final Object[] array) {
-		if (array == null)
-			return false;
-		return (array.length > 0);
-	}
 	public static <T extends Object> T[] ifEmpty(final T[] array, final T[] def) {
 		if (isEmpty(array))
 			return def;
@@ -108,11 +91,6 @@ public final class Utils {
 			return true;
 		return (collect.size() == 0);
 	}
-	public static boolean notEmpty(final Collection<?> collect) {
-		if (collect == null)
-			return false;
-		return (collect.size() > 0);
-	}
 	public static Collection<?> ifEmpty(final Collection<?> collect, final Collection<?> def) {
 		if (isEmpty(collect))
 			return def;
@@ -126,11 +104,6 @@ public final class Utils {
 		if (map == null)
 			return true;
 		return (map.size() == 0);
-	}
-	public static boolean notEmpty(final Map<?, ?> map) {
-		if (map == null)
-			return false;
-		return (map.size() > 0);
 	}
 	public static Map<?, ?> ifEmpty(final Map<?, ?> map, final Map<?, ?> def) {
 		if (isEmpty(map))
@@ -155,11 +128,6 @@ public final class Utils {
 			return true;
 		return (bytes.length == 0);
 	}
-	public static boolean notEmpty(final byte[] bytes) {
-		if (bytes == null)
-			return false;
-		return (bytes.length > 0);
-	}
 	public static byte[] ifEmpty(final byte[] bytes, final byte[] def) {
 		if (isEmpty(bytes))
 			return def;
@@ -183,11 +151,6 @@ public final class Utils {
 			return true;
 		return (chars.length == 0);
 	}
-	public static boolean notEmpty(final char[] chars) {
-		if (chars == null)
-			return false;
-		return (chars.length > 0);
-	}
 	public static char[] ifEmpty(final char[] chars, final char[] def) {
 		if (isEmpty(chars))
 			return def;
@@ -199,9 +162,6 @@ public final class Utils {
 	// character
 	public static boolean isEmpty(final Character chr) {
 		return (chr == null);
-	}
-	public static boolean notEmpty(final Character chr) {
-		return (chr != null);
 	}
 	public static Character ifEmpty(final Character chr, final Character def) {
 		if (isEmpty(chr))
@@ -216,11 +176,6 @@ public final class Utils {
 		if (chars == null)
 			return true;
 		return (chars.length == 0);
-	}
-	public static boolean notEmpty(final Character[] chars) {
-		if (chars == null)
-			return false;
-		return (chars.length > 0);
 	}
 	public static Character[] ifEmpty(final Character[] chars, final Character[] def) {
 		if (isEmpty(chars))
@@ -245,11 +200,6 @@ public final class Utils {
 			return true;
 		return (shorts.length == 0);
 	}
-	public static boolean notEmpty(final short[] shorts) {
-		if (shorts == null)
-			return false;
-		return (shorts.length > 0);
-	}
 	public static short[] ifEmpty(final short[] shorts, final short[] def) {
 		if (isEmpty(shorts))
 			return def;
@@ -272,11 +222,6 @@ public final class Utils {
 		if (ints == null)
 			return true;
 		return (ints.length == 0);
-	}
-	public static boolean notEmpty(final int[] ints) {
-		if (ints == null)
-			return false;
-		return (ints.length > 0);
 	}
 	public static int[] ifEmpty(final int[] ints, final int[] def) {
 		if (isEmpty(ints))
@@ -301,11 +246,6 @@ public final class Utils {
 			return true;
 		return (longs.length == 0);
 	}
-	public static boolean notEmpty(final long[] longs) {
-		if (longs == null)
-			return false;
-		return (longs.length > 0);
-	}
 	public static long[] ifEmpty(final long[] longs, final long[] def) {
 		if (isEmpty(longs))
 			return def;
@@ -328,11 +268,6 @@ public final class Utils {
 		if (doubles == null)
 			return true;
 		return (doubles.length == 0);
-	}
-	public static boolean notEmpty(final double[] doubles) {
-		if (doubles == null)
-			return false;
-		return (doubles.length > 0);
 	}
 	public static double[] ifEmpty(final double[] doubles, final double[] def) {
 		if (isEmpty(doubles))
@@ -357,11 +292,6 @@ public final class Utils {
 			return true;
 		return (floats.length == 0);
 	}
-	public static boolean notEmpty(final float[] floats) {
-		if (floats == null)
-			return false;
-		return (floats.length > 0);
-	}
 	public static float[] ifEmpty(final float[] floats, final float[] def) {
 		if (isEmpty(floats))
 			return def;
@@ -384,11 +314,6 @@ public final class Utils {
 		if (bools == null)
 			return true;
 		return (bools.length == 0);
-	}
-	public static boolean notEmpty(final boolean[] bools) {
-		if (bools == null)
-			return false;
-		return (bools.length > 0);
 	}
 	public static boolean[] ifEmpty(final boolean[] bools, final boolean[] def) {
 		if (isEmpty(bools))
@@ -420,11 +345,6 @@ public final class Utils {
 		if (obj == null)
 			return false;
 		return obj.getClass().isArray();
-	}
-	public static boolean notArray(final Object obj) {
-		if (obj == null)
-			return true;
-		return ! obj.getClass().isArray();
 	}
 
 
