@@ -1,5 +1,6 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.Utils.GetMS;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -25,7 +26,7 @@ public final class RandomUtils {
 		if (minNumber == maxNumber) return minNumber;
 		if (seed == 0L)
 			return GetRandom(minNumber, maxNumber, 1L);
-		final Random rnd = new Random(Utils.GetMS() * seed);
+		final Random rnd = new Random(GetMS() * seed);
 		final int num = rnd.nextInt(maxNumber - minNumber) + minNumber;
 		LastRND.set(num * LastRND.get());
 		return num;

@@ -1,5 +1,7 @@
 package com.poixson.tools.scheduler;
 
+import static com.poixson.utils.Utils.GetMS;
+
 import java.lang.ref.SoftReference;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -146,7 +148,7 @@ public class xScheduler implements xStartable, Runnable {
 
 
 	public static long getCurrentMillis() {
-		return Utils.GetMS();
+		return GetMS();
 	}
 
 

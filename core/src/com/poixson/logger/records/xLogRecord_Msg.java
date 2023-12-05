@@ -1,5 +1,7 @@
 package com.poixson.logger.records;
 
+import static com.poixson.utils.Utils.GetMS;
+
 import com.poixson.logger.xLevel;
 import com.poixson.logger.xLog;
 import com.poixson.utils.Utils;
@@ -18,7 +20,7 @@ public class xLogRecord_Msg implements xLogRecord {
 	public xLogRecord_Msg(final xLog log, final xLevel level,
 			final String msg, final Object[] args) {
 		this.level     = level;
-		this.timestamp = Utils.GetMS();
+		this.timestamp = GetMS();
 		this.msg       = msg;
 		this.args      = args;
 		this.nametree  = log.getNameTree();

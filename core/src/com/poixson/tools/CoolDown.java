@@ -1,8 +1,8 @@
 package com.poixson.tools;
 
-import java.util.concurrent.atomic.AtomicLong;
+import static com.poixson.utils.Utils.GetMS;
 
-import com.poixson.utils.Utils;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 public class CoolDown {
@@ -75,7 +75,7 @@ public class CoolDown {
 
 
 	public long getCurrent() {
-		return Utils.GetMS();
+		return GetMS();
 	}
 	public long getLast() {
 		return this.last.get();

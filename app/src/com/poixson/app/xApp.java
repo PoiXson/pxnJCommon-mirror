@@ -1,6 +1,7 @@
 package com.poixson.app;
 
 import static com.poixson.app.xAppDefines.EXIT_HUNG;
+import static com.poixson.utils.Utils.GetMS;
 
 import java.io.IOException;
 import java.lang.ref.SoftReference;
@@ -442,7 +443,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 	@xAppStep(type=xAppStepType.STARTUP, step=10, title="Startup Time")
 	public void __START__uptime() {
 		this.time_start
-			.set( Utils.GetMS(), TimeUnit.MILLISECONDS );
+			.set( GetMS(), TimeUnit.MILLISECONDS );
 	}
 
 
@@ -614,7 +615,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 	public long uptime() {
-		final long current = Utils.GetMS();
+		final long current = GetMS();
 		final long time_start = this.time_start.ms();
 		return current - time_start;
 	}
