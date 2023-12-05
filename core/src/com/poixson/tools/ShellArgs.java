@@ -1,5 +1,7 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,7 +11,6 @@ import java.util.ListIterator;
 import java.util.Map;
 
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 public class ShellArgs {
 
@@ -24,7 +25,7 @@ public class ShellArgs {
 
 
 	public ShellArgs(final String[] argsArray) {
-		if (Utils.isEmpty(argsArray)) {
+		if (IsEmpty(argsArray)) {
 			this.flags    = Collections.unmodifiableMap(  new HashMap<String, String>(0) );
 			this.commands = Collections.unmodifiableList( new ArrayList<String>(0)       );
 			return;
@@ -35,7 +36,7 @@ public class ShellArgs {
 		boolean allCommands = false;
 		while (it.hasNext()) {
 			final String arg = it.next();
-			if (Utils.isEmpty(arg)) continue;
+			if (IsEmpty(arg)) continue;
 			// --
 			if (allCommands) {
 				commands.add(arg);
@@ -61,7 +62,7 @@ public class ShellArgs {
 					// peek next arg
 					final String nextArg = it.next();
 					// blank value
-					if (Utils.isEmpty(StringUtils.TrimToNull(nextArg))) {
+					if (IsEmpty(StringUtils.TrimToNull(nextArg))) {
 						flags.put(
 							arg,
 							"true"

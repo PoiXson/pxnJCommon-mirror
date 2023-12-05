@@ -1,5 +1,7 @@
 package com.poixson.app;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -9,7 +11,6 @@ import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.tools.abstractions.RunnableNamed;
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 
 public class xAppStepDAO implements RunnableNamed {
@@ -49,7 +50,7 @@ public class xAppStepDAO implements RunnableNamed {
 		);
 		this.multi = anno.multi();
 		this.pause = anno.pause();
-		if (Utils.notEmpty(anno.title())) {
+		if (!IsEmpty(anno.title())) {
 			this.title = anno.title();
 		} else {
 			final String name =
@@ -61,11 +62,7 @@ public class xAppStepDAO implements RunnableNamed {
 					"shutdown",
 					"stop"
 				);
-			if (Utils.notEmpty(name)) {
-				this.title = name;
-			} else {
-				this.title = method.getName();
-			}
+			this.title = (IsEmpty(name) ? method.getName() : name);
 		}
 		this.titleFull =
 			String.format(

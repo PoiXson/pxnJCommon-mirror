@@ -41,7 +41,7 @@ public class xCommandHandlerJLine extends xCommandHandler {
 	}
 	@Override
 	public void unregisterMethod(final Object object, final String methodName) {
-		if (object == null || Utils.isEmpty(methodName)) return;
+		if (object == null || IsEmpty(methodName)) return;
 		super.unregisterMethod(object, methodName);
 		this.completer.set(null);
 	}

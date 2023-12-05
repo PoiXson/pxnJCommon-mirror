@@ -1,5 +1,7 @@
 package com.poixson.logger;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,7 +18,7 @@ import com.poixson.logger.records.xLogRecord_Msg;
 import com.poixson.tools.StdIO;
 import com.poixson.utils.ReflectUtils;
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
+
 
 //simplest - uncached
 /*
@@ -94,7 +96,7 @@ public abstract class xLog {
 	// child logger from instance
 	public xLog get(final String log_name) {
 		InitRoot();
-		if (Utils.isEmpty(log_name))
+		if (IsEmpty(log_name))
 			return Get();
 		// existing logger instance
 		{
@@ -122,7 +124,7 @@ public abstract class xLog {
 	// new instance (weak reference)
 	public xLog getWeak(final String log_name) {
 		InitRoot();
-		if (Utils.isEmpty(log_name))
+		if (IsEmpty(log_name))
 			return this.clone();
 		return this.create(log_name);
 	}
@@ -152,7 +154,7 @@ public abstract class xLog {
 	// child logger
 	protected xLog(final xLog parent, final String log_name) {
 		if (parent == null)          throw new RequiredArgumentException("parent");
-		if (Utils.isEmpty(log_name)) throw new RequiredArgumentException("log_name");
+		if (IsEmpty(log_name)) throw new RequiredArgumentException("log_name");
 		this.parent  = parent;
 		this.log_name = log_name;
 	}
@@ -238,7 +240,7 @@ public abstract class xLog {
 		if (this.isRoot())       return;
 		if (this.parent == null) return;
 		this.parent.buildNameTree(list);
-		if (Utils.notEmpty(this.log_name))
+		if (!IsEmpty(this.log_name))
 			list.add(this.log_name);
 	}
 
@@ -259,7 +261,7 @@ public abstract class xLog {
 	public abstract void publish(final xLogRecord record);
 
 	public void publish(final String[] lines) {
-		if (Utils.isEmpty(lines)) return;
+		if (IsEmpty(lines)) return;
 		for (final String line : lines)
 			this.publish(line);
 	}
@@ -283,7 +285,7 @@ public abstract class xLog {
 	}
 	public void trace(final Throwable e, final String msg, final Object...args) {
 		final StringBuilder str = new StringBuilder();
-		if (Utils.notEmpty(msg)) {
+		if (!IsEmpty(msg)) {
 			str.append(msg)
 				.append(" - ");
 		}
@@ -356,7 +358,7 @@ public abstract class xLog {
 		// defined handlers
 		{
 			final xLogHandler[] hands = this.handlers.toArray(new xLogHandler[0]);
-			if (Utils.notEmpty(hands))
+			if (!IsEmpty(hands))
 				return hands;
 		}
 		// default handler

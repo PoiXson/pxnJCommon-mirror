@@ -1,5 +1,8 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.Utils.IsEmpty;
+import static com.poixson.utils.Utils.SafeClose;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
@@ -33,7 +36,7 @@ public final class FileUtils {
 
 
 	public static String SearchLocalFile(final String fileNames[], final int parents) {
-		if (Utils.isEmpty(fileNames)) throw new RequiredArgumentException("fileNames");
+		if (IsEmpty(fileNames)) throw new RequiredArgumentException("fileNames");
 		final String[] workingPaths = (
 			FileUtils.inRunDir()
 			? new String[] { FileUtils.cwd() }
@@ -67,13 +70,13 @@ public final class FileUtils {
 			final String fileLocal, final String fileRes)
 			throws FileNotFoundException {
 		// local file
-		if (Utils.notEmpty(fileLocal)) {
+		if (!IsEmpty(fileLocal)) {
 			final File path = new File(fileLocal);
 			if (path.isFile())
 				return true;
 		}
 		// resource file
-		if (Utils.notEmpty(fileRes)) {
+		if (!IsEmpty(fileRes)) {
 			final URL url = clss.getResource(fileRes);
 			if (url != null)
 				return false;
@@ -102,7 +105,7 @@ public final class FileUtils {
 	private static void populateCwd() {
 		if (cwd.get() != null) return;
 		final String path = System.getProperty("user.dir");
-		if (Utils.notEmpty(path)) {
+		if (!IsEmpty(path)) {
 			cwd.compareAndSet(null, path);
 			return;
 		}
@@ -132,7 +135,7 @@ public final class FileUtils {
 		final CodeSource source = FileUtils.class.getProtectionDomain().getCodeSource();
 		final String pathRaw = source.getLocation().getPath();
 		final String path = StringUtils.decodeDef(pathRaw, pathRaw);
-		if (Utils.isEmpty(path)) throw new RuntimeException("Failed to get pwd path");
+		if (IsEmpty(path)) throw new RuntimeException("Failed to get pwd path");
 		final int pos = path.lastIndexOf('/');
 		if (pos < 0) throw new RuntimeException("Invalid pwd path: "+path);
 		pwd.compareAndSet(null, StringUtils.ceTrim(   path.substring(0, pos),  '/' ));
@@ -142,22 +145,22 @@ public final class FileUtils {
 
 
 	public static boolean isDir(final String pathStr) {
-		if (Utils.isEmpty(pathStr)) return false;
+		if (IsEmpty(pathStr)) return false;
 		final File path = new File(pathStr);
 		return ( path.exists() && path.isDirectory() );
 	}
 	public static boolean isFile(final String fileStr) {
-		if (Utils.isEmpty(fileStr)) return false;
+		if (IsEmpty(fileStr)) return false;
 		final File file = new File(fileStr);
 		return ( file.exists() && file.isFile() );
 	}
 	public static boolean isReadable(final String pathStr) {
-		if (Utils.isEmpty(pathStr)) return false;
+		if (IsEmpty(pathStr)) return false;
 		final File path = new File(pathStr);
 		return ( path.exists() && path.canRead() );
 	}
 	public static boolean isWritable(final String pathStr) {
-		if (Utils.isEmpty(pathStr)) return false;
+		if (IsEmpty(pathStr)) return false;
 		final File path = new File(pathStr);
 		return ( path.exists() && path.canWrite() );
 	}
@@ -165,13 +168,11 @@ public final class FileUtils {
 
 
 	public static long GetLastModified(final String fileStr) throws IOException {
-		if (Utils.isEmpty(fileStr))
-			return 0;
+		if (IsEmpty(fileStr)) return 0;
 		return GetLastModified( Paths.get(fileStr) );
 	}
 	public static long GetLastModified(final File file) throws IOException {
-		if (file == null)
-			return 0;
+		if (file == null) return 0;
 		return GetLastModified( file.toPath() );
 	}
 	public static long GetLastModified(final Path path) throws IOException {
@@ -225,12 +226,11 @@ public final class FileUtils {
 
 
 	public static String MergePaths(final String...strings) {
-		if (Utils.isEmpty(strings))
-			return null;
+		if (IsEmpty(strings)) return null;
 		boolean isAbsolute = false;
 		// maintain absolute
 		for (int index=0; index<strings.length; index++) {
-			if (Utils.isEmpty(strings[index])) continue;
+			if (IsEmpty(strings[index])) continue;
 			if (strings[index].startsWith("/")
 			||  strings[index].startsWith("\\")) {
 				isAbsolute = true;
@@ -246,13 +246,13 @@ public final class FileUtils {
 			// remove nulls/blanks
 			PARTS_ARRAY:
 			for (final String str : array) {
-				if (Utils.isEmpty(str)) continue PARTS_ARRAY;
+				if (IsEmpty(str)) continue PARTS_ARRAY;
 				final String s =
 					StringUtils.sTrim(
 						str,
 						" ", "\t", "\r", "\n"
 					);
-				if (Utils.isEmpty(s)) continue PARTS_ARRAY;
+				if (IsEmpty(s)) continue PARTS_ARRAY;
 				if (count > 0) {
 					if (".".equals(s)) continue PARTS_ARRAY;
 					if (",".equals(s)) continue PARTS_ARRAY;
@@ -320,7 +320,7 @@ public final class FileUtils {
 	 * @return InputStream of the open file, or null on failure.
 	 */
 	public static InputStream OpenResource(final Class<? extends Object> clssRef, final String fileStr) {
-		if (Utils.isEmpty(fileStr)) throw new RequiredArgumentException("fileStr");
+		if (IsEmpty(fileStr)) throw new RequiredArgumentException("fileStr");
 		final Class<? extends Object> clss = (clssRef==null ? FileUtils.class : clssRef);
 		return clss.getResourceAsStream( StringUtils.ForceStarts("/", fileStr) );
 	}
@@ -329,13 +329,13 @@ public final class FileUtils {
 
 	// copy jar resource to file
 	public static void ExportResource(final String targetFileStr, final InputStream in) throws IOException {
-		if (Utils.isEmpty(targetFileStr)) throw new RequiredArgumentException("targetFileStr");
-		if (in == null)                   throw new RequiredArgumentException("in");
+		if (IsEmpty(targetFileStr)) throw new RequiredArgumentException("targetFileStr");
+		if (in == null)             throw new RequiredArgumentException("in");
 		final File file = new File(targetFileStr);
 		try {
 			Files.copy(in, file.toPath());
 		} finally {
-			Utils.SafeClose(in);
+			SafeClose(in);
 		}
 	}
 

@@ -1,6 +1,7 @@
 package com.poixson.threadpool;
 
 import static com.poixson.threadpool.xThreadPool.WORKER_START_TIMEOUT;
+import static com.poixson.utils.Utils.IsEmpty;
 
 import java.lang.ref.SoftReference;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -12,7 +13,6 @@ import com.poixson.logger.xLog;
 import com.poixson.tools.CoolDown;
 import com.poixson.tools.abstractions.xStartable;
 import com.poixson.utils.ThreadUtils;
-import com.poixson.utils.Utils;
 
 
 public class xThreadPoolWorker implements xStartable, Runnable {
@@ -273,9 +273,8 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 
 	public String getWorkerName() {
 		// custom name
-		if (Utils.notEmpty(this.worker_name)) {
+		if (!IsEmpty(this.worker_name))
 			return this.worker_name;
-		}
 		// generated name
 		if (this.worker_name_cached.get() == null) {
 			final String name =

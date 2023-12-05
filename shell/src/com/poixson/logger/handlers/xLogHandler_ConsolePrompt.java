@@ -126,7 +126,7 @@ public class xLogHandler_ConsolePrompt extends xLogHandler_Console implements xS
 //this.resetReadCool();
 			}
 			// handle console input
-			if (Utils.notEmpty(line)) {
+			if (!IsEmpty(line)) {
 //TODO: remove this
 log.publish("GOT INPUT: "+line);
 			}
@@ -187,7 +187,7 @@ log.publish("GOT INPUT: "+line);
 	public void publish(final String line) {
 		this.getPublishLock();
 		try {
-			if (Utils.isEmpty(line)) {
+			if (IsEmpty(line)) {
 				this.out.println();
 			} else {
 				final int promptLength = this.getPromptLineLength();

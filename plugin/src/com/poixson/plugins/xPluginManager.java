@@ -1,5 +1,7 @@
 package com.poixson.plugins;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -10,7 +12,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.plugins.loaders.xPluginLoader;
-import com.poixson.utils.Utils;
 
 
 public abstract class xPluginManager<T extends xJavaPlugin> {
@@ -235,15 +236,13 @@ public abstract class xPluginManager<T extends xJavaPlugin> {
 	}
 
 	public T getPlugin(final String pluginName) {
-		if (Utils.isEmpty(pluginName))
-			return null;
-		return this.plugins.get(pluginName);
+		return (IsEmpty(pluginName) ? null : this.plugins.get(pluginName));
 	}
 
 
 
 	public boolean isPluginLoaded(final String plugin_name) {
-		if (Utils.isEmpty(plugin_name)) throw new RequiredArgumentException("plugin_name");
+		if (IsEmpty(plugin_name)) throw new RequiredArgumentException("plugin_name");
 		return this.plugins.containsKey(plugin_name);
 	}
 	public boolean isPluginLoaded(final T plugin) {

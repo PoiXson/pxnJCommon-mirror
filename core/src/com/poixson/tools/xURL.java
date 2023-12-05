@@ -1,8 +1,10 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import com.poixson.utils.NumberUtils;
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
+
 
 // protocol:[//[user[:password]@]host[:port]][/path]
 public class xURL {
@@ -149,9 +151,8 @@ public class xURL {
 		}
 		// path
 		{
-			if (Utils.notEmpty(buf)) {
+			if (!IsEmpty(buf))
 				this.path = buf;
-			}
 		}
 		return this;
 	}
@@ -167,25 +168,16 @@ public class xURL {
 		final String host     = this.host;
 		final int    port     = this.port;
 		final String path     = this.path;
-		if (Utils.notEmpty(protocol)) {
+		if (!IsEmpty(protocol))
 			str.append(protocol).append("://");
-		}
-		if (Utils.notEmpty(user) || Utils.notEmpty(pass)) {
-			if (Utils.notEmpty(user)) {
-				str.append(user);
-			}
-			if (Utils.notEmpty(pass)) {
-				str.append(':').append(pass);
-			}
+		if (!IsEmpty(user) || !IsEmpty(pass)) {
+			if (!IsEmpty(user)) str.append(user);
+			if (!IsEmpty(pass)) str.append(':').append(pass);
 			str.append('@');
 		}
 		str.append(host);
-		if (port > 0) {
-			str.append(':').append(port);
-		}
-		if (Utils.notEmpty(path)) {
-			str.append(path);
-		}
+		if (port > 0)       str.append(':').append(port);
+		if (!IsEmpty(path)) str.append(path);
 		return str.toString();
 	}
 
@@ -200,7 +192,7 @@ public class xURL {
 		return this.protocol;
 	}
 	public boolean hasProtocol() {
-		return Utils.notEmpty(this.protocol);
+		return !IsEmpty(this.protocol);
 	}
 
 
@@ -214,7 +206,7 @@ public class xURL {
 		return this.user;
 	}
 	public boolean hasUser() {
-		return Utils.notEmpty(this.user);
+		return !IsEmpty(this.user);
 	}
 
 
@@ -228,7 +220,7 @@ public class xURL {
 		return this.pass;
 	}
 	public boolean hasPass() {
-		return Utils.notEmpty(this.pass);
+		return !IsEmpty(this.pass);
 	}
 
 
@@ -242,7 +234,7 @@ public class xURL {
 		return this.host;
 	}
 	public boolean hasHost() {
-		return Utils.notEmpty(this.host);
+		return !IsEmpty(this.host);
 	}
 
 
@@ -279,7 +271,7 @@ public class xURL {
 		return this.path;
 	}
 	public boolean hasPath() {
-		return Utils.notEmpty(this.path);
+		return !IsEmpty(this.path);
 	}
 
 

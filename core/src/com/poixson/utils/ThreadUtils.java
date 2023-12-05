@@ -1,5 +1,7 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.awt.EventQueue;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
@@ -46,7 +48,7 @@ public final class ThreadUtils {
 			if (!includeDaemon && thread.isDaemon())
 				continue THREAD_LOOP;
 			final String name = thread.getName();
-			if (Utils.isEmpty(name))
+			if (IsEmpty(name))
 				continue THREAD_LOOP;
 			if (!includeDaemon && name.startsWith("main:"))
 				continue THREAD_LOOP;
@@ -78,7 +80,7 @@ public final class ThreadUtils {
 //		if (xVars.notDebug()) return;
 		final String[] threadNames = GetThreadNames(false);
 		// no threads still running
-		if (Utils.isEmpty(threadNames)) return;
+		if (IsEmpty(threadNames)) return;
 		// build message
 		final StringBuilder msg = new StringBuilder();
 		msg.append("Threads still running: [")

@@ -1,12 +1,14 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.Utils.IsEmpty;
+import static com.poixson.utils.Utils.SafeClose;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 
 public class AppProps {
@@ -45,7 +47,7 @@ public class AppProps {
 			props = new Properties();
 			props.load(in);
 		} finally {
-			Utils.SafeClose(in);
+			SafeClose(in);
 		}
 		return new AppProps(props);
 	}
@@ -63,7 +65,7 @@ public class AppProps {
 		// commit hash
 		{
 			final String hash = props.getProperty("commit");
-			if (Utils.isEmpty(hash)) {
+			if (IsEmpty(hash)) {
 				this.commitHashFull  = null;
 				this.commitHashShort = null;
 			} else

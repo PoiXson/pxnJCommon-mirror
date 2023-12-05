@@ -67,8 +67,8 @@ public final class NativeUtils {
 			final String outputDir, final String resourcePath,
 			final String fileName, final Class<?> classRef)
 			throws IOException {
-		if (Utils.isEmpty(fileName)) throw new RequiredArgumentException("fileName");
-		if (classRef == null       ) throw new RequiredArgumentException("classRef");
+		if (IsEmpty(fileName)) throw new RequiredArgumentException("fileName");
+		if (classRef == null)  throw new RequiredArgumentException("classRef");
 		// prepare paths
 		final String resPath =
 			FileUtils.MergePaths(
@@ -113,8 +113,8 @@ public final class NativeUtils {
 		} catch (FileNotFoundException e) {
 			throw new IOException("Cannot write to file: "+outFilePath, e);
 		} finally {
-			Utils.SafeClose(out);
-			Utils.SafeClose(in);
+			SafeClose(out);
+			SafeClose(in);
 		}
 	}
 

@@ -162,7 +162,7 @@ public class xClock {
 		} catch (Exception e) {
 			log.trace(e);
 		} finally {
-			Utils.SafeClose(socket);
+			SafeClose(socket);
 			this.lastChecked = time;
 			this.running.set(false);
 			this.thread.set(null);

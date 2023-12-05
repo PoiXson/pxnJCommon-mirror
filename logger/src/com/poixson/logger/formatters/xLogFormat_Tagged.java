@@ -1,5 +1,8 @@
 package com.poixson.logger.formatters;
 
+import static com.poixson.utils.Utils.IfEmpty;
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.text.SimpleDateFormat;
 
 import com.poixson.logger.xLevel;
@@ -7,7 +10,6 @@ import com.poixson.logger.xLogFormat;
 import com.poixson.logger.records.xLogRecord;
 import com.poixson.logger.records.xLogRecord_Msg;
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 
 public class xLogFormat_Tagged implements xLogFormat {
@@ -27,9 +29,9 @@ public class xLogFormat_Tagged implements xLogFormat {
 
 	public xLogFormat_Tagged(final String format,
 			final String formatCrumbs, final String formatTime) {
-		this.format      = Utils.ifEmpty(format,       DEFAULT_FORMAT);
-		this.formatTime  = Utils.ifEmpty(formatTime,   DEFAULT_FORMAT_TIME);
-		this.formatCrumb = Utils.ifEmpty(formatCrumbs, DEFAULT_FORMAT_CRUMB);
+		this.format      = IfEmpty(format,       DEFAULT_FORMAT);
+		this.formatTime  = IfEmpty(formatTime,   DEFAULT_FORMAT_TIME);
+		this.formatCrumb = IfEmpty(formatCrumbs, DEFAULT_FORMAT_CRUMB);
 		this.containsTime   = this.format.contains("{time}"  );
 		this.containsLevel  = this.format.contains("{level}" );
 		this.containsCrumbs = this.format.contains("{crumbs}");
@@ -60,7 +62,7 @@ public class xLogFormat_Tagged implements xLogFormat {
 				result = result.replace("{time}", this.genTimestamp(record));
 			if (this.containsLevel) {
 				final String levelStr = record.getLevelName();
-				if (Utils.notEmpty(levelStr))
+				if (!IsEmpty(levelStr))
 					result = result.replace("{level}", StringUtils.PadCenter(7, levelStr, ' '));
 			}
 			if (this.containsCrumbs)
@@ -73,11 +75,11 @@ public class xLogFormat_Tagged implements xLogFormat {
 
 	protected String genCrumbs(final xLogRecord_Msg record, final String formatCrumb) {
 		final String[] tree = record.getNameTree();
-		if (Utils.isEmpty(tree))
+		if (IsEmpty(tree))
 			return "";
 		final String[] parts = StringUtils.Split(formatCrumb, '{', '}');
 		final String start, mid, end;
-		if (Utils.isEmpty(parts)) {
+		if (IsEmpty(parts)) {
 			start = "";
 			mid   = ",";
 			end   = "";
@@ -149,7 +151,7 @@ public class xLogFormat_Tagged implements xLogFormat {
 	protected String genTimestamp(final xLogRecord_Msg record, final String format) {
 		final SimpleDateFormat dateFormat =
 			new SimpleDateFormat(
-				Utils.ifEmpty(format, DEFAULT_FORMAT_TIME)
+				IfEmpty(format, DEFAULT_FORMAT_TIME)
 			);
 		return dateFormat.format( Long.valueOf(record.timestamp) );
 	}

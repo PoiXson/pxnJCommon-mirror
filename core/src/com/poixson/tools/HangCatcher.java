@@ -1,12 +1,13 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.tools.abstractions.xStartable;
 import com.poixson.utils.ThreadUtils;
-import com.poixson.utils.Utils;
 
 
 public class HangCatcher implements xStartable, Runnable {
@@ -84,7 +85,7 @@ public class HangCatcher implements xStartable, Runnable {
 			if (!this.thread.compareAndSet(null, thread))
 				return;
 			thread.setDaemon(true);
-			if (Utils.isEmpty(this.name)) {
+			if (IsEmpty(this.name)) {
 				thread.setName("HangCatcher");
 			} else {
 				thread.setName(

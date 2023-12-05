@@ -1,5 +1,8 @@
 package com.poixson.plugins.loaders;
 
+import static com.poixson.utils.Utils.IfEmpty;
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -12,7 +15,6 @@ import com.poixson.logger.xLog;
 import com.poixson.plugins.xJavaPlugin;
 import com.poixson.plugins.xPluginManager;
 import com.poixson.plugins.xPluginYML;
-import com.poixson.utils.Utils;
 
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.Resource;
@@ -36,7 +38,7 @@ public abstract class xPluginLoader<T extends xJavaPlugin> {
 	public xPluginLoader(final xPluginManager<T> manager,
 			final xPluginFactory<T> factory, final String keyClassMain) {
 		this.manager      = manager;
-		this.keyClassMain = Utils.ifEmpty(keyClassMain, DEFAULT_KEY_CLASS_MAIN);
+		this.keyClassMain = IfEmpty(keyClassMain, DEFAULT_KEY_CLASS_MAIN);
 		this.factory = factory;
 	}
 
@@ -66,7 +68,7 @@ public abstract class xPluginLoader<T extends xJavaPlugin> {
 				throw new IOException("Multiple " + DEFAULT_PLUGIN_YML_FILE + " files found in plugin: " + file.getName());
 			final Resource res = resources.get(0);
 			yml = this.loadPluginYML(res);
-			if (Utils.isEmpty(yml.getMainClass())) {
+			if (IsEmpty(yml.getMainClass())) {
 				this.log().warning("'%s' not set in %s of %s", this.keyClassMain, DEFAULT_PLUGIN_YML_FILE, file.getName());
 				return null;
 			}
@@ -77,7 +79,7 @@ public abstract class xPluginLoader<T extends xJavaPlugin> {
 			throw new IOException("Plugin already loaded: " + plugin_name);
 		// load plugin instance
 		final String class_main = yml.getMainClass();
-		if (Utils.isEmpty(class_main)) {
+		if (IsEmpty(class_main)) {
 			throw new IOException(String.format(
 				"Class key: %s not found in plugin: %s",
 				this.keyClassMain,
@@ -107,13 +109,13 @@ public abstract class xPluginLoader<T extends xJavaPlugin> {
 		return this.loadPluginYML(res.getContentAsString());
 	}
 	public xPluginYML loadPluginYML(final String data) {
-		if (Utils.isEmpty(data)) return null;
+		if (IsEmpty(data)) return null;
 		final Yaml yml = new Yaml();
 		final Map<String, Object> datamap = yml.load(data);
 		return this.loadPluginYML(datamap);
 	}
 	public xPluginYML loadPluginYML(final Map<String, Object> datamap) {
-		if (Utils.isEmpty(datamap)) return null;
+		if (IsEmpty(datamap)) return null;
 		return new xPluginYML(datamap, this.keyClassMain);
 	}
 

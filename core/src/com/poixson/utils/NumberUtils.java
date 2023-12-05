@@ -1,5 +1,7 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.text.DecimalFormat;
 
 import com.poixson.tools.Keeper;
@@ -172,7 +174,7 @@ public final class NumberUtils {
 
 	// is number
 	public static boolean IsNumeric(final String value) {
-		if (Utils.isEmpty(value)) return false;
+		if (IsEmpty(value)) return false;
 		return (ToLong(value) != null);
 	}
 	// is boolean
@@ -184,7 +186,7 @@ public final class NumberUtils {
 
 	// parse number
 	public static Integer ToInteger(final String value) {
-		if (Utils.isEmpty(value)) return null;
+		if (IsEmpty(value)) return null;
 		try {
 			return Integer.valueOf( Integer.parseInt(value) );
 		} catch (NumberFormatException ignore) {}
@@ -208,7 +210,7 @@ public final class NumberUtils {
 
 	// parse byte
 	public static Byte ToByte(final String value) {
-		if (Utils.isEmpty(value)) return null;
+		if (IsEmpty(value)) return null;
 		try {
 			return Byte.valueOf( Byte.parseByte(value) );
 		} catch (NumberFormatException ignore) {}
@@ -232,7 +234,7 @@ public final class NumberUtils {
 
 	// parse short
 	public static Short ToShort(final String value) {
-		if (Utils.isEmpty(value)) return null;
+		if (IsEmpty(value)) return null;
 		try {
 			return Short.valueOf( Short.parseShort(value) );
 		} catch (NumberFormatException ignore) {}
@@ -256,7 +258,7 @@ public final class NumberUtils {
 
 	// parse long
 	public static Long ToLong(final String value) {
-		if (Utils.isEmpty(value)) return null;
+		if (IsEmpty(value)) return null;
 		try {
 			return Long.valueOf( Long.parseLong(value) );
 		} catch (NumberFormatException ignore) {}
@@ -280,7 +282,7 @@ public final class NumberUtils {
 
 	// parse double
 	public static Double ToDouble(final String value) {
-		if (Utils.isEmpty(value)) return null;
+		if (IsEmpty(value)) return null;
 		try {
 			return Double.valueOf( Double.parseDouble(value) );
 		} catch (NumberFormatException ignore) {}
@@ -304,7 +306,7 @@ public final class NumberUtils {
 
 	// parse float
 	public static Float ToFloat(final String value) {
-		if (Utils.isEmpty(value)) return null;
+		if (IsEmpty(value)) return null;
 		try {
 			return Float.valueOf( Float.parseFloat(value) );
 		} catch (NumberFormatException ignore) {}
@@ -328,7 +330,7 @@ public final class NumberUtils {
 
 	// parse boolean
 	public static Boolean ToBoolean(final String value) {
-		if (Utils.isEmpty(value)) return null;
+		if (IsEmpty(value)) return null;
 		final String val = value.trim().toLowerCase();
 		for (final String v : TRUE_VALUES) {
 			if (val.equals(v))

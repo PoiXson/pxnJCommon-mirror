@@ -1,5 +1,7 @@
 package com.poixson.app.commands;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicReference;
@@ -9,7 +11,6 @@ import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.tools.events.xHandler;
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 
 public class xCommandProcessor extends xHandler<xCommand> {
@@ -95,7 +96,7 @@ public class xCommandProcessor extends xHandler<xCommand> {
 	}
 	@Override
 	public void unregister(final Object object, final String methodName) {
-		if (object == null || Utils.isEmpty(methodName)) return;
+		if (object == null || IsEmpty(methodName)) return;
 		//REMOVE_LOOP:
 		for (int loops=0; loops<10; loops++) {
 			final xCommandDAO[] previous = this.commands.get();
@@ -137,8 +138,7 @@ public class xCommandProcessor extends xHandler<xCommand> {
 
 
 	public boolean process(final String line) {
-		if (Utils.isEmpty(line))
-			return false;
+		if (IsEmpty(line)) return false;
 		final xCommandDAO dao =
 			this.findCommand(
 				StringUtils.FirstPart(line, ' ')
@@ -149,7 +149,7 @@ public class xCommandProcessor extends xHandler<xCommand> {
 		return true;
 	}
 	protected xCommandDAO findCommand(final String cmd) {
-		if (Utils.isEmpty(cmd)) return null;
+		if (IsEmpty(cmd)) return null;
 		// find matching command
 		{
 			final xCommandDAO[] cmds = this.getCommands();

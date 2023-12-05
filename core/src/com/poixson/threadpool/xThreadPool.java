@@ -1,5 +1,7 @@
 package com.poixson.threadpool;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.lang.ref.SoftReference;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,7 +20,6 @@ import com.poixson.tools.Keeper;
 import com.poixson.tools.xTime;
 import com.poixson.tools.abstractions.RunnableMethod;
 import com.poixson.tools.abstractions.xStartable;
-import com.poixson.utils.Utils;
 
 
 public abstract class xThreadPool implements xStartable, Runnable {
@@ -63,7 +64,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 
 	protected xThreadPool(final String pool_name) {
-		if (Utils.isEmpty(pool_name)) throw new RequiredArgumentException("pool_name");
+		if (IsEmpty(pool_name)) throw new RequiredArgumentException("pool_name");
 		if (StoppingAll.get())
 			throw new IllegalStateException("Cannot create new thread pool, already stopping all!");
 		this.pool_name = pool_name;
@@ -286,7 +287,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 			final String taskName, final Runnable run) {
 		if (run instanceof xThreadPoolTask) {
 			final xThreadPoolTask task = (xThreadPoolTask) run;
-			if (Utils.notEmpty(taskName))
+			if (!IsEmpty(taskName))
 				task.setTaskName(taskName);
 			this.addTask(priority, task);
 			return task;
@@ -432,9 +433,9 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	public boolean proper(
 			final Object callingFrom, final String methodName,
 			final xThreadTaskPriority priority, final Object...args) {
-		if (callingFrom == null)       throw new RequiredArgumentException("callingFrom");
-		if (Utils.isEmpty(methodName)) throw new RequiredArgumentException("methodName");
-		if (priority == null)          throw new RequiredArgumentException("priority");
+		if (callingFrom == null) throw new RequiredArgumentException("callingFrom");
+		if (IsEmpty(methodName)) throw new RequiredArgumentException("methodName");
+		if (priority == null)    throw new RequiredArgumentException("priority");
 		// already running in correct thread
 		if (this.isCurrentThread())
 			return false;
@@ -475,9 +476,9 @@ public abstract class xThreadPool implements xStartable, Runnable {
 			final Object callingFrom, final String methodName,
 			final xThreadTaskPriority priority, final Object...args)
 			throws ContinueException {
-		if (callingFrom == null)       throw new RequiredArgumentException("callingFrom");
-		if (Utils.isEmpty(methodName)) throw new RequiredArgumentException("methodName");
-		if (priority == null)          throw new RequiredArgumentException("priority");
+		if (callingFrom == null) throw new RequiredArgumentException("callingFrom");
+		if (IsEmpty(methodName)) throw new RequiredArgumentException("methodName");
+		if (priority == null)    throw new RequiredArgumentException("priority");
 		// already running in correct thread
 		if (this.isCurrentThread())
 			throw new ContinueException();

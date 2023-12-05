@@ -2,6 +2,7 @@ package com.poixson.app;
 
 import static com.poixson.app.xAppDefines.EXIT_HUNG;
 import static com.poixson.utils.Utils.GetMS;
+import static com.poixson.utils.Utils.IsEmpty;
 
 import java.io.IOException;
 import java.lang.ref.SoftReference;
@@ -33,7 +34,6 @@ import com.poixson.utils.FileUtils;
 import com.poixson.utils.ProcUtils;
 import com.poixson.utils.StringUtils;
 import com.poixson.utils.ThreadUtils;
-import com.poixson.utils.Utils;
 
 
 /*
@@ -92,7 +92,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		xDebug.Init();
 		// search for .debug file
 		if (!xDebug.isDebug()) {
-			if (Utils.notEmpty(xAppDefines.SEARCH_DEBUG_FILES)) {
+			if (!IsEmpty(xAppDefines.SEARCH_DEBUG_FILES)) {
 				final String result =
 					FileUtils.SearchLocalFile(
 						xAppDefines.SEARCH_DEBUG_FILES,
@@ -129,7 +129,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		return Get(classType.getName());
 	}
 	public static xApp Get(final String classType) {
-		if (Utils.isEmpty(classType)) throw new RequiredArgumentException("classType");
+		if (IsEmpty(classType)) throw new RequiredArgumentException("classType");
 		final Iterator<xApp> it = apps.iterator();
 		while (it.hasNext()) {
 			final xApp app = it.next();
@@ -583,9 +583,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 		return this.props.name;
 	}
 	public String getTitle() {
-		if (Utils.notEmpty(this.props.title))
-			return this.props.title;
-		return this.getName();
+		return (IsEmpty(this.props.title) ? this.getName() : this.props.title);
 	}
 	public String getVersion() {
 		return this.props.version;

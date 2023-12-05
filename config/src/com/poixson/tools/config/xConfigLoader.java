@@ -1,5 +1,8 @@
 package com.poixson.tools.config;
 
+import static com.poixson.utils.Utils.IsEmpty;
+import static com.poixson.utils.Utils.SafeClose;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,7 +19,6 @@ import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.utils.FileUtils;
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 
 public final class xConfigLoader {
@@ -82,8 +84,8 @@ public final class xConfigLoader {
 
 	// load file
 	public static <T extends xConfig> T FromFile(final String filePath, final Class<T> clss) {
-		if (Utils.isEmpty(filePath)) throw new RequiredArgumentException("filePath");
-		if (clss == null)            throw new RequiredArgumentException("clss");
+		if (IsEmpty(filePath)) throw new RequiredArgumentException("filePath");
+		if (clss == null)      throw new RequiredArgumentException("clss");
 		final String fileStr = StringUtils.ForceEnds(".yml", filePath);
 		final File file = new File(fileStr);
 
@@ -95,7 +97,7 @@ public final class xConfigLoader {
 				datamap = LoadYamlFromStream(in);
 			} catch (FileNotFoundException ignore) {
 			} finally {
-				Utils.SafeClose(in);
+				SafeClose(in);
 			}
 		}
 		return NewConfig(datamap, clss);
@@ -105,8 +107,8 @@ public final class xConfigLoader {
 
 	// load jar resource
 	public static <T extends xConfig> T FromJar(final String filePath, final Class<T> clss) {
-		if (Utils.isEmpty(filePath)) throw new RequiredArgumentException("filePath");
-		if (clss == null)            throw new RequiredArgumentException("clss");
+		if (IsEmpty(filePath)) throw new RequiredArgumentException("filePath");
+		if (clss == null)      throw new RequiredArgumentException("clss");
 		final String fileStr = StringUtils.ForceEnds(".yml", filePath);
 		InputStream in = null;
 		try {
@@ -116,7 +118,7 @@ public final class xConfigLoader {
 			if (datamap == null) return null;
 			return NewConfig(datamap, clss);
 		} finally {
-			Utils.SafeClose(in);
+			SafeClose(in);
 		}
 	}
 
@@ -125,8 +127,8 @@ public final class xConfigLoader {
 	// load file or jar (copy from jar to filesystem if doesn't exist)
 	public static <T extends xConfig> T FromFileOrJar(final String filePath, final Class<T> clss)
 			throws CreateDefaultYmlFileException {
-		if (Utils.isEmpty(filePath)) throw new RequiredArgumentException("filePath");
-		if (clss == null)            throw new RequiredArgumentException("clss");
+		if (IsEmpty(filePath)) throw new RequiredArgumentException("filePath");
+		if (clss == null)      throw new RequiredArgumentException("clss");
 		final String fileStr = StringUtils.ForceEnds(".yml", filePath);
 		try {
 			// attempt loading from file

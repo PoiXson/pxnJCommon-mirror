@@ -1,5 +1,7 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import com.poixson.tools.Keeper;
 
 
@@ -62,7 +64,7 @@ public final class SanUtils {
 		return FileName(text, "_");
 	}
 	public static String FileName(final String text, final String replacement) {
-		if (Utils.isEmpty(text)) return null;
+		if (IsEmpty(text)) return null;
 		return text.replaceAll(
 			"[^a-zA-Z0-9\\._-]+",
 			(replacement == null ? "" : replacement)
@@ -78,7 +80,7 @@ public final class SanUtils {
 
 
 	public static String ValidateStringEnum(final String value, final String...valids) {
-		if (Utils.isEmpty(value)) return null;
+		if (IsEmpty(value)) return null;
 		if (valids.length == 0)   return null;
 		for (final String v : valids) {
 			if (v == null || v.isEmpty()) continue;

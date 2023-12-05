@@ -31,7 +31,7 @@ public class JTextFieldGhostable extends JTextField implements FocusListener {
 		this.addFocusListener(this);
 		this.defaultForeground = this.getForeground();
 		this.ghostText.set( Utils.ifEmpty(ghostText, "") );
-		if (Utils.isEmpty(text)) {
+		if (IsEmpty(text)) {
 			this.ghosting.set(true);
 			this.update();
 		} else {
@@ -70,7 +70,7 @@ public class JTextFieldGhostable extends JTextField implements FocusListener {
 
 	@Override
 	public void setText(final String text) {
-		if (Utils.isEmpty(text)) {
+		if (IsEmpty(text)) {
 			this.setGhosting(true);
 		} else {
 			this.setGhosting(false);
@@ -105,11 +105,8 @@ public class JTextFieldGhostable extends JTextField implements FocusListener {
 	}
 	@Override
 	public void focusLost(final FocusEvent event) {
-		if (Utils.isEmpty(super.getText())) {
-			this.setGhosting(true);
-		} else {
-			this.update();
-		}
+		if (IsEmpty(super.getText())) this.setGhosting(true);
+		else                          this.update();
 	}
 
 

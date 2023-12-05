@@ -1,5 +1,7 @@
 package com.poixson.tools.events;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicLong;
@@ -7,7 +9,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.threadpool.types.xThreadPool_Main;
-import com.poixson.utils.Utils;
 
 
 public class xEventListenerDAO {
@@ -70,11 +71,11 @@ public class xEventListenerDAO {
 	}
 	public boolean isMethod(final Object object, final String methodName) {
 		if (object == null) return false;
-		if (Utils.isEmpty(methodName)) return false;
 		if ( ! object.equals(this.object) )
 			return false;
 		if ( ! methodName.equals(this.method.getName()) )
 			return false;
+		if (IsEmpty(methodName)) return false;
 		return true;
 	}
 

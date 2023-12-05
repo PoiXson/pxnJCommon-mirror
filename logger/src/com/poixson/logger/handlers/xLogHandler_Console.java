@@ -1,5 +1,7 @@
 package com.poixson.logger.handlers;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.io.InputStream;
 import java.io.PrintStream;
 
@@ -8,7 +10,6 @@ import com.poixson.logger.xLogHandler;
 import com.poixson.logger.records.xLogRecord;
 import com.poixson.tools.StdIO;
 import com.poixson.utils.ShellUtils;
-import com.poixson.utils.Utils;
 
 
 public class xLogHandler_Console extends xLogHandler {
@@ -45,7 +46,7 @@ public class xLogHandler_Console extends xLogHandler {
 		this.getPublishLock();
 		try {
 			final String msg = this.format(record);
-			if (Utils.isEmpty(msg)) {
+			if (IsEmpty(msg)) {
 			} else
 			if ("\n".equals(msg)) {
 				this.out.println();

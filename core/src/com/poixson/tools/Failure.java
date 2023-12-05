@@ -1,5 +1,7 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -7,7 +9,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.poixson.logger.xLog;
 import com.poixson.utils.NumberUtils;
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 
 public final class Failure {
@@ -67,7 +68,7 @@ public final class Failure {
 				return;
 			}
 		}
-		if (Utils.notEmpty(msg)) {
+		if (!IsEmpty(msg)) {
 			this.messages.add(
 				String.format(msg, args)
 			);

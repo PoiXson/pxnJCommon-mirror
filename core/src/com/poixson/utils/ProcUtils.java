@@ -1,5 +1,7 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.util.List;
@@ -46,7 +48,7 @@ public final class ProcUtils {
 			final RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
 			if (bean != null) {
 				final String procName = bean.getName();
-				if (Utils.notEmpty(procName)) {
+				if (!IsEmpty(procName)) {
 					final String[] parts = procName.split("@", 2);
 					if (parts != null) {
 						if (parts.length == 2) {
@@ -67,14 +69,14 @@ public final class ProcUtils {
 	// single instance lock
 	public static boolean lockInstance(final String filepath) {
 		String path = filepath;
-		if (Utils.isEmpty(path)) {
+		if (IsEmpty(path)) {
 			final xApp app = xApp.peek();
 			if (app != null) {
 				final String appName = app.getName();
 				path = appName+".lock";
 			}
 		}
-		if (Utils.isEmpty(path)) throw new RequiredArgumentException("path");
+		if (IsEmpty(path)) throw new RequiredArgumentException("path");
 		final File file = new File(path);
 		RandomAccessFile access = null;
 		try {

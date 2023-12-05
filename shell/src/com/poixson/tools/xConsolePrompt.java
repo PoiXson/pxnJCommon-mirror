@@ -1,5 +1,7 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,7 +27,6 @@ import com.poixson.logger.xConsole;
 import com.poixson.logger.xLog;
 import com.poixson.utils.FileUtils;
 import com.poixson.utils.ThreadUtils;
-import com.poixson.utils.Utils;
 
 
 public class xConsolePrompt extends xConsole {
@@ -113,7 +114,7 @@ public class xConsolePrompt extends xConsole {
 //					this.getMask()
 				);
 				// handle line
-				if (Utils.notEmpty(line)) {
+				if (!IsEmpty(line)) {
 					final xCommandProcessor processor = this.app.getCommandProcessor();
 					if (processor == null) {
 						this.log().warning("No command processor to handle command: %s", line);

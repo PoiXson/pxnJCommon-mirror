@@ -1,6 +1,8 @@
 /*
 package com.poixson.tools.abstractions;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -28,8 +30,8 @@ public abstract class RemappedEventListener {
 
 
 	protected Method findMethod(final String methodStr, final Class<?> eventClass) {
-		if (Utils.isEmpty(methodStr)) return null;
-		if (eventClass == null)       return null;
+		if (IsEmpty(methodStr)) return null;
+		if (eventClass == null) return null;
 		Method method = null;
 		final Class<?> clss = this.container.getClass();
 		// method(event)

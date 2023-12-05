@@ -1,5 +1,8 @@
 package com.poixson.app.commands;
 
+import static com.poixson.utils.Utils.IfEmpty;
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -7,7 +10,6 @@ import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.events.xEventListenerDAO;
-import com.poixson.utils.Utils;
 
 
 public class xCommandDAO extends xEventListenerDAO {
@@ -20,9 +22,9 @@ public class xCommandDAO extends xEventListenerDAO {
 	public xCommandDAO(final String name, final String[] aliases,
 			final Object object, final Method method) {
 		super(object, method);
-		if (Utils.isEmpty(name)) throw new RequiredArgumentException("name");
+		if (IsEmpty(name)) throw new RequiredArgumentException("name");
 		this.name = name;
-		this.aliases = Utils.ifEmpty(aliases, null);
+		this.aliases = IfEmpty(aliases, null);
 	}
 
 
@@ -78,8 +80,7 @@ public class xCommandDAO extends xEventListenerDAO {
 	public boolean isAlias(final String cmd) {
 		if (cmd == null)
 			return false;
-		if (Utils.isEmpty(this.aliases))
-			return false;
+		if (IsEmpty(this.aliases)) return false;
 		for (final String alias : this.aliases) {
 			if (cmd.equals(alias))
 				return true;

@@ -71,10 +71,9 @@ public class NativeAutoLoader {
 		{
 			final String[] searchPaths =
 				this.searchPaths.toArray(new String[0]);
-			if (Utils.notEmpty(searchPaths)) {
-				for (final String path : searchPaths) {
+			if (!IsEmpty(searchPaths)) {
+				for (final String path : searchPaths)
 					loader.addSearchPath(path);
-				}
 			}
 		}
 		if (this.enableExtract != null)
@@ -88,9 +87,8 @@ public class NativeAutoLoader {
 
 	// extract/load library
 	public boolean load(final String fileName) {
-		if (Utils.notEmpty(fileName)) {
+		if (!IsEmpty(fileName))
 			this.setFileName(fileName);
-		}
 		return this.load();
 	}
 	public boolean load() {
@@ -106,7 +104,7 @@ public class NativeAutoLoader {
 	private boolean doLoad() {
 		final ErrorMode errorMode = this.getErrorMode();
 		final String fileName = this.getFileName();
-		if (Utils.isEmpty(fileName)) {
+		if (IsEmpty(fileName)) {
 			if (ErrorMode.EXCEPTION.equals(errorMode))
 				throw new RequiredArgumentException("fileName");
 			if (ErrorMode.LOG.equals(errorMode)) {
@@ -140,9 +138,9 @@ public class NativeAutoLoader {
 		}
 
 		// load from search paths
-		if (Utils.notEmpty(searchPaths)) {
+		if (!IsEmpty(searchPaths)) {
 			for (final String path : searchPaths) {
-				if (Utils.isEmpty(path)) continue;
+				if (IsEmpty(path)) continue;
 				final String searchPath =
 					FileUtils.MergePaths(
 						path,
@@ -278,7 +276,7 @@ System.out.println("SEARCH PATH: "+FileUtils.MergePaths(path, fileName));
 	// library file name
 	public String getFileName() {
 		String fileName = this.fileName;
-		if (Utils.isEmpty(fileName))
+		if (IsEmpty(fileName))
 			return null;
 //TODO: append file extension per os
 //		switch (os) {
@@ -296,7 +294,7 @@ System.out.println("SEARCH PATH: "+FileUtils.MergePaths(path, fileName));
 		return this;
 	}
 	public NativeAutoLoader setFileNameIfNull(final String fileName) {
-		if (Utils.isEmpty(this.fileName)) {
+		if (IsEmpty(this.fileName)) {
 			return this.setFileName(fileName);
 		}
 		return this;
@@ -327,7 +325,7 @@ System.out.println("SEARCH PATH: "+FileUtils.MergePaths(path, fileName));
 	public String getResourcesPath() {
 		final String path = this.resPath;
 		return (
-			Utils.isEmpty(path)
+			IsEmpty(path)
 			? null
 			: StringUtils.ForceStarts("/", path)
 		);
@@ -362,7 +360,7 @@ System.out.println("SEARCH PATH: "+FileUtils.MergePaths(path, fileName));
 		return this.searchPaths.toArray(new String[0]);
 	}
 	public NativeAutoLoader addSearchPath(final String path) {
-		if (Utils.notEmpty(path)) {
+		if (!IsEmpty(path)) {
 			if (!this.searchPaths.contains(path)) {
 				this.hasLoaded.set(false);
 				this.searchPaths.add(path);

@@ -1,5 +1,8 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.Utils.IsEmpty;
+import static com.poixson.utils.Utils.SafeClose;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,7 +18,6 @@ import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.utils.ProcUtils;
 import com.poixson.utils.ReflectUtils;
-import com.poixson.utils.Utils;
 
 
 public class xLockFile {
@@ -31,7 +33,7 @@ public class xLockFile {
 
 
 	public static xLockFile Get(final String filename) {
-		if (Utils.isEmpty(filename)) throw new RequiredArgumentException("filename");
+		if (IsEmpty(filename)) throw new RequiredArgumentException("filename");
 		// existing lock instance
 		{
 			final xLockFile lock = instances.get(filename);
@@ -49,7 +51,7 @@ public class xLockFile {
 		}
 	}
 	public static xLockFile Peek(final String filename) {
-		if (Utils.isEmpty(filename)) throw new RequiredArgumentException("filename");
+		if (IsEmpty(filename)) throw new RequiredArgumentException("filename");
 		return instances.get(filename);
 	}
 
@@ -73,7 +75,7 @@ public class xLockFile {
 
 
 	protected xLockFile(final String filename) {
-		if (Utils.isEmpty(filename)) throw new RequiredArgumentException("filename");
+		if (IsEmpty(filename)) throw new RequiredArgumentException("filename");
 		this.file = new File(filename);
 		// register shutdown hook
 		Runtime.getRuntime().addShutdownHook(
@@ -101,7 +103,7 @@ public class xLockFile {
 			this.handle = new RandomAccessFile(this.file, "rw");
 		} catch (FileNotFoundException e) {
 			this.log().trace(e);
-			Utils.SafeClose(this.handle);
+			SafeClose(this.handle);
 			this.handle = null;
 			return false;
 		}
@@ -109,8 +111,8 @@ public class xLockFile {
 		try {
 			this.lock = this.channel.tryLock();
 			if (this.lock == null) {
-				Utils.SafeClose(this.handle);
-				Utils.SafeClose(this.channel);
+				SafeClose(this.handle);
+				SafeClose(this.channel);
 				this.handle  = null;
 				this.channel = null;
 				return false;
@@ -121,18 +123,18 @@ public class xLockFile {
 			);
 		} catch (OverlappingFileLockException e) {
 			this.log().trace(e);
-			Utils.SafeClose(this.lock);
-			Utils.SafeClose(this.handle);
-			Utils.SafeClose(this.channel);
+			SafeClose(this.lock);
+			SafeClose(this.handle);
+			SafeClose(this.channel);
 			this.lock    = null;
 			this.handle  = null;
 			this.channel = null;
 			return false;
 		} catch (IOException e) {
 			this.log().trace(e);
-			Utils.SafeClose(this.lock);
-			Utils.SafeClose(this.handle);
-			Utils.SafeClose(this.channel);
+			SafeClose(this.lock);
+			SafeClose(this.handle);
+			SafeClose(this.channel);
 			this.lock    = null;
 			this.handle  = null;
 			this.channel = null;
@@ -147,9 +149,9 @@ public class xLockFile {
 		try {
 			this.lock.release();
 		} catch (Exception ignore) {}
-		Utils.SafeClose(this.lock);
-		Utils.SafeClose(this.channel);
-		Utils.SafeClose(this.handle);
+		SafeClose(this.lock);
+		SafeClose(this.channel);
+		SafeClose(this.handle);
 		this.lock    = null;
 		this.channel = null;
 		this.handle  = null;

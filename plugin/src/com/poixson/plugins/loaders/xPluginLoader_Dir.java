@@ -1,12 +1,13 @@
 package com.poixson.plugins.loaders;
 
+import static com.poixson.utils.Utils.IfEmpty;
+
 import java.io.File;
 import java.io.IOException;
 
 import com.poixson.plugins.xJavaPlugin;
 import com.poixson.plugins.xPluginManager;
 import com.poixson.utils.FileUtils;
-import com.poixson.utils.Utils;
 
 
 // load all plugins from dir
@@ -20,7 +21,7 @@ public class xPluginLoader_Dir<T extends xJavaPlugin> extends xPluginLoader<T> {
 	public xPluginLoader_Dir(final xPluginManager<T> manager,
 			final xPluginFactory<T> factory, final String keyClassMain, final String dir) {
 		super(manager, factory, keyClassMain);
-		this.dir = Utils.ifEmpty(dir, DEFAULT_PLUGINS_DIR);
+		this.dir = IfEmpty(dir, DEFAULT_PLUGINS_DIR);
 	}
 
 

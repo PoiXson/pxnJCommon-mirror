@@ -1,9 +1,10 @@
 package com.poixson.logger.formatters;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import com.poixson.logger.xLevel;
 import com.poixson.logger.records.xLogRecord_Msg;
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 
 public class xLogFormat_Color extends xLogFormat_Tagged {
@@ -110,7 +111,7 @@ public class xLogFormat_Color extends xLogFormat_Tagged {
 	// crumbs
 	protected String genCrumbsColored(final xLogRecord_Msg record) {
 		final String crumbStr = super.genCrumbs(record, "[{][}]");
-		if (Utils.isEmpty(crumbStr))
+		if (IsEmpty(crumbStr))
 			return "";
 		return (new StringBuilder())
 			.append("@|FG_BLACK,BOLD ")

@@ -1,5 +1,7 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -91,8 +93,8 @@ public final class ReflectUtils {
 	}
 	public static Method GetMethodByName(final Object container,
 			final String methodName, final Class<?>...args) {
-		if (container == null)         throw new RequiredArgumentException("container");
-		if (Utils.isEmpty(methodName)) throw new RequiredArgumentException("methodName");
+		if (container == null)   throw new RequiredArgumentException("container");
+		if (IsEmpty(methodName)) throw new RequiredArgumentException("methodName");
 		final Class<?> clss = ( container instanceof Class ? (Class<?>) container : container.getClass() );
 		if (clss == null) return null;
 		try {
@@ -150,7 +152,7 @@ public final class ReflectUtils {
 
 
 	public static Class<?>[] ArgsToClasses(final Object...args) {
-		if (Utils.isEmpty(args)) return null;
+		if (IsEmpty(args)) return null;
 		final Class<?>[] classes = new Class[args.length];
 		for (int i=0; i<args.length; i++) {
 			classes[i] = ( args[i] instanceof Class ? (Class<?>) args[i] : args[i].getClass() );
@@ -166,8 +168,8 @@ public final class ReflectUtils {
 
 
 	public static String GetStaticString(final Class<?> clss, final String name) {
-		if (clss == null)        throw new RequiredArgumentException("clss");
-		if (Utils.isEmpty(name)) throw new RequiredArgumentException("name");
+		if (clss == null)  throw new RequiredArgumentException("clss");
+		if (IsEmpty(name)) throw new RequiredArgumentException("name");
 		final Field field;
 		final String value;
 		try {

@@ -1,11 +1,12 @@
 package com.poixson.tools.abstractions;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.utils.ReflectUtils;
-import com.poixson.utils.Utils;
 
 
 public class RunnableMethod<V> extends xRunnable {
@@ -20,8 +21,8 @@ public class RunnableMethod<V> extends xRunnable {
 
 	public RunnableMethod(final Object container,
 			final String methodName, final Object...args) {
-		if (container == null)         throw new RequiredArgumentException("container");
-		if (Utils.isEmpty(methodName)) throw new RequiredArgumentException("method");
+		if (container == null)   throw new RequiredArgumentException("container");
+		if (IsEmpty(methodName)) throw new RequiredArgumentException("method");
 		this.method =
 			ReflectUtils.GetMethodByName(
 				container,
@@ -42,8 +43,8 @@ public class RunnableMethod<V> extends xRunnable {
 	}
 	public RunnableMethod(final String taskName, final Object container,
 			final String methodName, final Object...args) {
-		if (container == null) throw new RequiredArgumentException("container");
-		if (Utils.isEmpty(methodName)) throw new RequiredArgumentException("method");
+		if (container == null)   throw new RequiredArgumentException("container");
+		if (IsEmpty(methodName)) throw new RequiredArgumentException("method");
 		this.method =
 			ReflectUtils.GetMethodByName(
 				container,
@@ -103,9 +104,7 @@ public class RunnableMethod<V> extends xRunnable {
 
 
 	public V getResult() {
-		if (this.notRun())
-			return null;
-		return this.result.get();
+		return (this.hasRun() ? this.result.get() : null);
 	}
 
 

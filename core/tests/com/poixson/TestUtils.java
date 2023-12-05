@@ -1,12 +1,13 @@
 package com.poixson;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
 
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 
 public final class TestUtils {
@@ -34,9 +35,8 @@ public final class TestUtils {
 		for (final Object obj : foundList) {
 			actualList.remove(obj);
 		}
-		if (Utils.notEmpty(actualList)) {
+		if (!IsEmpty(actualList))
 			Assert.fail("Entries not in expected array: "+StringUtils.MergeObjects(", ", actualList));
-		}
 	}
 
 

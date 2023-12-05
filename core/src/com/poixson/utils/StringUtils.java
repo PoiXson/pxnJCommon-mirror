@@ -1,5 +1,8 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.Utils.IsEmpty;
+import static com.poixson.utils.Utils.SafeClose;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -70,7 +73,7 @@ public final class StringUtils {
 		try {
 			return writer.toString().trim();
 		} finally {
-			Utils.SafeClose(writer);
+			SafeClose(writer);
 		}
 	}
 
@@ -142,7 +145,7 @@ public final class StringUtils {
 				continue;
 			}
 			final String[] split = line.split("\n");
-			if (Utils.notEmpty(split)) {
+			if (!IsEmpty(split)) {
 				for (final String str : split)
 					result.add(str);
 			}
@@ -317,24 +320,24 @@ public final class StringUtils {
 
 
 	public static String TrimToNull(final String str) {
-		if (Utils.isEmpty(str)) return null;
+		if (IsEmpty(str)) return null;
 		//                            front end   case
 		final String result = doTrim( true, true, false, str, new char[0]);
-		if (Utils.isEmpty(result)) return null;
+		if (IsEmpty(result)) return null;
 		return result;
 	}
 	public static String TrimToNull(final String str, final String...strip) {
-		if (Utils.isEmpty(str)) return null;
+		if (IsEmpty(str)) return null;
 		//                            front end   case
 		final String result = doTrim( true, true, false, str, strip );
-		if (Utils.isEmpty(result)) return null;
+		if (IsEmpty(result)) return null;
 		return result;
 	}
 	public static String TrimToNull(final String str, final char...strip) {
-		if (Utils.isEmpty(str)) return null;
+		if (IsEmpty(str)) return null;
 		//                            front end   case
 		final String result = doTrim( true, true, false, str, strip );
-		if (Utils.isEmpty(result)) return null;
+		if (IsEmpty(result)) return null;
 		return result;
 	}
 
@@ -405,8 +408,8 @@ public final class StringUtils {
 			final boolean ignoreCase,
 			final String str, final char...strip) {
 		if (!trimFront && !trimEnd) return str;
-		if (Utils.isEmpty(str))     return str;
-		if (Utils.isEmpty(strip))   return str;
+		if (IsEmpty(str))           return str;
+		if (IsEmpty(strip))         return str;
 		final int stripCount = strip.length;
 		final char[] stripChars;
 		final String strPrep;
@@ -459,8 +462,8 @@ public final class StringUtils {
 			final boolean ignoreCase,
 			final String str, final String...strip) {
 		if (!trimFront && !trimEnd) return str;
-		if (Utils.isEmpty(str))     return str;
-		if (Utils.isEmpty(strip))   return str;
+		if (IsEmpty(str))           return str;
+		if (IsEmpty(strip))         return str;
 		final int stripCount = strip.length;
 		// default strip
 		if (stripCount == 0) {
@@ -534,8 +537,8 @@ public final class StringUtils {
 
 
 	public static String RemoveFromString(final String str, final String...strip) {
-		if (Utils.isEmpty(str))   return str;
-		if (Utils.isEmpty(strip)) return str;
+		if (IsEmpty(str))   return str;
+		if (IsEmpty(strip)) return str;
 		String result = str;
 		boolean changed = true;
 		while (changed) {
@@ -591,8 +594,8 @@ public final class StringUtils {
 
 	// increment and append string_# until unique
 	public static String UniqueKey(final Collection<String> collect, final String key) {
-		if (collect == null)    throw new RequiredArgumentException("collect");
-		if (Utils.isEmpty(key)) throw new RequiredArgumentException("key");
+		if (collect == null) throw new RequiredArgumentException("collect");
+		if (IsEmpty(key))    throw new RequiredArgumentException("key");
 		if (collect.isEmpty())
 			return key;
 		if ( ! collect.contains(key) )
@@ -613,8 +616,8 @@ public final class StringUtils {
 	}
 	// collection
 	public static String AddUnique(final Collection<String> collect, final String key) {
-		if (collect == null)    throw new RequiredArgumentException("collect");
-		if (Utils.isEmpty(key)) throw new RequiredArgumentException("key");
+		if (collect == null) throw new RequiredArgumentException("collect");
+		if (IsEmpty(key))    throw new RequiredArgumentException("key");
 		if (collect.isEmpty()) {
 			collect.add(key);
 			return key;
@@ -640,9 +643,9 @@ public final class StringUtils {
 	}
 	// concurrent hash map
 	public static <T> String PutUnique(final ConcurrentHashMap<String, T> map, final String key, final T value) {
-		if (map == null)        throw new RequiredArgumentException("map");
-		if (Utils.isEmpty(key)) throw new RequiredArgumentException("key");
-		if (value == null)      throw new RequiredArgumentException("value");
+		if (map == null)   throw new RequiredArgumentException("map");
+		if (IsEmpty(key))  throw new RequiredArgumentException("key");
+		if (value == null) throw new RequiredArgumentException("value");
 		if (map.putIfAbsent(key, value) == null)
 			return key;
 		int index = 0;
@@ -660,9 +663,9 @@ public final class StringUtils {
 	}
 	// map
 	public static <T> String PutUnique(final Map<String, T> map, final String key, final T value) {
-		if (map == null)        throw new RequiredArgumentException("map");
-		if (Utils.isEmpty(key)) throw new RequiredArgumentException("key");
-		if (value == null)      throw new RequiredArgumentException("value");
+		if (map == null)   throw new RequiredArgumentException("map");
+		if (IsEmpty(key))  throw new RequiredArgumentException("key");
+		if (value == null) throw new RequiredArgumentException("value");
 		if (map.isEmpty()) {
 			map.put(key, value);
 			return key;
@@ -696,8 +699,8 @@ public final class StringUtils {
 
 	// add strings with delimiter
 	public static String MergeStrings(final String delim, final String...addThis) {
-		if (Utils.isEmpty(addThis)) return "";
-		final String dlm = Utils.ifEmpty(delim, null);
+		if (IsEmpty(addThis)) return "";
+		final String dlm = (IsEmpty(delim) ? null : delim);
 		final StringBuilder buf = new StringBuilder();
 		// no delim
 		if (dlm == null) {
@@ -708,7 +711,7 @@ public final class StringUtils {
 		// merge with delim
 		boolean first = true;
 		for (final String part : addThis) {
-			if (Utils.isEmpty(part)) continue;
+			if (IsEmpty(part)) continue;
 			if (first) first = false;
 			else       buf.append(dlm);
 			buf.append(part);
@@ -716,11 +719,11 @@ public final class StringUtils {
 		return buf.toString();
 	}
 	public static String MergeStrings(final char delim, final String...addThis) {
-		if (Utils.isEmpty(addThis)) throw new RequiredArgumentException("addThis");
+		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
 		final StringBuilder buf = new StringBuilder();
 		boolean first = true;
 		for (final String line : addThis) {
-			if (Utils.isEmpty(line)) continue;
+			if (IsEmpty(line)) continue;
 			if (!first)
 				buf.append(delim);
 			buf.append(line);
@@ -734,7 +737,7 @@ public final class StringUtils {
 
 	// add objects to string with delimiter
 	public static String MergeObjects(final String delim, final Object...addThis) {
-		if (Utils.isEmpty(addThis)) throw new RequiredArgumentException("addThis");
+		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
 		String[] addStrings = new String[ addThis.length ];
 		int index = 0;
 		for (final Object obj : addThis) {
@@ -744,7 +747,7 @@ public final class StringUtils {
 		return MergeStrings(delim, addStrings);
 	}
 	public static String MergeObjects(final char delim, final Object...addThis) {
-		if (Utils.isEmpty(addThis)) throw new RequiredArgumentException("addThis");
+		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
 		String[] addStrings = new String[ addThis.length ];
 		int index = 0;
 		for (final Object obj : addThis) {
@@ -758,7 +761,7 @@ public final class StringUtils {
 
 	// generate regex from string with wildcard *
 	public static String WildcardToRegex(final String wildcard) {
-		if (Utils.isEmpty(wildcard)) return wildcard;
+		if (IsEmpty(wildcard)) return wildcard;
 		final StringBuilder buf = new StringBuilder(wildcard.length());
 		buf.append('^');
 		final int len = wildcard.length();
@@ -802,7 +805,7 @@ public final class StringUtils {
 
 	// index of (many delims)
 	public static int IndexOf(final String data, final int fromIndex, final char...delims) {
-		if (Utils.isEmpty(data)) return -1;
+		if (IsEmpty(data)) return -1;
 		int pos = Integer.MAX_VALUE;
 		for (final char delim : delims) {
 			final int p = data.indexOf(delim, fromIndex);
@@ -823,10 +826,10 @@ public final class StringUtils {
 
 
 	public static int IndexOf(final String data, final int fromIndex, final String...delims) {
-		if (Utils.isEmpty(data)) return -1;
+		if (IsEmpty(data)) return -1;
 		int pos = Integer.MAX_VALUE;
 		for (final String delim : delims) {
-			if (Utils.isEmpty(delim)) continue;
+			if (IsEmpty(delim)) continue;
 			final int p = data.indexOf(delim, fromIndex);
 			// delim not found
 			if (p == -1) continue;
@@ -846,7 +849,7 @@ public final class StringUtils {
 
 	// last index of (many delims)
 	public static int IndexOfLast(final String data, final char...delims) {
-		if (Utils.isEmpty(data)) return -1;
+		if (IsEmpty(data)) return -1;
 		int pos = Integer.MIN_VALUE;
 		for (final char delim : delims) {
 			final int p = data.lastIndexOf(delim);
@@ -859,10 +862,10 @@ public final class StringUtils {
 		return (pos == Integer.MIN_VALUE ? -1 : pos);
 	}
 	public static int IndexOfLast(final String data, final String...delims) {
-		if (Utils.isEmpty(data)) return -1;
+		if (IsEmpty(data)) return -1;
 		int pos = Integer.MIN_VALUE;
 		for (final String delim : delims) {
-			if (Utils.isEmpty(delim)) continue;
+			if (IsEmpty(delim)) continue;
 			final int p = data.lastIndexOf(delim);
 			// delim not found
 			if (p == -1) continue;
@@ -877,7 +880,7 @@ public final class StringUtils {
 
 	// find longest line
 	public static int FindLongestLine(final String[] lines) {
-		if (Utils.isEmpty(lines)) return -1;
+		if (IsEmpty(lines)) return -1;
 		int len = 0;
 		for (final String line : lines) {
 			if (line == null) continue;
@@ -890,7 +893,7 @@ public final class StringUtils {
 
 
 	public static String FirstPart(final String data, final char...delims) {
-		if (Utils.isEmpty(data)) return "";
+		if (IsEmpty(data)) return "";
 		if (delims.length == 0) throw new RequiredArgumentException("delims");
 		final int pos = IndexOf(data, delims);
 		if (pos == -1)
@@ -898,7 +901,7 @@ public final class StringUtils {
 		return data.substring(0, pos);
 	}
 	public static String FirstPart(final String data, final String...delims) {
-		if (Utils.isEmpty(data)) return "";
+		if (IsEmpty(data)) return "";
 		if (delims.length == 0) throw new RequiredArgumentException("delims");
 		final int pos = IndexOf(data, delims);
 		if (pos == -1)
@@ -909,7 +912,7 @@ public final class StringUtils {
 
 
 	public static String LastPart(final String data, final char...delims) {
-		if (Utils.isEmpty(data)) return "";
+		if (IsEmpty(data)) return "";
 		if (delims.length == 0) throw new RequiredArgumentException("delims");
 		final int pos = IndexOfLast(data, delims);
 		if (pos == -1)
@@ -917,14 +920,14 @@ public final class StringUtils {
 		return data.substring(pos + 1);
 	}
 	public static String LastPart(final String data, final String...delims) {
-		if (Utils.isEmpty(data)) return "";
+		if (IsEmpty(data)) return "";
 		if (delims.length == 0) throw new RequiredArgumentException("delims");
 		final int pos = IndexOfLast(data, delims);
 		if (pos == -1)
 			return data;
 		int delimLen = 0;
 		for (final String delim : delims) {
-			if (Utils.isEmpty(delim)) continue;
+			if (IsEmpty(delim)) continue;
 			final int len = delim.length();
 			if (len <= delimLen) continue;
 			if (data.substring(pos, len).equals(delim))
@@ -968,9 +971,9 @@ public final class StringUtils {
 	// replace with array
 	public static String ReplaceWith(final String str,
 			final String replaceWhat, final String[] withWhat) {
-		if (Utils.isEmpty(str))         return str;
-		if (Utils.isEmpty(replaceWhat)) return str;
-		if (Utils.isEmpty(withWhat))    return str;
+		if (IsEmpty(str))         return str;
+		if (IsEmpty(replaceWhat)) return str;
+		if (IsEmpty(withWhat))    return str;
 		final StringBuilder result = new StringBuilder();
 		final int count = withWhat.length;
 		int currentPos = 0;
@@ -999,7 +1002,7 @@ public final class StringUtils {
 
 	public static String ReplaceEnd(final String data,
 			final char replaceWhat, final char replaceWith) {
-		if (Utils.isEmpty(data))        return data;
+		if (IsEmpty(data)) return data;
 		final int size = data.length();
 		int index = 0;
 		while (true) {
@@ -1042,11 +1045,11 @@ public final class StringUtils {
 		return Repeat(count, str, null);
 	}
 	public static String Repeat(final int count, final String str, final String delim) {
-		if (Utils.isEmpty(str)) throw new RequiredArgumentException("str");
+		if (IsEmpty(str)) throw new RequiredArgumentException("str");
 		if (count < 1) return "";
 		final StringBuilder result = new StringBuilder();
 		// repeat string
-		if (Utils.isEmpty(delim)) {
+		if (IsEmpty(delim)) {
 			for (int i = 0; i < count; i++)
 				result.append(str);
 		} else {
@@ -1098,9 +1101,8 @@ public final class StringUtils {
 	}
 	public static String PadCenter(final int width, final String text, final char padding) {
 		if (width < 1) return null;
-		if (Utils.isEmpty(text)) {
+		if (IsEmpty(text))
 			return Repeat(width, padding);
-		}
 		final double count = ( ((double) width) - ((double) text.length()) ) / 2.0;
 		if (Math.ceil(count) < 1.0) return text;
 		return
@@ -1177,8 +1179,8 @@ public final class StringUtils {
 
 	// replace {} or {#} tags
 	public static String ReplaceTags(final String msg, final Object...args) {
-		if (Utils.isEmpty(msg))  return msg;
-		if (Utils.isEmpty(args)) return msg;
+		if (IsEmpty(msg))  return msg;
+		if (IsEmpty(args)) return msg;
 		final StringBuilder result = new StringBuilder(msg);
 		ARG_LOOP:
 		for (int index=0; index<args.length; index++) {
@@ -1217,8 +1219,8 @@ public final class StringUtils {
 
 	// replace {} or {#} tags (in multiple lines)
 	public static String[] ReplaceTags(final String[] msgs, final Object...args) {
-		if (Utils.isEmpty(msgs)) return msgs;
-		if (Utils.isEmpty(args)) return msgs;
+		if (IsEmpty(msgs)) return msgs;
+		if (IsEmpty(args)) return msgs;
 		String[] result = Arrays.copyOf(msgs, msgs.length);
 		final StringBuilder extras = new StringBuilder();
 		ARG_LOOP:
@@ -1230,7 +1232,7 @@ public final class StringUtils {
 				boolean found = false;
 				LINE_LOOP:
 				for (int lineIndex=0; lineIndex<msgs.length; lineIndex++) {
-					if (Utils.isEmpty( result[lineIndex] ))
+					if (IsEmpty( result[lineIndex] ))
 						continue LINE_LOOP;
 					//REPLACE_LOOP:
 					while (true) {
@@ -1246,7 +1248,7 @@ public final class StringUtils {
 			{
 				LINE_LOOP:
 				for (int lineIndex=0; lineIndex<msgs.length; lineIndex++) {
-					if (Utils.isEmpty( result[lineIndex] ))
+					if (IsEmpty( result[lineIndex] ))
 						continue LINE_LOOP;
 					final int pos = result[lineIndex].indexOf("{}");
 					if (pos == -1) continue LINE_LOOP;
@@ -1282,8 +1284,8 @@ public final class StringUtils {
 
 	// replace {key} tags
 	public static String ReplaceTags(final String msg, final Map<String, Object> args) {
-		if (Utils.isEmpty(msg))  return msg;
-		if (Utils.isEmpty(args)) return msg;
+		if (IsEmpty(msg))  return msg;
+		if (IsEmpty(args)) return msg;
 		final StringBuilder result = new StringBuilder(msg);
 		ARG_LOOP:
 		for (final String key : args.keySet()) {
@@ -1318,8 +1320,8 @@ public final class StringUtils {
 
 	// replace {key} tags (in multiple lines)
 	public static String[] ReplaceTags(final String[] msgs, final Map<String, Object> args) {
-		if (Utils.isEmpty(msgs)) return msgs;
-		if (Utils.isEmpty(args)) return msgs;
+		if (IsEmpty(msgs)) return msgs;
+		if (IsEmpty(args)) return msgs;
 		String[] result = Arrays.copyOf(msgs, msgs.length);
 		ARG_LOOP:
 		for (final String key : args.keySet()) {
@@ -1331,7 +1333,7 @@ public final class StringUtils {
 				boolean found = false;
 				LINE_LOOP:
 				for (int lineIndex=0; lineIndex<msgs.length; lineIndex++) {
-					if (Utils.isEmpty( result[lineIndex] ))
+					if (IsEmpty( result[lineIndex] ))
 						continue LINE_LOOP;
 					//REPLACE_LOOP:
 					while (true) {
@@ -1348,7 +1350,7 @@ public final class StringUtils {
 			{
 				LINE_LOOP:
 				for (int lineIndex=0; lineIndex<msgs.length; lineIndex++) {
-					if (Utils.isEmpty( result[lineIndex] ))
+					if (IsEmpty( result[lineIndex] ))
 						continue LINE_LOOP;
 					final int pos = result[lineIndex].indexOf("{}");
 					if (pos != -1) {

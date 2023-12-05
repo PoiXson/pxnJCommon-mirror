@@ -88,7 +88,7 @@ public class xFont {
 
 
 	public xFont apply(final String format) {
-		if (Utils.isEmpty(format))
+		if (IsEmpty(format))
 			return this;
 		final String[] parts = format.split(",");
 		PARTS_LOOP:
@@ -215,7 +215,7 @@ public class xFont {
 
 	public String getFamily() {
 		final String family = this.family;
-		if (Utils.isEmpty(family))
+		if (IsEmpty(family))
 			return DefaultFamily();
 		return family;
 	}

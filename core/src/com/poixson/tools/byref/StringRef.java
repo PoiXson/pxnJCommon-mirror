@@ -1,7 +1,8 @@
 package com.poixson.tools.byref;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 
 public class StringRef implements StringRefInterface {
@@ -34,7 +35,7 @@ public class StringRef implements StringRefInterface {
 
 	@Override
 	public boolean isEmpty() {
-		return Utils.isEmpty(this.value);
+		return IsEmpty(this.value);
 	}
 	@Override
 	public boolean notEmpty() {
@@ -160,7 +161,7 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String peekFirstPart(final char delim) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		final int pos = val.indexOf(delim);
 		return (
@@ -172,7 +173,7 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String peekFirstPart(final String delim) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		final int pos = val.indexOf(delim);
 		return (
@@ -187,7 +188,7 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String cutFirstPart(final char delim) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		final int pos = val.indexOf(delim);
 		if (pos == -1) {
@@ -201,7 +202,7 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String cutFirstPart(final String delim) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		final int pos = val.indexOf(delim);
 		if (pos == -1) {
@@ -221,7 +222,7 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String peekFirstPart(final char...delims) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		return
 			StringUtils.PeekFirstPart(
@@ -232,7 +233,7 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String peekFirstPart(final String...delims) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		return
 			StringUtils.PeekFirstPart(
@@ -246,7 +247,7 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String cutFirstPart(final char...delims) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		int pos = Integer.MAX_VALUE;
 		// find earliest delim
@@ -273,13 +274,13 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String cutFirstPart(final String...delims) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		int pos = Integer.MAX_VALUE;
 		int delimSize = 0;
 		// find earliest/longest delim
 		for (final String delim : delims) {
-			if (Utils.isEmpty(delim)) continue;
+			if (IsEmpty(delim)) continue;
 			final int p = val.indexOf(delim);
 			// delim not found
 			if (p == -1) continue;
@@ -320,7 +321,7 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String peekLastPart(final char delim) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		final int pos = val.lastIndexOf(delim);
 		return (
@@ -332,7 +333,7 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String peekLastPart(final String delim) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		final int pos = val.lastIndexOf(delim);
 		return (
@@ -347,7 +348,7 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String cutLastPart(final char delim) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		final int pos = val.lastIndexOf(delim);
 		if (pos == -1) {
@@ -361,7 +362,7 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String cutLastPart(final String delim) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		final int pos = val.lastIndexOf(delim);
 		if (pos == -1) {
@@ -381,7 +382,7 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String peekLastPart(final char...delims) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		return
 			StringUtils.PeekLastPart(
@@ -392,7 +393,7 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String peekLastPart(final String...delims) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		return
 			StringUtils.PeekLastPart(
@@ -406,7 +407,7 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String cutLastPart(final char...delims) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		int pos = Integer.MIN_VALUE;
 		// find latest delim
@@ -433,13 +434,13 @@ public class StringRef implements StringRefInterface {
 	@Override
 	public String cutLastPart(final String...delims) {
 		final String val = this.value;
-		if (Utils.isEmpty(val))
+		if (IsEmpty(val))
 			return val;
 		int pos = Integer.MIN_VALUE;
 		int delimSize = 0;
 		// find latest/longest delim
 		for (final String delim : delims) {
-			if (Utils.isEmpty(delim)) continue;
+			if (IsEmpty(delim)) continue;
 			final int p = val.lastIndexOf(delim);
 			// delim not found
 			if (p == -1) continue;

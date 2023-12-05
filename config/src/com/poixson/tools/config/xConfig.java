@@ -1,5 +1,7 @@
 package com.poixson.tools.config;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,7 +11,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.poixson.utils.NumberUtils;
 import com.poixson.utils.ObjectUtils;
-import com.poixson.utils.Utils;
 
 
 public class xConfig {
@@ -40,7 +41,7 @@ public class xConfig {
 
 
 	public Object read(final String key) {
-		if (Utils.isEmpty(key))
+		if (IsEmpty(key))
 			return null;
 		return this.datamap.get(key);
 	}
@@ -72,7 +73,7 @@ public class xConfig {
 				if (value != null)
 					return value;
 			} else {
-				if (Utils.notEmpty(value))
+				if (IsEmpty(value))
 					return value;
 			}
 		} catch (Exception ignore) {}

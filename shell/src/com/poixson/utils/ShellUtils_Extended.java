@@ -1,5 +1,7 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
@@ -64,7 +66,7 @@ public final class ShellUtils_Extended extends ShellUtils {
 
 	@Override
 	protected String _renderAnsi(final String line) {
-		if (Utils.isEmpty(line))
+		if (IsEmpty(line))
 			return line;
 		return
 			Ansi.ansi()
@@ -73,7 +75,7 @@ public final class ShellUtils_Extended extends ShellUtils {
 	}
 	@Override
 	protected String[] _renderAnsi(final String[] lines) {
-		if (Utils.isEmpty(lines))
+		if (IsEmpty(lines))
 			return lines;
 		String[] result = new String[ lines.length ];
 		for (int index=0; index<lines.length; index++) {

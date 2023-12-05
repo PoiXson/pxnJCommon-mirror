@@ -1,5 +1,7 @@
 package com.poixson.app.steps;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -13,7 +15,6 @@ import com.poixson.logger.xLog;
 import com.poixson.tools.AsciiArtBuilder;
 import com.poixson.utils.ProcUtils;
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 
 /*
@@ -88,9 +89,8 @@ public class xAppSteps_Logo {
 		result.put( "Current dir", System.getProperty("user.dir")       );
 		result.put( "java home",   System.getProperty("java.home")      );
 		final String[] args = app.getArgs();
-		if (Utils.notEmpty(args)) {
+		if (!IsEmpty(args))
 			result.put("Args", StringUtils.MergeStrings(", ", args));
-		}
 		return result;
 	}
 	public String[] display_startup_vars() {

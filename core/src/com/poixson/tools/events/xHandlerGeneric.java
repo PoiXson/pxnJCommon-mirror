@@ -59,7 +59,7 @@ public class xHandlerGeneric extends xHandler<xEvent> {
 	}
 	@Override
 	public void unregisterMethod(final Object object, final String methodName) {
-		if (object == null || Utils.isEmpty(methodName)) return;
+		if (object == null || IsEmpty(methodName)) return;
 		final Set<xEventListenerDAO> remove = new HashSet<xEventListenerDAO>();
 		final Iterator<xEventListenerDAO> it = this.listeners.iterator();
 		while (it.hasNext()) {

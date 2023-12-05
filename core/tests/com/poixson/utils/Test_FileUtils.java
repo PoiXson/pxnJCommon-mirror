@@ -1,5 +1,7 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.io.File;
 
 import org.junit.Assert;
@@ -12,9 +14,9 @@ public class Test_FileUtils {
 
 	@Test
 	public void testPaths() {
-		Assert.assertFalse( Utils.isEmpty(FileUtils.cwd()) );
-		Assert.assertFalse( Utils.isEmpty(FileUtils.pwd()) );
-		Assert.assertFalse(       null == FileUtils.exe()  );
+		Assert.assertFalse( IsEmpty(FileUtils.cwd()) );
+		Assert.assertFalse( IsEmpty(FileUtils.pwd()) );
+		Assert.assertFalse( null == FileUtils.exe()  );
 		Assert.assertTrue(FileUtils.isDir("/"));
 	}
 
@@ -24,7 +26,7 @@ public class Test_FileUtils {
 	public void testListDirContents() {
 		final File path = new File( FileUtils.pwd() );
 		final File[] result = FileUtils.ListDirContents( path );
-		Assert.assertFalse( Utils.isEmpty(result) );
+		Assert.assertFalse( IsEmpty(result) );
 	}
 
 

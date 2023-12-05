@@ -1,5 +1,7 @@
 package com.poixson.app;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.lang.ref.SoftReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -11,7 +13,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.logger.xLog;
-import com.poixson.utils.Utils;
 
 
 public class xAppStepLoader {
@@ -52,7 +53,7 @@ public class xAppStepLoader {
 	public void scan(final Class<?> clss, final Object container) {
 		if (clss == null) throw new RuntimeException("Failed to get step container class");
 		final Method[] methods = clss.getMethods();
-		if (Utils.isEmpty(methods)) throw new RuntimeException("No methods found in step container class: "+clss.getSimpleName());
+		if (IsEmpty(methods)) throw new RuntimeException("No methods found in step container class: "+clss.getSimpleName());
 		//METHODS_LOOP:
 		for (final Method m : methods) {
 

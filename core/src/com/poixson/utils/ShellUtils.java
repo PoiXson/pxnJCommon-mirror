@@ -1,5 +1,7 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.tools.Keeper;
@@ -74,7 +76,7 @@ public class ShellUtils {
 
 	// strip color tags
 	public static String StripColorTags(final String line) {
-		if (Utils.isEmpty(line)) return line;
+		if (IsEmpty(line)) return line;
 		final StringBuilder result = new StringBuilder(line);
 		boolean changed = false;
 		while (true) {
@@ -93,7 +95,7 @@ public class ShellUtils {
 		return line;
 	}
 	public static String[] StripColorTags(final String[] lines) {
-		if (Utils.isEmpty(lines)) return lines;
+		if (IsEmpty(lines)) return lines;
 		String[] result = new String[ lines.length ];
 		for (int index=0; index<lines.length; index++) {
 			result[index] = StripColorTags(result[index]);

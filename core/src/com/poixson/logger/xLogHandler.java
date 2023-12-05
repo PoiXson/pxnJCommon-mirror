@@ -40,13 +40,13 @@ public abstract class xLogHandler {
 		this.publish( (String[])null );
 	}
 	public void publish(final String msg) {
-		if (Utils.isEmpty(msg)) {
+		if (IsEmpty(msg)) {
 			this.publish();
 			return;
 		}
 		final String trimmed = StringUtils.cTrim(msg, '\n');
 		final String[] lines = trimmed.split("\n");
-		if (Utils.isEmpty(lines)) {
+		if (IsEmpty(lines)) {
 			this.publish();
 			return;
 		}

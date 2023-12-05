@@ -1,5 +1,7 @@
 package com.poixson.logger.proxies;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -10,7 +12,6 @@ import com.poixson.logger.xLevel;
 import com.poixson.logger.xLog;
 import com.poixson.logger.records.xLogRecord_Msg;
 import com.poixson.tools.Keeper;
-import com.poixson.utils.Utils;
 
 
 public class LoggerToXLog extends Handler {
@@ -57,7 +58,7 @@ public class LoggerToXLog extends Handler {
 
 
 	public static String AliasFor(final String name) {
-		if (Utils.isEmpty(name)) return null;
+		if (IsEmpty(name)) return null;
 		if (name.equals("org.jline"))        return "jline";
 		if (name.startsWith("io.netty"))     return "netty";
 //TODO: remove this?

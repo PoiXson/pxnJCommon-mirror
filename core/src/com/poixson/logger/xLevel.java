@@ -1,10 +1,11 @@
 package com.poixson.logger;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.poixson.utils.NumberUtils;
-import com.poixson.utils.Utils;
 
 
 public enum xLevel {
@@ -63,7 +64,7 @@ public enum xLevel {
 		return levels.toArray(new xLevel[0]);
 	}
 	public static xLevel GetLevel(final String name) {
-		if (Utils.isEmpty(name)) return null;
+		if (IsEmpty(name)) return null;
 		if (NumberUtils.IsNumeric(name)) {
 			return GetLevel(NumberUtils.ToInteger(name));
 		}

@@ -1,5 +1,8 @@
 package com.poixson.tools.abstractions;
 
+import static com.poixson.utils.Utils.IfEmpty;
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -8,7 +11,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 
 public class xRunnable implements RunnableNamed {
@@ -35,7 +37,7 @@ public class xRunnable implements RunnableNamed {
 		this(null, run);
 	}
 	public xRunnable(final String taskName, final Runnable run) {
-		if (Utils.notEmpty(taskName)) {
+		if (!IsEmpty(taskName)) {
 			this.taskName.set(taskName);
 		} else
 		if (run instanceof RunnableNamed) {
@@ -119,7 +121,7 @@ public class xRunnable implements RunnableNamed {
 		if (this.task != null) {
 			if (this.task instanceof RunnableNamed) {
 				final String taskName = ((RunnableNamed) this.task).getTaskName();
-				if (Utils.notEmpty(taskName))
+				if (!IsEmpty(taskName))
 					return taskName;
 			}
 		}
@@ -127,7 +129,7 @@ public class xRunnable implements RunnableNamed {
 	}
 	@Override
 	public void setTaskName(final String taskName) {
-		this.taskName.set(Utils.ifEmpty(taskName, null));
+		this.taskName.set(IfEmpty(taskName, null));
 	}
 	@Override
 	public boolean equalsTaskName(final String matchName) {

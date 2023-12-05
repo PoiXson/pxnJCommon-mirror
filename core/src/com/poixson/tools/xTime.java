@@ -1,6 +1,7 @@
 package com.poixson.tools;
 
 import static com.poixson.utils.Utils.GetMS;
+import static com.poixson.utils.Utils.IsEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 
 public class xTime {
@@ -100,7 +100,7 @@ public class xTime {
 		return this;
 	}
 	public xTime set(final String str) {
-		if (Utils.isEmpty(str)) throw new RequiredArgumentException("str");
+		if (IsEmpty(str)) throw new RequiredArgumentException("str");
 		this.value.set( ParseToLong(str) );
 		return this;
 	}
@@ -135,7 +135,7 @@ public class xTime {
 		this.value.addAndGet( xunit.convertTo(value) );
 	}
 	public void add(final String str) {
-		if (Utils.isEmpty(str)) throw new RequiredArgumentException("str");
+		if (IsEmpty(str)) throw new RequiredArgumentException("str");
 		this.value.addAndGet( ParseToLong(str) );
 	}
 	public void add(final xTime time) {
@@ -152,11 +152,11 @@ public class xTime {
 
 	// parse time from string
 	public static xTime Parse(final String str) {
-		if (Utils.isEmpty(str)) return null;
+		if (IsEmpty(str)) return null;
 		return new xTime( ParseToLong(str) );
 	}
 	public static long ParseToLong(final String str) {
-		if (Utils.isEmpty(str)) throw new RequiredArgumentException("str");
+		if (IsEmpty(str)) throw new RequiredArgumentException("str");
 		long value = 0L;
 		// split into parts
 		final StringBuilder bufValue = new StringBuilder();

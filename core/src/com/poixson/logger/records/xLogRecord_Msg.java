@@ -1,10 +1,10 @@
 package com.poixson.logger.records;
 
 import static com.poixson.utils.Utils.GetMS;
+import static com.poixson.utils.Utils.IsEmpty;
 
 import com.poixson.logger.xLevel;
 import com.poixson.logger.xLog;
-import com.poixson.utils.Utils;
 
 
 public class xLogRecord_Msg implements xLogRecord {
@@ -64,7 +64,7 @@ public class xLogRecord_Msg implements xLogRecord {
 
 	@Override
 	public boolean isEmpty() {
-		return Utils.isEmpty(this.msg);
+		return IsEmpty(this.msg);
 	}
 	@Override
 	public boolean notEmpty() {

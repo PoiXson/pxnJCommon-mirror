@@ -1,10 +1,11 @@
 package com.poixson.tools.events;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.utils.Utils;
 
 
 public abstract class xHandler <T extends Annotation> {
@@ -21,7 +22,7 @@ public abstract class xHandler <T extends Annotation> {
 
 
 	public int register(final Object...objects) {
-		if (Utils.isEmpty(objects)) return 0;
+		if (IsEmpty(objects)) return 0;
 		int count = 0;
 		OBJECTS_LOOP:
 		for (final Object obj : objects) {
@@ -33,7 +34,7 @@ public abstract class xHandler <T extends Annotation> {
 	protected int register(final Object object) {
 		if (object == null) return 0;
 		final Method[] methods = object.getClass().getMethods();
-		if (Utils.isEmpty(methods)) return 0;
+		if (IsEmpty(methods)) return 0;
 		int count = 0;
 		METHODS_LOOP:
 		for (final Method m : methods) {

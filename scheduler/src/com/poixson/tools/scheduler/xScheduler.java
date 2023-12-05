@@ -1,6 +1,7 @@
 package com.poixson.tools.scheduler;
 
 import static com.poixson.utils.Utils.GetMS;
+import static com.poixson.utils.Utils.IsEmpty;
 
 import java.lang.ref.SoftReference;
 import java.util.HashSet;
@@ -18,7 +19,6 @@ import com.poixson.tools.xTime;
 import com.poixson.tools.abstractions.xStartable;
 import com.poixson.utils.NumberUtils;
 import com.poixson.utils.ThreadUtils;
-import com.poixson.utils.Utils;
 
 
 public class xScheduler implements xStartable, Runnable {
@@ -176,7 +176,7 @@ public class xScheduler implements xStartable, Runnable {
 		return result;
 	}
 	public boolean cancel(final String taskName) {
-		if (Utils.isEmpty(taskName)) throw new RequiredArgumentException("taskName");
+		if (IsEmpty(taskName)) throw new RequiredArgumentException("taskName");
 		boolean found = false;
 		final Iterator<xSchedulerTask> it = this.tasks.iterator();
 		while (it.hasNext()) {
@@ -196,7 +196,7 @@ public class xScheduler implements xStartable, Runnable {
 		}
 	}
 	public boolean hasTask(final String taskName) {
-		if (Utils.isEmpty(taskName)) throw new RequiredArgumentException("taskName");
+		if (IsEmpty(taskName)) throw new RequiredArgumentException("taskName");
 		final Iterator<xSchedulerTask> it = this.tasks.iterator();
 		while (it.hasNext()) {
 			final xSchedulerTask task = it.next();

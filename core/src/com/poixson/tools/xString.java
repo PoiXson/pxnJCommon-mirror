@@ -1,7 +1,8 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 
 public class xString {
@@ -43,7 +44,7 @@ public class xString {
 
 
 	public boolean isEmpty() {
-		return Utils.isEmpty(this.data);
+		return IsEmpty(this.data);
 	}
 	public boolean notEmpty() {
 		return Utils.notEmpty(this.data);

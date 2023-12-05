@@ -1,5 +1,7 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,7 +9,6 @@ import java.util.List;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
 
 
 public class AsciiArtBuilder {
@@ -25,7 +26,7 @@ public class AsciiArtBuilder {
 
 
 	public AsciiArtBuilder(final String...lines) {
-		if (Utils.isEmpty(lines)) throw new RequiredArgumentException("lines");
+		if (IsEmpty(lines)) throw new RequiredArgumentException("lines");
 		this.lines = lines;
 		for (int i=0; i<lines.length; i++) {
 			this.colorLocations.put(
@@ -49,7 +50,7 @@ public class AsciiArtBuilder {
 		for (int lineIndex=0; lineIndex<lineCount; lineIndex++) {
 			final String line = this.lines[lineIndex];
 			// blank line
-			if (Utils.isEmpty(line)) {
+			if (IsEmpty(line)) {
 				result[ lineIndex ] =
 					StringUtils.Repeat(
 						(indent * 2) + maxLineSize,
@@ -70,7 +71,7 @@ public class AsciiArtBuilder {
 					Integer.valueOf(lineIndex)
 				);
 			// no colors to set
-			if (Utils.isEmpty(colorsMap)) {
+			if (IsEmpty(colorsMap)) {
 				if (bgColor != null) {
 					withinTag = true;
 					buf.append("@|")
@@ -91,7 +92,7 @@ public class AsciiArtBuilder {
 				for (final Integer posX : ordered) {
 					final int posXX = posX.intValue();
 					final String colorStr = colorsMap.get(posX);
-					if (Utils.isEmpty(colorStr))
+					if (IsEmpty(colorStr))
 						continue COLOR_LOOP;
 					// color doesn't start at front of line
 					if (lastX == -1) {
@@ -158,7 +159,7 @@ public class AsciiArtBuilder {
 	// default background color
 	public String getBgColor() {
 		final String bgColor = this.bgColor;
-		return Utils.ifEmpty(bgColor, null);
+		return (IsEmpty(bgColor) ? null : bgColor);
 	}
 	public AsciiArtBuilder setBgColor(final String bgColor) {
 		this.bgColor = StringUtils.ForceStarts("bg_", bgColor);
@@ -180,7 +181,7 @@ public class AsciiArtBuilder {
 	// color location
 	public AsciiArtBuilder setColor(final String color,
 			final int posX, final int posY) {
-		if (Utils.isEmpty(color)) throw new RequiredArgumentException("color");
+		if (IsEmpty(color)) throw new RequiredArgumentException("color");
 		if (posX < 0) throw new IllegalArgumentException("posX is out of range: "+Integer.toString(posX));
 		if (posY < 0) throw new IllegalArgumentException("posY is out of range: "+Integer.toString(posY));
 		if (posY > this.colorLocations.size()) {
@@ -208,7 +209,7 @@ public class AsciiArtBuilder {
 	}
 	public AsciiArtBuilder setBgColor(final String bgColor,
 			final int posX, final int posY) {
-		if (Utils.isEmpty(bgColor)) throw new RequiredArgumentException("bgColor");
+		if (IsEmpty(bgColor)) throw new RequiredArgumentException("bgColor");
 		return
 			this.setColor(
 				StringUtils.ForceStarts("bg_", bgColor),

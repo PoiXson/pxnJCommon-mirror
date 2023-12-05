@@ -1,12 +1,13 @@
 package com.poixson.logger;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import com.poixson.logger.handlers.xLogHandler_Console;
 import com.poixson.logger.records.xLogRecord;
 import com.poixson.logger.records.xLogRecord_Msg;
 import com.poixson.logger.records.xLogRecord_Special;
 import com.poixson.logger.records.xLogRecord_Special.SpecialType;
 import com.poixson.tools.StdIO;
-import com.poixson.utils.Utils;
 
 
 public class xLogger extends xLog {
@@ -50,7 +51,7 @@ public class xLogger extends xLog {
 
 	@Override
 	public void publish(final String msg) {
-		if (Utils.isEmpty(msg)) {
+		if (IsEmpty(msg)) {
 			this.publish();
 			return;
 		}
@@ -65,7 +66,7 @@ public class xLogger extends xLog {
 		}
 		{
 			final xLogHandler[] handlers = this.getHandlersOrDefault();
-			if (Utils.notEmpty(handlers)) {
+			if (!IsEmpty(handlers)) {
 				for (final xLogHandler hand : handlers) {
 					try {
 						hand.publish(record);

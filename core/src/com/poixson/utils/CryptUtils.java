@@ -130,23 +130,23 @@ public final class CryptUtils {
 
 	// base64 encode
 	public static String Base64Encode(final String data) {
-		if (Utils.isEmpty(data))
+		if (IsEmpty(data))
 			return data;
 		return new String(Base64Encode(data.getBytes()));
 	}
 	public static byte[] Base64Encode(final byte[] data) {
-		if (Utils.isEmpty(data))
+		if (IsEmpty(data))
 			return data;
 		return Base64.getEncoder().encode(data);
 	}
 	// base64 decode
 	public static String Base64Decode(final String data) {
-		if (Utils.isEmpty(data))
+		if (IsEmpty(data))
 			return data;
 		return new String(Base64Decode(data.getBytes()));
 	}
 	public static byte[] Base64Decode(final byte[] data) {
-		if (Utils.isEmpty(data))
+		if (IsEmpty(data))
 			return data;
 		return Base64.getDecoder().decode(data);
 	}
@@ -164,7 +164,7 @@ public final class CryptUtils {
 		for (final byte b : data) {
 			formatter.format("%02x", Byte.valueOf(b));
 		}
-		Utils.SafeClose(formatter);
+		SafeClose(formatter);
 		return str.toString();
 //TODO: is this useful?
 //		byte[] byteData = md.digest();
