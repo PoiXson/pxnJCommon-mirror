@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import com.poixson.app.xApp;
 import com.poixson.app.xAppStep;
 import com.poixson.app.xAppStepType;
+import com.poixson.logger.xDebug;
 import com.poixson.logger.xLog;
 import com.poixson.tools.AsciiArtBuilder;
 import com.poixson.utils.ProcUtils;
@@ -88,6 +89,11 @@ public class xAppSteps_Logo {
 		result.put( "Running as",  System.getProperty("user.name")      );
 		result.put( "Current dir", System.getProperty("user.dir")       );
 		result.put( "java home",   System.getProperty("java.home")      );
+		final StringBuilder log_level = new StringBuilder();
+		log_level.append( xLog.Get().getLevel() );
+		if (xDebug.isDebug())
+			log_level.append(" debug");
+		result.put("Log Level", log_level.toString());
 		final String[] args = app.getArgs();
 		if (!IsEmpty(args))
 			result.put("Args", StringUtils.MergeStrings(", ", args));
