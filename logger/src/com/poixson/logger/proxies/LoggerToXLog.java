@@ -35,10 +35,11 @@ public class LoggerToXLog extends Handler {
 		if (!found)
 			logger.addHandler( Get() );
 		// default log levels
+		xLog.Get("mqtt" ).setLevel(xLevel.INFO);
 		xLog.Get("jline").setLevel(xLevel.INFO);
 		xLog.Get("netty").setLevel(xLevel.INFO);
 		xLog.Get("jcl"  ).setLevel(xLevel.INFO);
-		xLog.Get("X11"  ).setLevel(xLevel.INFO);
+		xLog.Get("GUI"  ).setLevel(xLevel.INFO);
 	}
 
 
@@ -59,13 +60,12 @@ public class LoggerToXLog extends Handler {
 
 	public static String AliasFor(final String name) {
 		if (IsEmpty(name)) return null;
-		if (name.equals("org.jline"))        return "jline";
-		if (name.startsWith("io.netty"))     return "netty";
-//TODO: remove this?
-//		if (name.startsWith("org.xeustechnologies.jcl")) return "jcl";
-		if (name.startsWith("java.awt."))    return "X11";
-		if (name.startsWith("javax.swing.")) return "X11";
-		if (name.startsWith("sun.awt."))     return "X11";
+		if (name.startsWith("org.eclipse.paho.client")) return "mqtt";
+		if (name.equals(    "org.jline"   )) return "jline";
+		if (name.startsWith("io.netty"    )) return "netty";
+		if (name.startsWith("java.awt."   )) return "GUI";
+		if (name.startsWith("javax.swing.")) return "GUI";
+		if (name.startsWith("sun.awt."    )) return "GUI";
 		return name;
 	}
 
