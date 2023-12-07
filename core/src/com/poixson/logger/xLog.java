@@ -58,7 +58,7 @@ import com.poixson.utils.StringUtils;
 
 public abstract class xLog {
 
-	public static final xLevel DEFAULT_LEVEL = xLevel.ALL;
+	public static final xLevel DEFAULT_LEVEL = xLevel.INFO;
 
 	// root logger
 	protected static final AtomicReference<xLog> root = new AtomicReference<xLog>(null);
