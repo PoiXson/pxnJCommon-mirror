@@ -58,6 +58,7 @@ public abstract class xPluginLoader<T extends xJavaPlugin> {
 				.overrideClasspath(file)
 				.scan();
 		// load plugin.yml
+		final String class_main;
 		final xPluginYML yml;
 		{
 			final ResourceList resources = classgraph.getResourcesWithLeafName(DEFAULT_PLUGIN_YML_FILE);
@@ -68,7 +69,8 @@ public abstract class xPluginLoader<T extends xJavaPlugin> {
 				throw new IOException("Multiple " + DEFAULT_PLUGIN_YML_FILE + " files found in plugin: " + file.getName());
 			final Resource res = resources.get(0);
 			yml = this.loadPluginYML(res);
-			if (IsEmpty(yml.getMainClass())) {
+			class_main = yml.getMainClass();
+			if (IsEmpty(class_main)) {
 				this.log().warning("'%s' not set in %s of %s", this.keyClassMain, DEFAULT_PLUGIN_YML_FILE, file.getName());
 				return null;
 			}
@@ -78,7 +80,6 @@ public abstract class xPluginLoader<T extends xJavaPlugin> {
 		if (this.manager.isPluginLoaded(plugin_name))
 			throw new IOException("Plugin already loaded: " + plugin_name);
 		// load plugin instance
-		final String class_main = yml.getMainClass();
 		if (IsEmpty(class_main)) {
 			throw new IOException(String.format(
 				"Class key: %s not found in plugin: %s",

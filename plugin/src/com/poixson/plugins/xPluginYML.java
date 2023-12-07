@@ -1,5 +1,7 @@
 package com.poixson.plugins;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.util.Map;
 
 import com.poixson.tools.config.xConfig;
@@ -40,7 +42,7 @@ public class xPluginYML extends xConfig {
 		this.commit         = this.getString(PLUGIN_YML_COMMIT     );
 		this.author         = this.getString(PLUGIN_YML_AUTHOR     );
 		this.website        = this.getString(PLUGIN_YML_WEBSITE    );
-		this.class_main     = this.getStr(keyClassMain, null);
+		this.class_main     = this.getString(keyClassMain          );
 	}
 
 
@@ -98,6 +100,8 @@ public class xPluginYML extends xConfig {
 
 
 	public String getMainClass() {
+		if (IsEmpty(this.class_main))
+			return null;
 		return (
 			this.class_main.endsWith(".class")
 			? this.class_main.substring(0, this.class_main.length() - 6)
