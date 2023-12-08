@@ -15,7 +15,7 @@ import com.poixson.utils.ObjectUtils;
 
 public class xConfig {
 
-	protected final Map<String, Object> datamap = new ConcurrentHashMap<String, Object>();
+	public final Map<String, Object> datamap = new ConcurrentHashMap<String, Object>();
 
 
 
