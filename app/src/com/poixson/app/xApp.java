@@ -574,6 +574,9 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 	public String getVersion() {
 		return this.props.version;
 	}
+	public String getLicense() {
+		return this.props.license;
+	}
 	public String getCommitHashFull() {
 		return this.props.commitHashFull;
 	}

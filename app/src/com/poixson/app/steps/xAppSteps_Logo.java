@@ -44,6 +44,10 @@ public class xAppSteps_Logo {
 		return StringUtils.PadCenter(VERSION_WIDTH, this.getAppVersion(), ' ');
 	}
 
+	protected String getLicense() {
+		return this.app.getLicense();
+	}
+
 
 
 	// -------------------------------------------------------------------------------
@@ -71,6 +75,7 @@ public class xAppSteps_Logo {
 
 	public String[] display_legal() {
 		return new String[] {
+			" License: " + this.getLicense(),
 			" This program comes with absolutely no warranty. This is free ",
 			" software and you are welcome to modify it or redistribute it ",
 			" under certain conditions. Type 'show license' at the command ",

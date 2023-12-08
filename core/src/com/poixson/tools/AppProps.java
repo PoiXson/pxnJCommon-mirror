@@ -19,6 +19,7 @@ public class AppProps {
 	public final String name;
 	public final String title;
 	public final String version;
+	public final String license;
 	public final String commitHashFull;
 	public final String commitHashShort;
 	public final String url;
@@ -57,6 +58,7 @@ public class AppProps {
 		this.name      = props.getProperty("name");
 		this.title     = props.getProperty("title");
 		this.version   = props.getProperty("version");
+		this.license   = props.getProperty("license");
 		this.url       = props.getProperty("url");
 		this.orgName   = props.getProperty("org_name");
 		this.orgUrl    = props.getProperty("org_url");
