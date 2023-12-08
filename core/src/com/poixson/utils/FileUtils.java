@@ -343,18 +343,17 @@ public final class FileUtils {
 
 	public static String ReadInputStream(final InputStream in) {
 		if (in == null) return null;
-		final StringBuilder result = new StringBuilder();
-		final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		try {
+			final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			final StringBuilder result = new StringBuilder();
 			String line;
-			while ( (line=reader.readLine()) != null) {
+			while ( (line=reader.readLine()) != null)
 				result.append(line).append('\n');
-			}
+			return result.toString();
 		} catch (IOException e) {
 			e.printStackTrace();
-			return null;
 		}
-		return result.toString();
+		return null;
 	}
 
 
