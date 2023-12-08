@@ -173,9 +173,13 @@ public class xConfig {
 
 
 	// list
+	public <C> List<C> getList(final String key) {
+		return this.getList(key, null);
+	}
 	public <C> List<C> getList(final String key, final Class<? extends C> clss) {
 		return ObjectUtils.CastList(this.read(key), clss);
 	}
+
 	public List<String> getStringList(final String key) {
 		return this.getList(key, String.class);
 	}
@@ -196,8 +200,20 @@ public class xConfig {
 
 
 
-	public <T extends xConfig> List<T> getConfigList(final String key,
-			final Class<T> cfgClass) {
+	public <T extends xConfig> T getConfig(final String key) {
+		return this.getConfig(key, null);
+	}
+	public <T extends xConfig> T getConfig(final String key, final Class<T> clss) {
+		final Object obj = this.read(key);
+		if (obj == null) return null;
+		final Map<String, Object> datamap = ObjectUtils.CastMap(obj, String.class, null);
+		return xConfigLoader.NewConfig(datamap, clss);
+	}
+
+	public <T extends xConfig> List<T> getConfigList(final String key) {
+		return this.getConfigList(key, null);
+	}
+	public <T extends xConfig> List<T> getConfigList(final String key, final Class<T> clss) {
 		final List<Object> datalist = this.getList(key, Object.class);
 		if (datalist == null)
 			return null;
@@ -207,8 +223,8 @@ public class xConfig {
 			final Object obj = it.next();
 			final Map<String, Object> datamap = ObjectUtils.CastMap(obj, String.class, Object.class);
 			if (datamap == null)
-				throw new RuntimeException("Failed to get Map constructor for class: "+cfgClass.getName());
-			final T cfg = xConfigLoader.NewConfig(datamap, cfgClass);
+				throw new RuntimeException("Failed to get Map constructor for class: "+clss.getName());
+			final T cfg = xConfigLoader.NewConfig(datamap, clss);
 			list.add(cfg);
 		}
 		return list;
