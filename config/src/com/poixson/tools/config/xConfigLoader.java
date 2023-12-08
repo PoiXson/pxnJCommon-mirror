@@ -18,7 +18,6 @@ import com.poixson.exceptions.CreateDefaultYmlFileException;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.utils.FileUtils;
-import com.poixson.utils.StringUtils;
 
 
 public final class xConfigLoader {
@@ -77,7 +76,9 @@ public final class xConfigLoader {
 	public static Map<String, Object> LoadYamlFromStream(final InputStream in) {
 		if (in == null) throw new RequiredArgumentException("in");
 		final Yaml yml = new Yaml();
-		final Map<String, Object> datamap = yml.loadAs(in, Map.class);
+		String data = FileUtils.ReadInputStream(in);
+		data = data.replace('\t', ' ');
+		final Map<String, Object> datamap = yml.loadAs(data, Map.class);
 		return datamap;
 	}
 
