@@ -28,18 +28,18 @@ public final class xConfigLoader {
 
 	// new xConfig child instance
 	public static <T extends xConfig> T NewConfig(
-			final Map<String, Object> datamap, final Class<T> cfgClass) {
+			final Map<String, Object> datamap, final Class<T> clss) {
 		if (datamap == null) {
 			return NewConfig(
 				new HashMap<String, Object>(),
-				cfgClass
+				clss
 			);
 		}
-		if (cfgClass == null) throw new RequiredArgumentException("cfgClass");
+		if (clss == null) throw new RequiredArgumentException("clss");
 		// get construct
 		final Constructor<? extends xConfig> construct;
 		try {
-			construct = cfgClass.getDeclaredConstructor(Map.class);
+			construct = clss.getDeclaredConstructor(Map.class);
 		} catch (NoSuchMethodException e) {
 			throw new RuntimeException(e);
 		} catch (SecurityException e) {
@@ -83,17 +83,17 @@ public final class xConfigLoader {
 
 
 	// load file
-	public static <T extends xConfig> T FromFile(final String filePath, final Class<T> clss) {
-		if (IsEmpty(filePath)) throw new RequiredArgumentException("filePath");
+	public static <T extends xConfig> T FromFile(final String filepath, final Class<T> clss) {
+		if (IsEmpty(filepath)) throw new RequiredArgumentException("filepath");
 		if (clss == null)      throw new RequiredArgumentException("clss");
-		final String fileStr = StringUtils.ForceEnds(".yml", filePath);
-		final File file = new File(fileStr);
+		final String file = StringUtils.ForceEnds(".yml", filepath);
+		final File f = new File(file);
 
 		Map<String, Object> datamap = null;
-		if (file.isFile()) {
+		if (f.isFile()) {
 			InputStream in = null;
 			try {
-				in = new FileInputStream(fileStr);
+				in = new FileInputStream(f);
 				datamap = LoadYamlFromStream(in);
 			} catch (FileNotFoundException ignore) {
 			} finally {
@@ -106,13 +106,13 @@ public final class xConfigLoader {
 
 
 	// load jar resource
-	public static <T extends xConfig> T FromJar(final String filePath, final Class<T> clss) {
-		if (IsEmpty(filePath)) throw new RequiredArgumentException("filePath");
+	public static <T extends xConfig> T FromJar(final String filepath, final Class<T> clss) {
+		if (IsEmpty(filepath)) throw new RequiredArgumentException("filePath");
 		if (clss == null)      throw new RequiredArgumentException("clss");
-		final String fileStr = StringUtils.ForceEnds(".yml", filePath);
+		final String file = StringUtils.ForceEnds(".yml", filepath);
 		InputStream in = null;
 		try {
-			in = FileUtils.OpenResource(clss, fileStr);
+			in = FileUtils.OpenResource(clss, file);
 			if (in == null) return null;
 			final Map<String, Object> datamap = LoadYamlFromStream(in);
 			if (datamap == null) return null;
@@ -125,27 +125,27 @@ public final class xConfigLoader {
 
 
 	// load file or jar (copy from jar to filesystem if doesn't exist)
-	public static <T extends xConfig> T FromFileOrJar(final String filePath, final Class<T> clss)
+	public static <T extends xConfig> T FromFileOrJar(final String filepath, final Class<T> clss)
 			throws CreateDefaultYmlFileException {
-		if (IsEmpty(filePath)) throw new RequiredArgumentException("filePath");
+		if (IsEmpty(filepath)) throw new RequiredArgumentException("filepath");
 		if (clss == null)      throw new RequiredArgumentException("clss");
-		final String fileStr = StringUtils.ForceEnds(".yml", filePath);
+		final String file = StringUtils.ForceEnds(".yml", filepath);
 		try {
 			// attempt loading from file
 			{
-				final T cfg = FromFile(fileStr, clss);
+				final T cfg = FromFile(file, clss);
 				if (cfg != null) return cfg;
 			}
 			// attempt loading from resource
 			{
-				final T cfg = FromJar(fileStr, clss);
+				final T cfg = FromJar(file, clss);
 				if (cfg != null) {
 					// copy default file
 					try {
-						xLog.Get().info("Creating default file:", fileStr);
-						FileUtils.ExportResource(fileStr, FileUtils.OpenResource(clss, fileStr));
+						xLog.Get().info("Creating default file:", file);
+						FileUtils.ExportResource(file, FileUtils.OpenResource(clss, file));
 					} catch (Exception e) {
-						throw new CreateDefaultYmlFileException(fileStr, e);
+						throw new CreateDefaultYmlFileException(file, e);
 					}
 					return cfg;
 				}
