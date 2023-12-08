@@ -86,26 +86,25 @@ public final class xConfigLoader {
 
 	// load file
 	public static <T extends xConfig> T FromFile(final String filepath, final Class<T> clss) {
-		if (IsEmpty(filepath)) throw new RequiredArgumentException("filepath");
+		if (IsEmpty(filepath)) throw new RequiredArgumentException("filePath");
 		if (clss == null)
 			return CastConfig(FromFile(filepath, xConfig.class));
 		if (!filepath.endsWith(".yml")
 		&&  !filepath.endsWith(".json"))
 			return CastConfig(FromFile(filepath+".json", clss));
-		final File f = new File(file);
-
-		Map<String, Object> datamap = null;
-		if (f.isFile()) {
+		final File file = new File(filepath);
+		if (file.isFile()) {
 			InputStream in = null;
 			try {
-				in = new FileInputStream(f);
-				datamap = LoadYamlFromStream(in);
+				in = new FileInputStream(filepath);
+				final Map<String, Object> datamap = LoadYamlFromStream(in);
+				return NewConfig(datamap, clss);
 			} catch (FileNotFoundException ignore) {
 			} finally {
 				SafeClose(in);
 			}
 		}
-		return NewConfig(datamap, clss);
+		return null;
 	}
 
 
@@ -120,7 +119,7 @@ public final class xConfigLoader {
 			return CastConfig(FromJar(filepath+".json", clss));
 		InputStream in = null;
 		try {
-			in = FileUtils.OpenResource(clss, file);
+			in = FileUtils.OpenResource(clss, filepath);
 			if (in == null) return null;
 			final Map<String, Object> datamap = LoadYamlFromStream(in);
 			if (datamap == null) return null;
@@ -135,7 +134,7 @@ public final class xConfigLoader {
 	// load file or jar (copy from jar to filesystem if doesn't exist)
 	public static <T extends xConfig> T FromFileOrJar(final String filepath, final Class<T> clss)
 			throws CreateDefaultYmlFileException {
-		if (IsEmpty(filepath)) throw new RequiredArgumentException("filepath");
+		if (IsEmpty(filepath)) throw new RequiredArgumentException("filePath");
 		if (clss == null)
 			return CastConfig(FromFileOrJar(filepath, xConfig.class));
 		if (!filepath.endsWith(".yml")
@@ -144,21 +143,21 @@ public final class xConfigLoader {
 		try {
 			// attempt loading from file
 			{
-				final T cfg = FromFile(file, clss);
+				final T cfg = FromFile(filepath, clss);
 				if (cfg != null) return cfg;
 			}
 			// attempt loading from resource
 			{
-				final T cfg = FromJar(file, clss);
+				final T cfg = FromJar(filepath, clss);
 				if (cfg != null) {
 					// copy default file
 					try {
-						xLog.Get().info("Creating default file:", file);
-						FileUtils.ExportResource(file, FileUtils.OpenResource(clss, file));
+						xLog.Get().info("Creating default file:", filepath);
+						FileUtils.ExportResource(filepath, FileUtils.OpenResource(clss, filepath));
+						return cfg;
 					} catch (Exception e) {
-						throw new CreateDefaultYmlFileException(file, e);
+						throw new CreateDefaultYmlFileException(filepath, e);
 					}
-					return cfg;
 				}
 			}
 		} catch (Exception e) {

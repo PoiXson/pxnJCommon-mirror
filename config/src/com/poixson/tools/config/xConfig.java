@@ -64,18 +64,10 @@ public class xConfig {
 		return (String) this.read(key);
 	}
 	public String getStr(final String key, final String defVal) {
-		return this.getStr(key, defVal, false);
-	}
-	public String getStr(final String key, final String defVal, final boolean blankable) {
 		try {
 			final String value = this.getString(key);
-			if (blankable) {
-				if (value != null)
-					return value;
-			} else {
-				if (IsEmpty(value))
-					return value;
-			}
+			if (!IsEmpty(value))
+				return value;
 		} catch (Exception ignore) {}
 		return defVal;
 	}
