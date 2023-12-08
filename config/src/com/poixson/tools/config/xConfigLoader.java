@@ -89,7 +89,9 @@ public final class xConfigLoader {
 		if (IsEmpty(filepath)) throw new RequiredArgumentException("filepath");
 		if (clss == null)
 			return CastConfig(FromFile(filepath, xConfig.class));
-		final String file = StringUtils.ForceEnds(".yml", filepath);
+		if (!filepath.endsWith(".yml")
+		&&  !filepath.endsWith(".json"))
+			return CastConfig(FromFile(filepath+".json", clss));
 		final File f = new File(file);
 
 		Map<String, Object> datamap = null;
@@ -113,7 +115,9 @@ public final class xConfigLoader {
 		if (IsEmpty(filepath)) throw new RequiredArgumentException("filePath");
 		if (clss == null)
 			return CastConfig(FromJar(filepath, xConfig.class));
-		final String file = StringUtils.ForceEnds(".yml", filepath);
+		if (!filepath.endsWith(".yml")
+		&&  !filepath.endsWith(".json"))
+			return CastConfig(FromJar(filepath+".json", clss));
 		InputStream in = null;
 		try {
 			in = FileUtils.OpenResource(clss, file);
@@ -132,9 +136,11 @@ public final class xConfigLoader {
 	public static <T extends xConfig> T FromFileOrJar(final String filepath, final Class<T> clss)
 			throws CreateDefaultYmlFileException {
 		if (IsEmpty(filepath)) throw new RequiredArgumentException("filepath");
-		final String file = StringUtils.ForceEnds(".yml", filepath);
 		if (clss == null)
 			return CastConfig(FromFileOrJar(filepath, xConfig.class));
+		if (!filepath.endsWith(".yml")
+		&&  !filepath.endsWith(".json"))
+			return CastConfig(FromFileOrJar(filepath+".json", clss));
 		try {
 			// attempt loading from file
 			{
