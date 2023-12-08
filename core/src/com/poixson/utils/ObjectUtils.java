@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.tools.Keeper;
 
 
@@ -22,8 +21,8 @@ public final class ObjectUtils {
 	@SuppressWarnings("unchecked")
 	public static <T> T Cast(final Object object,
 			final Class<? extends T> clss) {
-		if (clss   == null) throw new RequiredArgumentException("clss");
 		if (object == null) return null;
+		if (clss   == null) return (T) object;
 		try {
 			if (String.class.equals(clss))
 				if (!(object instanceof String))
@@ -43,13 +42,12 @@ public final class ObjectUtils {
 	 */
 	public static <T> Set<T> CastSet(final Collection<?> data,
 			final Class<? extends T> clss) {
-		if (clss == null) throw new RequiredArgumentException("clss");
 		if (data == null) return null;
 		try {
 			final Set<T> result = new HashSet<T>(data.size());
 			for (final Object o : data) {
 				try {
-					result.add(clss.cast(o));
+					result.add(Cast(o, clss));
 				} catch (Exception ignore) {}
 			}
 			return result;
@@ -65,7 +63,6 @@ public final class ObjectUtils {
 	@SuppressWarnings("unchecked")
 	public static <T> Set<T> CastSet(final Object data,
 			final Class<? extends T> clss) {
-		if (clss == null) throw new RequiredArgumentException("clss");
 		if (data == null) return null;
 		try {
 			return CastSet((Collection<T>) data, clss);
@@ -83,7 +80,6 @@ public final class ObjectUtils {
 	 */
 	public static <T> List<T> CastList(final Collection<?> data,
 			final Class<? extends T> clss) {
-		if (clss == null) throw new RequiredArgumentException("clss");
 		if (data == null) return null;
 		try {
 			final List<T> result = new ArrayList<T>(data.size());
@@ -105,7 +101,6 @@ public final class ObjectUtils {
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> CastList(final Object data,
 			final Class<? extends T> clss) {
-		if (clss == null) throw new RequiredArgumentException("clss");
 		if (data == null) return null;
 		try {
 			return CastList((Collection<T>) data, clss);
@@ -124,8 +119,6 @@ public final class ObjectUtils {
 	 */
 	public static <K, V> Map<K, V> CastMap(final Map<?, ?> data,
 			final Class<? extends K> keyClss, final Class<? extends V> valClss) {
-		if (keyClss == null) throw new RequiredArgumentException("keyClss");
-		if (valClss == null) throw new RequiredArgumentException("valClss");
 		if (data    == null) return null;
 		try {
 			final Map<K, V> result = new HashMap<K, V>(data.size());
@@ -151,8 +144,6 @@ public final class ObjectUtils {
 	@SuppressWarnings("unchecked")
 	public static <K, V> Map<K, V> CastMap(final Object data,
 			final Class<? extends K> keyClss, final Class<? extends V> valClss) {
-		if (keyClss == null) throw new RequiredArgumentException("keyClss");
-		if (valClss == null) throw new RequiredArgumentException("valClss");
 		if (data    == null) return null;
 		try {
 			return CastMap((Map<K, V>) data, keyClss, valClss);
