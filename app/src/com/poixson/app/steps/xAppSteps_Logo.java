@@ -80,7 +80,8 @@ public class xAppSteps_Logo {
 			" software and you are welcome to modify it or redistribute it ",
 			" under certain conditions. Type 'show license' at the command ",
 			" prompt for license details, or go to www.growcontrol.com for ",
-			" more information.                                            ",
+			" more information. Wherever third party code has been used,   ",
+			" credit has been given in the code's comments.                ",
 		};
 	}
 
@@ -92,12 +93,12 @@ public class xAppSteps_Logo {
 		result.put( "Version",     app.getVersion()                     );
 		result.put( "Commit",      app.getCommitHashShort()             );
 		result.put( "Running as",  System.getProperty("user.name")      );
-		result.put( "Current dir", System.getProperty("user.dir")       );
-		result.put( "java home",   System.getProperty("java.home")      );
+		result.put( "Working dir", System.getProperty("user.dir")       );
+		result.put( "Java home",   System.getProperty("java.home")      );
 		final StringBuilder log_level = new StringBuilder();
 		log_level.append( xLog.Get().getLevel() );
 		if (xDebug.isDebug())
-			log_level.append(" debug");
+			log_level.append(" <debug>");
 		result.put("Log Level", log_level.toString());
 		final String[] args = app.getArgs();
 		if (!IsEmpty(args))
@@ -106,11 +107,11 @@ public class xAppSteps_Logo {
 	}
 	public String[] display_startup_vars() {
 		final LinkedList<String> lines = new LinkedList<String>();
-		final Map<String, String> varsMap = GetStartupVars(this.app);
-		final Iterator<Entry<String, String>> it = varsMap.entrySet().iterator();
+		final Map<String, String> vars = GetStartupVars(this.app);
+		final Iterator<Entry<String, String>> it = vars.entrySet().iterator();
 		final int maxLineSize =
 			StringUtils.FindLongestLine(
-				varsMap.keySet().toArray(new String[0])
+				vars.keySet().toArray(new String[0])
 			) + 1;
 		while (it.hasNext()) {
 			final Entry<String, String> entry = it.next();
@@ -118,6 +119,7 @@ public class xAppSteps_Logo {
 			final String val = entry.getValue();
 			lines.addLast(
 				(new StringBuilder())
+				.append(' ')
 				.append(key)
 				.append(':')
 				.append( StringUtils.Repeat(maxLineSize - key.length(), ' ') )
