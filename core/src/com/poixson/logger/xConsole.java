@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 
 import com.poixson.tools.abstractions.xStartable;
+import com.poixson.tools.commands.xCommandProcessor;
 
 
 public abstract class xConsole extends PrintStream implements xStartable, Runnable {
@@ -13,6 +14,11 @@ public abstract class xConsole extends PrintStream implements xStartable, Runnab
 	public xConsole(final OutputStream out) {
 		super(out, true);
 	}
+
+
+
+	public abstract xCommandProcessor getProcessor();
+	public abstract xCommandProcessor setProcessor(final xCommandProcessor processor);
 
 
 

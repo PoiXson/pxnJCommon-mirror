@@ -20,7 +20,6 @@ import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
 import com.poixson.ShellDefines;
-import com.poixson.app.xApp;
 import com.poixson.exceptions.IORuntimeException;
 import com.poixson.logger.xConsole;
 import com.poixson.logger.xLog;
@@ -32,7 +31,7 @@ import com.poixson.utils.ThreadUtils;
 public class xConsolePrompt extends xConsole {
 	protected static final String THREAD_NAME = "Console-Input";
 
-	protected final xApp app;
+	protected final AtomicReference<xCommandProcessor> processor = new AtomicReference<xCommandProcessor>(null);
 
 	protected static final AtomicReference<Terminal>   terminal = new AtomicReference<Terminal>(null);
 	protected static final AtomicReference<LineReader> reader   = new AtomicReference<LineReader>(null);
@@ -47,13 +46,11 @@ public class xConsolePrompt extends xConsole {
 
 
 
-	public xConsolePrompt(final xApp app) {
-		this(app, StdIO.OriginalOut(), StdIO.OriginalIn());
+	public xConsolePrompt() {
+		this(StdIO.OriginalOut(), StdIO.OriginalIn());
 	}
-	protected xConsolePrompt(final xApp app,
-			final OutputStream out, final InputStream in) {
+	protected xConsolePrompt(final OutputStream out, final InputStream in) {
 		super(out);
-		this.app = app;
 		this.out = out;
 		this.in  = in;
 		Keeper.add(this);
@@ -115,7 +112,7 @@ public class xConsolePrompt extends xConsole {
 				);
 				// handle line
 				if (!IsEmpty(line)) {
-					final xCommandProcessor processor = this.app.getCommandProcessor();
+					final xCommandProcessor processor = this.getProcessor();
 					if (processor == null) {
 						this.log().warning("No command processor to handle command: %s", line);
 						continue READER_LOOP;
@@ -155,8 +152,9 @@ public class xConsolePrompt extends xConsole {
 		this.stop();
 		StdIO.OriginalOut().println();
 		StdIO.OriginalOut().flush();
-		if (!this.app.isStopping())
-			this.app.stop();
+//TODO: how can we do this better?
+//		if (!this.app.isStopping())
+//			this.app.stop();
 	}
 
 
@@ -168,6 +166,21 @@ public class xConsolePrompt extends xConsole {
 	@Override
 	public boolean isStopping() {
 		return this.stopping.get();
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+
+
+
+	@Override
+	public xCommandProcessor getProcessor() {
+		return this.processor.get();
+	}
+	@Override
+	public xCommandProcessor setProcessor(final xCommandProcessor processor) {
+		return this.processor.getAndSet(processor);
 	}
 
 

@@ -13,6 +13,11 @@ public @interface xCommand {
 
 	String Name();
 	String Aliases() default "";
+//TODO: use this
+	String Desc()    default "";
+
+	boolean autoHandled()   default true;
+	boolean ignoreHandled() default true;
 
 
 }

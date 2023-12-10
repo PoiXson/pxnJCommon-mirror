@@ -1,6 +1,8 @@
 package com.poixson.app.commands;
 
 import com.poixson.app.xApp;
+import com.poixson.tools.commands.xCommand;
+import com.poixson.tools.commands.xCommandEvent;
 
 
 public class xCommands_ExitKill {
@@ -15,14 +17,22 @@ public class xCommands_ExitKill {
 
 
 
-	@xCommand(Name="exit", Aliases="e,stop,quit")
-	public void __COMMAND_exit() {
-		this.app.stop();
+	@xCommand(Name="exit", Aliases="e,stop,quit,shutdown")
+	public void __COMMAND_exit(final xCommandEvent event) {
+		if (event.isHelp()) {
+//TODO
+		} else {
+			this.app.stop();
+		}
 	}
 	@xCommand(Name="kill", Aliases="k")
-	public void __COMMAND__kill() {
-		this.app.kill();
-		System.exit(1);
+	public void __COMMAND__kill(final xCommandEvent event) {
+		if (event.isHelp()) {
+//TODO
+		} else {
+			this.app.kill();
+			System.exit(1);
+		}
 	}
 
 

@@ -1,62 +1,66 @@
 package com.poixson.tools.commands;
 
-import static com.poixson.utils.Utils.IfEmpty;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.threadpool.types.xThreadPool_Main;
-import com.poixson.tools.events.xEventListenerDAO;
+import com.poixson.utils.StringUtils;
 
 
-public class xCommandDAO extends xEventListenerDAO {
+public class xCommandDAO {
 
 	public final String   name;
 	public final String[] aliases;
 
+	public final Object container;
+	public final Method method;
+
+	public final boolean auto_handled;
+	public final boolean ignore_handled;
 
 
-	public xCommandDAO(final String name, final String[] aliases,
-			final Object object, final Method method) {
-		super(object, method);
-		if (IsEmpty(name)) throw new RequiredArgumentException("name");
-		this.name = name;
-		this.aliases = IfEmpty(aliases, null);
+
+	public xCommandDAO(final Object container, final Method method, final xCommand anno) {
+		this.container      = container;
+		this.method         = method;
+		this.name           = anno.Name();
+		this.aliases        = StringUtils.Split(anno.Aliases(), ',');
+		this.auto_handled   = anno.autoHandled();
+		this.ignore_handled = anno.ignoreHandled();
 	}
 
 
 
-	public void invoke(final String line) {
+	public void invoke(final xCommandEvent event) {
 		// only run in main thread
-		if (xThreadPool_Main.Get().proper(this, "invoke", line))
+		if (xThreadPool_Main.Get().proper(this, "invoke", event))
 			return;
 		xLog.Get().finest(
 			"Invoking command: %s->%s >> %s",
-			super.object.getClass().getName(),
-			super.method.getName(),
-			line
+			this.container.getClass().getName(),
+			this.method.getName(),
+			event.line
 		);
 		// method(event)
 		try {
-			final xCommandEvent event = new xCommandEvent(line);
-			this.method.invoke(this.object, event);
+			this.method.invoke(this.container, event);
 			return;
 		} catch (IllegalAccessException ignore) {
 		} catch (IllegalArgumentException ignore) {
 		} catch (InvocationTargetException ignore) {}
 		// method(line)
 		try {
-			this.method.invoke(this.object, line);
+			this.method.invoke(this.container, event.line);
 			return;
 		} catch (IllegalAccessException ignore) {
 		} catch (IllegalArgumentException ignore) {
 		} catch (InvocationTargetException ignore) {}
 		// method()
 		try {
-			this.method.invoke(this.object);
+			this.method.invoke(this.container);
 			return;
 		} catch (IllegalAccessException ignore) {
 		} catch (IllegalArgumentException ignore) {
@@ -65,23 +69,29 @@ public class xCommandDAO extends xEventListenerDAO {
 		throw new RuntimeException(
 			(new StringBuilder())
 				.append("Method arguments not supported: ")
-				.append(super.method.getName())
+				.append(this.method.getName())
 				.toString()
 		);
 	}
 
 
 
-	public boolean isCommand(final String cmd) {
-		if (cmd == null)
-			return false;
-		return cmd.equals(this.name);
-	}
-	public boolean isAlias(final String cmd) {
-		if (cmd == null)           return false;
-		if (IsEmpty(this.aliases)) return false;
+	public boolean isCommand(final String name) {
+		if (IsEmpty(name)) return IsEmpty(this.name);
 		for (final String alias : this.aliases) {
-			if (cmd.equals(alias))
+			if (alias.equals(name))
+				return true;
+		}
+		return false;
+	}
+	public boolean isName(final String name) {
+		if (IsEmpty(name)) return IsEmpty(this.name);
+		return this.name.equals(name);
+	}
+	public boolean isAlias(final String alias) {
+		if (IsEmpty(alias)) return false;
+		for (final String a : this.aliases) {
+			if (a.equals(alias))
 				return true;
 		}
 		return false;
