@@ -21,10 +21,10 @@ import org.jline.terminal.TerminalBuilder;
 
 import com.poixson.ShellDefines;
 import com.poixson.app.xApp;
-import com.poixson.app.commands.xCommandProcessor;
 import com.poixson.exceptions.IORuntimeException;
 import com.poixson.logger.xConsole;
 import com.poixson.logger.xLog;
+import com.poixson.tools.commands.xCommandProcessor;
 import com.poixson.utils.FileUtils;
 import com.poixson.utils.ThreadUtils;
 
