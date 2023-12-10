@@ -1,5 +1,6 @@
 package com.poixson.tools;
 
+import static com.poixson.ShellDefines.DEFAULT_PROMPT;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.io.IOException;
@@ -32,6 +33,7 @@ public class xConsolePrompt extends xConsole {
 	protected static final String THREAD_NAME = "Console-Input";
 
 	protected final AtomicReference<xCommandProcessor> processor = new AtomicReference<xCommandProcessor>(null);
+	protected final AtomicReference<String> prompt = new AtomicReference<String>(null);
 
 	protected static final AtomicReference<Terminal>   terminal = new AtomicReference<Terminal>(null);
 	protected static final AtomicReference<LineReader> reader   = new AtomicReference<LineReader>(null);
@@ -104,8 +106,7 @@ public class xConsolePrompt extends xConsole {
 			try {
 				// read console input
 				line = reader.readLine(
-//TODO
-					ShellDefines.DEFAULT_PROMPT,
+					this.getPrompt(),
 					null
 //					this.getPrompt(),
 //					this.getMask()
@@ -171,6 +172,22 @@ public class xConsolePrompt extends xConsole {
 
 
 	// -------------------------------------------------------------------------------
+
+
+
+	@Override
+	public String getPrompt() {
+		final String prompt = this.prompt.get();
+		return (
+			IsEmpty(prompt)
+			? DEFAULT_PROMPT
+			: prompt
+		);
+	}
+	@Override
+	public String setPrompt(final String prompt) {
+		return this.prompt.getAndSet(prompt);
+	}
 
 
 
