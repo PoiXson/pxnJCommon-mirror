@@ -113,6 +113,10 @@ public abstract class xLog {
 		}
 	}
 
+	public xLog[] getChildren() {
+		return this.loggers.values().toArray(new xLog[0]);
+	}
+
 	// new instance (weak reference)
 	public xLog getWeak(final String log_name) {
 		InitRoot();
