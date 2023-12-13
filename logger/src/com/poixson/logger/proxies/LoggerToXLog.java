@@ -2,6 +2,7 @@ package com.poixson.logger.proxies;
 
 import static com.poixson.utils.Utils.IsEmpty;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -17,29 +18,32 @@ import com.poixson.tools.Keeper;
 public class LoggerToXLog extends Handler {
 
 	protected static final AtomicReference<LoggerToXLog> instance = new AtomicReference<LoggerToXLog>(null);
+	protected static final AtomicBoolean inited = new AtomicBoolean(false);
 
 
 
 	public static void Init() {
-		Logger logger = Logger.getLogger("");
-		logger.setLevel(Level.ALL);
-		final Handler[] handlers = logger.getHandlers();
-		boolean found = false;
-		for (final Handler handler : handlers) {
-			if (handler instanceof LoggerToXLog) {
-				found = true;
-				continue;
+		if (inited.compareAndSet(false, true)) {
+			Logger logger = Logger.getLogger("");
+			logger.setLevel(Level.ALL);
+			final Handler[] handlers = logger.getHandlers();
+			boolean found = false;
+			for (final Handler handler : handlers) {
+				if (handler instanceof LoggerToXLog) {
+					found = true;
+					continue;
+				}
+				logger.removeHandler(handler);
 			}
-			logger.removeHandler(handler);
+			if (!found)
+				logger.addHandler( Get() );
+			// default log levels
+			xLog.Get("mqtt" ).setLevel(xLevel.INFO);
+			xLog.Get("jline").setLevel(xLevel.INFO);
+			xLog.Get("netty").setLevel(xLevel.INFO);
+			xLog.Get("jcl"  ).setLevel(xLevel.INFO);
+			xLog.Get("GUI"  ).setLevel(xLevel.INFO);
 		}
-		if (!found)
-			logger.addHandler( Get() );
-		// default log levels
-		xLog.Get("mqtt" ).setLevel(xLevel.INFO);
-		xLog.Get("jline").setLevel(xLevel.INFO);
-		xLog.Get("netty").setLevel(xLevel.INFO);
-		xLog.Get("jcl"  ).setLevel(xLevel.INFO);
-		xLog.Get("GUI"  ).setLevel(xLevel.INFO);
 	}
 
 
