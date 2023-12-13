@@ -56,6 +56,7 @@ import com.poixson.utils.StringUtils;
 */
 
 
+//TODO: expire old loggers?
 public abstract class xLog {
 
 	public static final xLevel DEFAULT_LEVEL = xLevel.INFO;
@@ -64,7 +65,7 @@ public abstract class xLog {
 	protected static final AtomicReference<xLog> root = new AtomicReference<xLog>(null);
 	protected static final AtomicBoolean inited = new AtomicBoolean(false);
 	// child-loggers
-	protected final ConcurrentHashMap<String, SoftReference<xLog>> loggers = new ConcurrentHashMap<String, SoftReference<xLog>>();
+	protected final ConcurrentHashMap<String, xLog> loggers = new ConcurrentHashMap<String, xLog>();
 
 	public final xLog parent;
 	public final String log_name;
@@ -100,24 +101,15 @@ public abstract class xLog {
 			return Get();
 		// existing logger instance
 		{
-			final SoftReference<xLog> ref = this.loggers.get(log_name);
-			if (ref != null) {
-				final xLog log = ref.get();
-				if (log != null)
-					return log;
-			}
+			final xLog log = this.loggers.get(log_name);
+			if (log != null)
+				return log;
 		}
 		// new logger instance
 		{
 			final xLog log = (this.parent==null ? Get() : this.parent).create(log_name);
-			final SoftReference<xLog> ref = new SoftReference<xLog>(log);
-			final SoftReference<xLog> existing = this.loggers.putIfAbsent(log_name, ref);
-			if (existing != null) {
-				final xLog lg = existing.get();
-				if (lg != null)
-					return lg;
-			}
-			return log;
+			final xLog existing = this.loggers.putIfAbsent(log_name, log);
+			return (existing == null ? log : existing);
 		}
 	}
 
