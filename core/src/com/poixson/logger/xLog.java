@@ -163,8 +163,10 @@ public abstract class xLog {
 
 	public xLevel getLevel() {
 		final xLevel level = this.level.get();
-		if (level == null)
-			return DEFAULT_LEVEL;
+		if (this.isRoot()) {
+			if (level == null)
+				return DEFAULT_LEVEL;
+		}
 		return level;
 	}
 	public void setLevel(final xLevel level) {
