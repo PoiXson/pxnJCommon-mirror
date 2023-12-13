@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class xSchedTrigger {
 
-	protected final AtomicBoolean enabled   = new AtomicBoolean(false);
+	protected final AtomicBoolean enabled   = new AtomicBoolean(true);
 	protected final AtomicBoolean repeating = new AtomicBoolean(false);
 
 	protected final AtomicLong last = new AtomicLong( Long.MIN_VALUE );

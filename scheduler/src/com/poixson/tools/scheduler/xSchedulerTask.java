@@ -22,7 +22,7 @@ public class xSchedulerTask extends xRunnable {
 	protected static final AtomicInteger TaskIndex = new AtomicInteger(0);
 	public final int task_index;
 
-	protected final AtomicBoolean enabled = new AtomicBoolean(false);
+	protected final AtomicBoolean enabled = new AtomicBoolean(true);
 	protected final AtomicBoolean lazy    = new AtomicBoolean(false);
 
 	protected final AtomicLong count_runs = new AtomicLong(0L);
