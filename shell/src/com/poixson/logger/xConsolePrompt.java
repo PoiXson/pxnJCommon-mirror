@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.ref.SoftReference;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -49,6 +50,7 @@ public class xConsolePrompt extends xConsole {
 	protected final AtomicReference<Thread> thread = new AtomicReference<Thread>(null);
 
 	protected final AtomicBoolean stopping = new AtomicBoolean(false);
+	protected final CopyOnWriteArraySet<Runnable> listeners_close = new CopyOnWriteArraySet<Runnable>();
 
 
 
@@ -161,6 +163,14 @@ public class xConsolePrompt extends xConsole {
 //TODO: how can we do this better?
 //		if (!this.app.isStopping())
 //			this.app.stop();
+		// close listeners
+		for (final Runnable listener : this.listeners_close) {
+			try {
+				listener.run();
+			} catch (Exception e) {
+				this.log().trace(e);
+			}
+		}
 	}
 
 
@@ -289,6 +299,17 @@ public class xConsolePrompt extends xConsole {
 				return history.get();
 			return hist;
 		}
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// listeners
+
+
+
+	public void addCloseListener(final Runnable run) {
+		this.listeners_close.add(run);
 	}
 
 
