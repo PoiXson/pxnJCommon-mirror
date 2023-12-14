@@ -3,6 +3,7 @@ package com.poixson.logger;
 import static com.poixson.ShellDefines.DEFAULT_PROMPT;
 import static com.poixson.utils.Utils.IsEmpty;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -47,6 +48,7 @@ public class xConsolePrompt extends xConsole {
 	protected final InputStream  in;
 
 	protected final xLogHandler_ConsolePrompt handler;
+
 	protected final AtomicReference<Thread> thread = new AtomicReference<Thread>(null);
 
 	protected final AtomicBoolean stopping = new AtomicBoolean(false);
@@ -55,7 +57,7 @@ public class xConsolePrompt extends xConsole {
 
 
 	public xConsolePrompt() {
-		this(StdIO.OriginalOut(), StdIO.OriginalIn());
+		this( StdIO.OriginalOut(), StdIO.OriginalIn() );
 	}
 	protected xConsolePrompt(final OutputStream out, final InputStream in) {
 		super(out);
@@ -70,15 +72,19 @@ public class xConsolePrompt extends xConsole {
 
 
 
+	// start console input thread
 	@Override
 	public void start() {
-		// start console input thread
+		if (this.stopping.get())
+			throw new IllegalStateException("Cannot start console prompt, already stopped");
 		if (this.thread.get() == null) {
+			// new thread
 			final Thread thread = new Thread(this);
 			if (this.thread.compareAndSet(null, thread)) {
 				thread.setName(THREAD_NAME);
 				thread.setDaemon(true);
 				thread.start();
+				ThreadUtils.Sleep(10L);
 			}
 		}
 	}
@@ -93,17 +99,17 @@ public class xConsolePrompt extends xConsole {
 			try {
 				thread.notifyAll();
 			} catch (Exception ignore) {}
-			ThreadUtils.Sleep(50L);
+			ThreadUtils.Sleep(10L);
 		}
 	}
 
 
 
+	// prompt thread
 	@Override
 	public void run() {
 		if (this.isStopping()) return;
 		this.log().fine("Console prompt started..");
-		final LineReader reader = getReader();
 		final Thread thread = Thread.currentThread();
 		READER_LOOP:
 		while (true) {
@@ -112,11 +118,10 @@ public class xConsolePrompt extends xConsole {
 			final String line;
 			try {
 				// read console input
+				final LineReader reader = this.getReader();
 				line = reader.readLine(
 					this.getPrompt(),
-					null
-//					this.getPrompt(),
-//					this.getMask()
+					this.mask.get()
 				);
 				// handle line
 				if (!IsEmpty(line)) {
@@ -127,7 +132,7 @@ public class xConsolePrompt extends xConsole {
 					}
 					final boolean result = processor.process(line);
 					if (!result)
-						log().warning("Unknown command: %s", line);
+						this.log().warning("Unknown command: %s", line);
 				}
 			} catch (UserInterruptException ignore) {
 				break READER_LOOP;
@@ -141,28 +146,13 @@ public class xConsolePrompt extends xConsole {
 				continue READER_LOOP;
 			}
 		} // end READER_LOOP
-		// save command history
-		{
-			final History history = xConsolePrompt.history.get();
-			if (history != null) {
-				if (history instanceof DefaultHistory) {
-					try {
-						((DefaultHistory) history)
-							.save();
-					} catch (IOException e) {
-						this.log().trace(e);
-					}
-				}
-			}
-		}
+		this.saveHistory();
 		this.log().fine("Console prompt stopped");
 		this.thread.set(null);
 		this.stop();
 		StdIO.OriginalOut().println();
 		StdIO.OriginalOut().flush();
-//TODO: how can we do this better?
-//		if (!this.app.isStopping())
-//			this.app.stop();
+		this.flush();
 		// close listeners
 		for (final Runnable listener : this.listeners_close) {
 			try {
@@ -199,15 +189,24 @@ public class xConsolePrompt extends xConsole {
 	@Override
 	public String getPrompt() {
 		final String prompt = this.prompt.get();
-		return (
-			IsEmpty(prompt)
-			? DEFAULT_PROMPT
-			: prompt
-		);
+		return (IsEmpty(prompt) ? DEFAULT_PROMPT : prompt);
 	}
 	@Override
 	public String setPrompt(final String prompt) {
 		return this.prompt.getAndSet(prompt);
+	}
+
+
+
+	@Override
+	public char getMask() {
+		final Character mask = this.mask.get();
+		return (mask==null ? null : mask.charValue());
+	}
+	@Override
+	public char setMask(final char mask) {
+		final Character previous = this.mask.getAndSet(Character.valueOf(mask));
+		return (previous==null ? null : previous.charValue());
 	}
 
 
@@ -228,13 +227,13 @@ public class xConsolePrompt extends xConsole {
 
 
 
-	public static Terminal getTerminal() {
+	public Terminal getTerminal() {
 		{
-			final Terminal term = terminal.get();
+			final Terminal term = this.terminal.get();
 			if (term != null)
 				return term;
 		}
-		synchronized (terminal) {
+		synchronized (this.terminal) {
 			final Terminal term;
 			try {
 				final PrintStream hold_out = System.out;
@@ -253,51 +252,77 @@ public class xConsolePrompt extends xConsole {
 			} catch (IOException e) {
 				throw new IORuntimeException(e);
 			}
-			if (!terminal.compareAndSet(null, term))
-				terminal.get();
-			AnsiConsole.systemInstall();
-			return term;
+			if (this.terminal.compareAndSet(null, term)) {
+				AnsiConsole.systemInstall();
+				return term;
+			}
 		}
+		return this.terminal.get();
 	}
-	public static LineReader getReader() {
+	public LineReader getReader() {
+		// existing instance
 		{
-			final LineReader read = reader.get();
+			final LineReader read = this.reader.get();
 			if (read != null)
 				return read;
 		}
-		synchronized (reader) {
-			final Terminal term = getTerminal();
+		// new instance
+		synchronized (this.reader) {
+			final Terminal term = this.getTerminal();
 			final LineReader read =
 				LineReaderBuilder.builder()
 					.terminal(term)
 					.build();
-			if ( ! reader.compareAndSet(null, read) )
-				return reader.get();
-			read.setVariable(
-				LineReader.BELL_STYLE,
+			if ( ! this.reader.compareAndSet(null, read) )
+				return this.reader.get();
 //TODO
-				"visible"
-//				( xShellDefines.BELL_ENABLED ? "audible" : "visible" )
-			);
-			getHistory();
+final String history_file = "history.txt";
+			read.setVariable(LineReader.HISTORY_FILE, new File(history_file));
+			//TODO
+//			( xShellDefines.BELL_ENABLED ? "audible" : "visible" )
+			read.setVariable(LineReader.BELL_STYLE, "visible");
+			this.getHistory();
 			return read;
 		}
 	}
-	public static History getHistory() {
+	public LineReaderImpl getReaderImpl() {
+		return (LineReaderImpl) this.getReader();
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// history
+
+
+
+	public History getHistory() {
+		// existing instance
 		{
-			final History hist = history.get();
+			final History hist = this.history.get();
 			if (hist != null)
 				return hist;
 		}
+		// new instance
 		{
 			final String historyFile = FileUtils.MergePaths(",", ShellDefines.HISTORY_FILE);
-			final LineReader read = getReader();
+			final LineReader read = this.getReader();
 			read.setVariable(LineReader.HISTORY_FILE, historyFile);
 			read.setVariable(LineReader.HISTORY_SIZE, ShellDefines.HISTORY_SIZE);
 			final History hist = new DefaultHistory(read);
-			if ( ! history.compareAndSet(null, hist) )
-				return history.get();
+			if ( ! this.history.compareAndSet(null, hist) )
+				return this.history.get();
 			return hist;
+		}
+	}
+	public void saveHistory() {
+		final History hist = this.history.get();
+		if (hist != null) {
+			try {
+				hist.save();
+			} catch (IOException e) {
+				xLog.Get().trace(e);
+			}
 		}
 	}
 
