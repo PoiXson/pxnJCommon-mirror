@@ -23,6 +23,7 @@ import com.poixson.tools.abstractions.xStartable;
 
 
 public abstract class xThreadPool implements xStartable, Runnable {
+	public static final boolean DEBUG_EXTRA = false;
 
 	public static final int  HARD_MAX_WORKERS = 100;
 	public static final long WORKER_START_TIMEOUT = 500L;

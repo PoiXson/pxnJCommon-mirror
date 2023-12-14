@@ -1,5 +1,6 @@
 package com.poixson.threadpool;
 
+import static com.poixson.threadpool.xThreadPool.DEBUG_EXTRA;
 import static com.poixson.threadpool.xThreadPool.WORKER_START_TIMEOUT;
 import static com.poixson.utils.Utils.IsEmpty;
 
@@ -135,7 +136,7 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 				if (this.isStopping())
 					break WORKER_LOOP;
 				// idle worker
-				this.log().detail("Idle thread..");
+				if (DEBUG_EXTRA) this.log().detail("Idle..");
 //TODO: idle thread may stop
 			} // end WORKER_LOOP
 		} finally {
@@ -148,10 +149,7 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 		if (task == null) throw new RequiredArgumentException("task");
 		this.active.set(true);
 		try {
-			this.log().finest(
-				"Run Task: %s",
-				task.getTaskName()
-			);
+			if (DEBUG_EXTRA) this.log().finest("Run Task: %s", task.getTaskName());
 			task.setWorker(this);
 			task.setRunIndex(runIndex);
 			task.runTask();
@@ -173,7 +171,7 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 		if (this.thread.get() == null) {
 			final Thread thread = this.newThread();
 			if (this.thread.compareAndSet(null, thread)) {
-				this.log().finer("New worker thread..");
+				if (DEBUG_EXTRA) this.log().finer("New worker thread..");
 				this.configureThread(thread);
 				return thread;
 			}

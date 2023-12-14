@@ -22,7 +22,7 @@ import com.poixson.utils.ThreadUtils;
 
 
 public class xScheduler implements xStartable, Runnable {
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG_EXTRA = false;
 	public static final String LOG_NAME = "sched";
 
 	protected final String name;
@@ -120,7 +120,7 @@ public class xScheduler implements xStartable, Runnable {
 			if (sleep <= 0L) continue RUN_LOOP;
 			// log sleep time
 			final double sleepSec = ((double)sleep) / 1000.0;
-			if (DEBUG)
+			if (DEBUG_EXTRA)
 				this.log().finest("Sleeping.. %s sec", NumberUtils.FormatDecimal("0.000", sleepSec));
 			// sleep until next check
 			this.sleeping.set(true);

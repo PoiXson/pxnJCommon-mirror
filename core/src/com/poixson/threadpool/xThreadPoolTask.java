@@ -1,5 +1,7 @@
 package com.poixson.threadpool;
 
+import static com.poixson.threadpool.xThreadPool.DEBUG_EXTRA;
+
 import java.lang.ref.SoftReference;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -48,7 +50,7 @@ public class xThreadPoolTask extends xRunnable {
 	public void runTask() {
 		if (!this.active.compareAndSet(false, true))
 			throw new IllegalStateException("Task already running: "+this.getTaskName());
-		this.log().finest("Running task:", this.getTaskName());
+		if (DEBUG_EXTRA) this.log().finest("Running task..");
 		try {
 			this.run();
 		} catch (Exception e) {
