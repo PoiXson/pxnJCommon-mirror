@@ -1,4 +1,4 @@
-package com.poixson.tools;
+package com.poixson.logger;
 
 import static com.poixson.ShellDefines.DEFAULT_PROMPT;
 import static com.poixson.utils.Utils.IsEmpty;
@@ -22,8 +22,8 @@ import org.jline.terminal.TerminalBuilder;
 
 import com.poixson.ShellDefines;
 import com.poixson.exceptions.IORuntimeException;
-import com.poixson.logger.xConsole;
-import com.poixson.logger.xLog;
+import com.poixson.tools.Keeper;
+import com.poixson.tools.StdIO;
 import com.poixson.tools.commands.xCommandProcessor;
 import com.poixson.utils.FileUtils;
 import com.poixson.utils.ThreadUtils;
