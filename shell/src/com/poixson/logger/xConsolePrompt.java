@@ -16,12 +16,14 @@ import org.jline.reader.History;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.UserInterruptException;
+import org.jline.reader.impl.LineReaderImpl;
 import org.jline.reader.impl.history.DefaultHistory;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
 import com.poixson.ShellDefines;
 import com.poixson.exceptions.IORuntimeException;
+import com.poixson.logger.handlers.xLogHandler_ConsolePrompt;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;
 import com.poixson.tools.commands.xCommandProcessor;
@@ -33,15 +35,17 @@ public class xConsolePrompt extends xConsole {
 	protected static final String THREAD_NAME = "Console-Input";
 
 	protected final AtomicReference<xCommandProcessor> processor = new AtomicReference<xCommandProcessor>(null);
-	protected final AtomicReference<String> prompt = new AtomicReference<String>(null);
+	protected final AtomicReference<String>  prompt = new AtomicReference<String>(null);
+	protected final AtomicReference<Character> mask = new AtomicReference<Character>(null);
 
-	protected static final AtomicReference<Terminal>   terminal = new AtomicReference<Terminal>(null);
-	protected static final AtomicReference<LineReader> reader   = new AtomicReference<LineReader>(null);
-	protected static final AtomicReference<History>    history  = new AtomicReference<History>(null);
+	protected final AtomicReference<Terminal>   terminal = new AtomicReference<Terminal>(null);
+	protected final AtomicReference<LineReader> reader   = new AtomicReference<LineReader>(null);
+	protected final AtomicReference<History>    history  = new AtomicReference<History>(null);
 
 	protected final OutputStream out;
 	protected final InputStream  in;
 
+	protected final xLogHandler_ConsolePrompt handler;
 	protected final AtomicReference<Thread> thread = new AtomicReference<Thread>(null);
 
 	protected final AtomicBoolean stopping = new AtomicBoolean(false);
@@ -55,6 +59,7 @@ public class xConsolePrompt extends xConsole {
 		super(out);
 		this.out = out;
 		this.in  = in;
+		this.handler = new xLogHandler_ConsolePrompt(this);
 		Keeper.add(this);
 	}
 	public void unload() {
@@ -172,6 +177,12 @@ public class xConsolePrompt extends xConsole {
 
 
 	// -------------------------------------------------------------------------------
+
+
+
+	public xLogHandler_ConsolePrompt getHandler() {
+		return this.handler;
+	}
 
 
 
