@@ -56,6 +56,7 @@ import com.poixson.utils.StringUtils;
 */
 
 
+//TODO: use a thread and queue
 //TODO: expire old loggers?
 public abstract class xLog {
 
@@ -402,7 +403,6 @@ public abstract class xLog {
 //TODO: publish lock
 		this.removeHandler(remove);
 		this.handlers.add(add);
-//TODO: release lock
 	}
 	public void replaceHandler(final xLogHandler remove, final xLogHandler add) {
 		if (remove == null) throw new RequiredArgumentException("remove");
@@ -410,7 +410,6 @@ public abstract class xLog {
 //TODO: publish lock
 		this.handlers.remove(remove);
 		this.handlers.add(add);
-//TODO: release lock
 	}
 
 

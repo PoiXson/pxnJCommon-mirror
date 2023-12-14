@@ -154,7 +154,7 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 			);
 			task.setWorker(this);
 			task.setRunIndex(runIndex);
-			task.run();
+			task.runTask();
 		} finally {
 			this.active.set(false);
 		}

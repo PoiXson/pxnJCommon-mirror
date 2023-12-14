@@ -52,14 +52,8 @@ public class xLogHandler_Console extends xLogHandler {
 				this.out.println();
 			} else {
 				final String[] lines = msg.split("\n");
-				// single line
-				if (lines.length == 1) {
-					this.out.println( ShellUtils.RenderAnsi(lines[0]) );
-				// multiple lines
-				} else {
-					for (final String line : lines)
-						this.out.println( ShellUtils.RenderAnsi(line) );
-				}
+				for (final String line : lines)
+					this.out.println( ShellUtils.RenderAnsi(line) );
 				this.out.flush();
 			}
 		} finally {
@@ -85,6 +79,30 @@ public class xLogHandler_Console extends xLogHandler {
 //	}
 //	@Override
 //	public void beep() {
+//	}
+//TODO: from xLogHandler_ConsolePrompt
+//	@Override
+//	public void flush() {
+//		this.getPublishLock();
+//		try {
+//			final Terminal term = this.terminal.get();
+//			if (term == null) {
+//				this.out.flush();
+//				this.err.flush();
+//			} else {
+//				term.flush();
+//			}
+//		} finally {
+//			this.releasePublishLock();
+//		}
+//	}
+//	@Override
+//	public void clearScreen() {
+//		this.getReaderImpl().clearScreen();
+//	}
+//	@Override
+//	public void beep() {
+//		this.getReaderImpl().beep();
 //	}
 
 

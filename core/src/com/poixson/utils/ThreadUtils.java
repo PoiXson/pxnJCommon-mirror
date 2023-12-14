@@ -12,6 +12,7 @@ import com.poixson.tools.xTime;
 import com.poixson.tools.abstractions.xCallable;
 
 
+//TODO: cleanup
 public final class ThreadUtils {
 	private ThreadUtils() {}
 	static { Keeper.add(new ThreadUtils()); }
@@ -35,6 +36,7 @@ public final class ThreadUtils {
 
 
 
+//TODO: clean up this
 	// list running thread names
 	public static String[] GetThreadNames() {
 		return GetThreadNames(true);

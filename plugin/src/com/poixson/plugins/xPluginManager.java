@@ -149,7 +149,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> {
 		while (it.hasNext()) {
 			final T plugin = it.next();
 			if (plugin.isState(null))
-				this.queue_init.addLast(plugin);
+				this.init(plugin);
 			count++;
 		}
 		return count;
@@ -160,7 +160,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> {
 		while (it.hasNext()) {
 			final T plugin = it.next();
 			if (plugin.isState(xPluginState.STOPPED))
-				this.queue_term.addLast(plugin);
+				this.term(plugin);
 			count++;
 		}
 		return count;
@@ -172,7 +172,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> {
 		while (it.hasNext()) {
 			final T plugin = it.next();
 			if (plugin.isState(xPluginState.INITED))
-					this.queue_start.addLast(plugin);
+				this.start(plugin);
 			count++;
 		}
 		return count;
@@ -183,7 +183,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> {
 		while (it.hasNext()) {
 			final T plugin = it.next();
 			if (plugin.isState(xPluginState.RUNNING))
-				this.queue_stop.addLast(plugin);
+				this.stop(plugin);
 			count++;
 		}
 		return count;

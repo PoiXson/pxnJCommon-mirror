@@ -118,9 +118,8 @@ public class xThreadPoolTask extends xRunnable {
 	public void setException(final Exception e) {
 		if (e != null) {
 			final Exception existing = this.e.getAndSet(e);
-			if (existing != null) {
+			if (existing != null)
 				this.log().trace(existing, "Task has multiple exceptions");
-			}
 		}
 	}
 	public boolean hasException() {

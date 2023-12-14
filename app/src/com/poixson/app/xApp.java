@@ -531,7 +531,6 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 	// -------------------------------------------------------------------------------
-	// configs
 
 
 

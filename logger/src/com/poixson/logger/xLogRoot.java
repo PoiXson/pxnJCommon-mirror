@@ -52,7 +52,7 @@ public class xLogRoot extends xLogger {
 			OutputStreamLineRemapper.toPrintStream(
 				new OutputStreamLineRemapper() {
 					@Override
-					public void line(final String line) {
+					public void print(final String line) {
 						final xLog log = xLog.Get();
 						if (log == null) StdIO.OriginalOut().println(line);
 						else             log.stdout(line);
@@ -65,7 +65,7 @@ public class xLogRoot extends xLogger {
 			OutputStreamLineRemapper.toPrintStream(
 				new OutputStreamLineRemapper() {
 					@Override
-					public void line(final String line) {
+					public void print(final String line) {
 						final xLog log = xLog.Get();
 						if (log == null) StdIO.OriginalErr().println(line);
 						else             log.stderr(line);

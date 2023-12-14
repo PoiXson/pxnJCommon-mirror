@@ -23,6 +23,9 @@ public abstract class xConsole extends PrintStream implements xStartable, Runnab
 	public abstract String getPrompt();
 	public abstract String setPrompt(final String prompt);
 
+	public abstract char getMask();
+	public abstract char setMask(final char mask);
+
 
 
 }

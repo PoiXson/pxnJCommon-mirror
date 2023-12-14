@@ -79,7 +79,7 @@ public class xAppSteps_Logo {
 			" This program comes with absolutely no warranty. This is free ",
 			" software and you are welcome to modify it or redistribute it ",
 			" under certain conditions. Type 'show license' at the command ",
-			" prompt for license details, or go to www.growcontrol.com for ",
+			" prompt for license details, or go to growcontrol.com for     ",
 			" more information. Wherever third party code has been used,   ",
 			" credit has been given in the code's comments.                ",
 		};
