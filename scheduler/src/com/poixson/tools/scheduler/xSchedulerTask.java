@@ -41,6 +41,14 @@ public class xSchedulerTask extends xRunnable {
 //		));
 //return (new StringBuilder()).append("task").append(this.taskIndex).toString();
 	}
+	public xSchedulerTask(final Runnable run) {
+		super(run);
+		this.task_index = TaskIndex.incrementAndGet();
+	}
+	public xSchedulerTask(final Runnable run, final String title) {
+		super(title, run);
+		this.task_index = TaskIndex.incrementAndGet();
+	}
 
 
 
