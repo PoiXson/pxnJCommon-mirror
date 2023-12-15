@@ -1,5 +1,5 @@
 /*
-package com.poixson.threadpool;
+package com.poixson.threadpool.task;
 
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;

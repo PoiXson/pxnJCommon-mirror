@@ -1,4 +1,4 @@
-package com.poixson.threadpool;
+package com.poixson.threadpool.task;
 
 import static com.poixson.threadpool.xThreadPool.DEBUG_EXTRA;
 
@@ -9,6 +9,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
+import com.poixson.threadpool.xThreadPool;
+import com.poixson.threadpool.worker.xThreadPoolWorker;
 import com.poixson.tools.abstractions.xRunnable;
 
 

@@ -1,4 +1,4 @@
-package com.poixson.threadpool;
+package com.poixson.threadpool.worker;
 
 import static com.poixson.threadpool.xThreadPool.DEBUG_EXTRA;
 import static com.poixson.threadpool.xThreadPool.WORKER_START_TIMEOUT;
@@ -11,6 +11,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
+import com.poixson.threadpool.xThreadPool;
+import com.poixson.threadpool.task.xThreadPoolTask;
 import com.poixson.tools.CoolDown;
 import com.poixson.tools.abstractions.xStartable;
 import com.poixson.utils.ThreadUtils;

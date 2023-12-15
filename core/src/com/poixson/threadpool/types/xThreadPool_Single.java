@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.threadpool.xThreadPool;
-import com.poixson.threadpool.xThreadPoolWorker;
+import com.poixson.threadpool.worker.xThreadPoolWorker;
 
 
 public abstract class xThreadPool_Single extends xThreadPool {

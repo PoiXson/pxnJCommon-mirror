@@ -3,7 +3,7 @@ package com.poixson.threadpool.types;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.threadpool.xThreadPool;
-import com.poixson.threadpool.xThreadPoolWorker;
+import com.poixson.threadpool.worker.xThreadPoolWorker;
 import com.poixson.tools.Keeper;
 
 
