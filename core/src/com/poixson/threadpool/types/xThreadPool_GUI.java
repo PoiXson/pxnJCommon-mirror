@@ -1,12 +1,11 @@
-/*
 package com.poixson.threadpool.types;
 
 import java.awt.EventQueue;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.threadpool.xThreadPool;
-import com.poixson.threadpool.xThreadPoolWorker;
-import com.poixson.threadpool.xThreadPoolWorker_GUI;
+import com.poixson.threadpool.worker.xThreadPoolWorker;
+import com.poixson.threadpool.worker.xThreadPoolWorker_GUI;
 
 
 public class xThreadPool_GUI extends xThreadPool_Single {
@@ -104,4 +103,3 @@ public class xThreadPool_GUI extends xThreadPool_Single {
 
 
 }
-*/

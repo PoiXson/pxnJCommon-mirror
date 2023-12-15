@@ -1,6 +1,10 @@
-/*
-package com.poixson.threadpool;
+package com.poixson.threadpool.worker;
 
+import static com.poixson.threadpool.xThreadPool.DEBUG_EXTRA;
+
+import javax.swing.SwingUtilities;
+
+import com.poixson.threadpool.task.xThreadPoolTask;
 import com.poixson.threadpool.types.xThreadPool_GUI;
 import com.poixson.utils.ThreadUtils;
 
@@ -23,46 +27,41 @@ public class xThreadPoolWorker_GUI extends xThreadPoolWorker {
 	@Override
 	public void run() {
 		if (this.isStopping()) return;
-final boolean b = true; if (b) throw new RuntimeException("UNFINISHED CODE");
-//TODO
-//		this.running.set(true);
-//		{
-//			final Thread thread = this.thread.get();
-//			if (thread == null) {
-//				if ( this.thread.compareAndSet(null, Thread.currentThread()) ) {
-//					this.configureThread(thread);
-//				}
-//			} else {
-//				if ( ! thread.equals(Thread.currentThread()) )
-//					throw new IllegalStateException("Invalid thread state!");
-//			}
-//		}
-//		// get task from queues
-//		try {
-//			final xThreadPoolTask task =
-//				this.pool.grabNextTask();
-//			// run the task
-//			if (task != null) {
-//				this.runTask(task);
-//				this.runCount.incrementAndGet();
-//				// run more tasks
-//				SwingUtilities.invokeLater(this);
-//				return;
-//			}
-//		} catch (InterruptedException e) {
-//			this.log().trace(e);
-//			return;
-//		}
-//		// idle
-//		this.log().detail("Idle thread..");
-//		if (this.stopping.get()) {
-//			this.running.set(false);
-//		} else {
-//			this.log().detail("Idle..");
-//		}
+		this.running.set(true);
+		{
+			final Thread thread = this.thread.get();
+			if (thread == null) {
+				if ( this.thread.compareAndSet(null, Thread.currentThread()) )
+					this.configureThread(thread);
+			} else {
+				if ( ! thread.equals(Thread.currentThread()) )
+					throw new IllegalStateException("Invalid thread state!");
+			}
+		}
+		// get task from queues
+		try {
+			final xThreadPoolTask task =
+				this.pool.grabNextTask();
+			// run the task
+			if (task != null) {
+				final long runIndex = this.count_runs.incrementAndGet();
+				this.runTask(task, runIndex);
+				// run more tasks
+				SwingUtilities.invokeLater(this);
+				return;
+			}
+		} catch (InterruptedException e) {
+			this.log().trace(e);
+		}
+		// idle
+		if (this.stopping.get()) {
+			this.running.set(false);
+		} else {
+			if (DEBUG_EXTRA)
+				this.log().detail("Idle..");
+		}
 	}
 
 
 
 }
-*/
