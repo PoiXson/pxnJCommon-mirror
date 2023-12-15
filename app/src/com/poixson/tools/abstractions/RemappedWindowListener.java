@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools.abstractions;
 
 import java.awt.event.WindowEvent;
@@ -87,4 +86,3 @@ implements WindowListener {
 
 
 }
-*/
