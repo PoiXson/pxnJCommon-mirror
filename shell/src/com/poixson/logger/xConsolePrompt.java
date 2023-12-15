@@ -43,11 +43,10 @@ public class xConsolePrompt extends xConsole {
 	protected final AtomicReference<Terminal>   terminal = new AtomicReference<Terminal>(null);
 	protected final AtomicReference<LineReader> reader   = new AtomicReference<LineReader>(null);
 	protected final AtomicReference<History>    history  = new AtomicReference<History>(null);
+	protected final xLogHandler_ConsolePrompt handler;
 
 	protected final OutputStream out;
 	protected final InputStream  in;
-
-	protected final xLogHandler_ConsolePrompt handler;
 
 	protected final AtomicReference<Thread> thread = new AtomicReference<Thread>(null);
 
@@ -193,7 +192,10 @@ public class xConsolePrompt extends xConsole {
 	}
 	@Override
 	public String setPrompt(final String prompt) {
-		return this.prompt.getAndSet(prompt);
+		final String previous = this.prompt.getAndSet(prompt);
+//TODO: this doesn't update properly
+		this.handler.redraw_prompt();
+		return previous;
 	}
 
 
