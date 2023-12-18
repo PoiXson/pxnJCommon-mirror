@@ -14,7 +14,7 @@ import com.poixson.tools.CoolDown;
 import com.poixson.tools.abstractions.Tuple;
 
 
-public class xScriptThreaded extends xScript {
+public class xScriptThreadSafe extends xScript {
 
 	protected final xScriptLoader loader;
 	protected final boolean safe;
@@ -33,7 +33,7 @@ public class xScriptThreaded extends xScript {
 
 
 
-	public xScriptThreaded(final xScriptLoader loader, final boolean safe) {
+	public xScriptThreadSafe(final xScriptLoader loader, final boolean safe) {
 		super();
 		this.loader = loader;
 		this.safe   = safe;
