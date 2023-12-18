@@ -40,7 +40,7 @@ public class xThreadPool_Main extends xThreadPool_Single {
 
 
 
-	public xThreadPool_Main() {
+	protected xThreadPool_Main() {
 		super(MAIN_POOL_NAME);
 		this.keepOneAlive.set(true);
 	}
