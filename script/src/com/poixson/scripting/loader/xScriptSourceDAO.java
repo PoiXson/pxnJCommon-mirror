@@ -2,8 +2,9 @@ package com.poixson.scripting.loader;
 
 import static com.poixson.utils.FileUtils.GetLastModified;
 import static com.poixson.utils.FileUtils.ReadInputStream;
+import static com.poixson.utils.StringUtils.ForceEnds;
+import static com.poixson.utils.StringUtils.ForceStarts;
 import static com.poixson.utils.Utils.GetMS;
-import static com.poixson.utils.Utils.IsEmpty;
 import static com.poixson.utils.Utils.SafeClose;
 
 import java.io.File;
@@ -11,6 +12,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+
+import com.poixson.utils.FileUtils;
 
 
 public class xScriptSourceDAO {
@@ -26,44 +29,43 @@ public class xScriptSourceDAO {
 
 
 
-	public static xScriptSourceDAO Find(
+	public static xScriptSourceDAO Find(final Class<?> clss,
 			final String path_local, final String path_resource,
 			final String filename)
 			throws FileNotFoundException {
 		InputStream in = null;
 		boolean isLocal = false;
-		// local file
-		if (path_local != null) {
-			final File file = new File(path_local, filename);
-			if (file.isFile()) {
-				in = new FileInputStream(file);
-				isReal = true;
+		try {
+			// local file
+			if (path_local != null) {
+				final File file = new File(path_local, filename);
+				if (file.isFile()) {
+					in = new FileInputStream(file);
+					isLocal = true;
+				}
 			}
-		}
-		// resource file
-		if (path_resource != null) {
-			final StringBuilder resFile = new StringBuilder();
-			if (!IsEmpty(path_resource))
-				resFile.append(path_resource).append('/');
-			resFile.append(filename);
-//TODO: load resource from reference
-//			if (in == null) in = plugin.getResource(resFile.toString());
+			// resource file
+			String resFile = null;
+			if (path_resource != null) {
+				resFile = ForceStarts('/', ForceEnds('/', path_resource)) + filename;
+				if (in == null)
+					in = FileUtils.OpenResource(clss, resFile);
+			}
 			if (in == null) throw new FileNotFoundException(filename);
 			final String code = ReadInputStream(in);
-			SafeClose(in);
-			final xScriptSourceDAO dao =
+			return
 				new xScriptSourceDAO(
-					isReal,
+					isLocal,
 					path_local,
 					path_resource,
 					filename,
 					code
 				);
+		} finally {
+			SafeClose(in);
 //TODO
-//Log().info(String.format("%sLoaded %s script: %s", LOG_PREFIX, isReal?"local":"resource", filename));
-			return dao;
+//Log().info(String.format("Loaded %s script: %s", isReal?"local":"resource", filename));
 		}
-		throw new FileNotFoundException(filename);
 	}
 
 
