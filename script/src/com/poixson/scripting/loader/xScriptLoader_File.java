@@ -13,19 +13,22 @@ import java.util.Set;
 
 public class xScriptLoader_File extends xScriptLoader {
 
+	protected final Class<?> clss;
+
 	protected final String path_local;
 	protected final String path_resource;
 	protected final String filename;
 
 
 
-	public xScriptLoader_File(
+	public xScriptLoader_File(final Class<?> clss,
 			final String path_local, final String path_resource,
 			final String filename) {
 		super();
+		this.clss          = clss;
 		this.path_local    = path_local;
 		this.path_resource = path_resource;
-		this.filename = filename;
+		this.filename      = filename;
 	}
 
 
@@ -91,6 +94,7 @@ public class xScriptLoader_File extends xScriptLoader {
 		// find local or resource file
 		final xScriptSourceDAO found =
 			xScriptSourceDAO.Find(
+				this.clss,
 				this.path_local,
 				this.path_resource,
 				filename
