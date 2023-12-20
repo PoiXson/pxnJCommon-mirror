@@ -19,7 +19,7 @@ public class xScriptSourceDAO {
 	public final String path_resource;
 
 	public final String filename;
-	public final boolean isReal;
+	public final boolean isLocal;
 
 	public final String code;
 	public final long timestamp;
@@ -31,7 +31,7 @@ public class xScriptSourceDAO {
 			final String filename)
 			throws FileNotFoundException {
 		InputStream in = null;
-		boolean isReal = false;
+		boolean isLocal = false;
 		// local file
 		if (path_local != null) {
 			final File file = new File(path_local, filename);
@@ -68,10 +68,10 @@ public class xScriptSourceDAO {
 
 
 
-	public xScriptSourceDAO(final boolean isReal,
+	public xScriptSourceDAO(final boolean isLocal,
 			final String path_local, final String path_resource,
 			final String filename, final String code) {
-		this.isReal        = isReal;
+		this.isLocal       = isLocal;
 		this.path_local    = path_local;
 		this.path_resource = path_resource;
 		this.filename      = filename;
@@ -82,7 +82,7 @@ public class xScriptSourceDAO {
 
 
 	public boolean hasFileChanged() {
-		if (this.isReal) {
+		if (this.isLocal) {
 			final File file = new File(this.path_local, this.filename);
 			try {
 				final long last = GetLastModified(file);
