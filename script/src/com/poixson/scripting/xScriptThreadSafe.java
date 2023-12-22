@@ -70,7 +70,9 @@ public class xScriptThreadSafe extends xScript {
 		final xScript script = this.build();
 		if (!this.script.compareAndSet(null, script))
 			throw new IllegalStateException("script already running?");
+		this.push(script);
 		script.start();
+		this.pull(script);
 		RUN_LOOP:
 		while (true) {
 			if (this.stopping.get()) break RUN_LOOP;
