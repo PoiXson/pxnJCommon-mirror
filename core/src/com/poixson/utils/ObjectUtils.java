@@ -1,5 +1,6 @@
 package com.poixson.utils;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.LinkedTransferQueue;
 
 import com.poixson.tools.Keeper;
 
@@ -149,6 +151,46 @@ public final class ObjectUtils {
 			return CastMap((Map<K, V>) data, keyClss, valClss);
 		} catch (Exception ignore) {}
 		return null;
+	}
+
+
+
+	public static Object ConvertThreadSafeVariable(final Object obj) {
+		final String type = obj.getClass().getName();
+		TYPE_SWITCH:
+		switch (type) {
+		// int[][]
+		case "[[I": {
+			final LinkedTransferQueue<LinkedTransferQueue<Integer>> list =
+					new LinkedTransferQueue<LinkedTransferQueue<Integer>>();
+			final int[][] array = (int[][]) obj;
+			for (final int[] arr : array) {
+				final LinkedTransferQueue<Integer> lst = new LinkedTransferQueue<Integer>();
+				for (final int entry : arr)
+					lst.add(Integer.valueOf(entry));
+				list.add(lst);
+			}
+			return list;
+		}
+		// Color[][]
+		case "[[Ljava.awt.Color;": {
+			final LinkedTransferQueue<LinkedTransferQueue<Integer>> list =
+					new LinkedTransferQueue<LinkedTransferQueue<Integer>>();
+			final Color[][] array = (Color[][]) obj;
+			for (final Color[] arr : array) {
+				final LinkedTransferQueue<Integer> lst = new LinkedTransferQueue<Integer>();
+				for (final Color entry : arr) {
+					if (entry == null) lst.add(Integer.valueOf(0));
+					else               lst.add(Integer.valueOf(entry.getRGB()));
+				}
+				list.add(lst);
+			}
+			return list;
+		}
+		// unhandled type
+		default: break TYPE_SWITCH;
+		}
+		return obj;
 	}
 
 
