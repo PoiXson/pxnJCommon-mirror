@@ -57,7 +57,8 @@ public class Lab implements Serializable, Cloneable {
 	}
 	@Override
 	public int hashCode() {
-		final long bits = ((31L + this.a) * 31L) + this.b;
+		long bits =    31L  + this.a;
+		bits = (bits * 31L) + this.b;
 		return (int) (bits ^ (bits >> 32L));
 	}
 

@@ -69,7 +69,10 @@ public class Labcd implements Serializable, Cloneable {
 	}
 	@Override
 	public int hashCode() {
-		final long bits = ((((((31L + this.a) * 31L) + this.b) * 31L) + this.c) * 31L) + this.d;
+		long bits =    31L  + this.a;
+		bits = (bits * 31L) + this.b;
+		bits = (bits * 31L) + this.c;
+		bits = (bits * 31L) + this.d;
 		return (int) (bits ^ (bits >> 32L));
 	}
 
