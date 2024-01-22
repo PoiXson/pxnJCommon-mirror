@@ -6,6 +6,7 @@ import static com.poixson.utils.Utils.SafeClose;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,6 +63,23 @@ public final class FileUtils {
 			} // end PATH_LOOP
 		} // end PARENTS_LOOP
 		return null;
+	}
+
+
+
+	public static InputStream OpenLocalOrResource(final Class<?> clss,
+			final String fileLocal, final String fileRes) {
+		// local file
+		{
+			final File file = new File(fileLocal);
+			if (file.isFile()) {
+				try {
+					return new FileInputStream(file);
+				} catch (FileNotFoundException ignore) {}
+			}
+		}
+		// resource file
+		return OpenResource(clss, fileRes);
 	}
 
 
