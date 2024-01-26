@@ -21,8 +21,7 @@ public final class ObjectUtils {
 
 
 	@SuppressWarnings("unchecked")
-	public static <T> T Cast(final Object object,
-			final Class<? extends T> clss) {
+	public static <T> T Cast(final Object object, final Class<? extends T> clss) {
 		if (object == null) return null;
 		if (clss   == null) return (T) object;
 		try {

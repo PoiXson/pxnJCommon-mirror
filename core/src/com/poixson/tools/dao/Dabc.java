@@ -17,10 +17,10 @@ public class Dabc implements Serializable, Cloneable {
 		this.b = 0;
 		this.c = 0;
 	}
-	public Dabc(final double x, final double y, final double z) {
-		this.a = x;
-		this.b = y;
-		this.c = z;
+	public Dabc(final double a, final double b, final double c) {
+		this.a = a;
+		this.b = b;
+		this.c = c;
 	}
 	public Dabc(final Dabc dao) {
 		this.a = dao.a;
