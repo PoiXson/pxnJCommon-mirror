@@ -36,7 +36,12 @@ public class xScriptInstance extends xScript {
 		super();
 		this.loader = loader;
 		this.safe   = safe;
-		xScriptContextFactory.Init();
+		try {
+			xScriptContextFactory.Init();
+		} catch (IllegalStateException e) {
+			if (!"zip file closed".equals(e.getMessage()))
+				throw e;
+		}
 		this.scope = InitScope(safe);
 		this.resetLastUsed();
 	}
