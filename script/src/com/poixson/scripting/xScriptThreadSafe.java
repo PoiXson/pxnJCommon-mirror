@@ -1,7 +1,5 @@
 package com.poixson.scripting;
 
-import static com.poixson.utils.ObjectUtils.ConvertThreadSafeVariable;
-
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -152,8 +150,7 @@ public class xScriptThreadSafe extends xScript {
 	@Override
 	public Object getVariable(final String key) {
 		final Map<String, Object> vars = this.vars_out.get();
-		if (vars == null) return null;
-		else              return ConvertThreadSafeVariable( vars.get(key) );
+		return (vars==null ? null : vars.get(key));
 	}
 
 
