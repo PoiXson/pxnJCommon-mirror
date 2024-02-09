@@ -10,6 +10,7 @@ import com.poixson.tools.abstractions.xStartStop;
 
 public abstract class xScript implements xStartStop, Runnable {
 
+	protected final AtomicBoolean active   = new AtomicBoolean(false);
 	protected final AtomicBoolean stopping = new AtomicBoolean(false);
 	protected final AtomicLong last_used = new AtomicLong(0L);
 
@@ -46,6 +47,10 @@ public abstract class xScript implements xStartStop, Runnable {
 
 	public boolean isStopping() {
 		return this.stopping.get();
+	}
+
+	public boolean isActive() {
+		return this.active.get();
 	}
 
 

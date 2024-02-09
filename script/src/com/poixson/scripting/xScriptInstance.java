@@ -68,6 +68,7 @@ public class xScriptInstance extends xScript {
 		if (this.stopping.get()) return null;
 		if (IsEmpty(func_name)) throw new RequiredArgumentException("func");
 		this.count_loops.incrementAndGet();
+		this.active.set(true);
 		this.resetLastUsed();
 		final Context context = Context.enter();
 		final Object result;
@@ -84,6 +85,7 @@ public class xScriptInstance extends xScript {
 			throw new RuntimeException(e);
 		} finally {
 			SafeClose(context);
+			this.active.set(false);
 			this.resetLastUsed();
 		}
 		return result;

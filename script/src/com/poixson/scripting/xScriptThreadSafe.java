@@ -122,6 +122,7 @@ public class xScriptThreadSafe extends xScript {
 
 
 	public void push(final xScript script) {
+		this.active.set(true);
 		final Iterator<Entry<String, Object>> it = this.vars_in.entrySet().iterator();
 		while (it.hasNext()) {
 			final Entry<String, Object> entry = it.next();
@@ -138,6 +139,7 @@ public class xScriptThreadSafe extends xScript {
 			result.put(name, value);
 		}
 		this.vars_out.set(result);
+		this.active.set(false);
 	}
 
 
