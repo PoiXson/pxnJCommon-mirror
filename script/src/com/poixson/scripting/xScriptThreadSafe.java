@@ -6,7 +6,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.scripting.loader.xScriptLoader;
@@ -22,7 +21,6 @@ public class xScriptThreadSafe extends xScript {
 	protected final AtomicReference<xScript> script = new AtomicReference<xScript>(null);
 	protected final AtomicReference<Thread>  thread = new AtomicReference<Thread>(null);
 
-	protected final AtomicBoolean stopping = new AtomicBoolean(false);
 //TODO: use this to detect file changes and reload
 	protected final CoolDown reload_cool = new CoolDown("5s");
 
