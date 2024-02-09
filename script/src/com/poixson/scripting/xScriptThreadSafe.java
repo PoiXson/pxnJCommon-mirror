@@ -31,6 +31,8 @@ public class xScriptThreadSafe extends xScript {
 	protected final ConcurrentHashMap<String, Object>    vars_in  = new ConcurrentHashMap<String, Object>();
 	protected final AtomicReference<Map<String, Object>> vars_out = new AtomicReference<Map<String, Object>>();
 
+	protected final ConcurrentHashMap<String, Runnable> tasks = new ConcurrentHashMap<String, Runnable>();
+
 
 
 	public xScriptThreadSafe(final xScriptLoader loader, final boolean safe) {
@@ -79,10 +81,15 @@ public class xScriptThreadSafe extends xScript {
 			try {
 				final Tuple<String, Object[]> entry = this.queue_calls.poll(100L, TimeUnit.MILLISECONDS);
 				if (entry != null) {
-					this.push(script);
-					if (entry.key == "loop") script.run();
-					else                     script.call(entry.key, entry.val);
-					this.pull(script);
+					final Runnable task = this.tasks.get(entry.key);
+					if (task != null) {
+						task.run();
+					} else {
+						this.push(script);
+						if ("loop".equals(entry.key)) script.run();
+						else                          script.call(entry.key, entry.val);
+						this.pull(script);
+					}
 				}
 			} catch (InterruptedException ignore) {}
 		} // end RUN_LOOP
@@ -153,6 +160,12 @@ public class xScriptThreadSafe extends xScript {
 	public Object getVariable(final String key) {
 		final Map<String, Object> vars = this.vars_out.get();
 		return (vars==null ? null : vars.get(key));
+	}
+
+
+
+	public void addTask(final String key, final Runnable task) {
+		this.tasks.put(key, task);
 	}
 
 
