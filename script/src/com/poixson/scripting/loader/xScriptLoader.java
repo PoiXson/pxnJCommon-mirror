@@ -132,6 +132,7 @@ public abstract class xScriptLoader {
 	public Map<String, String> getFlags() {
 		return this.flags.get();
 	}
+
 	public String[] getImports() {
 		final String[] imports = this.imports.get();
 		return (imports == null ? new String[0] : imports);
@@ -139,6 +140,23 @@ public abstract class xScriptLoader {
 	public String[] getExports() {
 		final String[] exports = this.exports.get();
 		return (exports == null ? new String[0] : exports);
+	}
+
+	public boolean hasImport(final String key) {
+		final String[] imports = this.imports.get();
+		for (final String k : imports) {
+			if (key.equals(k))
+				return true;
+		}
+		return false;
+	}
+	public boolean hasExport(final String key) {
+		final String[] exports = this.exports.get();
+		for (final String k : exports) {
+			if (key.equals(k))
+				return true;
+		}
+		return false;
 	}
 
 
