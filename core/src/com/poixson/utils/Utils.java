@@ -1,5 +1,6 @@
 package com.poixson.utils;
 
+import java.awt.Color;
 import java.io.Closeable;
 import java.util.Collection;
 import java.util.Iterator;
@@ -274,6 +275,12 @@ public final class Utils {
 		if (uuidA == null || uuidB == null)
 			return false;
 		return (uuidA.compareTo(uuidB) == 0);
+	}
+
+	public static boolean EqualsColor(final Color colorA, final Color colorB) {
+		if (colorA == null || colorB == null)
+			return (colorA == null && colorB == null);
+		return (colorA.getRGB() == colorB.getRGB());
 	}
 
 
