@@ -1,9 +1,11 @@
 package com.poixson.scripting;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -26,6 +28,7 @@ public class xScriptThreadSafe extends xScript {
 
 	protected final LinkedBlockingQueue<Tuple<String, Object[]>> queue_calls = new LinkedBlockingQueue<Tuple<String, Object[]>>();
 
+	protected final CopyOnWriteArraySet<String>          vars     = new CopyOnWriteArraySet<String>();
 	protected final ConcurrentHashMap<String, Object>    vars_in  = new ConcurrentHashMap<String, Object>();
 	protected final AtomicReference<Map<String, Object>> vars_out = new AtomicReference<Map<String, Object>>();
 
@@ -129,19 +132,22 @@ public class xScriptThreadSafe extends xScript {
 	public void push(final xScript script) {
 		this.active.set(true);
 		final Iterator<Entry<String, Object>> it = this.vars_in.entrySet().iterator();
+		final LinkedList<String> removing = new LinkedList<String>();
 		while (it.hasNext()) {
 			final Entry<String, Object> entry = it.next();
-			script.setVariable(entry.getKey(), entry.getValue());
+			final String key = entry.getKey();
+			script.setVariable(key, entry.getValue());
+			this.vars.add(key);
+			removing.add(key);
 		}
+		for (final String key : removing)
+			this.vars_in.remove(key);
 	}
 	public void pull(final xScript script) {
 		final ConcurrentHashMap<String, Object> result = new ConcurrentHashMap<String, Object>();
-		final Iterator<Entry<String, Object>> it = this.vars_in.entrySet().iterator();
-		while (it.hasNext()) {
-			final Entry<String, Object> entry = it.next();
-			final String name = entry.getKey();
-			final Object value = script.getVariable(name);
-			result.put(name, value);
+		for (final String key : this.vars) {
+			final Object value = script.getVariable(key);
+			result.put(key, value);
 		}
 		this.vars_out.set(result);
 		this.active.set(false);
