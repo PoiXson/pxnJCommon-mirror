@@ -73,15 +73,18 @@ public class xScriptThreadSafe extends xScript {
 		final xScript script = this.build();
 		if (!this.script.compareAndSet(null, script))
 			throw new IllegalStateException("script already running?");
+		this.active.set(true);
 		this.push(script);
 		script.start();
 		this.pull(script);
+		this.active.set(false);
 		RUN_LOOP:
 		while (true) {
 			if (this.stopping.get()) break RUN_LOOP;
 			try {
 				final Tuple<String, Object[]> entry = this.queue_calls.poll(100L, TimeUnit.MILLISECONDS);
 				if (entry != null) {
+					this.active.set(true);
 					final Runnable task = this.tasks.get(entry.key);
 					if (task != null) {
 						task.run();
@@ -91,6 +94,7 @@ public class xScriptThreadSafe extends xScript {
 						else                          script.call(entry.key, entry.val);
 						this.pull(script);
 					}
+					this.active.set(false);
 				}
 			} catch (InterruptedException ignore) {}
 		} // end RUN_LOOP
@@ -130,7 +134,6 @@ public class xScriptThreadSafe extends xScript {
 
 
 	public void push(final xScript script) {
-		this.active.set(true);
 		final Iterator<Entry<String, Object>> it = this.vars_in.entrySet().iterator();
 		final LinkedList<String> removing = new LinkedList<String>();
 		while (it.hasNext()) {
@@ -150,7 +153,6 @@ public class xScriptThreadSafe extends xScript {
 			result.put(key, value);
 		}
 		this.vars_out.set(result);
-		this.active.set(false);
 	}
 
 
