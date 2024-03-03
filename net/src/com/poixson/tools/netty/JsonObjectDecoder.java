@@ -43,7 +43,7 @@ public class JsonObjectDecoder extends ByteToMessageDecoder {
 		this(MB_1, stream_array_elements);
 	}
 	public JsonObjectDecoder(final int buffer_size, final boolean stream_array_elements) {
-		if (buffer_size < 1) throw new IllegalArgumentException("Invalid JSON buffer size: " + Integer.toString(buffer_size));
+		if (buffer_size < 1) throw new IllegalArgumentException("Invalid JSON buffer size: "+Integer.toString(buffer_size));
 		this.buffer_size           = buffer_size;
 		this.stream_array_elements = stream_array_elements;
 	}

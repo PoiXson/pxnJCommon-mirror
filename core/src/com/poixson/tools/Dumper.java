@@ -94,7 +94,7 @@ public class Dumper {
 		buffer.append("Dumped: ");
 		Class<?> objClass = obj.getClass();
 		String objSimpleName = getSimpleNameWithoutArrayQualifier(objClass);
-		if (ctx.ignoreList.get(objSimpleName + ":") != null) {
+		if (ctx.ignoreList.get(objSimpleName+":") != null) {
 			return "<Ignored>";
 		}
 		if (String.class.equals(objClass)) {
@@ -163,9 +163,9 @@ public class Dumper {
 							.append( "("             )
 							.append( fSimpleName     )
 							.append( ")="            );
-						if (ctx.ignoreList.get(":" + fName) == null
-								&& ctx.ignoreList.get(fSimpleName + ":" + fName) == null
-								&& ctx.ignoreList.get(fSimpleName + ":") == null) {
+						if (ctx.ignoreList.get(":"+fName) == null
+								&& ctx.ignoreList.get(fSimpleName+":"+fName) == null
+								&& ctx.ignoreList.get(fSimpleName+":") == null) {
 							try {
 								final Object value = fields[i].get(obj);
 								buffer.append(dumpValue(value, ctx));
@@ -220,7 +220,7 @@ public class Dumper {
 			}
 			return "<Reached max recursion depth>";
 		}
-		return "<Previously visited - see hashCode " + value.hashCode() + ">";
+		return "<Previously visited - see hashCode "+value.hashCode()+">";
 	}
 
 

@@ -65,7 +65,7 @@ public class xTime {
 		return xunit.convertTo( this.value.get() );
 	}
 	public long get(final TimeUnit unit) {
-		if (unit == null)  throw new RequiredArgumentException("unit");
+		if (unit == null) throw new RequiredArgumentException("unit");
 		final xTimeU xunit = xTimeU.GetUnit(unit);
 		if (xunit == null) throw new RuntimeException("Unknown time unit: "+unit.toString());
 		return xunit.convertTo( this.value.get() );
@@ -93,9 +93,9 @@ public class xTime {
 		return this;
 	}
 	public xTime set(final long value, final TimeUnit unit) {
-		if (unit == null)      throw new RequiredArgumentException("unit");
+		if (unit == null) throw new RequiredArgumentException("unit");
 		final xTimeU xunit = xTimeU.GetUnit(unit);
-		if (xunit == null)     throw new RuntimeException("Unknown time unit: "+unit.toString());
+		if (xunit == null) throw new RuntimeException("Unknown time unit: "+unit.toString());
 		this.value.set( xunit.convertTo(value) );
 		return this;
 	}
@@ -105,7 +105,7 @@ public class xTime {
 		return this;
 	}
 	public xTime set(final xTime time) {
-		if (time == null)      throw new RequiredArgumentException("time");
+		if (time == null) throw new RequiredArgumentException("time");
 		this.value.set( time.ms() );
 		return this;
 	}
@@ -125,13 +125,13 @@ public class xTime {
 		this.value.addAndGet(ms);
 	}
 	public void add(final long value, final xTimeU xunit) {
-		if (xunit == null)     throw new RequiredArgumentException("unit");
+		if (xunit == null) throw new RequiredArgumentException("unit");
 		this.value.addAndGet( xunit.convertTo(value) );
 	}
 	public void add(final long value, final TimeUnit unit) {
 		if (unit == null)      throw new RequiredArgumentException("unit");
 		final xTimeU xunit = xTimeU.GetUnit(unit);
-		if (xunit == null)     throw new RuntimeException("Unknown time unit: "+unit.toString());
+		if (xunit == null) throw new RuntimeException("Unknown time unit: "+unit.toString());
 		this.value.addAndGet( xunit.convertTo(value) );
 	}
 	public void add(final String str) {
@@ -139,7 +139,7 @@ public class xTime {
 		this.value.addAndGet( ParseToLong(str) );
 	}
 	public void add(final xTime time) {
-		if (time == null)      throw new RequiredArgumentException("time");
+		if (time == null) throw new RequiredArgumentException("time");
 		this.value.addAndGet( time.ms() );
 	}
 
@@ -280,7 +280,7 @@ public class xTime {
 			}
 			result.add(str.toString());
 		}
-		return StringUtils.MergeStrings( ' ', result.toArray(new String[0]) );
+		return StringUtils.MergeStrings(' ', result.toArray(new String[0]));
 	}
 
 

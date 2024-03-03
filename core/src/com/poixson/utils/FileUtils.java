@@ -196,7 +196,7 @@ public final class FileUtils {
 	public static long GetLastModified(final Path path) throws IOException {
 		BasicFileAttributes attr =
 			Files.readAttributes(path, BasicFileAttributes.class);
-		if (attr == null) throw new IOException("Failed to get file attributes: " + path.toString());
+		if (attr == null) throw new IOException("Failed to get file attributes: "+path.toString());
 		final FileTime time = attr.lastModifiedTime();
 		return time.to(TimeUnit.SECONDS);
 	}

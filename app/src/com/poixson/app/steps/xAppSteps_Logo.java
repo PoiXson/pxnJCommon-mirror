@@ -75,7 +75,7 @@ public class xAppSteps_Logo {
 
 	public String[] display_legal() {
 		return new String[] {
-			" License: " + this.getLicense(),
+			" License: "+this.getLicense(),
 			" This program comes with absolutely no warranty. This is free ",
 			" software and you are welcome to modify it or redistribute it ",
 			" under certain conditions. Type 'show license' at the command ",

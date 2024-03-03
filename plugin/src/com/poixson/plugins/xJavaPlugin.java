@@ -162,7 +162,7 @@ public abstract class xJavaPlugin implements xStartStop, Runnable, xFailable {
 		return this._log.get();
 	}
 	protected xLog _log() {
-		return xLog.Get( "Plugin:" + this.getPluginNameSafe() );
+		return xLog.Get("Plugin:"+this.getPluginNameSafe());
 	}
 
 

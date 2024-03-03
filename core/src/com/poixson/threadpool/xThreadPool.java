@@ -40,11 +40,11 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	protected final AtomicInteger threadPriority = new AtomicInteger(DEFAULT_THREAD_PRIORITY);
 
 	// run now queue
-	protected final LinkedBlockingDeque<xThreadPoolTask> queueNow   = new LinkedBlockingDeque  <xThreadPoolTask>();
+	protected final LinkedBlockingDeque<xThreadPoolTask> queueNow   = new LinkedBlockingDeque<xThreadPoolTask>();
 	// run later queue
-	protected final LinkedBlockingDeque<xThreadPoolTask> queueLater = new LinkedBlockingDeque  <xThreadPoolTask>();
+	protected final LinkedBlockingDeque<xThreadPoolTask> queueLater = new LinkedBlockingDeque<xThreadPoolTask>();
 	// run lazy queue
-	protected final LinkedBlockingDeque<xThreadPoolTask> queueLazy  = new LinkedBlockingDeque  <xThreadPoolTask>();
+	protected final LinkedBlockingDeque<xThreadPoolTask> queueLazy  = new LinkedBlockingDeque<xThreadPoolTask>();
 
 	// pool state
 	protected        final AtomicBoolean running     = new AtomicBoolean(false);

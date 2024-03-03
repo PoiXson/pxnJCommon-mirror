@@ -49,7 +49,7 @@ public abstract class xPluginLoader<T extends xJavaPlugin> {
 	// load plugin jar file
 	public T load(final File file) throws IOException{
 		if (file == null) throw new RequiredArgumentException("file");
-		if (!file.exists()) throw new IOException("Plugin file not found: " + file.getName());
+		if (!file.exists()) throw new IOException("Plugin file not found: "+file.getName());
 		this.log().finer("Loading plugin jar: %s", file.getName());
 		// load jar
 		final ScanResult classgraph =
@@ -64,9 +64,9 @@ public abstract class xPluginLoader<T extends xJavaPlugin> {
 			final ResourceList resources = classgraph.getResourcesWithLeafName(DEFAULT_PLUGIN_YML_FILE);
 			final int resource_size = resources.size();
 			if (resource_size == 0)
-				throw new IOException(DEFAULT_PLUGIN_YML_FILE + " file not found in plugin: " + file.getName());
+				throw new IOException(String.format("%s file not found in plugin: %s", DEFAULT_PLUGIN_YML_FILE, file.getName()));
 			if (resource_size > 1)
-				throw new IOException("Multiple " + DEFAULT_PLUGIN_YML_FILE + " files found in plugin: " + file.getName());
+				throw new IOException(String.format("Multiple %s files found in plugin: %s", DEFAULT_PLUGIN_YML_FILE, file.getName()));
 			final Resource res = resources.get(0);
 			yml = this.loadPluginYML(res);
 			class_main = yml.getMainClass();
@@ -78,7 +78,7 @@ public abstract class xPluginLoader<T extends xJavaPlugin> {
 		// check plugin already loaded
 		final String plugin_name = yml.getPluginName();
 		if (this.manager.isPluginLoaded(plugin_name))
-			throw new IOException("Plugin already loaded: " + plugin_name);
+			throw new IOException("Plugin already loaded: "+plugin_name);
 		// load plugin instance
 		if (IsEmpty(class_main)) {
 			throw new IOException(String.format(
@@ -87,11 +87,11 @@ public abstract class xPluginLoader<T extends xJavaPlugin> {
 				file.getName()
 			));
 		}
-		this.log().finest("Attempting to load plugin main class: %s", class_main);
+		this.log().finest("Attempting to load plugin main class: "+class_main);
 		final Class<T> clss = this.castPluginClass(
 			classgraph.loadClass(class_main, true)
 		);
-		if (clss == null) throw new IOException("Plugin class not found: " + class_main);
+		if (clss == null) throw new IOException("Plugin class not found: "+class_main);
 		return this.factory.build(this.manager, yml, clss, class_main);
 	}
 

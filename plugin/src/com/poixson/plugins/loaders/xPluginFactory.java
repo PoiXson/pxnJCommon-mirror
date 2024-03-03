@@ -22,10 +22,10 @@ public class xPluginFactory<T extends xJavaPlugin> {
 			final Class<T> clss, final String class_main) throws IOException {
 		final Constructor<T> construct = this.getConstruct(clss);
 		if (construct == null)
-			throw new IOException("Failed to get instance constructor: " + class_main);
+			throw new IOException("Failed to get instance constructor: "+class_main);
 		final T plugin = this.getPlugin(construct, manager, yml);
 		if (plugin == null)
-			throw new IOException("Failed to create new instance of plugin class: " + class_main);
+			throw new IOException("Failed to create new instance of plugin class: "+class_main);
 		return plugin;
 	}
 

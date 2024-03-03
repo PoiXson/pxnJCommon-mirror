@@ -8,10 +8,10 @@ public class InvalidValueException extends IllegalArgumentException {
 
 
 	public InvalidValueException(final String name) {
-		super("Invalid value: " + name);
+		super("Invalid value: "+name);
 	}
 	public InvalidValueException(final String name, final Object value) {
-		super("Invalid value: " + name + " = " + StringUtils.ToString(value));
+		super("Invalid value: "+name+" = "+StringUtils.ToString(value));
 	}
 
 

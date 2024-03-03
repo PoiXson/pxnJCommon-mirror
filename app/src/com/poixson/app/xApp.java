@@ -104,7 +104,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 				final xApp a = it.next();
 				final String clss = a.getClass().getName();
 				if (appClassName.equals(clss))
-					throw new RuntimeException("App of this type already active: " + appClassName);
+					throw new RuntimeException("App of this type already active: "+appClassName);
 			}
 			apps.add(app);
 		}
