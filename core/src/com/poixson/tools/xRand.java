@@ -40,4 +40,21 @@ public class xRand {
 
 
 
+	public double nextDbl(final double min, final double max) {
+		final double value = this.rnd.nextDouble(min, max);
+		this.seed += (long) Math.ceil(value * 1000.0);
+		this.rnd.setSeed(this.seed);
+		return value;
+	}
+	public double nextDlb(final double min, final double max, final double last) {
+		for (int i=0; i<100; i++) {
+			final double value = this.nextDbl(min, max);
+			if (value != last)
+				return value;
+		}
+		return last;
+	}
+
+
+
 }
