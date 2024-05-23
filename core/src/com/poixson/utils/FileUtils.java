@@ -43,11 +43,11 @@ public final class FileUtils {
 			? new String[] { FileUtils.cwd() }
 			: new String[] { FileUtils.cwd(), FileUtils.pwd() }
 		);
-		//PARENTS_LOOP:
+		//LOOP_PARENTS:
 		for (int parentIndex=0; parentIndex<parents+1; parentIndex++) {
-			//PATH_LOOP:
+			//LOOP_PATH:
 			for (final String workPath : workingPaths) {
-				//FILE_LOOP:
+				//LOOP_FILE:
 				for (final String fileName : fileNames) {
 					final String path =
 						FileUtils.MergePaths(
@@ -59,9 +59,9 @@ public final class FileUtils {
 					if (file.exists()) {
 						return path;
 					}
-				} // end FILE_LOOP
-			} // end PATH_LOOP
-		} // end PARENTS_LOOP
+				} // end LOOP_FILE
+			} // end LOOP_PATH
+		} // end LOOP_PARENTS
 		return null;
 	}
 
@@ -258,7 +258,7 @@ public final class FileUtils {
 		// split further
 		final LinkedList<String> result = new LinkedList<String>();
 		int count = 0;
-		//PARAMS_LOOP:
+		//LOOP_PARAMS:
 		for (int index=0; index<strings.length; index++) {
 			final String[] array = strings[index].split("/");
 			// remove nulls/blanks
@@ -278,7 +278,7 @@ public final class FileUtils {
 				result.add(s);
 				count++;
 			} // end PARTS_ARRAY
-		} // end PARAMS_LOOP
+		} // end LOOP_PARAMS
 		if (result.isEmpty())
 			return null;
 		final String first = result.getFirst();

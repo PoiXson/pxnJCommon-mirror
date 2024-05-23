@@ -25,9 +25,9 @@ public abstract class xHandler <T extends Annotation> {
 	public int register(final Object...objects) {
 		if (IsEmpty(objects)) return 0;
 		int count = 0;
-		OBJECTS_LOOP:
+		LOOP_OBJECTS:
 		for (final Object obj : objects) {
-			if (obj == null) continue OBJECTS_LOOP;
+			if (obj == null) continue LOOP_OBJECTS;
 			count += this.register(obj);
 		}
 		return count;
@@ -37,11 +37,11 @@ public abstract class xHandler <T extends Annotation> {
 		final Method[] methods = object.getClass().getMethods();
 		if (IsEmpty(methods)) return 0;
 		int count = 0;
-		METHODS_LOOP:
+		LOOP_METHODS:
 		for (final Method m : methods) {
-			if (m == null) continue METHODS_LOOP;
+			if (m == null) continue LOOP_METHODS;
 			final T anno = m.getAnnotation(this.type);
-			if (anno == null) continue METHODS_LOOP;
+			if (anno == null) continue LOOP_METHODS;
 			// found annotation
 			if (this.register(object, m, anno))
 				count++;

@@ -84,16 +84,16 @@ public abstract class xScriptLoader {
 				} else {
 					final String key = line.substring(0, pos);
 					final String val = line.substring(pos + 1);
-					FLAG_SWITCH:
+					SWITCH_FLAG:
 					switch (key) {
 					//#include=file.js
-					case "include": this.loadSources(val, list, flags, imports, exports); break FLAG_SWITCH;
+					case "include": this.loadSources(val, list, flags, imports, exports); break SWITCH_FLAG;
 					//#import=var
-					case "import": imports.add(val); break FLAG_SWITCH;
+					case "import": imports.add(val); break SWITCH_FLAG;
 					//#export=var
-					case "export": exports.add(val); break FLAG_SWITCH;
-					default:    flags.put(key, val); break FLAG_SWITCH;
-					} // end FLAG_SWITCH
+					case "export": exports.add(val); break SWITCH_FLAG;
+					default:    flags.put(key, val); break SWITCH_FLAG;
+					} // end SWITCH_FLAG
 				}
 				continue LOOP_LINES;
 			} // end //#

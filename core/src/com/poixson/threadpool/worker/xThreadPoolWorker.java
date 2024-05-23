@@ -75,11 +75,11 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 		// wait for worker to start
 		long sleep = 0L;
 		CoolDown cool = null;
-		WAIT_LOOP:
+		LOOP_WAIT:
 		while (true) {
 			// is running
 			if (this.isRunning())
-				break WAIT_LOOP;
+				break LOOP_WAIT;
 			// timeout
 			if (cool == null) {
 				cool = new CoolDown(timeout);
@@ -87,11 +87,11 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 			} else
 			if (cool.again()) {
 				this.log().warning("Timeout waiting for thread pool to start");
-				break WAIT_LOOP;
+				break LOOP_WAIT;
 			}
 			sleep += 5L;
 			ThreadUtils.Sleep(sleep);
-		} // end WAIT_LOOP
+		} // end LOOP_WAIT
 	}
 
 
@@ -120,27 +120,27 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 		if ( ! this.thread.get().equals(Thread.currentThread()) )
 			throw new IllegalStateException("Invalid thread state!");
 		try {
-			WORKER_LOOP:
+			LOOP_WORKER:
 			while (true) {
 				// get task from queues
 				final xThreadPoolTask task;
 				try {
 					task = this.pool.grabNextTask();
 				} catch (InterruptedException ignore) {
-					continue WORKER_LOOP;
+					continue LOOP_WORKER;
 				}
 				// run the task
 				if (task != null) {
 					final long runIndex = this.count_runs.incrementAndGet();
 					this.runTask(task, runIndex);
-					continue WORKER_LOOP;
+					continue LOOP_WORKER;
 				}
 				if (this.isStopping())
-					break WORKER_LOOP;
+					break LOOP_WORKER;
 				// idle worker
 				if (DEBUG_EXTRA) this.log().detail("Idle..");
 //TODO: idle thread may stop
-			} // end WORKER_LOOP
+			} // end LOOP_WORKER
 		} finally {
 			this.stopping.set(true);
 			this.running.set(false);

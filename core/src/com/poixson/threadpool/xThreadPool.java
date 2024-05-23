@@ -121,13 +121,13 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	public static void StopAll() {
 		StoppingAll.set(true);
 		final Iterator<xThreadPool> it = pools.values().iterator();
-		WORKERS_LOOP:
+		LOOP_WORKERS:
 		while (it.hasNext()) {
 			final xThreadPool pool = it.next();
-			if (pool.isMainPool())     continue WORKERS_LOOP;
-			if (pool.isGraphicsPool()) continue WORKERS_LOOP;
+			if (pool.isMainPool())     continue LOOP_WORKERS;
+			if (pool.isGraphicsPool()) continue LOOP_WORKERS;
 			pool.stop();
-		} // end WORKERS_LOOP
+		} // end LOOP_WORKERS
 	}
 
 
@@ -231,7 +231,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 	public xThreadPoolTask grabNextTask() throws InterruptedException {
 		// loop a few times
-		PRIORITY_LOOP:
+		LOOP_PRIORITY:
 		while (true) {
 			// high priority tasks
 			{
@@ -263,7 +263,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 			}
 			if (this.isStopping()
 			&&  this.isEmpty())
-				break PRIORITY_LOOP;
+				break LOOP_PRIORITY;
 			// wait for high priority tasks
 			{
 				final xThreadPoolTask task;
@@ -276,7 +276,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 					return task;
 				}
 			}
-		} // end PRIORITY_LOOP
+		} // end LOOP_PRIORITY
 		return null;
 	}
 
@@ -329,12 +329,12 @@ public abstract class xThreadPool implements xStartable, Runnable {
 		final long addTimeout    = this.getAddTimeout();
 		try {
 			boolean success = false;
-			QUEUE_LOOP:
+			LOOP_QUEUE:
 			for (int i=0; i<maxAddAttempts; i++) {
 				success = queue.offer(task, addTimeout, TimeUnit.MILLISECONDS);
 				if (success)
-					break QUEUE_LOOP;
-			} // end QUEUE_LOOP
+					break LOOP_QUEUE;
+			} // end LOOP_QUEUE
 			if (this.isRunning())
 				this.startNewWorkerIfNeededAndAble();
 			// timeout adding to queue

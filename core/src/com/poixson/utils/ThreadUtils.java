@@ -45,25 +45,25 @@ public final class ThreadUtils {
 		final Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
 		if (threadSet.isEmpty()) return null;
 		final Set<String> list = new HashSet<String>();
-		THREAD_LOOP:
+		LOOP_THREAD:
 		for (final Thread thread : threadSet) {
 			if (!includeDaemon && thread.isDaemon())
-				continue THREAD_LOOP;
+				continue LOOP_THREAD;
 			final String name = thread.getName();
 			if (IsEmpty(name))
-				continue THREAD_LOOP;
+				continue LOOP_THREAD;
 			if (!includeDaemon && name.startsWith("main:"))
-				continue THREAD_LOOP;
+				continue LOOP_THREAD;
 			// check ignore list
-			//IGNORE_LOOP:
+			//LOOP_IGNORE:
 			for (final String str : ignoreThreadNames) {
 				if (name.equals(str)) {
-					continue THREAD_LOOP;
+					continue LOOP_THREAD;
 				}
-			} // end IGNORE_LOOP
+			} // end LOOP_IGNORE
 			// add to list
 			list.add(thread.getName());
-		} // end THREAD_LOOP
+		} // end LOOP_THREAD
 		if (list.isEmpty())
 			return null;
 		return list.toArray(new String[0]);

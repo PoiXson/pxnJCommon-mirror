@@ -85,17 +85,17 @@ public abstract class xLogHandler {
 	}
 
 	protected void getPublishLock(final ReentrantLock lock) {
-		TIMEOUT_LOOP:
+		LOOP_TIMEOUT:
 		for (int i=0; i<50; i++) {
 			try {
 				if (lock.tryLock(5L, TimeUnit.MILLISECONDS))
 					return;
 			} catch (InterruptedException e) {
-				break TIMEOUT_LOOP;
+				break LOOP_TIMEOUT;
 			}
 			if (Thread.interrupted())
-				break TIMEOUT_LOOP;
-		} // end TIMEOUT_LOOP
+				break LOOP_TIMEOUT;
+		} // end LOOP_TIMEOUT
 	}
 	protected void releasePublishLock(final ReentrantLock lock) {
 		try {

@@ -78,9 +78,9 @@ public class xScriptThreadSafe extends xScript {
 		script.start();
 		this.pull(script);
 		this.active.set(false);
-		RUN_LOOP:
+		LOOP_RUN:
 		while (true) {
-			if (this.stopping.get()) break RUN_LOOP;
+			if (this.stopping.get()) break LOOP_RUN;
 			try {
 				final Tuple<String, Object[]> entry = this.queue_calls.poll(100L, TimeUnit.MILLISECONDS);
 				if (entry != null) {
@@ -97,7 +97,7 @@ public class xScriptThreadSafe extends xScript {
 					this.active.set(false);
 				}
 			} catch (InterruptedException ignore) {}
-		} // end RUN_LOOP
+		} // end LOOP_RUN
 		this.stop();
 	}
 

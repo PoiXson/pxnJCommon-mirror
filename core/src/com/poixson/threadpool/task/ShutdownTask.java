@@ -95,12 +95,12 @@ public class ShutdownTask implements Runnable {
 		if (!this.running.compareAndSet(false, true))
 			return;
 		int totalCount = 0;
-		OUTER_LOOP:
+		LOOP_OUTER:
 		while (true) {
 			int count = 0;
 			final Iterator<Runnable> it =
 				xThreadPool.shutdownHooks.iterator();
-			//INNER_LOOP:
+			//LOOP_INNER:
 			while (it.hasNext()) {
 				final Runnable run = it.next();
 				this.pool
@@ -109,11 +109,11 @@ public class ShutdownTask implements Runnable {
 				this.resetTimeout();
 			}
 			if (count == 0)
-				break OUTER_LOOP;
+				break LOOP_OUTER;
 			totalCount += count;
 			XLog().fine("Running %d shutdown hooks..", count);
 			ThreadUtils.Sleep(20L);
-		} // end OUTER_LOOP
+		} // end LOOP_OUTER
 		// queue another shutdown task (to wait for things to finish)
 		if (totalCount > 0) {
 			// run this again

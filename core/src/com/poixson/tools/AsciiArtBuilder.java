@@ -46,7 +46,7 @@ public class AsciiArtBuilder {
 		final StringBuilder buf = new StringBuilder();
 		final int maxLineSize = StringUtils.FindLongestLine(this.lines);
 		boolean withinTag = false;
-		LINE_LOOP:
+		LOOP_LINE:
 		for (int lineIndex=0; lineIndex<lineCount; lineIndex++) {
 			final String line = this.lines[lineIndex];
 			// blank line
@@ -56,7 +56,7 @@ public class AsciiArtBuilder {
 						(indent * 2) + maxLineSize,
 						' '
 					);
-				continue LINE_LOOP;
+				continue LOOP_LINE;
 			}
 			buf.setLength(0);
 			if (indent > 0) {
@@ -88,12 +88,12 @@ public class AsciiArtBuilder {
 					);
 				Collections.sort(ordered);
 				int lastX = -1;
-				COLOR_LOOP:
+				LOOP_COLOR:
 				for (final Integer posX : ordered) {
 					final int posXX = posX.intValue();
 					final String colorStr = colorsMap.get(posX);
 					if (IsEmpty(colorStr))
-						continue COLOR_LOOP;
+						continue LOOP_COLOR;
 					// color doesn't start at front of line
 					if (lastX == -1) {
 						lastX = 0;
@@ -123,7 +123,7 @@ public class AsciiArtBuilder {
 					buf.append(colorStr)
 						.append(' ');
 					lastX = posXX;
-				} // end COLOR_LOOP
+				} // end LOOP_COLOR
 				if (lastX < line.length()) {
 					buf.append(
 						line.substring(lastX)
@@ -142,7 +142,7 @@ public class AsciiArtBuilder {
 				);
 			}
 			result[ lineIndex ] = buf.toString();
-		} // end LINE_LOOP
+		} // end LOOP_LINE
 		return result;
 	}
 

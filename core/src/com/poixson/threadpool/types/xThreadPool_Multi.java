@@ -86,35 +86,35 @@ throw new RuntimeException("UNFINISHED CODE");
 	@Override
 	protected void stopWorkers() {
 		boolean changed = true;
-		//CHANGED_LOOP:
+		//LOOP_CHANGED:
 		while (changed) {
 			changed = false;
 			final Iterator<xThreadPoolWorker> it = this.workers.iterator();
-			//WORKERS_LOOP:
+			//LOOP_WORKERS:
 			while (it.hasNext()) {
 				final xThreadPoolWorker worker= it.next();
 				if (!worker.isStopping()) {
 					worker.stop();
 					changed = true;
 				}
-			} // end WORKERS_LOOP
+			} // end LOOP_WORKERS
 			if (changed) {
 				ThreadUtils.Sleep(10L);
 			}
-		} // end CHANGED_LOOP
+		} // end LOOP_CHANGED
 	}
 
 
 
 	@Override
 	public void join(final long timeout) {
-		OUTER_LOOP:
+		LOOP_OUTER:
 		while (true) {
 			if (this.workers.isEmpty())
-				break OUTER_LOOP;
+				break LOOP_OUTER;
 			final int count = this.workers.size();
 			final Iterator<xThreadPoolWorker> it = this.workers.iterator();
-			//INNER_LOOP:
+			//LOOP_INNER:
 			while (it.hasNext()) {
 				final xThreadPoolWorker worker = it.next();
 				try {
@@ -130,10 +130,10 @@ throw new RuntimeException("UNFINISHED CODE");
 				} catch (InterruptedException e) {
 					this.log().trace(e);
 				}
-			} // end INNER_LOOP
+			} // end LOOP_INNER
 			if (timeout > 0L)
-				break OUTER_LOOP;
-		} // end OUTER_LOOP
+				break LOOP_OUTER;
+		} // end LOOP_OUTER
 	}
 
 

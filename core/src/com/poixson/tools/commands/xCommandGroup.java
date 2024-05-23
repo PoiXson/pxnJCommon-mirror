@@ -30,11 +30,11 @@ public class xCommandGroup {
 		int count = 0;
 		final Method[] methods = obj.getClass().getMethods();
 		if (IsEmpty(methods)) return 0;
-		METHODS_LOOP:
+		LOOP_METHODS:
 		for (final Method m : methods) {
-			if (m == null) continue METHODS_LOOP;
+			if (m == null) continue LOOP_METHODS;
 			final xCommand anno = m.getAnnotation(xCommand.class);
-			if (anno == null) continue METHODS_LOOP;
+			if (anno == null) continue LOOP_METHODS;
 			final xCommandDAO dao = new xCommandDAO(obj, m, anno);
 			this.add(dao);
 			count++;
