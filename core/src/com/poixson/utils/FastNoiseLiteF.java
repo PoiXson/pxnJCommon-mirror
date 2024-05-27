@@ -55,6 +55,7 @@ import static com.poixson.utils.MathUtils.RotateY;
 
 
 public class FastNoiseLiteF {
+
 	public enum NoiseType {
 		OpenSimplex2,
 		OpenSimplex2S,
@@ -109,6 +110,7 @@ public class FastNoiseLiteF {
 		DefaultOpenSimplex2
 	};
 
+	private float angle = 0.0f;
 	private int mSeed = 1337;
 	private float mFrequency = 0.01f;
 	private NoiseType mNoiseType = NoiseType.OpenSimplex2;
@@ -147,6 +149,20 @@ public class FastNoiseLiteF {
 	public FastNoiseLiteF(int seed) {
 		this();
 		setSeed(seed);
+	}
+
+	public FastNoiseLiteF(final float angle) {
+		this();
+		this.setAngle(angle);
+	}
+	public FastNoiseLiteF(int seed, final float angle) {
+		this();
+		setSeed(seed);
+		this.setAngle(angle);
+	}
+
+	public void setAngle(final float angle) {
+		this.angle = angle;
 	}
 
 	/// <summary>
@@ -313,14 +329,6 @@ public class FastNoiseLiteF {
 	}
 
 
-	public float getNoiseRot(float x, float y, float angle) {
-		return this.getNoise(
-			RotateX(x, y, angle),
-			RotateY(x, y, angle)
-		);
-	}
-
-
 	/// <summary>
 	/// 2D noise at given position using current settings
 	/// </summary>
@@ -328,6 +336,14 @@ public class FastNoiseLiteF {
 	/// Noise output bounded between -1...1
 	/// </returns>
 	public float getNoise(float x, float y) {
+		if (this.angle == 0.0f)
+			return this.getNoise2F(x, y);
+		return this.getNoise2F(
+			RotateX(x, y, this.angle),
+			RotateY(x, y, this.angle)
+		);
+	}
+	protected float getNoise2F(float x, float y) {
 		x *= this.mFrequency;
 		y *= this.mFrequency;
 		switch (this.mNoiseType) {
@@ -358,6 +374,9 @@ public class FastNoiseLiteF {
 	/// Noise output bounded between -1...1
 	/// </returns>
 	public float getNoise(float x, float y, float z) {
+		return this.getNoise3F(x, y, z);
+	}
+	protected float getNoise3F(float x, float y, float z) {
 		x *= this.mFrequency;
 		y *= this.mFrequency;
 		z *= this.mFrequency;

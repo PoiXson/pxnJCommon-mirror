@@ -55,6 +55,7 @@ import static com.poixson.utils.MathUtils.RotateY;
 
 
 public class FastNoiseLiteD {
+
 	public enum NoiseType {
 		OpenSimplex2,
 		OpenSimplex2S,
@@ -109,6 +110,7 @@ public class FastNoiseLiteD {
 		DefaultOpenSimplex2
 	};
 
+	private double angle = 0.0;
 	private int mSeed = 1337;
 	private double mFrequency = 0.01;
 	private NoiseType mNoiseType = NoiseType.OpenSimplex2;
@@ -147,6 +149,20 @@ public class FastNoiseLiteD {
 	public FastNoiseLiteD(int seed) {
 		this();
 		setSeed(seed);
+	}
+
+	public FastNoiseLiteD(final double angle) {
+		this();
+		this.setAngle(angle);
+	}
+	public FastNoiseLiteD(int seed, final double angle) {
+		this();
+		setSeed(seed);
+		this.setAngle(angle);
+	}
+
+	public void setAngle(final double angle) {
+		this.angle = angle;
 	}
 
 	/// <summary>
@@ -313,14 +329,6 @@ public class FastNoiseLiteD {
 	}
 
 
-	public double getNoiseRot(double x, double y, double angle) {
-		return this.getNoise(
-			RotateX(x, y, angle),
-			RotateY(x, y, angle)
-		);
-	}
-
-
 	/// <summary>
 	/// 2D noise at given position using current settings
 	/// </summary>
@@ -328,6 +336,14 @@ public class FastNoiseLiteD {
 	/// Noise output bounded between -1...1
 	/// </returns>
 	public double getNoise(double x, double y) {
+		if (this.angle == 0.0)
+			return this.getNoise2D(x, y);
+		return this.getNoise2D(
+			RotateX(x, y, this.angle),
+			RotateY(x, y, this.angle)
+		);
+	}
+	protected double getNoise2D(double x, double y) {
 		x *= this.mFrequency;
 		y *= this.mFrequency;
 		switch (this.mNoiseType) {
@@ -343,7 +359,6 @@ public class FastNoiseLiteD {
 			default:
 				break;
 		}
-
 		switch (this.mFractalType) {
 			case FBm:      return GenFractalFBm(x, y);
 			case Ridged:   return GenFractalRidged(x, y);
@@ -359,6 +374,9 @@ public class FastNoiseLiteD {
 	/// Noise output bounded between -1...1
 	/// </returns>
 	public double getNoise(double x, double y, double z) {
+		return this.getNoise3D(x, y, z);
+	}
+	protected double getNoise3D(double x, double y, double z) {
 		x *= this.mFrequency;
 		y *= this.mFrequency;
 		z *= this.mFrequency;
