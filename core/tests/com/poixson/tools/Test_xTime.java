@@ -154,10 +154,15 @@ public class Test_xTime {
 
 	@Test
 	public void testToString() {
-		Assert.assertEquals( "123ms",     (new xTime(123L)).toString()           );
-		Assert.assertEquals( "2m 3s",     (new xTime(123000L)).toString()        );
-		Assert.assertEquals( "2 minutes", (new xTime(123000L).toRoundedString()) );
-		Assert.assertEquals( "2 minutes 3 seconds", (new xTime(123000L)).toFullString() );
+		Assert.assertEquals("123ms",                     (new xTime(123L)).toString()          );
+		Assert.assertEquals("2m 3s 456ms",               (new xTime(123456L)).toString()       );
+		Assert.assertEquals("2 minutes",                 (new xTime(123456L)).toRoundedString());
+		Assert.assertEquals("2 minutes 3 seconds 456ms", (new xTime(123456L)).toFullString()   );
+		Assert.assertEquals("2 minutes 3 seconds 456ms", (new xTime(123456L)).toRoundedString(-1));
+		Assert.assertEquals("2 minutes 3 seconds 456ms", (new xTime(123456L)).toRoundedString(0));
+		Assert.assertEquals("2 minutes",                 (new xTime(123456L)).toRoundedString(1));
+		Assert.assertEquals("2 minutes 3 seconds",       (new xTime(123456L)).toRoundedString(2));
+		Assert.assertEquals("2 minutes 3 seconds 456ms", (new xTime(123456L)).toRoundedString(3));
 	}
 
 

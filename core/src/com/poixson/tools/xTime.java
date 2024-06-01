@@ -236,6 +236,9 @@ public class xTime {
 	public String toRoundedString() {
 		return ToString(this.ms(), true, true);
 	}
+	public String toRoundedString(final int places) {
+		return ToString(this.ms(), true, places);
+	}
 	public String toFullString() {
 		return ToString(this.ms(), true, false);
 	}
@@ -249,23 +252,33 @@ public class xTime {
 	}
 	public static String ToString(final long ms,
 			final boolean fullFormat, final boolean roundedFormat) {
+		return ToString(ms, fullFormat, roundedFormat ? 1 : -1);
+	}
+	public static String ToString(final long ms,
+			final boolean fullFormat, final int places) {
 		long tmp = ms;
 		final List<String> result = new ArrayList<String>();
+		int units = 0;
+		LOOP_UNITS:
 		for (final xTimeU xunit : xTimeU.xunits) {
-			if (xTimeU.T.equals(xunit)) continue;
-			if (xTimeU.W.equals(xunit)) continue;
-			if (tmp < xunit.value) continue;
+			if (xTimeU.T.equals(xunit)) continue LOOP_UNITS;
+			if (xTimeU.W.equals(xunit)) continue LOOP_UNITS;
+			if (tmp < xunit.value)      continue LOOP_UNITS;
 			final long val = Math.floorDiv(tmp, xunit.value);
-			if (val == 0L) continue;
+			if (val == 0L) continue LOOP_UNITS;
 			tmp -= (val * xunit.value);
 			final StringBuilder str = new StringBuilder();
 			// full format
 			if (fullFormat) {
-				str.append(val)
-					.append(' ')
-					.append(xunit.name);
-				if (val != 1L)
-					str.append('s');
+				if (xTimeU.MS.equals(xunit)) {
+					str.append(val).append(xunit.name);
+				} else {
+					str.append(val)
+						.append(' ')
+						.append(xunit.name);
+					if (val != 1L)
+						str.append('s');
+				}
 			// short format
 			} else {
 				str.append(val);
@@ -275,10 +288,10 @@ public class xTime {
 					str.append(xunit.chr);
 				}
 			}
-			if (roundedFormat) {
-				return str.toString();
-			}
 			result.add(str.toString());
+			if (places > 0
+			&& ++units >= places)
+				break LOOP_UNITS;
 		}
 		return StringUtils.MergeStrings(' ', result.toArray(new String[0]));
 	}
