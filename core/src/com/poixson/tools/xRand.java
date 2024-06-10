@@ -23,6 +23,7 @@ public class xRand {
 
 
 
+	// int
 	public int nextInt(final int min, final int max) {
 		final int value = this.rnd.nextInt(min, max);
 		this.seed += value;
@@ -40,6 +41,28 @@ public class xRand {
 
 
 
+	// long
+	public long nextLong(final long min, final long max) {
+		final long value = this.rnd.nextLong(min, max);
+		this.seed += value;
+		this.rnd.setSeed(this.seed);
+		return value;
+	}
+	public long nextLong(final long min, final long max, final long last) {
+		for (int i=0; i<100; i++) {
+			final long value = this.rnd.nextLong(min, max);
+			if (value != last) {
+				this.seed += value;
+				this.rnd.setSeed(this.seed);
+				return value;
+			}
+		}
+		return last;
+	}
+
+
+
+	// double
 	public double nextDbl(final double min, final double max) {
 		final double value = this.rnd.nextDouble(min, max);
 		this.seed += (long) Math.ceil(value * 1000.0);
