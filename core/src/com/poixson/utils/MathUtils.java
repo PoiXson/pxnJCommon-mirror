@@ -4,12 +4,192 @@ import static com.poixson.utils.NumberUtils.MinMax;
 
 import java.awt.Color;
 
+import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.tools.Keeper;
 
 
 public final class MathUtils {
 	private MathUtils() {}
 	static { Keeper.add(new MathUtils()); }
+
+
+
+	// -------------------------------------------------------------------------------
+	// min/max
+
+
+
+	public static int Min(final int...values) {
+		final int num = values.length;
+		if (num == 0) throw new RequiredArgumentException("values");
+		if (num == 1) return values[0];
+		int min = values[0];
+		for (int i=1; i<num; i++) {
+			if (min > values[i])
+				min = values[i];
+		}
+		return min;
+	}
+	public static long Min(final long...values) {
+		final int num = values.length;
+		if (num == 0) throw new RequiredArgumentException("values");
+		if (num == 1) return values[0];
+		long min = values[0];
+		for (int i=1; i<num; i++) {
+			if (min > values[i])
+				min = values[i];
+		}
+		return min;
+	}
+	public static float Min(final float...values) {
+		final int num = values.length;
+		if (num == 0) throw new RequiredArgumentException("values");
+		if (num == 1) return values[0];
+		float min = values[0];
+		for (int i=1; i<num; i++) {
+			if (min > values[i])
+				min = values[i];
+		}
+		return min;
+	}
+	public static double Min(final double...values) {
+		final int num = values.length;
+		if (num == 0) throw new RequiredArgumentException("values");
+		if (num == 1) return values[0];
+		double min = values[0];
+		for (int i=1; i<num; i++) {
+			if (min > values[i])
+				min = values[i];
+		}
+		return min;
+	}
+
+
+
+	public static int Max(final int...values) {
+		final int num = values.length;
+		if (num == 0) throw new RequiredArgumentException("values");
+		if (num == 1) return values[0];
+		int max = values[0];
+		for (int i=1; i<num; i++) {
+			if (max < values[i])
+				max = values[i];
+		}
+		return max;
+	}
+	public static long Max(final long...values) {
+		final int num = values.length;
+		if (num == 0) throw new RequiredArgumentException("values");
+		if (num == 1) return values[0];
+		long max = values[0];
+		for (int i=1; i<num; i++) {
+			if (max < values[i])
+				max = values[i];
+		}
+		return max;
+	}
+	public static float Max(final float...values) {
+		final int num = values.length;
+		if (num == 0) throw new RequiredArgumentException("values");
+		if (num == 1) return values[0];
+		float max = values[0];
+		for (int i=1; i<num; i++) {
+			if (max < values[i])
+				max = values[i];
+		}
+		return max;
+	}
+	public static double Max(final double...values) {
+		final int num = values.length;
+		if (num == 0) throw new RequiredArgumentException("values");
+		if (num == 1) return values[0];
+		double max = values[0];
+		for (int i=1; i<num; i++) {
+			if (max < values[i])
+				max = values[i];
+		}
+		return max;
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// distance
+
+
+
+	public static double Distance2D(
+			final double x1, final double z1,
+			final double x2, final double z2) {
+		return Math.sqrt(
+			Square(x1 - x2) +
+			Square(z1 - z2)
+		);
+	}
+	public static double Distance3D(
+			final double x1, final double y1, final double z1,
+			final double x2, final double y2, final double z2) {
+		return Math.sqrt(
+			Square(x1 - x2) +
+			Square(y1 - y2) +
+			Square(z1 - z2)
+		);
+	}
+
+
+
+	public static double DistanceFast2D(
+			final double x1, final double z1,
+			final double x2, final double z2) {
+		return Max(
+			Math.abs(x1 - x2),
+			Math.abs(z1 - z2)
+		);
+	}
+	public static double DistanceFast3D(
+			final double x1, final double y1, final double z1,
+			final double x2, final double y2, final double z2) {
+		return Max(
+			Math.abs(x1 - x2),
+			Math.abs(y1 - y2),
+			Math.abs(z1 - z2)
+		);
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// square/cube
+
+
+
+	public static int Square(final int value) {
+		return value * value;
+	}
+	public static long Square(final long value) {
+		return value * value;
+	}
+	public static float Square(final float value) {
+		return value * value;
+	}
+	public static double Square(final double value) {
+		return value * value;
+	}
+
+
+
+	public static int Cube(final int value) {
+		return value * value * value;
+	}
+	public static long Cube(final long value) {
+		return value * value * value;
+	}
+	public static float Cube(final float value) {
+		return value * value * value;
+	}
+	public static double Cube(final double value) {
+		return value * value * value;
+	}
 
 
 

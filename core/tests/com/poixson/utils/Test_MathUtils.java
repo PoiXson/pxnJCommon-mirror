@@ -1,5 +1,12 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.MathUtils.Min;
+import static com.poixson.utils.MathUtils.Max;
+import static com.poixson.utils.MathUtils.Distance2D;
+import static com.poixson.utils.MathUtils.Distance3D;
+import static com.poixson.utils.MathUtils.DistanceFast2D;
+import static com.poixson.utils.MathUtils.DistanceFast3D;
+
 //import static com.poixson.utils.MathUtils.CubicInterpolate;
 //import static com.poixson.utils.MathUtils.CubicInterpolateCircularValues;
 //import static com.poixson.utils.MathUtils.CubicInterpolateLoopedValues;
@@ -14,6 +21,78 @@ import org.junit.Test;
 public class Test_MathUtils {
 
 //	private static final double DELTA = NumberUtils.DELTA;
+
+
+
+	@Test
+	public void testMinMax() {
+		Assert.assertEquals( 1, Min( 1, 2, 3      ));
+		Assert.assertEquals(-5, Min(-5, 0, 5      ));
+		Assert.assertEquals( 5, Min( 9, 8, 7, 5, 6));
+		Assert.assertEquals( 3, Max( 1, 2, 3      ));
+		Assert.assertEquals( 5, Max(-5, 0, 5      ));
+		Assert.assertEquals( 9, Max( 9, 8, 7, 5, 6));
+	}
+
+
+
+	@Test
+	public void testDistance() {
+		final double delta = 0.001;
+		final double x1 =   0.0; final double y1 = x1; final double z1 = x1;
+		final double x2 =   1.0; final double y2 = x2; final double z2 = x2;
+		final double x3 =   5.0; final double y3 = x3; final double z3 = x3;
+		final double x4 =  90.0; final double y4 = x4; final double z4 = x4;
+		final double x5 = 999.9; final double y5 = x5; final double z5 = x5;
+		// 2d distance
+		Assert.assertEquals(   0.0,   Distance2D(x1, z1, x1, z1), delta);
+		Assert.assertEquals(   1.414, Distance2D(x1, z1, x2, z2), delta);
+		Assert.assertEquals(   7.071, Distance2D(x1, z1, x3, z3), delta);
+		Assert.assertEquals(   5.656, Distance2D(x2, z2, x3, z3), delta);
+		Assert.assertEquals( 120.208, Distance2D(x3, z3, x4, z4), delta);
+		Assert.assertEquals(1407.001, Distance2D(x3, z3, x5, z5), delta);
+		Assert.assertEquals(1414.072, Distance2D(x1, z1, x5, z5), delta);
+		Assert.assertEquals(   1.0,   Distance2D(x1, z1, x2, z1), delta);
+		Assert.assertEquals(   1.0,   Distance2D(x1, z1, x1, z2), delta);
+		Assert.assertEquals(   1.414, Distance2D(x2, z2, x1, z1), delta);
+		// 3d distance
+		Assert.assertEquals(   0.0,   Distance3D(x1, y1, z1, x1, y1, z1), delta);
+		Assert.assertEquals(   1.732, Distance3D(x1, y1, z1, x2, y2, z2), delta);
+		Assert.assertEquals(   8.66,  Distance3D(x1, y1, z1, x3, y3, z3), delta);
+		Assert.assertEquals(   6.928, Distance3D(x2, y2, z2, x3, y3, z3), delta);
+		Assert.assertEquals( 147.224, Distance3D(x3, y3, z3, x4, y4, z4), delta);
+		Assert.assertEquals(1723.217, Distance3D(x3, y3, z3, x5, y5, z5), delta);
+		Assert.assertEquals(1731.877, Distance3D(x1, y1, z1, x5, y5, z5), delta);
+		Assert.assertEquals(   1.0,   Distance3D(x1, y1, z1, x2, y1, z1), delta);
+		Assert.assertEquals(   1.0,   Distance3D(x1, y1, z1, x1, y2, z1), delta);
+		Assert.assertEquals(   1.0,   Distance3D(x1, y1, z1, x1, y1, z2), delta);
+		Assert.assertEquals(   1.0,   Distance3D(x1, y1, z1, x1, y2, z1), delta);
+		Assert.assertEquals(   1.732, Distance3D(x2, y2, z2, x1, y1, z1), delta);
+		// 2d fast distance
+		Assert.assertEquals(  0.0, DistanceFast2D(x1, z1, x1, z1), delta);
+		Assert.assertEquals(  1.0, DistanceFast2D(x1, z1, x2, z2), delta);
+		Assert.assertEquals(  5.0, DistanceFast2D(x1, z1, x3, z3), delta);
+		Assert.assertEquals(  4.0, DistanceFast2D(x2, z2, x3, z3), delta);
+		Assert.assertEquals( 85.0, DistanceFast2D(x3, z3, x4, z4), delta);
+		Assert.assertEquals(994.9, DistanceFast2D(x3, z3, x5, z5), delta);
+		Assert.assertEquals(999.9, DistanceFast2D(x1, z1, x5, z5), delta);
+		Assert.assertEquals(  1.0, DistanceFast2D(x1, z1, x2, z1), delta);
+		Assert.assertEquals(  1.0, DistanceFast2D(x1, z1, x1, z2), delta);
+		Assert.assertEquals(  1.0, DistanceFast2D(x2, z2, x1, z1), delta);
+		// 3d fast distance
+		Assert.assertEquals(  0.0, DistanceFast3D(x1, y1, z1, x1, y1, z1), delta);
+		Assert.assertEquals(  1.0, DistanceFast3D(x1, y1, z1, x2, y2, z2), delta);
+		Assert.assertEquals(  5.0, DistanceFast3D(x1, y1, z1, x3, y3, z3), delta);
+		Assert.assertEquals(  4.0, DistanceFast3D(x2, y2, z2, x3, y3, z3), delta);
+		Assert.assertEquals( 85.0, DistanceFast3D(x3, y3, z3, x4, y4, z4), delta);
+		Assert.assertEquals(994.9, DistanceFast3D(x3, y3, z3, x5, y5, z5), delta);
+		Assert.assertEquals(999.9, DistanceFast3D(x1, y1, z1, x5, y5, z5), delta);
+		Assert.assertEquals(  1.0, DistanceFast3D(x1, y1, z1, x2, y1, z1), delta);
+		Assert.assertEquals(  1.0, DistanceFast3D(x1, y1, z1, x1, y2, z1), delta);
+		Assert.assertEquals(  1.0, DistanceFast3D(x1, y1, z1, x1, y1, z2), delta);
+		Assert.assertEquals(  1.0, DistanceFast3D(x1, y1, z1, x1, y2, z1), delta);
+		Assert.assertEquals(  1.0, DistanceFast3D(x2, y2, z2, x1, y1, z1), delta);
+	}
 
 
 
