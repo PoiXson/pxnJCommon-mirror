@@ -1,5 +1,7 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.Utils.GetMS;
+
 import java.security.SecureRandom;
 
 
@@ -17,8 +19,20 @@ public class xRand {
 
 
 
-	public long seed(final int seed) {
-		return this.seed += seed;
+	public xRand seed_time() {
+		return this.seed(
+			this.seed += (GetMS() % ((long)Integer.MAX_VALUE))
+		);
+	}
+	public xRand seed(final int seed) {
+		return this.seed( (long)seed );
+	}
+	public xRand seed(final long seed) {
+		this.seed += seed;
+		return this;
+	}
+	public long getSeed() {
+		return this.seed;
 	}
 
 
