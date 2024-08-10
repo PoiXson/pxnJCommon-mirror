@@ -1,10 +1,9 @@
 package com.poixson.tools.abstractions;
 
 
-public interface xStartStop {
+public interface xStartStop extends xStart {
 
 
-	public void start();
 	public void stop();
 
 
