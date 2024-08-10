@@ -109,6 +109,20 @@ public final class xConfigLoader {
 
 
 
+	public static <T extends xConfig> T FromFileOrEmpty(final String filepath, final Class<T> clss) {
+		{
+			final T config = FromFile(filepath, clss);
+			if (config != null)
+				return config;
+		}
+		{
+			final Map<String, Object> datamap = new HashMap<String, Object>();
+			return NewConfig(datamap, clss);
+		}
+	}
+
+
+
 	// load jar resource
 	public static <T extends xConfig> T FromJar(final String filepath, final Class<T> clss) {
 		if (IsEmpty(filepath)) throw new RequiredArgumentException("filePath");
