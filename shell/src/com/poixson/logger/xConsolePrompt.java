@@ -110,6 +110,7 @@ public class xConsolePrompt extends xConsole {
 		if (this.isStopping()) return;
 		this.log().fine("Console prompt started..");
 		final Thread thread = Thread.currentThread();
+		int count_errors = 0;
 		READER_LOOP:
 		while (true) {
 			if (this.isStopping())      break READER_LOOP;
@@ -133,16 +134,16 @@ public class xConsolePrompt extends xConsole {
 					if (!result)
 						this.log().warning("Unknown command: %s", line);
 				}
+				count_errors = 0;
 			} catch (UserInterruptException ignore) {
 				break READER_LOOP;
 			} catch (Exception e) {
 				this.log().trace(e);
-				try {
-					Thread.sleep(100L);
-				} catch (InterruptedException ignore) {
+				if (++count_errors > 5) {
+					this.log().trace(new RuntimeException("Too many errors"));
 					break READER_LOOP;
 				}
-				continue READER_LOOP;
+				ThreadUtils.Sleep(100L);
 			}
 		} // end READER_LOOP
 		this.saveHistory();
