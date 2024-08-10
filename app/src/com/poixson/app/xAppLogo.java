@@ -1,4 +1,4 @@
-package com.poixson.app.steps;
+package com.poixson.app;
 
 import static com.poixson.utils.Utils.IsEmpty;
 
@@ -8,9 +8,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.poixson.app.xApp;
-import com.poixson.app.xAppStep;
-import com.poixson.app.xAppStepType;
 import com.poixson.logger.xLog;
 import com.poixson.tools.AsciiArtBuilder;
 import com.poixson.tools.xDebug;
@@ -22,7 +19,7 @@ import com.poixson.utils.StringUtils;
  * Startup sequence
  *  20 | display logo
  */
-public class xAppSteps_Logo {
+public class xAppLogo {
 
 	protected static final int INDENT        = 2;
 	protected static final int VERSION_WIDTH = 15;
@@ -31,7 +28,7 @@ public class xAppSteps_Logo {
 
 
 
-	public xAppSteps_Logo(final xApp app) {
+	public xAppLogo(final xApp app) {
 		this.app = app;
 	}
 
