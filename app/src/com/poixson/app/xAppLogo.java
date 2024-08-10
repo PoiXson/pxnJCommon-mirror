@@ -15,10 +15,6 @@ import com.poixson.utils.ProcUtils;
 import com.poixson.utils.StringUtils;
 
 
-/*
- * Startup sequence
- *  20 | display logo
- */
 public class xAppLogo {
 
 	protected static final int INDENT        = 2;
@@ -47,30 +43,20 @@ public class xAppLogo {
 
 
 
-	// -------------------------------------------------------------------------------
-	// startup steps
-
-
-
 	// display logo
-	@xAppStep(type=xAppStepType.STARTUP, step=20, title="Display Logo")
-	public void __START__display_logo() {
+	public void display() {
 		final xLog log = this.app.log();
-		log.publish(this.display_logo());
+		log.publish(this.build_logo());
 		log.publish();
-		log.publish(this.display_legal());
+		log.publish(this.build_legal());
 		log.publish();
-		log.publish(this.display_startup_vars());
+		log.publish(this.build_startup_vars());
 		log.publish();
 	}
 
 
 
-	// -------------------------------------------------------------------------------
-
-
-
-	public String[] display_legal() {
+	public String[] build_legal() {
 		return new String[] {
 			" License: "+this.getLicense(),
 			" This program comes with absolutely no warranty. This is free ",
@@ -102,7 +88,7 @@ public class xAppLogo {
 			result.put("Args", StringUtils.MergeStrings(", ", args));
 		return result;
 	}
-	public String[] display_startup_vars() {
+	public String[] build_startup_vars() {
 		final LinkedList<String> lines = new LinkedList<String>();
 		final Map<String, String> vars = GetStartupVars(this.app);
 		final Iterator<Entry<String, String>> it = vars.entrySet().iterator();
@@ -142,7 +128,7 @@ public class xAppLogo {
 //10 |/////////////////////////////////////////////////////////////////|
 //   0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6 8 0 2 4 6
 //             1         2         3         4         5         6
-	public String[] display_logo() {
+	public String[] build_logo() {
 		final String version = this.getAppVersionPadded();
 		// define colors
 		final String COLOR_BG = "black";
