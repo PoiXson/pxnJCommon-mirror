@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.poixson.tools.xTime;
+import com.poixson.tools.xTimeU;
 import com.poixson.utils.NumberUtils;
 import com.poixson.utils.ObjectUtils;
 
@@ -145,6 +147,27 @@ public class xConfig {
 				return value.floatValue();
 		} catch (Exception ignore) {}
 		return defVal;
+	}
+
+
+
+	public xTime getTime(final String key) {
+		{
+			final Long value = this.getLong(key);
+			if (value != null)
+				return new xTime(value.longValue(), xTimeU.MS);
+		}
+		{
+			final String value = this.getString(key);
+			if (!IsEmpty(value))
+				return new xTime(value);
+		}
+		return null;
+	}
+	public xTime getTime(final String key, final String def) {
+		final xTime time = this.getTime(key);
+		if (time == null) return new xTime(def);
+		else              return time;
 	}
 
 
