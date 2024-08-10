@@ -415,7 +415,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 
-	// start time
+	// 10 | start time
 	@xAppStep(type=xAppStepType.STARTUP, step=10, title="Startup Time")
 	public void __START__uptime() {
 		this.time_start
@@ -429,7 +429,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 
-	// display uptime
+	// 60 | display uptime
 	@xAppStep(type=xAppStepType.SHUTDOWN, step=60, title="Uptime")
 	public void __STOP__uptime(final xLog log) {
 //TODO: display total time running
@@ -437,7 +437,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 
-	// stop thread pools
+	// 50 | stop thread pools
 	@xAppStep(type=xAppStepType.SHUTDOWN, step=50, title="Stop Thread Pools")
 	public void __STOP__threadpools() {
 		xThreadPool.StopAll();
@@ -445,7 +445,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 
-	// garbage collect
+	// 10 | garbage collect
 	@xAppStep(type=xAppStepType.SHUTDOWN, step=10, title="Garbage Collect")
 	public void __STOP__garbage() {
 		StdIO.OriginalOut().flush();
@@ -456,7 +456,7 @@ public abstract class xApp implements xStartable, Runnable, xFailable {
 
 
 
-	// exit
+	// 1 | exit
 	@xAppStep(type=xAppStepType.SHUTDOWN, step=1, title="Exit")
 	public void __STOP__exit() {
 		final Thread thread = new Thread() {

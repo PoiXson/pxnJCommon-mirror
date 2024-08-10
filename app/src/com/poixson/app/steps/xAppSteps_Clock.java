@@ -19,7 +19,7 @@ public class xAppSteps_Clock {
 
 
 
-	// ensure not root
+	// 55 | ensure not root
 	@xAppStep(type=StepType.STARTUP, step=55, title="Clock Sync")
 	public void __START__clock_sync() {
 //TODO

@@ -19,7 +19,7 @@ public class xAppSteps_UserNotRoot {
 
 
 
-	// ensure not root
+	// 5 | ensure not root
 	@xAppStep(type=xAppStepType.STARTUP, step=5, title="Check User")
 	public void __START__user_not_root() {
 		final String user = System.getProperty("user.name");

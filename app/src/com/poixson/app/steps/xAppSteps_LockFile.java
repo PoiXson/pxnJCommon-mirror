@@ -29,7 +29,7 @@ public class xAppSteps_LockFile {
 
 
 
-	// lock file
+	// 15 | lock file
 	@xAppStep(type=xAppStepType.STARTUP, title="Lock File", step=15)
 	public void __START__lockfile() {
 		final xLockFile lock = xLockFile.Get(this.filename);
@@ -44,7 +44,7 @@ public class xAppSteps_LockFile {
 
 
 
-	// release lock file
+	// 15 | release lock file
 	@xAppStep(type=xAppStepType.SHUTDOWN, title="Lock File", step=15)
 	public void __STOP__lockfile() {
 		xLockFile.Release(this.filename);
