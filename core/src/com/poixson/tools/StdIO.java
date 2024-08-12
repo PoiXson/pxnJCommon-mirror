@@ -30,13 +30,16 @@ public final class StdIO {
 
 
 	public static PrintStream OriginalOut() {
-		return OriginalOut.get();
+		final PrintStream out = OriginalOut.get();
+		return (out==null ? System.out : out);
 	}
 	public static PrintStream OriginalErr() {
-		return OriginalErr.get();
+		final PrintStream err = OriginalErr.get();
+		return (err==null ? System.err : err);
 	}
 	public static InputStream OriginalIn() {
-		return OriginalIn.get();
+		final InputStream in = OriginalIn.get();
+		return (in==null ? System.in : in);
 	}
 
 
