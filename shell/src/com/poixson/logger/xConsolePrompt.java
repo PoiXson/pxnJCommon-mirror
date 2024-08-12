@@ -18,13 +18,11 @@ import org.jline.reader.History;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.UserInterruptException;
-import org.jline.reader.impl.LineReaderImpl;
 import org.jline.reader.impl.history.DefaultHistory;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
 import com.poixson.ShellDefines;
-import com.poixson.exceptions.IORuntimeException;
 import com.poixson.logger.handlers.xLogHandler_ConsolePrompt;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;
@@ -113,6 +111,72 @@ public class xConsolePrompt extends xConsole implements xFailable {
 		if (this.isFailed())   return;
 		if (this.isStopping()) return;
 		this.log().fine("Console prompt started..");
+		{
+			final PrintStream hold_out = System.out;
+			final InputStream hold_in  = System.in;
+			synchronized (this.terminal) {
+				try {
+					System.setOut(StdIO.OriginalOut());
+					System.setIn (StdIO.OriginalIn() );
+					// jline terminal
+					final Terminal term = TerminalBuilder.builder()
+						.system(true)
+						.streams(
+							StdIO.OriginalIn(),
+							StdIO.OriginalOut()
+						)
+						.build();
+					if (term == null) {
+						this.fail(new RuntimeException("Failed to create jline terminal instance"));
+						return;
+					}
+					if ("dumb".equals(term.getType())) {
+						this.fail(new RuntimeException("Detected a dumb terminal"));
+						return;
+					}
+					if (!this.terminal.compareAndSet(null, term)) {
+						this.fail(new RuntimeException("Invalid terminal state, already set"));
+						return;
+					}
+					this.log().fine("Terminal: "+term.getType());
+					if (this.isFailed()) return;
+					// jline reader
+					final LineReader reader =
+						LineReaderBuilder.builder()
+							.terminal(term)
+							.build();
+					if (reader == null) {
+						this.fail(new RuntimeException("Failed to create jline reader instance"));
+						return;
+					}
+					if (!this.reader.compareAndSet(null, reader)) {
+						this.fail(new RuntimeException("Invalid reader state, already set"));
+						return;
+					}
+					if (this.isFailed()) return;
+					//TODO
+					//( xShellDefines.BELL_ENABLED ? "audible" : "visible" )
+					reader.setVariable(LineReader.BELL_STYLE, "visible");
+					// command history
+					reader.setVariable(LineReader.HISTORY_FILE, new File(ShellDefines.HISTORY_FILE));
+					final String file_history = FileUtils.MergePaths(",", ShellDefines.HISTORY_FILE);
+					reader.setVariable(LineReader.HISTORY_FILE, file_history);
+					reader.setVariable(LineReader.HISTORY_SIZE, ShellDefines.HISTORY_SIZE);
+					final History history = new DefaultHistory(reader);
+					if (!this.history.compareAndSet(null, history)) {
+						this.fail(new RuntimeException("Invalid command history state, already set"));
+						return;
+					}
+					AnsiConsole.systemInstall();
+				} catch (Exception e) {
+					this.fail(e);
+					return;
+				} finally {
+					System.setOut(hold_out);
+					System.setIn( hold_in );
+				}
+			} // end sync terminal
+		}
 		if (this.isFailed()) return;
 		final Thread thread = Thread.currentThread();
 		int count_errors = 0;
@@ -124,8 +188,7 @@ public class xConsolePrompt extends xConsole implements xFailable {
 			final String line;
 			try {
 				// read console input
-				final LineReader reader = this.getReader();
-				line = reader.readLine(
+				line = this.getReader().readLine(
 					this.getPrompt(),
 					this.mask.get()
 				);
@@ -233,99 +296,15 @@ public class xConsolePrompt extends xConsole implements xFailable {
 
 
 
-	// -------------------------------------------------------------------------------
-	// JLine
-
-
-
 	public Terminal getTerminal() {
-		{
-			final Terminal term = this.terminal.get();
-			if (term != null)
-				return term;
-		}
-		synchronized (this.terminal) {
-			final Terminal term;
-			try {
-				final PrintStream hold_out = System.out;
-				final InputStream hold_in  = System.in;
-				System.setOut(StdIO.OriginalOut());
-				System.setIn (StdIO.OriginalIn() );
-				term = TerminalBuilder.builder()
-					.system(true)
-					.streams(
-						StdIO.OriginalIn(),
-						StdIO.OriginalOut()
-					)
-					.build();
-				System.setOut(hold_out);
-				System.setIn( hold_in );
-			} catch (IOException e) {
-				throw new IORuntimeException(e);
-			}
-			if (this.terminal.compareAndSet(null, term)) {
-				AnsiConsole.systemInstall();
-				return term;
-			}
-		}
 		return this.terminal.get();
 	}
 	public LineReader getReader() {
-		// existing instance
-		{
-			final LineReader read = this.reader.get();
-			if (read != null)
-				return read;
-		}
-		// new instance
-		synchronized (this.reader) {
-			final Terminal term = this.getTerminal();
-			final LineReader read =
-				LineReaderBuilder.builder()
-					.terminal(term)
-					.build();
-			if ( ! this.reader.compareAndSet(null, read) )
-				return this.reader.get();
-//TODO
-final String history_file = "history.txt";
-			read.setVariable(LineReader.HISTORY_FILE, new File(history_file));
-			//TODO
-//			( xShellDefines.BELL_ENABLED ? "audible" : "visible" )
-			read.setVariable(LineReader.BELL_STYLE, "visible");
-			this.getHistory();
-			return read;
-		}
-	}
-	public LineReaderImpl getReaderImpl() {
-		return (LineReaderImpl) this.getReader();
+		return this.reader.get();
 	}
 
 
 
-	// -------------------------------------------------------------------------------
-	// history
-
-
-
-	public History getHistory() {
-		// existing instance
-		{
-			final History hist = this.history.get();
-			if (hist != null)
-				return hist;
-		}
-		// new instance
-		{
-			final String historyFile = FileUtils.MergePaths(",", ShellDefines.HISTORY_FILE);
-			final LineReader read = this.getReader();
-			read.setVariable(LineReader.HISTORY_FILE, historyFile);
-			read.setVariable(LineReader.HISTORY_SIZE, ShellDefines.HISTORY_SIZE);
-			final History hist = new DefaultHistory(read);
-			if ( ! this.history.compareAndSet(null, hist) )
-				return this.history.get();
-			return hist;
-		}
-	}
 	public void saveHistory() {
 		if (this.isFailed()) return;
 		final History hist = this.history.get();
@@ -378,7 +357,7 @@ final String history_file = "history.txt";
 	public void onFailure() {
 		final Throwable e = this.failure.get();
 		if (e != null)
-			e.printStackTrace(StdIO.OriginalOut());
+			this.log().trace(e);
 		this.stop();
 	}
 
