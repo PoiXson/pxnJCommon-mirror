@@ -28,12 +28,13 @@ import com.poixson.exceptions.IORuntimeException;
 import com.poixson.logger.handlers.xLogHandler_ConsolePrompt;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;
+import com.poixson.tools.abstractions.xFailable;
 import com.poixson.tools.commands.xCommandProcessor;
 import com.poixson.utils.FileUtils;
 import com.poixson.utils.ThreadUtils;
 
 
-public class xConsolePrompt extends xConsole {
+public class xConsolePrompt extends xConsole implements xFailable {
 	protected static final String THREAD_NAME = "Console-Input";
 
 	protected final AtomicReference<xCommandProcessor> processor = new AtomicReference<xCommandProcessor>(null);
@@ -51,6 +52,8 @@ public class xConsolePrompt extends xConsole {
 
 	protected final AtomicBoolean stopping = new AtomicBoolean(false);
 	protected final CopyOnWriteArraySet<Runnable> listeners_close = new CopyOnWriteArraySet<Runnable>();
+
+	protected final AtomicReference<Throwable> failure = new AtomicReference<Throwable>(null);
 
 
 
@@ -73,6 +76,7 @@ public class xConsolePrompt extends xConsole {
 	// start console input thread
 	@Override
 	public void start() {
+		if (this.isFailed()) return;
 		if (this.stopping.get())
 			throw new IllegalStateException("Cannot start console prompt, already stopped");
 		if (this.thread.get() == null) {
@@ -106,12 +110,15 @@ public class xConsolePrompt extends xConsole {
 	// prompt thread
 	@Override
 	public void run() {
+		if (this.isFailed())   return;
 		if (this.isStopping()) return;
 		this.log().fine("Console prompt started..");
+		if (this.isFailed()) return;
 		final Thread thread = Thread.currentThread();
 		int count_errors = 0;
 		LOOP_READER:
 		while (true) {
+			if (this.isFailed())        break LOOP_READER;
 			if (this.isStopping())      break LOOP_READER;
 			if (thread.isInterrupted()) break LOOP_READER;
 			final String line;
@@ -166,10 +173,12 @@ public class xConsolePrompt extends xConsole {
 
 	@Override
 	public boolean isRunning() {
+		if (this.isFailed()) return false;
 		return (this.thread.get() != null);
 	}
 	@Override
 	public boolean isStopping() {
+		if (this.isFailed()) return true;
 		return this.stopping.get();
 	}
 
@@ -318,6 +327,7 @@ final String history_file = "history.txt";
 		}
 	}
 	public void saveHistory() {
+		if (this.isFailed()) return;
 		final History hist = this.history.get();
 		if (hist != null) {
 			try {
@@ -337,6 +347,39 @@ final String history_file = "history.txt";
 
 	public void addCloseListener(final Runnable run) {
 		this.listeners_close.add(run);
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// failure
+
+
+
+	@Override
+	public boolean fail(final Throwable e) {
+		if (this.failure.compareAndSet(null, e)) {
+			this.onFailure();
+			return true;
+		}
+		return false;
+	}
+	@Override
+	public boolean fail(final String msg, final Object...args) {
+		return this.fail(new RuntimeException(String.format(msg, args)));
+	}
+
+	@Override
+	public boolean isFailed() {
+		return (this.failure.get() != null);
+	}
+
+	@Override
+	public void onFailure() {
+		final Throwable e = this.failure.get();
+		if (e != null)
+			e.printStackTrace(StdIO.OriginalOut());
+		this.stop();
 	}
 
 
