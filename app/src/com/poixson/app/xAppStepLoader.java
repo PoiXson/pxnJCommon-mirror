@@ -54,7 +54,7 @@ public class xAppStepLoader {
 		if (clss == null) throw new RuntimeException("Failed to get step container class");
 		final Method[] methods = clss.getMethods();
 		if (IsEmpty(methods)) throw new RuntimeException("No methods found in step container class: "+clss.getSimpleName());
-		//METHODS_LOOP:
+		//LOOP_METHODS:
 		for (final Method m : methods) {
 
 			// @xAppMoreSteps
@@ -89,7 +89,7 @@ public class xAppStepLoader {
 				}
 			}
 
-		} // end METHODS_LOOP
+		} // end LOOP_METHODS
 	}
 
 

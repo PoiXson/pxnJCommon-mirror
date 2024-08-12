@@ -91,10 +91,10 @@ public class xFont {
 		if (IsEmpty(format))
 			return this;
 		final String[] parts = format.split(",");
-		PARTS_LOOP:
+		LOOP_PARTS:
 		for (String part : parts) {
 			part = part.trim().toLowerCase();
-			if (part.isEmpty()) continue PARTS_LOOP;
+			if (part.isEmpty()) continue LOOP_PARTS;
 			// size
 			if (part.startsWith("size")) {
 				part = part.substring(4).trim();
@@ -112,7 +112,7 @@ public class xFont {
 					if (size == null) throw new RuntimeException("Invalid font size: "+part);
 					this.size(size.intValue());
 				}
-				continue PARTS_LOOP;
+				continue LOOP_PARTS;
 			}
 			// family
 			if (part.startsWith("fam")) {
@@ -125,27 +125,27 @@ public class xFont {
 					part = part.substring(1).trim();
 				}
 				this.family(part);
-				continue PARTS_LOOP;
+				continue LOOP_PARTS;
 			}
 			// style
 			switch (part) {
 			case "b":
 			case "bold":
 				this.bold();
-				continue PARTS_LOOP;
+				continue LOOP_PARTS;
 			case "i":
 			case "italic":
 				this.italic();
-				continue PARTS_LOOP;
+				continue LOOP_PARTS;
 			case "p":
 			case "plain":
 				this.plain();
-				continue PARTS_LOOP;
+				continue LOOP_PARTS;
 			default:
 			}
 			// unknown format
 			throw new RuntimeException("Unknown font format: "+part);
-		} // end PARTS_LOOP
+		} // end LOOP_PARTS
 		return this;
 	}
 	public xFont apply(final xFont clone) {

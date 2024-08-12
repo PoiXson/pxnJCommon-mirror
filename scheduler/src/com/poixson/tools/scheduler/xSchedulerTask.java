@@ -98,20 +98,20 @@ public class xSchedulerTask extends xRunnable {
 		{
 			final Iterator<xSchedTrigger> it = this.triggers.iterator();
 			long next = Long.MAX_VALUE;
-			TRIGGERS_LOOP:
+			LOOP_TRIGGERS:
 			while (it.hasNext()) {
 				final xSchedTrigger trigger = it.next();
 				if (!trigger.isEnabled())
-					continue TRIGGERS_LOOP;
+					continue LOOP_TRIGGERS;
 				final long until_next = trigger.getUntilNext(now);
 				if (until_next == Long.MIN_VALUE)
-					continue TRIGGERS_LOOP;
+					continue LOOP_TRIGGERS;
 				if (next > until_next) {
 					next = until_next;
 					if (next <= 0L)
 						return 0L;
 				}
-			} // end TRIGGERS_LOOP
+			} // end LOOP_TRIGGERS
 			if (next == Long.MAX_VALUE)
 				return Long.MIN_VALUE;
 			return next;
@@ -175,7 +175,6 @@ public class xSchedulerTask extends xRunnable {
 		if (!this.enabled.get())
 			return false;
 		final Iterator<xSchedTrigger> it = this.triggers.iterator();
-		//TRIGGER_LOOP:
 		while (it.hasNext()) {
 			final xSchedTrigger trigger = it.next();
 			if (trigger.isEnabled())
@@ -188,7 +187,6 @@ public class xSchedulerTask extends xRunnable {
 
 	public boolean isRepeat() {
 		final Iterator<xSchedTrigger> it = this.triggers.iterator();
-		//TRIGGER_LOOP:
 		while (it.hasNext()) {
 			if (it.next().isRepeat())
 				return true;

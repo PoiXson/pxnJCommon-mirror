@@ -131,23 +131,23 @@ public abstract class xWindow extends JFrame implements xCloseable {
 	}
 	public static void CloseAll() {
 		boolean changed = false;
-		OUTER_LOOP:
+		LOOP_OUTER:
 		while (true) {
 			if (changed)
 				ThreadUtils.Sleep(10L);
 			changed = false;
 			final Iterator<xWindow> it = all.values().iterator();
-			//IT_LOOP:
+			//LOOP_IT:
 			while (it.hasNext()) {
 				final xWindow window = it.next();
 				if (!window.isClosed()) {
 					window.close();
 					changed = true;
 				}
-			} // end IT_LOOP
+			} // end LOOP_IT
 			if (!changed)
-				break OUTER_LOOP;
-		} // end OUTER_LOOP
+				break LOOP_OUTER;
+		} // end LOOP_OUTER
 	}
 
 

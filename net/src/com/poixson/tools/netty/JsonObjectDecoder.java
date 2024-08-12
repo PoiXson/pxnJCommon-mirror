@@ -65,10 +65,10 @@ public class JsonObjectDecoder extends ByteToMessageDecoder {
 			this.reset();
 			throw new TooLongFrameException(String.format("Object length exceeds %d bytes; dropping %d bytes..", this.buffer_size, buffer_index));
 		}
-		//INDEX_LOOP:
+		//LOOP_INDEX:
 		for (; this.index < buffer_index; this.index++) {
 			final byte c = in.getByte(this.index);
-			STATE_SWITCH:
+			SWITCH_STATE:
 			switch (this.state) {
 			case STATE_DECODING_NORMAL: {
 				this.decode_byte(c, in);
@@ -81,7 +81,7 @@ public class JsonObjectDecoder extends ByteToMessageDecoder {
 					in.readerIndex(this.index + 1);
 					this.reset();
 				}
-				break STATE_SWITCH;
+				break SWITCH_STATE;
 			}
 			case STATE_DECODING_ARRAY_STREAM: {
 				this.decode_byte(c, in);
@@ -93,10 +93,10 @@ public class JsonObjectDecoder extends ByteToMessageDecoder {
 							in.skipBytes(1);
 						int index_no_spaces = this.index - 1;
 						// skip trailing spaces
-						SKIP_LOOP:
+						LOOP_SKIP:
 						while (true) {
-							if (index_no_spaces < in.readerIndex())                   break SKIP_LOOP;
-							if (!Character.isWhitespace(in.getByte(index_no_spaces))) break SKIP_LOOP;
+							if (index_no_spaces < in.readerIndex())                   break LOOP_SKIP;
+							if (!Character.isWhitespace(in.getByte(index_no_spaces))) break LOOP_SKIP;
 							index_no_spaces--;
 						}
 						final int len = (index_no_spaces - in.readerIndex()) + 1;
@@ -108,7 +108,7 @@ public class JsonObjectDecoder extends ByteToMessageDecoder {
 							this.reset();
 					}
 				}
-				break STATE_SWITCH;
+				break SWITCH_STATE;
 			}
 			default: {
 				if (c == '{' || c == '[') {
@@ -123,10 +123,10 @@ public class JsonObjectDecoder extends ByteToMessageDecoder {
 					this.state = StreamStateJSON.STATE_CORRUPTED;
 					throw new CorruptedFrameException(String.format("Invalid JSON at byte position: %d %s", this.index, ByteBufUtil.hexDump(in)));
 				}
-				break STATE_SWITCH;
+				break SWITCH_STATE;
 			}
-			} // end STATE_SWITCH
-		} // end INDEX_LOOP
+			} // end SWITCH_STATE
+		} // end LOOP_INDEX
 		if (in.readableBytes() == 0)
 			this.index = 0;
 		this.last_index = this.index;
@@ -160,10 +160,10 @@ public class JsonObjectDecoder extends ByteToMessageDecoder {
 			if (c == '"') {
 				int count = 0;
 				int i = this.index - 1;
-				SLASH_LOOP:
+				LOOP_SLASH:
 				while (i >= 0) {
 					if (in.getByte(i) != '\\')
-						break SLASH_LOOP;
+						break LOOP_SLASH;
 					count++;
 					i--;
 				}
@@ -173,12 +173,12 @@ public class JsonObjectDecoder extends ByteToMessageDecoder {
 			}
 		// not in a string
 		} else {
-			CHAR_SWITCH:
+			SWITCH_CHAR:
 			switch (c) {
-			case '"': this.in_string = true; break CHAR_SWITCH;
-			case '{': case '[': this.braces++; break CHAR_SWITCH;
-			case '}': case ']': this.braces--; break CHAR_SWITCH;
-			default: break CHAR_SWITCH;
+			case '"': this.in_string = true;   break SWITCH_CHAR;
+			case '{': case '[': this.braces++; break SWITCH_CHAR;
+			case '}': case ']': this.braces--; break SWITCH_CHAR;
+			default: break SWITCH_CHAR;
 			}
 		}
 	}

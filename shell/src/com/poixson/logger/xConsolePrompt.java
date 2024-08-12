@@ -111,10 +111,10 @@ public class xConsolePrompt extends xConsole {
 		this.log().fine("Console prompt started..");
 		final Thread thread = Thread.currentThread();
 		int count_errors = 0;
-		READER_LOOP:
+		LOOP_READER:
 		while (true) {
-			if (this.isStopping())      break READER_LOOP;
-			if (thread.isInterrupted()) break READER_LOOP;
+			if (this.isStopping())      break LOOP_READER;
+			if (thread.isInterrupted()) break LOOP_READER;
 			final String line;
 			try {
 				// read console input
@@ -128,7 +128,7 @@ public class xConsolePrompt extends xConsole {
 					final xCommandProcessor processor = this.getProcessor();
 					if (processor == null) {
 						this.log().warning("No command processor to handle command: %s", line);
-						continue READER_LOOP;
+						continue LOOP_READER;
 					}
 					final boolean result = processor.process(line);
 					if (!result)
@@ -136,16 +136,16 @@ public class xConsolePrompt extends xConsole {
 				}
 				count_errors = 0;
 			} catch (UserInterruptException ignore) {
-				break READER_LOOP;
+				break LOOP_READER;
 			} catch (Exception e) {
 				this.log().trace(e);
 				if (++count_errors > 5) {
 					this.log().trace(new RuntimeException("Too many errors"));
-					break READER_LOOP;
+					break LOOP_READER;
 				}
 				ThreadUtils.Sleep(100L);
 			}
-		} // end READER_LOOP
+		} // end LOOP_READER
 		this.saveHistory();
 		this.log().fine("Console prompt stopped");
 		this.thread.set(null);
@@ -488,20 +488,20 @@ final String history_file = "history.txt";
 		final boolean isread =
 			this.waitReadCool();
 		try {
-			RETRY_LOOP:
+			LOOP_RETRY:
 			for (int i=0; i<5; i++) {
 				if (this.stopping.get())
-					break RETRY_LOOP;
+					break LOOP_RETRY;
 				if (isread) {
 					try {
 						final Terminal   term = getTerminal();
 						final LineReader read = getReader();
 						read.callWidget(LineReader.CLEAR_SCREEN);
 						term.writer().flush();
-						break RETRY_LOOP;
+						break LOOP_RETRY;
 					} catch (Exception ignore) {}
 					if (this.stopping.get())
-						break RETRY_LOOP;
+						break LOOP_RETRY;
 					ThreadUtils.Sleep(20L);
 				} else {
 					final PrintStream out = xVars.getOriginalOut();
@@ -512,9 +512,9 @@ final String history_file = "history.txt";
 							.toString()
 					);
 					out.flush();
-					break RETRY_LOOP;
+					break LOOP_RETRY;
 				}
-			} // end RETRY_LOOP
+			} // end LOOP_RETRY
 		} catch (Exception ignore) {}
 	}
 	@Override

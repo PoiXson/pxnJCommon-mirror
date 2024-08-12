@@ -80,20 +80,20 @@ public class xScheduler implements xStartable, Runnable {
 			this.thread.compareAndSet(null, Thread.currentThread());
 		final Set<xSchedulerTask> tasks_finished = new HashSet<xSchedulerTask>();
 		final long sleep_time = this.max_sleep_time.ms();
-		RUN_LOOP:
+		LOOP_RUN:
 		while (true) {
-			if (this.stopping.get()) break RUN_LOOP;
+			if (this.stopping.get()) break LOOP_RUN;
 			final long now = getCurrentMillis();
 			long sleep = sleep_time;
 			// check task triggers
 			final Iterator<xSchedulerTask> it = this.tasks.iterator();
-			TASK_LOOP:
+			LOOP_TASK:
 			while (it.hasNext()) {
 				final xSchedulerTask task = it.next();
 				final long until_next = task.getUntilNext(now);
 				// disabled
 				if (until_next == Long.MIN_VALUE)
-					continue TASK_LOOP;
+					continue LOOP_TASK;
 				// trigger now
 				if (until_next <= 0L) {
 					task.doTrigger();
@@ -108,16 +108,16 @@ public class xScheduler implements xStartable, Runnable {
 				if (sleep > until_next) {
 					sleep = until_next;
 				}
-			} // end TASK_LOOP
+			} // end LOOP_TASK
 			// finished tasks
 			if (!tasks_finished.isEmpty()) {
 				this.tasks.removeAll(tasks_finished);
 				tasks_finished.clear();
 			}
-			if (sleep <= 0L) continue RUN_LOOP;
+			if (sleep <= 0L) continue LOOP_RUN;
 			if (sleep > sleep_time) sleep = sleep_time;
 			else                    sleep = (long)Math.floor( ((double)sleep) * this.threadSleepInhibitPercent );
-			if (sleep <= 0L) continue RUN_LOOP;
+			if (sleep <= 0L) continue LOOP_RUN;
 			// log sleep time
 			final double sleepSec = ((double)sleep) / 1000.0;
 			if (DEBUG_EXTRA)
@@ -126,7 +126,7 @@ public class xScheduler implements xStartable, Runnable {
 			this.sleeping.set(true);
 			ThreadUtils.Sleep(sleep);
 			this.sleeping.set(false);
-		} // end RUN_LOOP
+		} // end LOOP_RUN
 		this.stopping.set(true);
 		this.thread.set(null);
 		this.log().fine("Stopped scheduler manager");

@@ -46,10 +46,10 @@ public class xPluginLoader_Dir<T extends xJavaPlugin> extends xPluginLoader<T> {
 		}
 		// load found jars
 		int count = 0;
-		FILES_LOOP:
+		LOOP_FILES:
 		for (final File f : files) {
 			if (f == null)
-				continue FILES_LOOP;
+				continue LOOP_FILES;
 			try {
 				final T plugin = super.load(f);
 				if (plugin != null) {
@@ -59,7 +59,7 @@ public class xPluginLoader_Dir<T extends xJavaPlugin> extends xPluginLoader<T> {
 			} catch (Exception e) {
 				this.log().trace(e);
 			}
-		} // end FILES_LOOP
+		} // end LOOP_FILES
 		return count;
 	}
 
