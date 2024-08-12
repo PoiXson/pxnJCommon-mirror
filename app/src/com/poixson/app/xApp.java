@@ -18,7 +18,6 @@ import com.poixson.logger.xLogHandler;
 import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.AppProps;
-import com.poixson.tools.Failure;
 import com.poixson.tools.HangCatcher;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;
@@ -58,7 +57,8 @@ public abstract class xApp implements xStartable, Runnable, xFailableApp {
 	// app state
 	protected final AtomicInteger state = new AtomicInteger(xAppState.OFF.value);
 	protected final AtomicBoolean paused = new AtomicBoolean(false);
-	protected final AtomicReference<Failure> failure = new AtomicReference<Failure>(null);
+	protected final AtomicReference<Throwable>   failure     = new AtomicReference<Throwable>(null);
+	protected final AtomicInteger                failcode    = new AtomicInteger(0);
 	protected final AtomicReference<HangCatcher> hangcatcher = new AtomicReference<HangCatcher>(null);
 
 	protected final AtomicReference<xAppStepLoader> step_loader = new AtomicReference<xAppStepLoader>(null);
@@ -605,18 +605,8 @@ public abstract class xApp implements xStartable, Runnable, xFailableApp {
 
 	@Override
 	public boolean fail(final Throwable e) {
-		return this.fail(
-			(new StringBuilder())
-				.append(e.getMessage())
-				.append('\n')
-				.append(StringUtils.ExceptionToString(e))
-				.toString(),
-			e
-		);
-	}
-	@Override
-	public boolean fail(final String msg, final Object...args) {
-		if (Failure.AtomicFail(this.failure, this.log(), msg, args)) {
+		this.failcode.compareAndSet(0, 1);
+		if (this.failure.compareAndSet(null, e)) {
 			this.state.set(xAppState.OFF.value);
 			this.step_loader.set(null);
 			xThreadPool_Main.Get().runTaskLazy(
@@ -627,10 +617,20 @@ public abstract class xApp implements xStartable, Runnable, xFailableApp {
 		return false;
 	}
 	@Override
-	public boolean fail(final int exitCode, final String msg, final Object...args) {
-		final boolean result = this.fail(msg, args);
-		this.failure.get().setExitCode(exitCode);
-		return result;
+	public boolean fail(final String msg, final Object...args) {
+		return this.fail(new RuntimeException(String.format(msg, args)));
+	}
+	@Override
+	public boolean fail(final int exitcode, final String msg, final Object...args) {
+		this.failcode.compareAndSet(0, exitcode);
+		return this.fail(msg, args);
+	}
+
+
+
+	@Override
+	public boolean isFailed() {
+		return (this.failure.get() != null);
 	}
 
 
@@ -640,18 +640,12 @@ public abstract class xApp implements xStartable, Runnable, xFailableApp {
 		this.stopHangCatcher();
 		System.exit( this.getExitCode() );
 	}
+
+
+
 	@Override
-	public boolean isFailed() {
-		return (this.failure.get() != null);
-	}
-
-
-
 	public int getExitCode() {
-		final Failure failure = this.failure.get();
-		if (failure == null)
-			return 0;
-		return failure.getExitCode();
+		return this.failcode.get();
 	}
 
 

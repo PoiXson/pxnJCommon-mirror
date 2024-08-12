@@ -6,7 +6,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.logger.xLog;
 import com.poixson.threadpool.types.xThreadPool_Main;
-import com.poixson.tools.Failure;
 import com.poixson.tools.abstractions.RunnableMethod;
 import com.poixson.tools.abstractions.xFailable;
 import com.poixson.tools.abstractions.xStartStop;
@@ -20,7 +19,7 @@ public abstract class xJavaPlugin implements xStartStop, Runnable, xFailable {
 
 	// state
 	protected final AtomicReference<xPluginState> state = new AtomicReference<xPluginState>(null);
-	protected final AtomicReference<Failure>    failure = new AtomicReference<Failure>(null);
+	protected final AtomicReference<Throwable>  failure = new AtomicReference<Throwable>(null);
 
 
 
@@ -89,18 +88,7 @@ public abstract class xJavaPlugin implements xStartStop, Runnable, xFailable {
 
 	@Override
 	public boolean fail(final Throwable e) {
-		return this.fail(
-			(new StringBuilder())
-				.append(e.getMessage())
-				.append('\n')
-				.append(StringUtils.ExceptionToString(e))
-				.toString(),
-			e
-		);
-	}
-	@Override
-	public boolean fail(final String msg, final Object...args) {
-		if (Failure.AtomicFail(this.failure, this.log(), msg, args)) {
+		if (this.failure.compareAndSet(null, e)) {
 			xThreadPool_Main.Get().runTaskLazy(
 				new RunnableMethod<Object>(this, "onFailure")
 			);
@@ -109,8 +97,8 @@ public abstract class xJavaPlugin implements xStartStop, Runnable, xFailable {
 		return false;
 	}
 	@Override
-	public boolean fail(final int exitCode, final String msg, final Object... args) {
-		return this.fail(msg, args);
+	public boolean fail(final String msg, final Object...args) {
+		return this.fail(new RuntimeException(String.format(msg, args)));
 	}
 
 
