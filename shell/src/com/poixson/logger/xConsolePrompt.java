@@ -63,6 +63,7 @@ public class xConsolePrompt extends xConsole {
 		this.out = out;
 		this.in  = in;
 		this.handler = new xLogHandler_ConsolePrompt(this);
+		StdIO.Init();
 		Keeper.add(this);
 	}
 	public void unload() {

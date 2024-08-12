@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.poixson.logger.records.xLogRecord;
+import com.poixson.tools.StdIO;
 
 
 public abstract class xLogHandler {
@@ -18,6 +19,7 @@ public abstract class xLogHandler {
 
 
 	public xLogHandler() {
+		StdIO.Init();
 	}
 
 
