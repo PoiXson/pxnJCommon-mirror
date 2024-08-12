@@ -3,7 +3,6 @@ package com.poixson.logger;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.poixson.logger.handlers.xLogHandler_Console;
-import com.poixson.logger.proxies.LoggerToXLog;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;
 import com.poixson.tools.abstractions.OutputStreamLineRemapper;
@@ -37,8 +36,6 @@ public class xLogRoot extends xLogger {
 		if (!root.compareAndSet(null, log))
 			throw new RuntimeException("Logger root already initialized");
 		Keeper.add(log);
-		// proxy
-		LoggerToXLog.Init();
 	}
 
 
