@@ -39,7 +39,7 @@ public abstract class xPluginLoader<T extends xJavaPlugin> {
 			final xPluginFactory<T> factory, final String keyClassMain) {
 		this.manager      = manager;
 		this.keyClassMain = IfEmpty(keyClassMain, DEFAULT_KEY_CLASS_MAIN);
-		this.factory = factory;
+		this.factory = (factory==null ? new xPluginFactory<T>() : factory);
 	}
 
 

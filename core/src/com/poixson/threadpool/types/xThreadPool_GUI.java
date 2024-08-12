@@ -10,7 +10,7 @@ import com.poixson.threadpool.worker.xThreadPoolWorker_GUI;
 
 public class xThreadPool_GUI extends xThreadPool_Single {
 
-	public static final String DISPATCH_POOL_NAME = "gui";
+	public static final String DISPATCH_POOL_NAME = "GUI";
 
 	private final static AtomicReference<xThreadPool_GUI> instance =
 			new AtomicReference<xThreadPool_GUI>(null);

@@ -44,7 +44,7 @@ public class xConsolePrompt extends xConsole implements xFailable {
 	protected final AtomicReference<History>    history  = new AtomicReference<History>(null);
 	protected final xLogHandler_ConsolePrompt handler;
 
-	protected final InputStream  in;
+	protected final InputStream in;
 
 	protected final AtomicReference<Thread> thread = new AtomicReference<Thread>(null);
 
@@ -56,13 +56,14 @@ public class xConsolePrompt extends xConsole implements xFailable {
 
 
 	public xConsolePrompt() {
-		this( StdIO.OriginalOut(), StdIO.OriginalIn() );
+		this(null, null, null);
 	}
-	protected xConsolePrompt(final OutputStream out, final InputStream in) {
-		super(out);
-		this.in  = in;
-		this.handler = new xLogHandler_ConsolePrompt(this);
+	protected xConsolePrompt(final OutputStream out, final InputStream in,
+			final xLogHandler_ConsolePrompt handler) {
+		super(out==null ? StdIO.OriginalOut() : out);
 		StdIO.Init();
+		this.in      = (in==null ? StdIO.OriginalIn() : in);
+		this.handler = (handler==null ? new xLogHandler_ConsolePrompt(this) : handler);
 		Keeper.add(this);
 	}
 	public void unload() {
@@ -396,193 +397,3 @@ public class xConsolePrompt extends xConsole implements xFailable {
 
 
 }
-/*
-	protected static final AtomicReference<xAppSteps_Console> instance = new AtomicReference<xAppSteps_Console>(null);
-
-
-
-	protected final AtomicBoolean is_reading = new AtomicBoolean(false);
-	protected final AtomicReference<CoolDown> readCool = new AtomicReference<CoolDown>(null);
-
-
-
-	public static xAppSteps_Console Get() {
-		// existing instance
-		{
-			final xAppSteps_Console console = instance.get();
-			if (console != null)
-				return console;
-		}
-		// new instance
-		{
-			final xAppSteps_Console console = new xAppSteps_Console();
-			if (instance.compareAndSet(null, console))
-				return console;
-			return instance.get();
-		}
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public boolean waitReadCool() {
-		if ( ! this.isreading.get() )
-			return false;
-		if (this.readCool.get() == null)
-			return true;
-		while (true) {
-			try {
-				Thread.sleep(5L);
-			} catch (InterruptedException ignore) {
-				break;
-			}
-			final CoolDown cool = this.readCool.get();
-			if (cool == null) break;
-			if (cool.runAgain()) {
-				this.readCool.set(null);
-			}
-		}
-		return true;
-	}
-	public void setReadCool() {
-		final CoolDown cool = CoolDown.getNew(20L);
-		this.readCool.set(cool);
-		this.isreading.set(true);
-	}
-	public void resetReadCool() {
-		this.isreading.set(false);
-		this.readCool.set(null);
-	}
-
-
-
-
-
-
-	// -------------------------------------------------------------------------------
-	// publish to console
-
-
-
-	@Override
-	public void doPublish(final String line) {
-		final Terminal   term = getTerminal();
-		final LineReader read = getReader();
-		final PrintWriter out = term.writer();
-		{
-			final boolean isread =
-				this.waitReadCool();
-			if (isread) {
-				try {
-					read.callWidget(LineReader.CLEAR);
-				} catch (Exception ignore) {}
-			}
-		}
-		out.println(line);
-		{
-			final boolean isread =
-				this.waitReadCool();
-			if (isread) {
-				try {
-					read.callWidget(LineReader.REDRAW_LINE);
-					read.callWidget(LineReader.REDISPLAY);
-				} catch (Exception ignore) {}
-			}
-		}
-		out.flush();
-	}
-
-
-
-	@Override
-	public void doClearScreen() {
-		final boolean isread =
-			this.waitReadCool();
-		try {
-			LOOP_RETRY:
-			for (int i=0; i<5; i++) {
-				if (this.stopping.get())
-					break LOOP_RETRY;
-				if (isread) {
-					try {
-						final Terminal   term = getTerminal();
-						final LineReader read = getReader();
-						read.callWidget(LineReader.CLEAR_SCREEN);
-						term.writer().flush();
-						break LOOP_RETRY;
-					} catch (Exception ignore) {}
-					if (this.stopping.get())
-						break LOOP_RETRY;
-					ThreadUtils.Sleep(20L);
-				} else {
-					final PrintStream out = xVars.getOriginalOut();
-					out.print(
-						Ansi.ansi()
-							.eraseScreen()
-							.cursor(0, 0)
-							.toString()
-					);
-					out.flush();
-					break LOOP_RETRY;
-				}
-			} // end LOOP_RETRY
-		} catch (Exception ignore) {}
-	}
-	@Override
-	public void doFlush() {
-		this.waitReadCool();
-		try {
-			getTerminal().flush();
-		} catch (Exception ignore) {}
-	}
-	@Override
-	public void doBeep() {
-		final boolean isread = this.waitReadCool();
-		try {
-			if (isread) {
-				getReader().callWidget(LineReader.BEEP);
-			} else {
-				getTerminal().puts(Capability.bell);
-			}
-		} catch (Exception ignore) {}
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// settings
-
-
-
-	// prompt
-	public String getPrompt() {
-		return StringUtils.ForceStarts("\r", xShellDefines.DEFAULT_PROMPT);
-	}
-	@Override
-	public void setPrompt(final String prompt) {
-//TODO:
-throw new UnsupportedOperationException("Unfinished");
-	}
-
-
-
-	// mask
-	public Character getMask() {
-		return null;
-	}
-	@Override
-	public void setMask(final Character mask) {
-//TODO:
-throw new UnsupportedOperationException("Unfinished");
-	}
-*/

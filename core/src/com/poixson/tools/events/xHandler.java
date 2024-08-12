@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools.events;
 
 import static com.poixson.utils.Utils.IsEmpty;
@@ -25,13 +24,15 @@ public abstract class xHandler <T extends Annotation> {
 	public int register(final Object...objects) {
 		if (IsEmpty(objects)) return 0;
 		int count = 0;
-		LOOP_OBJECTS:
 		for (final Object obj : objects) {
-			if (obj == null) continue LOOP_OBJECTS;
-			count += this.register(obj);
+			if (obj != null)
+				count += this.register(obj);
 		}
 		return count;
 	}
+
+
+
 	protected int register(final Object object) {
 		if (object == null) return 0;
 		final Method[] methods = object.getClass().getMethods();
@@ -59,4 +60,3 @@ public abstract class xHandler <T extends Annotation> {
 
 
 }
-*/

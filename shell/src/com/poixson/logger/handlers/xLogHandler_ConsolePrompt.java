@@ -50,11 +50,11 @@ public class xLogHandler_ConsolePrompt extends xLogHandler_Console {
 
 
 	public void redraw_prompt() {
-		final LineReaderImpl read = this.console.getReaderImpl();
-		if (read != null) {
-			if (read.isReading()) {
-				read.redrawLine();
-				read.redisplay();
+		final LineReaderImpl reader = (LineReaderImpl) this.console.getReader();
+		if (reader != null) {
+			if (reader.isReading()) {
+				reader.redrawLine();
+				reader.redisplay();
 			}
 		}
 	}
@@ -62,11 +62,11 @@ public class xLogHandler_ConsolePrompt extends xLogHandler_Console {
 
 
 	protected int getPromptLineLength() {
-		final LineReader read = this.console.getReader();
+		final LineReader reader = this.console.getReader();
+		if (reader == null) return 0;
 		final String prompt = this.console.getPrompt();
-		if (read == null) return 0;
 		final int len_prompt = prompt.length();
-		final int len_buffer = read.getBuffer().length();
+		final int len_buffer = reader.getBuffer().length();
 		return len_prompt + len_buffer;
 	}
 

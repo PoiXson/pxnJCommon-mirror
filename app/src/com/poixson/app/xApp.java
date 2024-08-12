@@ -27,7 +27,6 @@ import com.poixson.tools.abstractions.RunnableMethod;
 import com.poixson.tools.abstractions.xFailableApp;
 import com.poixson.tools.abstractions.xStartable;
 import com.poixson.utils.ProcUtils;
-import com.poixson.utils.StringUtils;
 import com.poixson.utils.ThreadUtils;
 
 
@@ -55,8 +54,8 @@ public abstract class xApp implements xStartable, Runnable, xFailableApp {
 	protected final AtomicReference<String[]> args = new AtomicReference<String[]>(null);
 
 	// app state
-	protected final AtomicInteger state = new AtomicInteger(xAppState.OFF.value);
-	protected final AtomicBoolean paused = new AtomicBoolean(false);
+	protected final AtomicInteger                state       = new AtomicInteger(xAppState.OFF.value);
+	protected final AtomicBoolean                paused      = new AtomicBoolean(false);
 	protected final AtomicReference<Throwable>   failure     = new AtomicReference<Throwable>(null);
 	protected final AtomicInteger                failcode    = new AtomicInteger(0);
 	protected final AtomicReference<HangCatcher> hangcatcher = new AtomicReference<HangCatcher>(null);

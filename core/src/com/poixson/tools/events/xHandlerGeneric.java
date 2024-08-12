@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.utils.Utils;
 
 
 public class xHandlerGeneric extends xHandler<xEvent> {
@@ -25,7 +24,7 @@ public class xHandlerGeneric extends xHandler<xEvent> {
 
 
 	@Override
-	protected boolean registerMethod(
+	protected boolean register(
 			final Object object, final Method method, final xEvent anno) {
 		if (object == null) throw new RequiredArgumentException("object");
 		if (method == null) throw new RequiredArgumentException("method");
@@ -38,10 +37,8 @@ public class xHandlerGeneric extends xHandler<xEvent> {
 		return true;
 	}
 
-
-
 	@Override
-	public void unregisterObject(final Object object) {
+	public void unregister(final Object object) {
 		if (object == null) return;
 		final Set<xEventListenerDAO> remove = new HashSet<xEventListenerDAO>();
 		final Iterator<xEventListenerDAO> it = this.listeners.iterator();
@@ -58,7 +55,7 @@ public class xHandlerGeneric extends xHandler<xEvent> {
 		}
 	}
 	@Override
-	public void unregisterMethod(final Object object, final String methodName) {
+	public void unregister(final Object object, final String methodName) {
 		if (object == null || IsEmpty(methodName)) return;
 		final Set<xEventListenerDAO> remove = new HashSet<xEventListenerDAO>();
 		final Iterator<xEventListenerDAO> it = this.listeners.iterator();
@@ -82,7 +79,7 @@ public class xHandlerGeneric extends xHandler<xEvent> {
 
 
 	// trigger event
-	public void trigger() {
+	public void invoke() {
 		final Iterator<xEventListenerDAO> it = this.listeners.iterator();
 		while (it.hasNext()) {
 			final xEventListenerDAO dao = it.next();

@@ -52,11 +52,6 @@ public abstract class xJavaPlugin implements xStartStop, Runnable, xFailable {
 	public void run() {}
 
 
-	// failed
-	@Override
-	public void onFailure() {}
-
-
 
 	// -------------------------------------------------------------------------------
 	// plugin state
@@ -101,11 +96,13 @@ public abstract class xJavaPlugin implements xStartStop, Runnable, xFailable {
 		return this.fail(new RuntimeException(String.format(msg, args)));
 	}
 
-
-
 	@Override
 	public boolean isFailed() {
 		return (this.failure.get() != null);
+	}
+
+	@Override
+	public void onFailure() {
 	}
 
 

@@ -1,4 +1,3 @@
-/*
 package com.poixson.tools.events;
 
 import static com.poixson.utils.Utils.IsEmpty;
@@ -14,7 +13,7 @@ import com.poixson.threadpool.types.xThreadPool_Main;
 
 public class xEventListenerDAO {
 
-	private static final AtomicLong nextIndex = new AtomicLong(0);
+	private static final AtomicLong index_next = new AtomicLong(0);
 	public final long index;
 
 	protected final Object object;
@@ -25,7 +24,7 @@ public class xEventListenerDAO {
 	public xEventListenerDAO(final Object object, final Method method) {
 		if (object == null) throw new RequiredArgumentException("object");
 		if (method == null) throw new RequiredArgumentException("method");
-		this.index = nextIndex.incrementAndGet();
+		this.index = index_next.incrementAndGet();
 		this.object = object;
 		this.method = method;
 	}
@@ -81,4 +80,3 @@ public class xEventListenerDAO {
 
 
 }
-*/
