@@ -3,7 +3,6 @@ package com.poixson.logger.proxies;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -17,7 +16,6 @@ import com.poixson.tools.Keeper;
 
 public class LoggerToXLog extends Handler {
 
-	protected static final AtomicReference<LoggerToXLog> instance = new AtomicReference<LoggerToXLog>(null);
 	protected static final AtomicBoolean inited = new AtomicBoolean(false);
 
 
@@ -36,7 +34,7 @@ public class LoggerToXLog extends Handler {
 				logger.removeHandler(handler);
 			}
 			if (!found)
-				logger.addHandler( Get() );
+				logger.addHandler(new LoggerToXLog());
 			// default log levels
 			xLog.Get("mqtt" ).setLevel(xLevel.INFO);
 			xLog.Get("jline").setLevel(xLevel.INFO);
@@ -48,14 +46,6 @@ public class LoggerToXLog extends Handler {
 
 
 
-	protected static LoggerToXLog Get() {
-		if (instance.get() == null) {
-			final LoggerToXLog handler = new LoggerToXLog();
-			if (instance.compareAndSet(null, handler))
-				return handler;
-		}
-		return instance.get();
-	}
 	protected LoggerToXLog() {
 		Keeper.add(this);
 	}
