@@ -45,7 +45,6 @@ public class xConsolePrompt extends xConsole {
 	protected final AtomicReference<History>    history  = new AtomicReference<History>(null);
 	protected final xLogHandler_ConsolePrompt handler;
 
-	protected final OutputStream out;
 	protected final InputStream  in;
 
 	protected final AtomicReference<Thread> thread = new AtomicReference<Thread>(null);
@@ -60,7 +59,6 @@ public class xConsolePrompt extends xConsole {
 	}
 	protected xConsolePrompt(final OutputStream out, final InputStream in) {
 		super(out);
-		this.out = out;
 		this.in  = in;
 		this.handler = new xLogHandler_ConsolePrompt(this);
 		StdIO.Init();
