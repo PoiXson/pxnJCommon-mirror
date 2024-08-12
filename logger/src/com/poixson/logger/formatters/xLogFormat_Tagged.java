@@ -133,8 +133,6 @@ public class xLogFormat_Tagged implements xLogFormat {
 		final int length = StringUtils.FindLongestLine(lines);
 		final StringBuilder result = new StringBuilder();
 		for (final String line : lines) {
-			if (result.length() == 0)
-				result.append('\n');
 			result.append(strPre)
 				.append( StringUtils.PadEnd(length, line, ' ') )
 				.append(strPost);
