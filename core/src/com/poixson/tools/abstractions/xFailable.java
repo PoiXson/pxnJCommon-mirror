@@ -6,7 +6,6 @@ public interface xFailable {
 
 	public boolean fail(final Throwable e);
 	public boolean fail(final String msg, final Object...args);
-	public boolean fail(final int exitCode, final String msg, final Object...args);
 
 	public boolean isFailed();
 

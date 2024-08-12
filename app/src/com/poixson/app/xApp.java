@@ -25,7 +25,7 @@ import com.poixson.tools.StdIO;
 import com.poixson.tools.xDebug;
 import com.poixson.tools.xTime;
 import com.poixson.tools.abstractions.RunnableMethod;
-import com.poixson.tools.abstractions.xFailable;
+import com.poixson.tools.abstractions.xFailableApp;
 import com.poixson.tools.abstractions.xStartable;
 import com.poixson.utils.ProcUtils;
 import com.poixson.utils.StringUtils;
@@ -42,7 +42,7 @@ import com.poixson.utils.ThreadUtils;
  *  10 | garbage collect
  *   1 | exit
  */
-public abstract class xApp implements xStartable, Runnable, xFailable {
+public abstract class xApp implements xStartable, Runnable, xFailableApp {
 
 	public static final int EXIT_HUNG = 3;
 
