@@ -1,4 +1,4 @@
-package com.poixson.logger;
+package com.poixson.logger.formatters;
 
 import com.poixson.logger.records.xLogRecord;
 

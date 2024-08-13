@@ -1,7 +1,10 @@
 /*
-package com.poixson.logger;
+package com.poixson.logger.tools;
 
 import java.io.PrintStream;
+
+import com.poixson.logger.xLevel;
+import com.poixson.logger.xLog;
 
 
 // xLog print stream

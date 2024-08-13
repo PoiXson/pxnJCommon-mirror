@@ -6,7 +6,6 @@ import static com.poixson.utils.Utils.IsEmpty;
 import java.text.SimpleDateFormat;
 
 import com.poixson.logger.xLevel;
-import com.poixson.logger.xLogFormat;
 import com.poixson.logger.records.xLogRecord;
 import com.poixson.logger.records.xLogRecord_Msg;
 import com.poixson.utils.StringUtils;

@@ -2,6 +2,8 @@ package com.poixson.logger;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.poixson.logger.formatters.xLogFormat_Tagged;
+import com.poixson.logger.handlers.xLogHandler;
 import com.poixson.logger.handlers.xLogHandler_Console;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;

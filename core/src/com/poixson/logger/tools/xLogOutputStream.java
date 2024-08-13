@@ -1,11 +1,13 @@
 /*
-package com.poixson.logger;
+package com.poixson.logger.tools;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
+import com.poixson.logger.xLevel;
+import com.poixson.logger.xLog;
 import com.poixson.logger.records.xLogRecord_Msg;
 
 

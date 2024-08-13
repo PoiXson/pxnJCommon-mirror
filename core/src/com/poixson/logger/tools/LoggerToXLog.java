@@ -1,4 +1,4 @@
-package com.poixson.logger.proxies;
+package com.poixson.logger.tools;
 
 import static com.poixson.utils.Utils.IsEmpty;
 

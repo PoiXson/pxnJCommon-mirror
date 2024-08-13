@@ -1,9 +1,11 @@
-package com.poixson.logger;
+package com.poixson.logger.handlers;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.poixson.logger.xLevel;
+import com.poixson.logger.formatters.xLogFormat;
 import com.poixson.logger.records.xLogRecord;
 import com.poixson.tools.StdIO;
 
