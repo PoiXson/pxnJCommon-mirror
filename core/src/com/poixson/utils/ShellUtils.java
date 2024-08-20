@@ -89,4 +89,28 @@ public final class ShellUtils {
 
 
 
+	// -------------------------------------------------------------------------------
+	// raw terminal mode
+
+
+
+	protected static final AtomicBoolean mode_raw = new AtomicBoolean(false);
+
+	public static void RawTerminal() throws IOException, InterruptedException {
+		if (mode_raw.compareAndSet(false, true)) {
+			Runtime.getRuntime().exec(new String[] {
+				"/bin/sh", "-c", "stty -echo raw </dev/tty"
+			}).waitFor();
+		}
+	}
+	public static void RestoreTerminal() throws IOException, InterruptedException {
+		if (mode_raw.compareAndSet(true, false)) {
+			Runtime.getRuntime().exec(new String[] {
+				"/bin/sh", "-c", "stty echo cooked </dev/tty"
+			}).waitFor();
+		}
+	}
+
+
+
 }
