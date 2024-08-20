@@ -772,7 +772,7 @@ public final class StringUtils {
 				buf.append(".*");
 				break;
 			case '?':
-				buf.append(".");
+				buf.append('.');
 				break;
 			case '(':
 			case ')':

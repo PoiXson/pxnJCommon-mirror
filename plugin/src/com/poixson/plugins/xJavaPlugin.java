@@ -83,6 +83,7 @@ public abstract class xJavaPlugin implements xStartStop, Runnable, xFailable {
 
 	@Override
 	public boolean fail(final Throwable e) {
+		this.log().trace(e);
 		if (this.failure.compareAndSet(null, e)) {
 			xThreadPool_Main.Get().runTaskLazy(
 				new RunnableMethod<Object>(this, "onFailure")

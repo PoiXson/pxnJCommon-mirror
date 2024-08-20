@@ -12,11 +12,11 @@ import com.poixson.tools.StdIO;
 
 public abstract class xLogHandler {
 
-	// publish lock
-	protected final ReentrantLock lock = new ReentrantLock(true);
-
 	protected final AtomicReference<xLogFormat> format = new AtomicReference<xLogFormat>(null);
 	protected final AtomicReference<xLevel>     level  = new AtomicReference<xLevel>    (null);
+
+	// publish lock
+	protected final ReentrantLock lock = new ReentrantLock(true);
 
 
 

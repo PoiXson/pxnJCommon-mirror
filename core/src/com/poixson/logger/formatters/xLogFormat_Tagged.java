@@ -12,6 +12,7 @@ import com.poixson.utils.StringUtils;
 
 
 public class xLogFormat_Tagged implements xLogFormat {
+
 	public static final String DEFAULT_FORMAT       = " {time} [{level}]{crumbs} {msg}";
 	public static final String DEFAULT_FORMAT_CRUMB = " [{][}]";
 	public static final String DEFAULT_FORMAT_TIME  = "D yyyy-MM-dd HH:mm:ss";
@@ -26,6 +27,9 @@ public class xLogFormat_Tagged implements xLogFormat {
 
 
 
+	public xLogFormat_Tagged() {
+		this(null, null, null);
+	}
 	public xLogFormat_Tagged(final String format,
 			final String formatCrumbs, final String formatTime) {
 		this.format      = IfEmpty(format,       DEFAULT_FORMAT);

@@ -1,4 +1,3 @@
-/*
 package com.poixson.logger.tools;
 
 import java.io.PrintStream;
@@ -7,10 +6,9 @@ import com.poixson.logger.xLevel;
 import com.poixson.logger.xLog;
 
 
-// xLog print stream
 public class xLogPrintStream extends PrintStream {
 
-	private final xLog log;
+	protected final xLog log;
 
 
 
@@ -20,12 +18,12 @@ public class xLogPrintStream extends PrintStream {
 	public xLogPrintStream(final xLog log) {
 		this(log, null);
 	}
-	public xLogPrintStream(final xLevel printLevel) {
-		this(null, printLevel);
+	public xLogPrintStream(final xLevel level) {
+		this(null, level);
 	}
-	public xLogPrintStream(final xLog log, final xLevel printLevel) {
+	public xLogPrintStream(final xLog log, final xLevel level) {
 		super(
-			new xLogOutputStream(log, printLevel)
+			new xLogOutputStream(log, level)
 		);
 		this.log = log;
 	}
@@ -59,4 +57,3 @@ public class xLogPrintStream extends PrintStream {
 
 
 }
-*/

@@ -26,7 +26,7 @@ public class xAppStepDAO implements RunnableNamed {
 	public final AtomicInteger loop_count = new AtomicInteger(0);
 
 	public final String title;
-	public final String titleFull;
+	public final String title_full;
 
 	public final Object container;
 	public final Method method;
@@ -64,7 +64,7 @@ public class xAppStepDAO implements RunnableNamed {
 				);
 			this.title = (IsEmpty(name) ? method.getName() : name);
 		}
-		this.titleFull =
+		this.title_full =
 			String.format(
 				"%s-%d-%s",
 				this.type.name(),
@@ -160,8 +160,15 @@ public class xAppStepDAO implements RunnableNamed {
 
 	@Override
 	public String getTaskName() {
-		return this.titleFull;
+		return this.getTaskTitleFull();
 	}
+	public String getTaskTitle() {
+		return this.title;
+	}
+	public String getTaskTitleFull() {
+		return this.title_full;
+	}
+
 	@Override
 	public void setTaskName(final String name) {
 		throw new UnsupportedOperationException();
@@ -169,7 +176,7 @@ public class xAppStepDAO implements RunnableNamed {
 	@Override
 	public boolean equalsTaskName(final String name) {
 		return StringUtils.MatchString(name, this.title)
-			|| StringUtils.MatchString(name, this.titleFull);
+			|| StringUtils.MatchString(name, this.title_full);
 	}
 
 
@@ -198,7 +205,7 @@ public class xAppStepDAO implements RunnableNamed {
 
 	public xLog log() {
 		return this.app.log()
-				.getWeak(this.titleFull);
+				.getWeak(this.title_full);
 	}
 
 

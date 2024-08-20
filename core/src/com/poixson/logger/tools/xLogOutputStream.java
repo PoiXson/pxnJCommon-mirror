@@ -1,4 +1,3 @@
-/*
 package com.poixson.logger.tools;
 
 import java.io.IOException;
@@ -11,7 +10,6 @@ import com.poixson.logger.xLog;
 import com.poixson.logger.records.xLogRecord_Msg;
 
 
-// note: not thread safe - variables not volatile, assuming only used in one thread
 public class xLogOutputStream extends OutputStream {
 
 	private final xLog   log;
@@ -128,4 +126,3 @@ public class xLogOutputStream extends OutputStream {
 
 
 }
-*/

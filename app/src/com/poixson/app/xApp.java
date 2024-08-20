@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
-import com.poixson.logger.xLogHandler;
+import com.poixson.logger.handlers.xLogHandler;
 import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.AppProps;
@@ -263,6 +263,7 @@ public abstract class xApp implements xStartable, Runnable, xFailableApp {
 				multi_finished = true;
 			} catch (Exception e) {
 				this.fail(e);
+				return;
 			}
 			this.resetHangCatcher();
 			if (dao.isPauseAfter())
@@ -604,11 +605,12 @@ public abstract class xApp implements xStartable, Runnable, xFailableApp {
 
 	@Override
 	public boolean fail(final Throwable e) {
+		this.log().trace(e);
 		this.failcode.compareAndSet(0, 1);
 		if (this.failure.compareAndSet(null, e)) {
 			this.state.set(xAppState.OFF.value);
 			this.step_loader.set(null);
-			xThreadPool_Main.Get().runTaskLazy(
+			xThreadPool_Main.Get().runTaskLater(
 				new RunnableMethod<Object>(this, "onFailure")
 			);
 			return true;
