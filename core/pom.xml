@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated: Thu Jun  6 07:41:06 PM EDT 2024 -->
+<!-- Generated: Tue Aug 20 02:03:22 AM EDT 2024 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -32,6 +32,9 @@
 		<git-commit-id-version>4.9.10</git-commit-id-version>
 		<junit-version>4.13.2</junit-version>
 		<surefire-version>3.2.2</surefire-version>
+
+		<!-- Dependencies -->
+		<jansi-version>[2,)</jansi-version>
 
 	</properties>
 	<scm>
@@ -148,6 +151,12 @@
 		</plugins>
 	</build>
 	<dependencies>
+		<dependency>
+			<artifactId>jansi</artifactId>
+			<groupId>org.fusesource.jansi</groupId>
+			<version>${jansi-version}</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<artifactId>junit</artifactId>
 			<groupId>junit</groupId>
