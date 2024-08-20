@@ -60,6 +60,7 @@ public class LoggerToXLog extends Handler {
 		if (name.startsWith("java.awt."   )) return "GUI";
 		if (name.startsWith("javax.swing.")) return "GUI";
 		if (name.startsWith("sun.awt."    )) return "GUI";
+		if (name.equals("java.lang.ProcessBuilder")) return "exec";
 		return name;
 	}
 
