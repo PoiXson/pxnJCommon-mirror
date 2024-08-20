@@ -1,4 +1,4 @@
-package com.poixson.utils;
+package com.poixson.tools;
 
 
 public class FastNoiseLiteCached2F extends FastNoiseLiteF {
