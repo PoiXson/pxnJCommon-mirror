@@ -253,7 +253,7 @@ public abstract class xApp implements xStartable, Runnable, xFailableApp {
 		final xAppStepDAO dao = this.nextStepDAO.getAndSet(null);
 		boolean multi_finished = false;
 		if (dao != null) {
-			this.log_loader().fine("@|white,bold %d - %s|@", dao.step_abs, dao.getTaskName());
+			this.log_loader().fine("@|white,bold %d - %s|@", dao.step_abs, dao.getTaskTitle());
 			this.resetHangCatcher();
 			dao.loop_count.getAndIncrement();
 			try {
