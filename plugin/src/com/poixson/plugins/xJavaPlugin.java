@@ -92,8 +92,8 @@ public abstract class xJavaPlugin implements xStartStop, Runnable, xFailable {
 		return false;
 	}
 	@Override
-	public boolean fail(final String msg, final Object...args) {
-		return this.fail(new RuntimeException(String.format(msg, args)));
+	public boolean fail(final String msg) {
+		return this.fail(new RuntimeException(msg));
 	}
 
 	@Override

@@ -81,7 +81,7 @@ public abstract class xApp implements xStartable, Runnable, xFailableApp {
 				props = AppProps.LoadFromClassRef( this.getClass() );
 			} catch (IOException e) {
 				this.props = null;
-				this.fail("Failed to load app.properties file", e);
+				this.fail(e);
 				return;
 			}
 			this.props = props;
@@ -616,13 +616,13 @@ public abstract class xApp implements xStartable, Runnable, xFailableApp {
 		return false;
 	}
 	@Override
-	public boolean fail(final String msg, final Object...args) {
-		return this.fail(new RuntimeException(String.format(msg, args)));
+	public boolean fail(final String msg) {
+		return this.fail(new RuntimeException(msg));
 	}
 	@Override
-	public boolean fail(final int exitcode, final String msg, final Object...args) {
+	public boolean fail(final int exitcode, final String msg) {
 		this.failcode.compareAndSet(0, exitcode);
-		return this.fail(msg, args);
+		return this.fail(msg);
 	}
 
 
