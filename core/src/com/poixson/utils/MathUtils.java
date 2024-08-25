@@ -1,7 +1,5 @@
 package com.poixson.utils;
 
-import static com.poixson.utils.NumberUtils.MinMax;
-
 import java.awt.Color;
 
 import com.poixson.exceptions.RequiredArgumentException;
@@ -109,6 +107,67 @@ public final class MathUtils {
 				max = values[i];
 		}
 		return max;
+	}
+
+
+
+	public static int MinMax(final int value, final int min, final int max) {
+		if (min   > max) throw new IllegalArgumentException("min cannot be greater than max");
+		if (value < min) return min;
+		if (value > max) return max;
+		return value;
+	}
+	public static byte MinMax(final byte value, final byte min, final byte max) {
+		if (min   > max) throw new IllegalArgumentException("min cannot be greater than max");
+		if (value < min) return min;
+		if (value > max) return max;
+		return value;
+	}
+	public static short MinMax(final short value, final short min, final short max) {
+		if (min   > max) throw new IllegalArgumentException("min cannot be greater than max");
+		if (value < min) return min;
+		if (value > max) return max;
+		return value;
+	}
+	public static long MinMax(final long value, final long min, final long max) {
+		if (min   > max) throw new IllegalArgumentException("min cannot be greater than max");
+		if (value < min) return min;
+		if (value > max) return max;
+		return value;
+	}
+	public static double MinMax(final double value, final double min, final double max) {
+		if (min   > max) throw new IllegalArgumentException("min cannot be greater than max");
+		if (value < min) return min;
+		if (value > max) return max;
+		return value;
+	}
+	public static float MinMax(final float value, final float min, final float max) {
+		if (min   > max) throw new IllegalArgumentException("min cannot be greater than max");
+		if (value < min) return min;
+		if (value > max) return max;
+		return value;
+	}
+
+
+
+	// is within range
+	public static boolean IsMinMax(final int value, final int min, final int max) {
+		return (value >= min && value <= max);
+	}
+	public static boolean IsMinMax(final byte value, final byte min, final byte max) {
+		return (value >= min && value <= max);
+	}
+	public static boolean IsMinMax(final short value, final short min, final short max) {
+		return (value >= min && value <= max);
+	}
+	public static boolean IsMinMax(final long value, final long min, final long max) {
+		return (value >= min && value <= max);
+	}
+	public static boolean IsMinMax(final double value, final double min, final double max) {
+		return (value >= min && value <= max);
+	}
+	public static boolean IsMinMax(final float value, final float min, final float max) {
+		return (value >= min && value <= max);
 	}
 
 
