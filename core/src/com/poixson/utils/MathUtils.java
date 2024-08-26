@@ -1,6 +1,9 @@
 package com.poixson.utils;
 
 import java.awt.Color;
+import java.time.Instant;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.tools.Keeper;
@@ -168,6 +171,33 @@ public final class MathUtils {
 	}
 	public static boolean IsMinMax(final float value, final float min, final float max) {
 		return (value >= min && value <= max);
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// time
+
+
+
+	public static boolean IsDayTimeBetween(final long current, final long start, final long stop, final int zone) {
+		return _IsDayTimeBetween(
+			TimestampSinceMidnight(current, zone),
+			MinMax(start, 0, 86399999),
+			MinMax(stop,  0, 86399999)
+		);
+	}
+	protected static boolean _IsDayTimeBetween(final long current, final long start, final long stop) {
+		if (start < stop) return (current >= start) && (current < stop); // normal case
+		else              return (current >= start) || (current < stop); // crossing midnight
+	}
+
+
+
+	public static long TimestampSinceMidnight(final long timestamp, final int zone) {
+		final Instant   instant = Instant.ofEpochMilli(timestamp);
+		final LocalTime current = instant.atZone(ZoneOffset.ofHours(zone)).toLocalTime();
+		return current.toNanoOfDay() / 1000000L;
 	}
 
 
