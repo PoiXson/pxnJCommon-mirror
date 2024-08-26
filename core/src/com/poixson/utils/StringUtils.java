@@ -1,5 +1,6 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.MathUtils.MinMax;
 import static com.poixson.utils.Utils.IsEmpty;
 import static com.poixson.utils.Utils.SafeClose;
 
@@ -1035,7 +1036,7 @@ public final class StringUtils {
 			if (str == null) throw new RequiredArgumentException("str");
 			buf.append(str);
 		}
-		return buf.toString().substring( 0, NumberUtils.MinMax(length, 0, buf.length()) );
+		return buf.toString().substring( 0, MinMax(length, 0, buf.length()) );
 	}
 
 

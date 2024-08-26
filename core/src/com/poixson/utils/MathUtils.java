@@ -378,9 +378,9 @@ public final class MathUtils {
 	public static Color Remap(final Color colorA, final Color colorB, final double percent) {
 		return
 			new Color(
-				NumberUtils.MinMax(Remap(colorA.getRed(),   colorB.getRed(),   percent), 0, 255),
-				NumberUtils.MinMax(Remap(colorA.getGreen(), colorB.getGreen(), percent), 0, 255),
-				NumberUtils.MinMax(Remap(colorA.getBlue(),  colorB.getBlue(),  percent), 0, 255)
+				MinMax(Remap(colorA.getRed(),   colorB.getRed(),   percent), 0, 255),
+				MinMax(Remap(colorA.getGreen(), colorB.getGreen(), percent), 0, 255),
+				MinMax(Remap(colorA.getBlue(),  colorB.getBlue(),  percent), 0, 255)
 			);
 	}
 

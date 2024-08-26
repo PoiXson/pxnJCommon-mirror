@@ -1,6 +1,6 @@
 package com.poixson.tools.dao;
 
-import com.poixson.utils.NumberUtils;
+import static com.poixson.utils.MathUtils.MinMax;
 
 
 public class Tuple3D extends Dabc {
@@ -123,9 +123,9 @@ public class Tuple3D extends Dabc {
 
 
 	public void clamp(final double min, final double max) {
-		this.a = NumberUtils.MinMax(this.a, min, max);
-		this.b = NumberUtils.MinMax(this.b, min, max);
-		this.c = NumberUtils.MinMax(this.c, min, max);
+		this.a = MinMax(this.a, min, max);
+		this.b = MinMax(this.b, min, max);
+		this.c = MinMax(this.c, min, max);
 	}
 	public void clampMin(final double min) {
 		if (this.a < min) this.a = min;

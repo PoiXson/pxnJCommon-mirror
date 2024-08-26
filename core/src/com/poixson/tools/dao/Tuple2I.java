@@ -1,6 +1,6 @@
 package com.poixson.tools.dao;
 
-import com.poixson.utils.NumberUtils;
+import static com.poixson.utils.MathUtils.MinMax;
 
 
 public class Tuple2I extends Iab {
@@ -115,8 +115,8 @@ public class Tuple2I extends Iab {
 
 
 	public void clamp(final int min, final int max) {
-		this.a = NumberUtils.MinMax(this.a, min, max);
-		this.b = NumberUtils.MinMax(this.b, min, max);
+		this.a = MinMax(this.a, min, max);
+		this.b = MinMax(this.b, min, max);
 	}
 	public void clampMin(final int min) {
 		if (this.a < min) this.a = min;
