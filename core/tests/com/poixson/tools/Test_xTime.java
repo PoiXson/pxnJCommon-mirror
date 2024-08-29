@@ -60,10 +60,10 @@ public class Test_xTime {
 	@Test
 	public void testGet() {
 		final xTime time = new xTime(123L);
-		Assert.assertEquals( 123L, time.get(xTimeU.MS) );
-		Assert.assertEquals( 123L, time.get(TimeUnit.MILLISECONDS) );
-		Assert.assertEquals( "123ms", time.toString() );
-		Assert.assertEquals( 123L, time.ms() );
+		Assert.assertEquals( 123L,   time.get(xTimeU.MS) );
+		Assert.assertEquals( 123L,   time.get(TimeUnit.MILLISECONDS) );
+		Assert.assertEquals("123ms", time.toString() );
+		Assert.assertEquals( 123L,   time.ms() );
 		Assert.assertEquals( 20, (new xTime( 1L, xTimeU.S)).ticks(50L));
 	}
 
@@ -72,21 +72,11 @@ public class Test_xTime {
 	@Test
 	public void testSet() {
 		final xTime time = new xTime();
-		// (ms)
-		time.set(123L);
-		Assert.assertEquals( 123L, time.ms() );
-		// (value, xunit)
-		time.set(123L, xTimeU.S);
-		Assert.assertEquals( 123000L, time.ms() );
-		// (value, unit)
-		time.set(321L, TimeUnit.SECONDS);
-		Assert.assertEquals( 321000L, time.ms() );
-		// (string)
-		time.set("123s");
-		Assert.assertEquals( 123000L, time.ms() );
-		// (xtime)
-		time.set( new xTime(123L) );
-		Assert.assertEquals( 123L, time.ms() );
+		time.set(           123L                  ); Assert.assertEquals(    123L, time.ms() ); // (ms)
+		time.set(           123L, xTimeU.S        ); Assert.assertEquals( 123000L, time.ms() ); // (value, xunit)
+		time.set(           321L, TimeUnit.SECONDS); Assert.assertEquals( 321000L, time.ms() ); // (value, unit)
+		time.set(          "123s"                 ); Assert.assertEquals( 123000L, time.ms() ); // (string)
+		time.set( new xTime(123L)                 ); Assert.assertEquals(    123L, time.ms() ); // (xtime)
 		// reset()
 		time.reset();
 		Assert.assertEquals( 0L, time.ms() );
@@ -98,15 +88,9 @@ public class Test_xTime {
 	public void testAdd() {
 		final xTime time = new xTime(123L);
 		Assert.assertEquals(123L, time.ms() );
-		// (ms)
-		time.add(123L);
-		Assert.assertEquals(246L, time.ms() );
-		// (value, xunit)
-		time.add(123L, xTimeU.S);
-		Assert.assertEquals(123246L, time.ms() );
-		// (value, unit)
-		time.add(123L, TimeUnit.SECONDS);
-		Assert.assertEquals(246246L, time.ms() );
+		time.add(123L                  ); Assert.assertEquals(   246L, time.ms() ); // (ms)
+		time.add(123L, xTimeU.S        ); Assert.assertEquals(123246L, time.ms() ); // (value, xunit)
+		time.add(123L, TimeUnit.SECONDS); Assert.assertEquals(246246L, time.ms() ); // (value, unit)
 		// (string)
 		time.reset();
 		time.add("123s");
@@ -120,9 +104,9 @@ public class Test_xTime {
 
 	@Test
 	public void testParse() {
-		Assert.assertEquals(123L,        xTime.ParseToLong("123" ));
-		Assert.assertEquals(123000L,     xTime.ParseToLong("123s"));
-		Assert.assertEquals(123000L*60L, xTime.ParseToLong("123m"));
+		Assert.assertEquals(       123L, xTime.ParseToLong("123" ));
+		Assert.assertEquals(    123000L, xTime.ParseToLong("123s"));
+		Assert.assertEquals(60L*123000L, xTime.ParseToLong("123m"));
 		Assert.assertEquals(       500L, xTime.ParseToLong("0.5s"));
 		{
 			final xTime time = xTime.Parse("123");
