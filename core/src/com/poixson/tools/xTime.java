@@ -182,7 +182,7 @@ public class xTime {
 					continue;
 				}
 			}
-			if (chr == ' ') {
+			if (StringUtils.IsWhiteSpace(chr)) {
 				if (moreNumbers) {
 					moreNumbers = false;
 				} else {

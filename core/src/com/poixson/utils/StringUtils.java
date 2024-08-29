@@ -280,6 +280,27 @@ public final class StringUtils {
 
 
 
+	public static boolean IsWhiteSpace(final String str) {
+		final int len = str.length();
+		for (int i=0; i<len; i++) {
+			if (!IsWhiteSpace(str.charAt(i)))
+				return false;
+		}
+		return true;
+	}
+	public static boolean IsWhiteSpace(final char chr) {
+		switch (chr) {
+		case ' ':
+		case '\t':
+		case '\r':
+		case '\n':
+			return true;
+		default: return false;
+		}
+	}
+
+
+
 	// -------------------------------------------------------------------------------
 	// string equals
 
