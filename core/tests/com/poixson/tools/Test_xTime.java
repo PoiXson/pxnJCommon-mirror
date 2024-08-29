@@ -123,6 +123,7 @@ public class Test_xTime {
 		Assert.assertEquals(123L,        xTime.ParseToLong("123" ));
 		Assert.assertEquals(123000L,     xTime.ParseToLong("123s"));
 		Assert.assertEquals(123000L*60L, xTime.ParseToLong("123m"));
+		Assert.assertEquals(       500L, xTime.ParseToLong("0.5s"));
 		{
 			final xTime time = xTime.Parse("123");
 			Assert.assertNotNull(time);

@@ -197,7 +197,7 @@ public class xTime {
 						if (decimal) {
 							final Double val = Double.valueOf( buf_val.toString() );
 							if (val == null) throw new NumberFormatException("Invalid number: "+buf_unit.toString());
-							value += (long) xunit.convertFrom( val.doubleValue() );
+							value += (long) xunit.convertTo( val.doubleValue() );
 						} else {
 							final Long val = Long.valueOf( buf_val.toString() );
 							if (val == null) throw new NumberFormatException("Invalid number: "+buf_unit.toString());
