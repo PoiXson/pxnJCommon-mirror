@@ -159,26 +159,26 @@ public class xTime {
 		if (IsEmpty(str)) throw new RequiredArgumentException("str");
 		long value = 0L;
 		// split into parts
-		final StringBuilder bufValue = new StringBuilder();
-		final StringBuilder bufUnit  = new StringBuilder();
+		final StringBuilder buf_val  = new StringBuilder();
+		final StringBuilder buf_unit = new StringBuilder();
 		boolean moreNumbers = true;
 		boolean decimal = false;
 		for (char chr : (str+"  ").toCharArray()) {
 			if (moreNumbers) {
 				if (chr == '.') {
 					decimal = true;
-					bufValue.append(chr);
+					buf_val.append(chr);
 					continue;
 				}
 				if (chr == ',') continue;
 				if (chr == '-') {
-					if (bufValue.length() == 0) {
-						bufValue.append('-');
+					if (buf_val.length() == 0) {
+						buf_val.append('-');
 						continue;
 					}
 				}
 				if (Character.isDigit(chr)) {
-					bufValue.append(chr);
+					buf_val.append(chr);
 					continue;
 				}
 			}
@@ -187,26 +187,26 @@ public class xTime {
 					moreNumbers = false;
 				} else {
 					final xTimeU xunit;
-					if (bufUnit.length() == 0) {
+					if (buf_unit.length() == 0) {
 						xunit = xTimeU.MS;
 					} else {
-						xunit = xTimeU.GetUnit( bufUnit.toString() );
-						if (xunit == null) throw new NumberFormatException("Unknown unit: "+bufUnit.toString());
+						xunit = xTimeU.GetUnit( buf_unit.toString() );
+						if (xunit == null) throw new NumberFormatException("Unknown unit: "+buf_unit.toString());
 					}
-					if (bufValue.length() > 0) {
+					if (buf_val.length() > 0) {
 						if (decimal) {
-							final Double val = Double.valueOf( bufValue.toString() );
-							if (val == null) throw new NumberFormatException("Invalid number: "+bufValue.toString());
+							final Double val = Double.valueOf( buf_val.toString() );
+							if (val == null) throw new NumberFormatException("Invalid number: "+buf_unit.toString());
 							value += (long) xunit.convertFrom( val.doubleValue() );
 						} else {
-							final Long val = Long.valueOf( bufValue.toString() );
-							if (val == null) throw new NumberFormatException("Invalid number: "+bufValue.toString());
+							final Long val = Long.valueOf( buf_val.toString() );
+							if (val == null) throw new NumberFormatException("Invalid number: "+buf_unit.toString());
 							value += xunit.convertTo( val.longValue() );
 						}
 					}
 					// reset buffers
-					bufValue.setLength(0);
-					bufUnit.setLength(0);
+					buf_val .setLength(0);
+					buf_unit.setLength(0);
 					moreNumbers = true;
 					decimal = false;
 				}
@@ -214,7 +214,7 @@ public class xTime {
 			}
 			if (Character.isLetter(chr)) {
 				moreNumbers = false;
-				bufUnit.append(chr);
+				buf_unit.append(chr);
 				continue;
 			}
 			throw new NumberFormatException(
