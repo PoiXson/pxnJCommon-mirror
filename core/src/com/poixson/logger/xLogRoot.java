@@ -4,48 +4,55 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.poixson.logger.formatters.xLogFormat_Tagged;
 import com.poixson.logger.handlers.xLogHandler;
-import com.poixson.logger.handlers.xLogHandler_Console;
+import com.poixson.logger.handlers.xLogHandler_StdIO;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;
-import com.poixson.tools.abstractions.OutputStreamLineRemapper;
 
 
-public class xLogRoot extends xLogger {
+public class xLogRoot extends xLog {
 
-	protected static final AtomicBoolean RootInited = new AtomicBoolean(false);
-
-
-
-	static {
-		InitRoot();
-	}
+	protected static final AtomicBoolean inited = new AtomicBoolean(false);
 
 
 
-	// init root logger
 	public static void InitRoot() {
-		if (!RootInited.compareAndSet(false, true))
-			return;
-		// override stdio
-		StdIO.Init();
-		// root logger
-		final xLog log = new xLogRoot();
-//TODO: remove this
-		// default log to console
-		log.setDefaultHandlerIfEmpty(
-			new xLogHandler_Console()
-		);
-		if (!root.compareAndSet(null, log))
-			throw new RuntimeException("Logger root already initialized");
-		Keeper.add(log);
+		if (inited.compareAndSet(false, true)) {
+			StdIO.Init();
+			final xLogRoot log = new xLogRoot();
+			if (!root.compareAndSet(null, log))
+				throw new RuntimeException("Logger root already initialized");
+		}
 	}
 
 
 
-	protected xLogRoot() {
+	public xLogRoot() {
 		super();
 		if (root.get() != null)
 			throw new RuntimeException("Logger root already initialized");
+		Keeper.add(this);
+	}
+
+
+
+	@Override
+	public boolean isRoot() {
+		return true;
+	}
+
+
+
+	@Override
+	protected xLogHandler createDefaultHandler() {
+		final xLogHandler handler = new xLogHandler_StdIO();
+		handler.setFormat(new xLogFormat_Tagged());
+		return handler;
+	}
+
+
+
+}
+/*
 		// capture std-out
 		System.setOut(
 			OutputStreamLineRemapper.toPrintStream(
@@ -73,14 +80,4 @@ public class xLogRoot extends xLogger {
 			)
 		);
 	}
-
-
-
-	@Override
-	public boolean isRoot() {
-		return true;
-	}
-
-
-
-}
+*/
