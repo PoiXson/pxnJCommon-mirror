@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.plugins.loaders.xPluginLoader;
+import com.poixson.tools.config.xConfig;
 
 
 public abstract class xPluginManager<T extends xJavaPlugin> {
@@ -39,7 +40,7 @@ public abstract class xPluginManager<T extends xJavaPlugin> {
 
 
 
-	public int load() {
+	public int loadAll() {
 		// plugin loaders
 		int count = 0;
 		final Iterator<xPluginLoader<T>> it = this.loaders.iterator();
@@ -162,6 +163,43 @@ public abstract class xPluginManager<T extends xJavaPlugin> {
 			if (plugin.isState(xPluginState.STOPPED))
 				this.term(plugin);
 			count++;
+		}
+		return count;
+	}
+
+	public int configAll(final xConfig cfg) {
+		int count = 0;
+		final Iterator<T> it = this.plugins.values().iterator();
+		while (it.hasNext()) {
+			final T plugin = it.next();
+			STATE_SWITCH:
+			switch (plugin.getState()) {
+			case INITED:
+			case STARTING:
+			case RUNNING:
+				plugin.config(cfg);
+				count++;
+				break STATE_SWITCH;
+			default: break STATE_SWITCH;
+			}
+		}
+		return count;
+	}
+	public int saveAll(final xConfig cfg) {
+		int count = 0;
+		final Iterator<T> it = this.plugins.values().iterator();
+		while (it.hasNext()) {
+			final T plugin = it.next();
+			STATE_SWITCH:
+			switch (plugin.getState()) {
+			case INITED:
+			case STARTING:
+			case RUNNING:
+				plugin.save(cfg);
+				count++;
+				break STATE_SWITCH;
+			default: break STATE_SWITCH;
+			}
 		}
 		return count;
 	}
