@@ -4,7 +4,6 @@ import static com.poixson.utils.Utils.IsEmpty;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.poixson.logger.xConsole;
 import com.poixson.logger.xLog;
 import com.poixson.utils.StringUtils;
 
@@ -77,6 +76,8 @@ public class xCommandProcessor {
 
 
 
+//TODO: remove this?
+/*
 	public static xCommandProcessor GetProcessor() {
 		final xLog log = xLog.Get();
 		final xConsole console = log.getConsole();
@@ -100,6 +101,7 @@ public class xCommandProcessor {
 		final xConsole console = log.getConsole();
 		return console.setPrompt(prompt);
 	}
+*/
 
 
 

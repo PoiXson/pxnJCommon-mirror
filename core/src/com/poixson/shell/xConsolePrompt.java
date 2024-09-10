@@ -1,94 +1,87 @@
-package com.poixson.logger;
+package com.poixson.shell;
 
-import static com.poixson.ShellDefines.DEFAULT_PROMPT;
+import static com.poixson.utils.ShellUtils.RawTerminal;
+import static com.poixson.utils.ShellUtils.RestoreTerminal;
 import static com.poixson.utils.Utils.IsEmpty;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.ref.SoftReference;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.fusesource.jansi.AnsiConsole;
-import org.jline.reader.History;
-import org.jline.reader.LineReader;
-import org.jline.reader.LineReaderBuilder;
-import org.jline.reader.UserInterruptException;
-import org.jline.reader.impl.history.DefaultHistory;
-import org.jline.terminal.Terminal;
-import org.jline.terminal.TerminalBuilder;
-
-import com.poixson.ShellDefines;
-import com.poixson.logger.handlers.xLogHandler_ConsolePrompt;
+import com.poixson.logger.xLog;
+import com.poixson.logger.handlers.xLogHandler;
+import com.poixson.logger.handlers.xLogHandler_StdIO;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;
-import com.poixson.tools.abstractions.xFailable;
 import com.poixson.tools.commands.xCommandProcessor;
-import com.poixson.utils.FileUtils;
 import com.poixson.utils.ThreadUtils;
 
 
-public class xConsolePrompt extends xConsole implements xFailable {
-	protected static final String THREAD_NAME = "Console-Input";
+public class xConsolePrompt extends xConsole {
+	public static final boolean DEBUG_UNKNOWN_KEYS = false;
 
-	protected final AtomicReference<xCommandProcessor> processor = new AtomicReference<xCommandProcessor>(null);
+	public static final String THREAD_NAME = "prompt";
+	public static final String DEFAULT_PROMPT = " #>";
+	public static final String HISTORY_FILE = "history.txt";
+	public static final int    HISTORY_SIZE = 1000;
+
 	protected final AtomicReference<String>  prompt = new AtomicReference<String>(null);
 	protected final AtomicReference<Character> mask = new AtomicReference<Character>(null);
 
-	protected final AtomicReference<Terminal>   terminal = new AtomicReference<Terminal>(null);
-	protected final AtomicReference<LineReader> reader   = new AtomicReference<LineReader>(null);
-	protected final AtomicReference<History>    history  = new AtomicReference<History>(null);
-	protected final xLogHandler_ConsolePrompt handler;
+	protected final StringBuilder buffer_in;
+	protected final StringBuilder buffer_out;
+	protected final Object lock = new Object();
 
 	protected final InputStream in;
+	protected final boolean dumb;
+
+	protected final AtomicReference<xCommandProcessor> processor = new AtomicReference<xCommandProcessor>(null);
 
 	protected final AtomicReference<Thread> thread = new AtomicReference<Thread>(null);
-
 	protected final AtomicBoolean stopping = new AtomicBoolean(false);
-	protected final CopyOnWriteArraySet<Runnable> listeners_close = new CopyOnWriteArraySet<Runnable>();
-
-	protected final AtomicReference<Throwable> failure = new AtomicReference<Throwable>(null);
 
 
 
 	public xConsolePrompt() {
-		this(null, null, null);
+		this(
+			StdIO.OriginalOut(),
+			StdIO.OriginalIn(),
+			null
+		);
 	}
-	protected xConsolePrompt(final OutputStream out, final InputStream in,
-			final xLogHandler_ConsolePrompt handler) {
-		super(out==null ? StdIO.OriginalOut() : out);
-		StdIO.Init();
-		this.in      = (in==null ? StdIO.OriginalIn() : in);
-		this.handler = (handler==null ? new xLogHandler_ConsolePrompt(this) : handler);
-		Keeper.add(this);
-	}
-	public void unload() {
-		Keeper.remove(this);
+	public xConsolePrompt(final PrintStream out, final InputStream in, final String prompt) {
+		super(out);
+		this.in = in;
+		this.prompt.set(prompt);
+		this.buffer_in  = new StringBuilder();
+		this.buffer_out = new StringBuilder();
+		this.dumb = (System.console() == null);
 	}
 
 
 
-	// start console input thread
 	@Override
 	public void start() {
-		if (this.isFailed()) return;
+		if (this.dumb) return;
 		if (this.stopping.get())
-			throw new IllegalStateException("Cannot start console prompt, already stopped");
-		if (this.thread.get() == null) {
-			// new thread
-			final Thread thread = new Thread(this);
-			if (this.thread.compareAndSet(null, thread)) {
-				thread.setName(THREAD_NAME);
-				thread.setDaemon(true);
-				thread.start();
-				ThreadUtils.Sleep(10L);
+			throw new IllegalStateException("Prompt thread already stopped");
+		final Thread thread = new Thread() {
+			@Override
+			public void run() {
+				xConsolePrompt.this.run();
 			}
-		}
+		};
+		thread.setName(THREAD_NAME);
+		thread.setDaemon(true);
+		if (!this.thread.compareAndSet(null, thread))
+			throw new IllegalStateException("Prompt thread already started");
+		thread.start();
+		ThreadUtils.Sleep(50L);
 	}
+
 	@Override
 	public void stop() {
 		this.stopping.set(true);
@@ -109,140 +102,135 @@ public class xConsolePrompt extends xConsole implements xFailable {
 	// prompt thread
 	@Override
 	public void run() {
-		if (this.isFailed())   return;
-		if (this.isStopping()) return;
-		this.log().fine("Console prompt started..");
-		{
-			final PrintStream hold_out = System.out;
-			final InputStream hold_in  = System.in;
-			synchronized (this.terminal) {
-				try {
-					System.setOut(StdIO.OriginalOut());
-					System.setIn (StdIO.OriginalIn() );
-					// jline terminal
-					final Terminal term = TerminalBuilder.builder()
-						.system(true)
-						.streams(
-							StdIO.OriginalIn(),
-							StdIO.OriginalOut()
-						)
-						.build();
-					if (term == null) {
-						this.fail(new RuntimeException("Failed to create jline terminal instance"));
-						return;
-					}
-					if ("dumb".equals(term.getType())) {
-						this.fail(new RuntimeException("Detected a dumb terminal"));
-						return;
-					}
-					if (!this.terminal.compareAndSet(null, term)) {
-						this.fail(new RuntimeException("Invalid terminal state, already set"));
-						return;
-					}
-					this.log().fine("Terminal: "+term.getType());
-					if (this.isFailed()) return;
-					// jline reader
-					final LineReader reader =
-						LineReaderBuilder.builder()
-							.terminal(term)
-							.build();
-					if (reader == null) {
-						this.fail(new RuntimeException("Failed to create jline reader instance"));
-						return;
-					}
-					if (!this.reader.compareAndSet(null, reader)) {
-						this.fail(new RuntimeException("Invalid reader state, already set"));
-						return;
-					}
-					if (this.isFailed()) return;
-					//TODO
-					//( xShellDefines.BELL_ENABLED ? "audible" : "visible" )
-					reader.setVariable(LineReader.BELL_STYLE, "visible");
-					// command history
-					reader.setVariable(LineReader.HISTORY_FILE, new File(ShellDefines.HISTORY_FILE));
-					final String file_history = FileUtils.MergePaths(",", ShellDefines.HISTORY_FILE);
-					reader.setVariable(LineReader.HISTORY_FILE, file_history);
-					reader.setVariable(LineReader.HISTORY_SIZE, ShellDefines.HISTORY_SIZE);
-					final History history = new DefaultHistory(reader);
-					if (!this.history.compareAndSet(null, history)) {
-						this.fail(new RuntimeException("Invalid command history state, already set"));
-						return;
-					}
-					AnsiConsole.systemInstall();
-				} catch (Exception e) {
-					this.fail(e);
-					return;
-				} finally {
-					System.setOut(hold_out);
-					System.setIn( hold_in );
-				}
-			} // end sync terminal
+		if (this.dumb) return;
+		if (!Thread.currentThread().equals(this.thread.get())) {
+			this.stopping.set(true);
+			(new IllegalStateException("Run called from wrong thread")).printStackTrace(this);
+			return;
 		}
-		if (this.isFailed()) return;
-		final Thread thread = Thread.currentThread();
-		int count_errors = 0;
-		LOOP_READER:
-		while (true) {
-			if (this.isFailed())        break LOOP_READER;
-			if (this.isStopping())      break LOOP_READER;
-			if (thread.isInterrupted()) break LOOP_READER;
-			final String line;
-			try {
-				// read console input
-				line = this.getReader().readLine(
-					this.getPrompt(),
-					this.mask.get()
-				);
-				// handle line
-				if (!IsEmpty(line)) {
-					final xCommandProcessor processor = this.getProcessor();
-					if (processor == null) {
-						this.log().warning("No command processor to handle command: %s", line);
-						continue LOOP_READER;
+		if (this.getProcessor() == null) {
+			this.stopping.set(true);
+			(new RuntimeException("Command processor not set")).printStackTrace(this);
+			return;
+		}
+		try {
+			RawTerminal();
+		} catch (IOException e) {
+			this.stopping.set(true);
+			e.printStackTrace(this);
+			return;
+		} catch (InterruptedException e) {
+			this.stopping.set(true);
+			e.printStackTrace(this);
+			return;
+		}
+		final xLogHandler handler = xLog.Get().getHandler(xLogHandler_StdIO.class);
+		if (handler != null)
+			((xLogHandler_StdIO)handler).setOut(this);
+		Keeper.add(this);
+		Runtime.getRuntime().addShutdownHook(
+			new Thread() {
+				@Override
+				public void run() {
+					final PrintStream out = new PrintStream(xConsolePrompt.this.out, true);
+					try {
+						RestoreTerminal();
+					} catch (IOException e) {
+						e.printStackTrace(out);
+					} catch (InterruptedException e) {
+						e.printStackTrace(out);
 					}
-					final boolean result = processor.process(line);
-					if (!result)
-						this.log().warning("Unknown command: %s", line);
+					out.println();
 				}
-				count_errors = 0;
-			} catch (UserInterruptException ignore) {
-				break LOOP_READER;
-			} catch (Exception e) {
-				this.log().trace(e);
-				if (++count_errors > 5) {
-					this.log().trace(new RuntimeException("Too many errors"));
-					break LOOP_READER;
-				}
-				ThreadUtils.Sleep(100L);
 			}
-		} // end LOOP_READER
-		this.saveHistory();
-		this.log().fine("Console prompt stopped");
-		this.thread.set(null);
-		this.stop();
-		StdIO.OriginalOut().println();
-		StdIO.OriginalOut().flush();
-		this.flush();
-		// close listeners
-		for (final Runnable listener : this.listeners_close) {
+		);
+		try {
+			this.log().fine("Console prompt started..");
+			this.drawPrompt();
+			LOOP_PROMPT:
+			while (true) {
+				if (this.stopping.get())
+					break LOOP_PROMPT;
+				final int chr = this.in.read();
+				SWITCH_CHAR:
+				switch (chr) {
+//TODO
+//				// ctrl + a
+//				case 1:
+//				// esc
+//				case 27:
+				// ctrl + c
+				case 3:
+					System.exit(1);
+					break LOOP_PROMPT;
+				// backspace
+				case 127: {
+					final int len = this.buffer_in.length();
+					if (len > 0) {
+						this.buffer_in.setLength(len-1);
+						this.drawPrompt();
+					}
+					break SWITCH_CHAR;
+				}
+				// enter
+				case 13: {
+					synchronized (this.lock) {
+						this.out.write("\r\n".getBytes());
+						this.drawPrompt();
+					}
+					final String cmd = this.buffer_in.toString();
+					this.buffer_in.setLength(0);
+					if (!IsEmpty(cmd)) {
+						final xCommandProcessor processor = this.getProcessor();
+						if (processor == null) {
+							(new RuntimeException("Command processor not set")).printStackTrace(this);
+							break LOOP_PROMPT;
+						}
+						if (!processor.process(cmd)) {
+							if (this.hasMask()) this.println("Unknown command: <masked>");
+							else                this.println("Unknown command: "+cmd);
+						}
+					}
+					break SWITCH_CHAR;
+				}
+				default: {
+					if (chr > 31 && chr < 127) {
+						this.buffer_in.append( (char)chr );
+						final Character mask = this.getMask();
+						if (mask == null) this.print( (char)chr );
+						else              this.print(mask.charValue());
+					} else
+					if (DEBUG_UNKNOWN_KEYS) {
+						this.println(chr);
+					}
+					break SWITCH_CHAR;
+				}
+				} // end SWITCH_CHAR
+			} // end LOOP_PROMPT
+		} catch (IOException e) {
+			e.printStackTrace(this);
+		} finally {
+			this.log().fine("Console prompt stopped");
+			Keeper.remove(this);
 			try {
-				listener.run();
-			} catch (Exception e) {
-				this.log().trace(e);
+				RestoreTerminal();
+			} catch (IOException e) {
+				e.printStackTrace(this);
+			} catch (InterruptedException e) {
+				e.printStackTrace(this);
 			}
 		}
+		this.stopping.set(true);
 	}
 
 
 
 	@Override
 	public boolean isRunning() {
-		if (this.isFailed()) return false;
 		return (this.thread.get() != null);
 	}
 	@Override
 	public boolean isStopping() {
-		if (this.isFailed()) return true;
 		return this.stopping.get();
 	}
 
@@ -252,8 +240,85 @@ public class xConsolePrompt extends xConsole implements xFailable {
 
 
 
-	public xLogHandler_ConsolePrompt getHandler() {
-		return this.handler;
+	@Override
+	public void println(final String str) {
+		synchronized (this.lock) {
+			this.write(str.getBytes());
+			this.write('\n');
+		}
+	}
+	@Override
+	public void write(byte[] b) {
+		synchronized (this.lock) {
+			final int len = b.length;
+			for (int i=0; i<len; i++)
+				this.write(b[i]);
+		}
+	}
+	@Override
+	public void write(final int b) {
+		if (b == '\r') {
+		} else
+		if (b == '\n') {
+			synchronized (this.lock) {
+				try {
+					this.clearLine();
+					this.out.write(this.buffer_out.toString().getBytes());
+					this.out.write('\r'); this.out.write('\n');
+					this.drawPrompt();
+					this.out.flush();
+				} catch (IOException e) {
+					e.printStackTrace(new PrintStream(this.out));
+				}
+				this.buffer_out.setLength(0);
+			}
+		} else {
+			this.buffer_out.append( (char)b );
+		}
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+
+
+
+	public void clearLine() {
+		if (this.isRunning()) {
+			synchronized (this.lock) {
+				try {
+					this.out.write('\r');
+					final int len = this.buffer_in.length() + this.getPrompt().length() + 5;
+					for (int i=0; i<len; i++)
+						this.out.write(' ');
+					this.out.write('\r');
+				} catch (IOException e) {
+					e.printStackTrace(new PrintStream(this.out));
+				}
+			}
+		}
+	}
+
+
+
+	@Override
+	public void drawPrompt() {
+		synchronized (this.lock) {
+			try {
+				this.clearLine();
+				this.out.write(this.getPrompt().getBytes());
+				final Character mask = this.getMask();
+				if (mask == null) {
+					this.out.write(this.buffer_in.toString().getBytes());
+				} else {
+					final int len = this.buffer_in.length();
+					for (int i=0; i<len; i++)
+						this.out.write(mask.charValue());
+				}
+			} catch (IOException e) {
+				e.printStackTrace(this);
+			}
+		}
 	}
 
 
@@ -265,23 +330,22 @@ public class xConsolePrompt extends xConsole implements xFailable {
 	}
 	@Override
 	public String setPrompt(final String prompt) {
-		final String previous = this.prompt.getAndSet(prompt);
-//TODO: this doesn't update properly
-		this.handler.redraw_prompt();
-		return previous;
+		return this.prompt.getAndSet(prompt);
 	}
 
 
 
 	@Override
-	public char getMask() {
-		final Character mask = this.mask.get();
-		return (mask==null ? null : mask.charValue());
+	public Character getMask() {
+		return this.mask.get();
 	}
 	@Override
-	public char setMask(final char mask) {
-		final Character previous = this.mask.getAndSet(Character.valueOf(mask));
-		return (previous==null ? null : previous.charValue());
+	public Character setMask(final Character chr) {
+		return this.mask.getAndSet(chr);
+	}
+	@Override
+	public boolean hasMask() {
+		return (this.mask.get() != null);
 	}
 
 
@@ -293,73 +357,6 @@ public class xConsolePrompt extends xConsole implements xFailable {
 	@Override
 	public xCommandProcessor setProcessor(final xCommandProcessor processor) {
 		return this.processor.getAndSet(processor);
-	}
-
-
-
-	public Terminal getTerminal() {
-		return this.terminal.get();
-	}
-	public LineReader getReader() {
-		return this.reader.get();
-	}
-
-
-
-	public void saveHistory() {
-		if (this.isFailed()) return;
-		final History hist = this.history.get();
-		if (hist != null) {
-			try {
-				hist.save();
-			} catch (IOException e) {
-				xLog.Get().trace(e);
-			}
-		}
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// listeners
-
-
-
-	public void addCloseListener(final Runnable run) {
-		this.listeners_close.add(run);
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// failure
-
-
-
-	@Override
-	public boolean fail(final Throwable e) {
-		if (this.failure.compareAndSet(null, e)) {
-			this.onFailure();
-			return true;
-		}
-		return false;
-	}
-	@Override
-	public boolean fail(final String msg, final Object...args) {
-		return this.fail(new RuntimeException(String.format(msg, args)));
-	}
-
-	@Override
-	public boolean isFailed() {
-		return (this.failure.get() != null);
-	}
-
-	@Override
-	public void onFailure() {
-		final Throwable e = this.failure.get();
-		if (e != null)
-			this.log().trace(e);
-		this.stop();
 	}
 
 

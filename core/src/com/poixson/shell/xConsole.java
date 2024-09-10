@@ -1,4 +1,4 @@
-package com.poixson.logger;
+package com.poixson.shell;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -20,11 +20,16 @@ public abstract class xConsole extends PrintStream implements xStartable, Runnab
 	public abstract xCommandProcessor getProcessor();
 	public abstract xCommandProcessor setProcessor(final xCommandProcessor processor);
 
+
+
 	public abstract String getPrompt();
 	public abstract String setPrompt(final String prompt);
 
-	public abstract char getMask();
-	public abstract char setMask(final char mask);
+	public abstract Character getMask();
+	public abstract Character setMask(final Character chr);
+	public abstract boolean hasMask();
+
+	public abstract void drawPrompt();
 
 
 
