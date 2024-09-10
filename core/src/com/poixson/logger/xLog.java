@@ -76,8 +76,8 @@ public abstract class xLog {
 
 	protected final AtomicReference<xLevel> level = new AtomicReference<xLevel>(null);
 
-	protected final AtomicReference<xLogHandler> defaultHandler = new AtomicReference<xLogHandler>(null);
 	protected final CopyOnWriteArraySet<xLogHandler> handlers = new CopyOnWriteArraySet<xLogHandler>();
+	protected final AtomicReference<xLogHandler> handler_default = new AtomicReference<xLogHandler>(null);
 	protected final AtomicReference<SoftReference<String[]>> cachedNameTree = new AtomicReference<SoftReference<String[]>>(null);
 
 	protected final AtomicReference<xConsole> console = new AtomicReference<xConsole>(null);
@@ -345,16 +345,12 @@ public abstract class xLog {
 
 
 
-	public abstract xLogHandler getDefaultHandler();
-
 	public xLogHandler setDefaultHandler(final xLogHandler handler) {
-		return this.defaultHandler.getAndSet(handler);
+		return this.handler_default.getAndSet(handler);
 	}
 	public void setDefaultHandlerIfEmpty(final xLogHandler handler) {
-		this.defaultHandler.compareAndSet(null, handler);
+		this.handler_default.compareAndSet(null, handler);
 	}
-
-
 
 	public xLogHandler[] getHandlersOrDefault() {
 		// defined handlers
@@ -371,34 +367,53 @@ public abstract class xLog {
 		}
 		return null;
 	}
+
+
+
+	public xLogHandler[] getHandlers() {
+		return this.handlers.toArray(new xLogHandler[0]);
+	}
+
 	public xLogHandler getHandler(final Class<? extends xLogHandler> clss) {
 		if (clss == null) throw new RequiredArgumentException("clss");
-		final Iterator<xLogHandler> it = this.handlers.iterator();
-		while (it.hasNext()) {
-			final xLogHandler h = it.next();
-			if (clss.isInstance(h))
-				return h;
+		if (this.handlers.isEmpty()) {
+			final xLogHandler handler = this.getDefaultHandler();
+			if (clss.isInstance(handler))
+				return handler;
+		} else {
+			for (final xLogHandler handler : this.handlers) {
+				if (clss.isInstance(handler))
+					return handler;
+			}
 		}
 		return null;
 	}
 
+
+
+	public void addHandlers(final xLogHandler[] handlers) {
+		for (final xLogHandler handler : handlers)
+			this.addHandler(handler);
+	}
 	public void addHandler(final xLogHandler handler) {
 		if (handler == null) throw new RequiredArgumentException("handler");
 		this.handlers.add(handler);
 	}
 
+
+
 	public void removeHandler(final Class<? extends xLogHandler> remove) {
 		if (remove == null) throw new RequiredArgumentException("remove");
 		final List<xLogHandler> removing = new ArrayList<xLogHandler>();
-		final Iterator<xLogHandler> it = this.handlers.iterator();
-		while (it.hasNext()) {
-			final xLogHandler h = it.next();
-			if (remove.isInstance(h))
-				removing.add(h);
+		for (final xLogHandler handler : this.handlers) {
+			if (remove.isInstance(handler))
+				removing.add(handler);
 		}
-		for (final xLogHandler h : removing)
-			this.handlers.remove(h);
+		for (final xLogHandler handler : removing)
+			this.handlers.remove(handler);
 	}
+
+
 
 	public void replaceHandler(final Class<? extends xLogHandler> remove, final xLogHandler add) {
 		if (remove == null) throw new RequiredArgumentException("remove");

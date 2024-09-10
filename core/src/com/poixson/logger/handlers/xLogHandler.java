@@ -8,6 +8,7 @@ import com.poixson.logger.xLevel;
 import com.poixson.logger.formatters.xLogFormat;
 import com.poixson.logger.records.xLogRecord;
 import com.poixson.tools.StdIO;
+import com.poixson.utils.ShellUtils;
 
 
 public abstract class xLogHandler {
@@ -35,6 +36,98 @@ public abstract class xLogHandler {
 
 
 
+
+
+
+
+
+
+
+
+
+	// -------------------------------------------------------------------------------
+	// format
+
+
+
+	public String format(final xLogRecord record) {
+		if (record == null) return null;
+		final xLogFormat format = this.format.get();
+		if (format == null)
+			return record.toString();
+		final String result = format.format(record);
+		return ShellUtils.StripColorTags(result);
+	}
+
+	public xLogFormat getFormat() {
+		return this.format.get();
+	}
+	public void setFormat(final xLogFormat format) {
+		this.format.set(format);
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// publish lock
+
+
+
+	public void getPublishLock() {
+		this.getPublishLock(this.lock);
+	}
+	public void releasePublishLock() {
+		this.releasePublishLock(this.lock);
+	}
+
+	protected void getPublishLock(final ReentrantLock lock) {
+		LOOP_TIMEOUT:
+		for (int i=0; i<50; i++) {
+			try {
+				if (lock.tryLock(5L, TimeUnit.MILLISECONDS))
+					return;
+			} catch (InterruptedException e) {
+				break LOOP_TIMEOUT;
+			}
+			if (Thread.interrupted())
+				break LOOP_TIMEOUT;
+		} // end LOOP_TIMEOUT
+	}
+	protected void releasePublishLock(final ReentrantLock lock) {
+		try {
+			lock.unlock();
+		} catch (IllegalMonitorStateException ignore) {}
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// log level
+
+
+
+	// log level
+	public xLevel getLevel() {
+		return this.level.get();
+	}
+	public void setLevel(final xLevel level) {
+		this.level.set(level);
+	}
+
+
+
+	public boolean isLoggable(final xLevel level) {
+		if (level == null)
+			return true;
+		final xLevel current = this.getLevel();
+		if (current == null)
+			return true;
+		return current.isLoggable(level);
+	}
+
+
+
+}
 /*
 	protected abstract void publish(final String[] lines);
 
@@ -73,88 +166,3 @@ public abstract class xLogHandler {
 	public abstract void clearScreen();
 	public abstract void beep();
 */
-
-
-
-	// -------------------------------------------------------------------------------
-	// publish lock
-
-
-
-	public void getPublishLock() {
-		this.getPublishLock(this.lock);
-	}
-	public void releasePublishLock() {
-		this.releasePublishLock(this.lock);
-	}
-
-	protected void getPublishLock(final ReentrantLock lock) {
-		LOOP_TIMEOUT:
-		for (int i=0; i<50; i++) {
-			try {
-				if (lock.tryLock(5L, TimeUnit.MILLISECONDS))
-					return;
-			} catch (InterruptedException e) {
-				break LOOP_TIMEOUT;
-			}
-			if (Thread.interrupted())
-				break LOOP_TIMEOUT;
-		} // end LOOP_TIMEOUT
-	}
-	protected void releasePublishLock(final ReentrantLock lock) {
-		try {
-			lock.unlock();
-		} catch (IllegalMonitorStateException ignore) {}
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// format
-
-
-
-	public String format(final xLogRecord record) {
-		if (record == null) return null;
-		final xLogFormat format = this.format.get();
-		if (format == null)
-			return record.toString();
-		return format.format(record);
-	}
-
-	public xLogFormat getFormat() {
-		return this.format.get();
-	}
-	public void setFormat(final xLogFormat format) {
-		this.format.set(format);
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// log level
-
-
-
-	// log level
-	public xLevel getLevel() {
-		return this.level.get();
-	}
-	public void setLevel(final xLevel level) {
-		this.level.set(level);
-	}
-
-
-
-	public boolean isLoggable(final xLevel level) {
-		if (level == null)
-			return true;
-		final xLevel current = this.getLevel();
-		if (current == null)
-			return true;
-		return current.isLoggable(level);
-	}
-
-
-
-}
