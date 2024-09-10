@@ -9,6 +9,7 @@ import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.abstractions.RunnableMethod;
 import com.poixson.tools.abstractions.xFailable;
 import com.poixson.tools.abstractions.xStartStop;
+import com.poixson.tools.config.xConfig;
 import com.poixson.utils.StringUtils;
 
 
@@ -39,13 +40,15 @@ public abstract class xJavaPlugin implements xStartStop, Runnable, xFailable {
 	public void init() {}
 	public void term() {}
 
+	// config
+	public void config(final xConfig config) {}
+	public void save(final xConfig config) {}
 
 	// start/stop
 	@Override
 	public void start() {}
 	@Override
 	public void stop() {}
-
 
 	// run loop
 	@Override
