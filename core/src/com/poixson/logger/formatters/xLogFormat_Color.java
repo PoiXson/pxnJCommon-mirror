@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger.formatters;
 
 import static com.poixson.utils.Utils.IsEmpty;
@@ -123,3 +124,4 @@ public class xLogFormat_Color extends xLogFormat_Tagged {
 
 
 }
+*/
