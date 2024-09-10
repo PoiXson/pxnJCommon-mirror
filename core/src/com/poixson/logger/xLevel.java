@@ -2,9 +2,6 @@ package com.poixson.logger;
 
 import static com.poixson.utils.Utils.IsEmpty;
 
-import java.util.Iterator;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import com.poixson.utils.NumberUtils;
 
 
@@ -31,27 +28,6 @@ public enum xLevel {
 
 
 
-	private static final CopyOnWriteArrayList<xLevel> levels = new CopyOnWriteArrayList<xLevel>() {
-		private static final long serialVersionUID = 1L;
-		{
-			add( xLevel.OFF     );
-			add( xLevel.ALL     );
-			add( xLevel.TITLE   );
-			add( xLevel.DETAIL  );
-			add( xLevel.FINEST  );
-			add( xLevel.FINER   );
-			add( xLevel.FINE    );
-			add( xLevel.STATS   );
-			add( xLevel.INFO    );
-			add( xLevel.WARNING );
-			add( xLevel.NOTICE  );
-			add( xLevel.SEVERE  );
-			add( xLevel.FATAL   );
-		}
-	};
-
-
-
 	private xLevel(final char chr, final String name, final int value) {
 		this.chr   = chr;
 		this.name  = name;
@@ -60,17 +36,12 @@ public enum xLevel {
 
 
 
-	public static xLevel[] Levels() {
-		return levels.toArray(new xLevel[0]);
-	}
 	public static xLevel GetLevel(final String name) {
 		if (IsEmpty(name)) return null;
 		if (NumberUtils.IsNumeric(name)) {
 			return GetLevel(NumberUtils.ToInteger(name));
 		}
-		final Iterator<xLevel> it = levels.iterator();
-		while (it.hasNext()) {
-			final xLevel level = it.next();
+		for (final xLevel level : xLevel.values()) {
 			if (name.equalsIgnoreCase(level.name))
 				return level;
 		}
@@ -83,15 +54,13 @@ public enum xLevel {
 		if (val == xLevel.OFF.value) return xLevel.OFF;
 		xLevel found = xLevel.OFF;
 		int offset = xLevel.OFF.value;
-		final Iterator<xLevel> it = levels.iterator();
-		while (it.hasNext()) {
-			final xLevel lvl = it.next();
-			if (xLevel.OFF.equals(lvl)) continue;
-			if (xLevel.ALL.equals(lvl)) continue;
-			if (val < lvl.value) continue;
-			if (val - lvl.value < offset) {
-				offset = val - lvl.value;
-				found = lvl;
+		for (final xLevel level : xLevel.values()) {
+			if (xLevel.OFF.equals(level)) continue;
+			if (xLevel.ALL.equals(level)) continue;
+			if (val < level.value) continue;
+			if (val - level.value < offset) {
+				offset = val - level.value;
+				found = level;
 			}
 		}
 		return found;
@@ -113,20 +82,11 @@ public enum xLevel {
 
 	public boolean isLoggable(final xLevel level) {
 		if (level == null) return false;
-		// off (disabled)
-		if (this.value == xLevel.OFF.value)
-			return false;
-		// all (forced)
-		if (this.value == xLevel.ALL.value)
-			return true;
-		// check level
-		if (level.value == xLevel.ALL.value)
-			return true;
+		if (this.value == xLevel.OFF.value)  return false; // off (disabled)
+		if (this.value == xLevel.ALL.value)  return true;  // all (forced)
+		if (level.value == xLevel.ALL.value) return true;  // check level
+		if (this.value >= 9000)              return true;  // title
 		return (this.value <= level.value);
-	}
-	public boolean notLoggable(final xLevel level) {
-		if (level == null) return false;
-		return ! this.isLoggable(level);
 	}
 
 
