@@ -42,10 +42,10 @@ public class Tuple2L extends Lab {
 		this.a = tup.a;
 		this.b = tup.b;
 	}
-	public void setX(final long a) {
+	public void setA(final long a) {
 		this.a = a;
 	}
-	public void setY(final long b) {
+	public void setB(final long b) {
 		this.b = b;
 	}
 

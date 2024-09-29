@@ -48,16 +48,17 @@ public class Tuple4D extends Dabcd {
 		this.c = tup.c;
 		this.d = tup.d;
 	}
-	public void setW(final double a) {
+
+	public void setA(final double a) {
 		this.a = a;
 	}
-	public void setX(final double b) {
+	public void setB(final double b) {
 		this.b = b;
 	}
-	public void setY(final double c) {
+	public void setC(final double c) {
 		this.c = c;
 	}
-	public void setZ(final double d) {
+	public void setD(final double d) {
 		this.d = d;
 	}
 

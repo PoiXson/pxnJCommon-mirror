@@ -45,13 +45,13 @@ public class Tuple3F extends Fabc {
 		this.b = tup.b;
 		this.c = tup.c;
 	}
-	public void setX(final float a) {
+	public void setA(final float a) {
 		this.a = a;
 	}
-	public void setY(final float b) {
+	public void setB(final float b) {
 		this.b = b;
 	}
-	public void setZ(final float c) {
+	public void setC(final float c) {
 		this.c = c;
 	}
 

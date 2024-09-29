@@ -51,13 +51,13 @@ public class Tuple3L extends Labc {
 		this.b = tup.b;
 		this.c = tup.c;
 	}
-	public void setX(final long a) {
+	public void setA(final long a) {
 		this.a = a;
 	}
-	public void setY(final long b) {
+	public void setB(final long b) {
 		this.b = b;
 	}
-	public void setZ(final long c) {
+	public void setC(final long c) {
 		this.c = c;
 	}
 

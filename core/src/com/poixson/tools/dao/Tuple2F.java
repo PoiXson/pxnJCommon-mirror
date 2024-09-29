@@ -42,10 +42,10 @@ public class Tuple2F extends Fab {
 		this.a = tup.a;
 		this.b = tup.b;
 	}
-	public void setX(final float a) {
+	public void setA(final float a) {
 		this.a = a;
 	}
-	public void setY(final float b) {
+	public void setB(final float b) {
 		this.b = b;
 	}
 

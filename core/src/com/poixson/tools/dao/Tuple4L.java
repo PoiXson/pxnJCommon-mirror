@@ -57,17 +57,18 @@ public class Tuple4L extends Labcd {
 		this.c = tup.c;
 		this.d = tup.d;
 	}
-	public void setW(final long w) {
-		this.a = w;
+
+	public void setA(final long a) {
+		this.a = a;
 	}
-	public void setX(final long x) {
-		this.b = x;
+	public void setB(final long b) {
+		this.b = b;
 	}
-	public void setY(final long y) {
-		this.c = y;
+	public void setC(final long c) {
+		this.c = c;
 	}
-	public void setZ(final long z) {
-		this.d = z;
+	public void setD(final long d) {
+		this.d = d;
 	}
 
 

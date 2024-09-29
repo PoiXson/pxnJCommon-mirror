@@ -57,16 +57,17 @@ public class Tuple4I extends Iabcd {
 		this.c = tup.c;
 		this.d = tup.d;
 	}
-	public void setW(final int a) {
+
+	public void setA(final int a) {
 		this.a = a;
 	}
-	public void setX(final int b) {
+	public void setB(final int b) {
 		this.b = b;
 	}
-	public void setY(final int c) {
+	public void setC(final int c) {
 		this.c = c;
 	}
-	public void setZ(final int d) {
+	public void setD(final int d) {
 		this.d = d;
 	}
 

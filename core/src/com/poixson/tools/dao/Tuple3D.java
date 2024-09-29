@@ -45,13 +45,13 @@ public class Tuple3D extends Dabc {
 		this.b = tup.b;
 		this.c = tup.c;
 	}
-	public void setX(final double a) {
+	public void setA(final double a) {
 		this.a = a;
 	}
-	public void setY(final double b) {
+	public void setB(final double b) {
 		this.b = b;
 	}
-	public void setZ(final double c) {
+	public void setC(final double c) {
 		this.c = c;
 	}
 

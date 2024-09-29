@@ -48,16 +48,17 @@ public class Tuple4F extends Fabcd {
 		this.c = tup.c;
 		this.d = tup.d;
 	}
-	public void setW(final float a) {
+
+	public void setA(final float a) {
 		this.a = a;
 	}
-	public void setX(final float b) {
+	public void setB(final float b) {
 		this.b = b;
 	}
-	public void setY(final float c) {
+	public void setC(final float c) {
 		this.c = c;
 	}
-	public void setZ(final float d) {
+	public void setD(final float d) {
 		this.d = d;
 	}
 

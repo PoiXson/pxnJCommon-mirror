@@ -42,10 +42,10 @@ public class Tuple2I extends Iab {
 		this.a = tup.a;
 		this.b = tup.b;
 	}
-	public void setX(final int a) {
+	public void setA(final int a) {
 		this.a = a;
 	}
-	public void setY(final int b) {
+	public void setB(final int b) {
 		this.b = b;
 	}
 

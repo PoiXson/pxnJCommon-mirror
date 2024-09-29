@@ -42,10 +42,10 @@ public class Tuple2D extends Dab {
 		this.a = tup.a;
 		this.b = tup.b;
 	}
-	public void setX(final double a) {
+	public void setA(final double a) {
 		this.a = a;
 	}
-	public void setY(final double b) {
+	public void setB(final double b) {
 		this.b = b;
 	}
 

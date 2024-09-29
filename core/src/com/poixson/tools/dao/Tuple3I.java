@@ -51,13 +51,13 @@ public class Tuple3I extends Iabc {
 		this.b = tup.b;
 		this.c = tup.c;
 	}
-	public void setX(final int a) {
+	public void setA(final int a) {
 		this.a = a;
 	}
-	public void setY(final int b) {
+	public void setB(final int b) {
 		this.b = b;
 	}
-	public void setZ(final int c) {
+	public void setC(final int c) {
 		this.c = c;
 	}
 
