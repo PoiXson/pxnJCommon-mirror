@@ -432,6 +432,21 @@ public final class MathUtils {
 
 
 	// -------------------------------------------------------------------------------
+	// interleave
+
+
+
+	public static int ZOrderInterleave(final int value, final int minor, final int major) {
+		final int total = minor * major;
+		return
+			(Math.floorDiv(value, total) * total)   + // total offset
+			Math.floorDiv( (value % total), minor ) + // group offset
+			((value % minor) * major);                // step offset
+	}
+
+
+
+	// -------------------------------------------------------------------------------
 	// interpolation
 
 
