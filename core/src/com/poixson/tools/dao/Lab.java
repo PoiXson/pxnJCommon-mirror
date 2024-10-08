@@ -1,5 +1,7 @@
 package com.poixson.tools.dao;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.io.Serializable;
 
 
@@ -54,6 +56,18 @@ public class Lab implements Serializable, Cloneable {
 			.append(this.a).append(", ")
 			.append(this.b)
 			.toString();
+	}
+	public static Lab FromString(final String str) {
+		if (!IsEmpty(str)) {
+			final String[] parts = str.split(",");
+			if (parts.length == 2) {
+				return new Lab(
+					Long.parseLong(parts[0].trim()),
+					Long.parseLong(parts[1].trim())
+				);
+			}
+		}
+		return null;
 	}
 	@Override
 	public int hashCode() {

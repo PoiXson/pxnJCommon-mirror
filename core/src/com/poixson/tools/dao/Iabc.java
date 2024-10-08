@@ -1,5 +1,7 @@
 package com.poixson.tools.dao;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.io.Serializable;
 
 
@@ -60,6 +62,19 @@ public class Iabc implements Serializable, Cloneable {
 			.append(this.b).append(", ")
 			.append(this.c)
 			.toString();
+	}
+	public static Iabc FromString(final String str) {
+		if (!IsEmpty(str)) {
+			final String[] parts = str.split(",");
+			if (parts.length == 3) {
+				return new Iabc(
+					Integer.parseInt(parts[0].trim()),
+					Integer.parseInt(parts[1].trim()),
+					Integer.parseInt(parts[2].trim())
+				);
+			}
+		}
+		return null;
 	}
 	@Override
 	public int hashCode() {

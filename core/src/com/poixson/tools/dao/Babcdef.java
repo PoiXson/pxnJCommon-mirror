@@ -1,6 +1,10 @@
 package com.poixson.tools.dao;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.io.Serializable;
+
+import com.poixson.utils.NumberUtils;
 
 
 public class Babcdef implements Serializable, Cloneable {
@@ -77,6 +81,28 @@ public class Babcdef implements Serializable, Cloneable {
 			.append(this.e ? "true" : "false").append(", ")
 			.append(this.f ? "true" : "false")
 			.toString();
+	}
+	public static Babcdef FromString(final String str) {
+		if (!IsEmpty(str)) {
+			final String[] parts = str.split(",");
+			if (parts.length == 6) {
+				final Boolean bool0 = NumberUtils.ToBoolean(parts[0]); if (bool0 == null) return null;
+				final Boolean bool1 = NumberUtils.ToBoolean(parts[1]); if (bool1 == null) return null;
+				final Boolean bool2 = NumberUtils.ToBoolean(parts[2]); if (bool2 == null) return null;
+				final Boolean bool3 = NumberUtils.ToBoolean(parts[3]); if (bool3 == null) return null;
+				final Boolean bool4 = NumberUtils.ToBoolean(parts[4]); if (bool4 == null) return null;
+				final Boolean bool5 = NumberUtils.ToBoolean(parts[5]); if (bool5 == null) return null;
+				return new Babcdef(
+					bool0.booleanValue(),
+					bool1.booleanValue(),
+					bool2.booleanValue(),
+					bool3.booleanValue(),
+					bool4.booleanValue(),
+					bool5.booleanValue()
+				);
+			}
+		}
+		return null;
 	}
 	@Override
 	public int hashCode() {

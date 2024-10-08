@@ -1,5 +1,7 @@
 package com.poixson.tools.dao;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.io.Serializable;
 
 
@@ -54,6 +56,18 @@ public class Dab implements Serializable, Cloneable {
 			.append(this.a).append(", ")
 			.append(this.b)
 			.toString();
+	}
+	public static Dab FromString(final String str) {
+		if (!IsEmpty(str)) {
+			final String[] parts = str.split(",");
+			if (parts.length == 2) {
+				return new Dab(
+					Double.parseDouble(parts[0].trim()),
+					Double.parseDouble(parts[1].trim())
+				);
+			}
+		}
+		return null;
 	}
 	@Override
 	public int hashCode() {

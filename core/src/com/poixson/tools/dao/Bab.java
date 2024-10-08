@@ -1,6 +1,10 @@
 package com.poixson.tools.dao;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.io.Serializable;
+
+import com.poixson.utils.NumberUtils;
 
 
 public class Bab implements Serializable, Cloneable {
@@ -54,6 +58,20 @@ public class Bab implements Serializable, Cloneable {
 			.append(this.a ? "true" : "false").append(", ")
 			.append(this.b ? "true" : "false")
 			.toString();
+	}
+	public static Bab FromString(final String str) {
+		if (!IsEmpty(str)) {
+			final String[] parts = str.split(",");
+			if (parts.length == 2) {
+				final Boolean bool0 = NumberUtils.ToBoolean(parts[0]); if (bool0 == null) return null;
+				final Boolean bool1 = NumberUtils.ToBoolean(parts[1]); if (bool1 == null) return null;
+				return new Bab(
+					bool0.booleanValue(),
+					bool1.booleanValue()
+				);
+			}
+		}
+		return null;
 	}
 	@Override
 	public int hashCode() {

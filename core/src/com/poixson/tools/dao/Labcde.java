@@ -1,5 +1,7 @@
 package com.poixson.tools.dao;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.io.Serializable;
 
 
@@ -72,6 +74,21 @@ public class Labcde implements Serializable, Cloneable {
 			.append(this.d).append(", ")
 			.append(this.e)
 			.toString();
+	}
+	public static Labcde FromString(final String str) {
+		if (!IsEmpty(str)) {
+			final String[] parts = str.split(",");
+			if (parts.length == 5) {
+				return new Labcde(
+					Long.parseLong(parts[0].trim()),
+					Long.parseLong(parts[1].trim()),
+					Long.parseLong(parts[2].trim()),
+					Long.parseLong(parts[3].trim()),
+					Long.parseLong(parts[4].trim())
+				);
+			}
+		}
+		return null;
 	}
 	@Override
 	public int hashCode() {

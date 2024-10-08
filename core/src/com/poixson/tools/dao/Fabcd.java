@@ -1,5 +1,7 @@
 package com.poixson.tools.dao;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.io.Serializable;
 
 
@@ -66,6 +68,20 @@ public class Fabcd implements Serializable, Cloneable {
 			.append(this.c).append(", ")
 			.append(this.d)
 			.toString();
+	}
+	public static Fabcd FromString(final String str) {
+		if (!IsEmpty(str)) {
+			final String[] parts = str.split(",");
+			if (parts.length == 4) {
+				return new Fabcd(
+					Float.parseFloat(parts[0].trim()),
+					Float.parseFloat(parts[1].trim()),
+					Float.parseFloat(parts[2].trim()),
+					Float.parseFloat(parts[3].trim())
+				);
+			}
+		}
+		return null;
 	}
 	@Override
 	public int hashCode() {

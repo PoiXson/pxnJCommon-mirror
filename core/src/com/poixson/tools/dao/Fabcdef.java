@@ -1,5 +1,7 @@
 package com.poixson.tools.dao;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.io.Serializable;
 
 
@@ -78,6 +80,22 @@ public class Fabcdef implements Serializable, Cloneable {
 			.append(this.e).append(", ")
 			.append(this.f)
 			.toString();
+	}
+	public static Fabcdef FromString(final String str) {
+		if (!IsEmpty(str)) {
+			final String[] parts = str.split(",");
+			if (parts.length == 6) {
+				return new Fabcdef(
+					Float.parseFloat(parts[0].trim()),
+					Float.parseFloat(parts[1].trim()),
+					Float.parseFloat(parts[2].trim()),
+					Float.parseFloat(parts[3].trim()),
+					Float.parseFloat(parts[4].trim()),
+					Float.parseFloat(parts[5].trim())
+				);
+			}
+		}
+		return null;
 	}
 	@Override
 	public int hashCode() {
