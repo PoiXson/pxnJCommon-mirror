@@ -70,6 +70,12 @@ public class xTime {
 		if (xunit == null) throw new RuntimeException("Unknown time unit: "+unit.toString());
 		return xunit.convertTo( this.value.get() );
 	}
+	public long get(final long unit) {
+		return Math.floorDiv(this.value.get(), unit);
+	}
+	public long get(final String unit) {
+		return this.get( xTime.ParseToLong(unit) );
+	}
 
 
 
