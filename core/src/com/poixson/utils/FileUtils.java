@@ -361,12 +361,16 @@ public final class FileUtils {
 
 	public static String ReadInputStream(final InputStream in) throws IOException {
 		if (in == null) return null;
-			final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-			final StringBuilder result = new StringBuilder();
-			String line;
-			while ( (line=reader.readLine()) != null)
-				result.append(line).append('\n');
-			return result.toString();
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		return ReadBufferedReader(reader);
+	}
+	public static String ReadBufferedReader(final BufferedReader reader) throws IOException {
+		if (reader == null) return null;
+		final StringBuilder result = new StringBuilder();
+		String line;
+		while ( (line=reader.readLine()) != null)
+			result.append(line).append('\n');
+		return result.toString();
 	}
 
 
