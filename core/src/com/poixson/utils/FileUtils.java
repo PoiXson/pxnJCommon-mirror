@@ -359,19 +359,14 @@ public final class FileUtils {
 
 
 
-	public static String ReadInputStream(final InputStream in) {
+	public static String ReadInputStream(final InputStream in) throws IOException {
 		if (in == null) return null;
-		try {
 			final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			final StringBuilder result = new StringBuilder();
 			String line;
 			while ( (line=reader.readLine()) != null)
 				result.append(line).append('\n');
 			return result.toString();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 
