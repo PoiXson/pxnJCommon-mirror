@@ -6,6 +6,7 @@ import static com.poixson.utils.Utils.SafeClose;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -73,7 +74,8 @@ public final class xConfigLoader {
 	 * @param in InputStream to read from.
 	 * @return Map<String, Object> datamap contents of yml file.
 	 */
-	public static Map<String, Object> LoadYamlFromStream(final InputStream in) {
+	public static Map<String, Object> LoadYamlFromStream(final InputStream in)
+			throws IOException {
 		if (in == null) throw new RequiredArgumentException("in");
 		final Yaml yml = new Yaml();
 		String data = FileUtils.ReadInputStream(in);
@@ -85,7 +87,8 @@ public final class xConfigLoader {
 
 
 	// load file
-	public static <T extends xConfig> T FromFile(final String filepath, final Class<T> clss) {
+	public static <T extends xConfig> T FromFile(final String filepath, final Class<T> clss)
+			throws IOException {
 		if (IsEmpty(filepath)) throw new RequiredArgumentException("filePath");
 		if (clss == null)
 			return CastConfig(FromFile(filepath, xConfig.class));
@@ -109,7 +112,8 @@ public final class xConfigLoader {
 
 
 
-	public static <T extends xConfig> T FromFileOrEmpty(final String filepath, final Class<T> clss) {
+	public static <T extends xConfig> T FromFileOrEmpty(final String filepath, final Class<T> clss)
+			throws IOException {
 		{
 			final T config = FromFile(filepath, clss);
 			if (config != null)
@@ -124,7 +128,8 @@ public final class xConfigLoader {
 
 
 	// load jar resource
-	public static <T extends xConfig> T FromJar(final String filepath, final Class<T> clss) {
+	public static <T extends xConfig> T FromJar(final String filepath, final Class<T> clss)
+			throws IOException {
 		if (IsEmpty(filepath)) throw new RequiredArgumentException("filePath");
 		if (clss == null)
 			return CastConfig(FromJar(filepath, xConfig.class));
