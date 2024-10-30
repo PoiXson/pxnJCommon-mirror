@@ -1,6 +1,6 @@
 package com.poixson.scripting.loader;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +25,7 @@ public abstract class xScriptLoader {
 		this.sources.set(null);
 		try {
 			this.getSources();
-		} catch (FileNotFoundException ignore) {}
+		} catch (IOException ignore) {}
 	}
 
 
@@ -34,20 +34,19 @@ public abstract class xScriptLoader {
 
 
 
-	public abstract xScriptSourceDAO[] getSources()
-			throws FileNotFoundException;
+	public abstract xScriptSourceDAO[] getSources() throws IOException;
 
 	protected abstract void loadSources(final String filename,
 			final LinkedList<xScriptSourceDAO> list,
 			final Map<String, String> flags,
 			final Set<String> imports, final Set<String> exports)
-			throws FileNotFoundException;
+			throws IOException;
 
 	protected void parseHeader(final String code,
 			final LinkedList<xScriptSourceDAO> list,
 			final Map<String, String> flags,
 			final Set<String> imports, final Set<String> exports)
-			throws FileNotFoundException {
+			throws IOException {
 		String lines = code;
 		String line;
 		int pos;

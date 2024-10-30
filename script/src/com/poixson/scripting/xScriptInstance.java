@@ -4,6 +4,7 @@ import static com.poixson.utils.Utils.IsEmpty;
 import static com.poixson.utils.Utils.SafeClose;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -93,7 +94,7 @@ public class xScriptInstance extends xScript {
 
 
 
-	public xScriptSourceDAO[] getSources() throws FileNotFoundException {
+	public xScriptSourceDAO[] getSources() throws IOException {
 		if (this.stopping.get()) return null;
 		try {
 			return this.loader.getSources();

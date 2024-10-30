@@ -3,6 +3,7 @@ package com.poixson.scripting.loader;
 import static com.poixson.utils.FileUtils.MergePaths;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -54,7 +55,7 @@ public class xScriptLoader_File extends xScriptLoader {
 
 	@Override
 	public xScriptSourceDAO[] getSources()
-			throws FileNotFoundException {
+			throws IOException {
 		// existing sources
 		{
 			final xScriptSourceDAO[] sources = this.sources.get();
@@ -90,7 +91,7 @@ public class xScriptLoader_File extends xScriptLoader {
 			final LinkedList<xScriptSourceDAO> list,
 			final Map<String, String> flags,
 			final Set<String> imports, final Set<String> exports)
-			throws FileNotFoundException {
+			throws IOException {
 		// find local or resource file
 		final xScriptSourceDAO found =
 			xScriptSourceDAO.Find(

@@ -9,7 +9,6 @@ import static com.poixson.utils.Utils.SafeClose;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -32,7 +31,7 @@ public class xScriptSourceDAO {
 	public static xScriptSourceDAO Find(final Class<?> clss,
 			final String path_local, final String path_resource,
 			final String filename)
-			throws FileNotFoundException {
+			throws IOException {
 		InputStream in = null;
 		boolean isLocal = false;
 		try {
@@ -51,7 +50,7 @@ public class xScriptSourceDAO {
 				if (in == null)
 					in = FileUtils.OpenResource(clss, resFile);
 			}
-			if (in == null) throw new FileNotFoundException(filename);
+			if (in == null) throw new IOException(filename);
 			final String code = ReadInputStream(in);
 			return
 				new xScriptSourceDAO(
