@@ -1,11 +1,27 @@
 package com.poixson.utils;
 
-import static com.poixson.utils.MathUtils.Min;
-import static com.poixson.utils.MathUtils.Max;
+import static com.poixson.utils.MathUtils.CastBoolean;
+import static com.poixson.utils.MathUtils.CastByte;
+import static com.poixson.utils.MathUtils.CastDouble;
+import static com.poixson.utils.MathUtils.CastFloat;
+import static com.poixson.utils.MathUtils.CastInteger;
+import static com.poixson.utils.MathUtils.CastLong;
+import static com.poixson.utils.MathUtils.CastShort;
 import static com.poixson.utils.MathUtils.Distance2D;
 import static com.poixson.utils.MathUtils.Distance3D;
 import static com.poixson.utils.MathUtils.DistanceFast2D;
 import static com.poixson.utils.MathUtils.DistanceFast3D;
+import static com.poixson.utils.MathUtils.EqualsExact;
+import static com.poixson.utils.MathUtils.Max;
+import static com.poixson.utils.MathUtils.Min;
+import static com.poixson.utils.MathUtils.SafeLongToInt;
+import static com.poixson.utils.MathUtils.ToBoolean;
+import static com.poixson.utils.MathUtils.ToByte;
+import static com.poixson.utils.MathUtils.ToDouble;
+import static com.poixson.utils.MathUtils.ToFloat;
+import static com.poixson.utils.MathUtils.ToInteger;
+import static com.poixson.utils.MathUtils.ToLong;
+import static com.poixson.utils.MathUtils.ToShort;
 
 //import static com.poixson.utils.MathUtils.CubicInterpolate;
 //import static com.poixson.utils.MathUtils.CubicInterpolateCircularValues;
@@ -21,6 +37,163 @@ import org.junit.Test;
 public class Test_MathUtils {
 
 //	private static final double DELTA = NumberUtils.DELTA;
+
+
+
+	// -------------------------------------------------------------------------------
+	// equals
+
+
+
+	@Test
+	public void testEqualsExact() {
+		// int
+		Assert.assertTrue(  EqualsExact( Integer.valueOf(123), Integer.valueOf(123) ) );
+		Assert.assertFalse( EqualsExact( Integer.valueOf(123), Integer.valueOf(42)  ) );
+		Assert.assertFalse( EqualsExact( Integer.valueOf(123), (Integer) null       ) );
+		Assert.assertFalse( EqualsExact( (Integer) null,       Integer.valueOf(123) ) );
+		Assert.assertTrue(  EqualsExact( (Integer) null,       (Integer) null       ) );
+		// boolean
+		Assert.assertTrue(  EqualsExact( Boolean.valueOf(true),  Boolean.valueOf(true)  ) );
+		Assert.assertTrue(  EqualsExact( Boolean.valueOf(false), Boolean.valueOf(false) ) );
+		Assert.assertFalse( EqualsExact( Boolean.valueOf(true),  Boolean.valueOf(false) ) );
+		Assert.assertFalse( EqualsExact( Boolean.valueOf(true),  (Boolean) null         ) );
+		Assert.assertFalse( EqualsExact( Boolean.valueOf(false), (Boolean) null         ) );
+		Assert.assertFalse( EqualsExact( (Boolean) null,         Boolean.valueOf(true)  ) );
+		Assert.assertFalse( EqualsExact( (Boolean) null,         Boolean.valueOf(false) ) );
+		Assert.assertTrue(  EqualsExact( (Boolean) null,         (Boolean) null         ) );
+		// byte
+		Assert.assertTrue(  EqualsExact( Byte.valueOf((byte)123), Byte.valueOf((byte)123) ) );
+		Assert.assertFalse( EqualsExact( Byte.valueOf((byte)123), Byte.valueOf((byte)42)  ) );
+		Assert.assertFalse( EqualsExact( Byte.valueOf((byte)123), null                    ) );
+		Assert.assertFalse( EqualsExact( null,                    Byte.valueOf((byte)123) ) );
+		Assert.assertTrue(  EqualsExact( (Byte) null,             (Byte) null             ) );
+		// short
+		Assert.assertTrue(  EqualsExact( Short.valueOf((short)123), Short.valueOf((short)123) ) );
+		Assert.assertFalse( EqualsExact( Short.valueOf((short)123), Short.valueOf((short)42)  ) );
+		Assert.assertFalse( EqualsExact( Short.valueOf((short)123), (Short) null              ) );
+		Assert.assertFalse( EqualsExact( (Short) null,              Short.valueOf((short)123) ) );
+		Assert.assertTrue(  EqualsExact( (Short) null,              (Short) null              ) );
+		// long
+		Assert.assertTrue(  EqualsExact( Long.valueOf((short)123), Long.valueOf((short)123) ) );
+		Assert.assertFalse( EqualsExact( Long.valueOf((short)123), Long.valueOf((short)42)  ) );
+		Assert.assertFalse( EqualsExact( Long.valueOf((short)123), (Long) null              ) );
+		Assert.assertFalse( EqualsExact( (Long) null,              Long.valueOf((short)123) ) );
+		Assert.assertTrue(  EqualsExact( (Long) null,              (Long) null              ) );
+		// double
+		Assert.assertTrue(  EqualsExact( Double.valueOf(12.3d), Double.valueOf(12.3d) ) );
+		Assert.assertFalse( EqualsExact( Double.valueOf(12.3d), Double.valueOf(42.1d) ) );
+		Assert.assertFalse( EqualsExact( Double.valueOf(12.3d), (Double) null         ) );
+		Assert.assertFalse( EqualsExact( (Double) null,         Double.valueOf(12.3d) ) );
+		Assert.assertTrue(  EqualsExact( (Double) null,         (Double) null         ) );
+		// float
+		Assert.assertTrue(  EqualsExact( Float.valueOf(12.3f), Float.valueOf(12.3f) ) );
+		Assert.assertFalse( EqualsExact( Float.valueOf(12.3f), Float.valueOf(42.1f) ) );
+		Assert.assertFalse( EqualsExact( Float.valueOf(12.3f), (Float) null         ) );
+		Assert.assertFalse( EqualsExact( (Float) null,         Float.valueOf(12.3f) ) );
+		Assert.assertTrue(  EqualsExact( (Float) null,         (Float) null         ) );
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// convert
+
+
+
+	@Test
+	public void testSafeLongToInt() {
+		Assert.assertEquals( 11, SafeLongToInt(11L) );
+		Assert.assertEquals( Integer.MAX_VALUE, SafeLongToInt( ((long)Integer.MAX_VALUE) + 9L ) );
+		Assert.assertEquals( Integer.MIN_VALUE, SafeLongToInt( ((long)Integer.MIN_VALUE) - 9L ) );
+	}
+
+
+
+	@Test
+	public void testToNumber() {
+		// number
+		Assert.assertEquals( Integer.valueOf(123),      ToInteger("123"  ) );
+		Assert.assertEquals( Byte.valueOf((byte)123),   ToByte(   "123"  ) );
+		Assert.assertEquals( Short.valueOf((short)123), ToShort(  "123"  ) );
+		Assert.assertEquals( Long.valueOf(123),         ToLong(   "123"  ) );
+		Assert.assertEquals( Double.valueOf(123),       ToDouble( "123"  ) );
+		Assert.assertEquals( Float.valueOf(123),        ToFloat(  "123"  ) );
+		Assert.assertEquals( Boolean.valueOf(true),     ToBoolean("true" ) );
+		Assert.assertEquals( Boolean.valueOf(false),    ToBoolean("false") );
+	}
+	@Test
+	public void testToNumberOrDefault() {
+		// int
+		Assert.assertTrue( 123 == ToInteger("123", 42) );
+		Assert.assertTrue( 42  == ToInteger(null,  42) );
+		Assert.assertTrue( 42  == ToInteger("3xy", 42) );
+		Assert.assertTrue( 42  == ToInteger("xy3", 42) );
+		// byte
+		Assert.assertTrue( ((byte)123) == ToByte("123", (byte)42) );
+		Assert.assertTrue( ((byte)42)  == ToByte(null,  (byte)42) );
+		Assert.assertTrue( ((byte)42)  == ToByte("3xy", (byte)42) );
+		Assert.assertTrue( ((byte)42)  == ToByte("xy3", (byte)42) );
+		// short
+		Assert.assertTrue( ((short)123) == ToShort("123", (short)42) );
+		Assert.assertTrue( ((short)42)  == ToShort(null,  (short)42) );
+		Assert.assertTrue( ((short)42)  == ToShort("3xy", (short)42) );
+		Assert.assertTrue( ((short)42)  == ToShort("xy3", (short)42) );
+		// long
+		Assert.assertTrue( 123L == ToLong("123", 42L) );
+		Assert.assertTrue( 42L  == ToLong(null,  42L) );
+		Assert.assertTrue( 42L  == ToLong("3xy", 42L) );
+		Assert.assertTrue( 42L  == ToLong("xy3", 42L) );
+		// double
+		Assert.assertTrue( 12.3d == ToDouble("12.3", 42.1d) );
+		Assert.assertTrue( 42.1d == ToDouble(null,   42.1d) );
+		Assert.assertTrue( 42.1d == ToDouble("3xy",  42.1d) );
+		Assert.assertTrue( 42.1d == ToDouble("xy3",  42.1d) );
+		// float
+		Assert.assertTrue( 12.3f == ToFloat("12.3",  42.1f) );
+		Assert.assertTrue( 42.1f == ToFloat(null,    42.1f) );
+		Assert.assertTrue( 42.1f == ToFloat("1.2xy", 42.1f) );
+		Assert.assertTrue( 42.1f == ToFloat("xy1.2", 42.1f) );
+		// boolean
+		Assert.assertEquals( Boolean.valueOf(true),  ToBoolean("true")     );
+		Assert.assertEquals( Boolean.valueOf(true),  ToBoolean("en")       );
+		Assert.assertEquals( Boolean.valueOf(true),  ToBoolean("enable")   );
+		Assert.assertEquals( Boolean.valueOf(true),  ToBoolean("enabled")  );
+		Assert.assertEquals( Boolean.valueOf(true),  ToBoolean("yes")      );
+		Assert.assertEquals( Boolean.valueOf(true),  ToBoolean("on")       );
+		Assert.assertEquals( Boolean.valueOf(false), ToBoolean("false")    );
+		Assert.assertEquals( Boolean.valueOf(false), ToBoolean("dis")      );
+		Assert.assertEquals( Boolean.valueOf(false), ToBoolean("disable")  );
+		Assert.assertEquals( Boolean.valueOf(false), ToBoolean("disabled") );
+		Assert.assertEquals( Boolean.valueOf(false), ToBoolean("no")       );
+		Assert.assertEquals( Boolean.valueOf(false), ToBoolean("off")      );
+		Assert.assertEquals( Boolean.valueOf(true),  ToBoolean("1")        );
+		Assert.assertEquals( Boolean.valueOf(true),  ToBoolean("t")        );
+		Assert.assertEquals( Boolean.valueOf(true),  ToBoolean("i")        );
+		Assert.assertEquals( Boolean.valueOf(true),  ToBoolean("e")        );
+		Assert.assertEquals( Boolean.valueOf(true),  ToBoolean("y")        );
+		Assert.assertEquals( Boolean.valueOf(false), ToBoolean("0")        );
+		Assert.assertEquals( Boolean.valueOf(false), ToBoolean("f")        );
+		Assert.assertEquals( Boolean.valueOf(false), ToBoolean("o")        );
+		Assert.assertEquals( Boolean.valueOf(false), ToBoolean("d")        );
+		Assert.assertEquals( Boolean.valueOf(false), ToBoolean("n")        );
+	}
+	@Test
+	public void testObjectToNumber() {
+		Assert.assertEquals( Integer.valueOf(123),       CastInteger( (Object) Integer.valueOf(123)       ) );
+		Assert.assertEquals( Byte.valueOf(  (byte)123),  CastByte(    (Object) Byte.valueOf(  (byte)123)  ) );
+		Assert.assertEquals( Short.valueOf( (short)123), CastShort(   (Object) Short.valueOf( (short)123) ) );
+		Assert.assertEquals( Long.valueOf(  123L),       CastLong(    (Object) Long.valueOf(123L)         ) );
+		Assert.assertEquals( Double.valueOf(12.3d),      CastDouble(  (Object) Double.valueOf(12.3d)      ) );
+		Assert.assertEquals( Float.valueOf( 12.3f),      CastFloat(   (Object) Float.valueOf(12.3f)       ) );
+		Assert.assertEquals( Boolean.TRUE,               CastBoolean( (Object) Boolean.valueOf(true)      ) );
+		Assert.assertEquals( Boolean.FALSE,              CastBoolean( (Object) Boolean.valueOf(false)     ) );
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// min/max
 
 
 
