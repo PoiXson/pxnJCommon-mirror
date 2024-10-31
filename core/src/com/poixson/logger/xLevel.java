@@ -1,8 +1,8 @@
 package com.poixson.logger;
 
+import static com.poixson.utils.MathUtils.IsNumeric;
+import static com.poixson.utils.MathUtils.ToInteger;
 import static com.poixson.utils.Utils.IsEmpty;
-
-import com.poixson.utils.NumberUtils;
 
 
 public enum xLevel {
@@ -38,8 +38,8 @@ public enum xLevel {
 
 	public static xLevel GetLevel(final String name) {
 		if (IsEmpty(name)) return null;
-		if (NumberUtils.IsNumeric(name)) {
-			return GetLevel(NumberUtils.ToInteger(name));
+		if (IsNumeric(name)) {
+			return GetLevel(ToInteger(name));
 		}
 		for (final xLevel level : xLevel.values()) {
 			if (name.equalsIgnoreCase(level.name))

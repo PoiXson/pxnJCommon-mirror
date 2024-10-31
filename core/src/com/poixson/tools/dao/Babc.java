@@ -1,10 +1,9 @@
 package com.poixson.tools.dao;
 
+import static com.poixson.utils.MathUtils.ToBoolean;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.io.Serializable;
-
-import com.poixson.utils.NumberUtils;
 
 
 public class Babc implements Serializable, Cloneable {
@@ -68,9 +67,9 @@ public class Babc implements Serializable, Cloneable {
 		if (!IsEmpty(str)) {
 			final String[] parts = str.split(",");
 			if (parts.length == 3) {
-				final Boolean bool0 = NumberUtils.ToBoolean(parts[0]); if (bool0 == null) return null;
-				final Boolean bool1 = NumberUtils.ToBoolean(parts[1]); if (bool1 == null) return null;
-				final Boolean bool2 = NumberUtils.ToBoolean(parts[2]); if (bool2 == null) return null;
+				final Boolean bool0 = ToBoolean(parts[0]); if (bool0 == null) return null;
+				final Boolean bool1 = ToBoolean(parts[1]); if (bool1 == null) return null;
+				final Boolean bool2 = ToBoolean(parts[2]); if (bool2 == null) return null;
 				return new Babc(
 					bool0.booleanValue(),
 					bool1.booleanValue(),

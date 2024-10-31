@@ -1,5 +1,6 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.MathUtils.ToInteger;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.lang.management.ManagementFactory;
@@ -52,7 +53,7 @@ public final class ProcUtils {
 					final String[] parts = procName.split("@", 2);
 					if (parts != null) {
 						if (parts.length == 2) {
-							value = NumberUtils.ToInteger(parts[0], -1);
+							value = ToInteger(parts[0], -1);
 						}
 					}
 				}

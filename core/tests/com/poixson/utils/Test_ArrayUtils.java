@@ -1,6 +1,6 @@
 package com.poixson.utils;
 
-import static com.poixson.utils.NumberUtils.DELTA;
+import static com.poixson.utils.MathUtils.DELTA;
 
 import org.junit.Assert;
 import org.junit.Test;

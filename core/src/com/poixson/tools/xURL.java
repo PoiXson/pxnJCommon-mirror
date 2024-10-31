@@ -1,8 +1,8 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.MathUtils.CastInteger;
 import static com.poixson.utils.Utils.IsEmpty;
 
-import com.poixson.utils.NumberUtils;
 import com.poixson.utils.StringUtils;
 
 
@@ -138,7 +138,7 @@ public class xURL {
 				if (pos != -1) {
 					this.host = str.substring(0, pos);
 					final Integer i =
-						NumberUtils.CastInteger(
+						CastInteger(
 							str.substring(pos + 1)
 						);
 					this.port = (
