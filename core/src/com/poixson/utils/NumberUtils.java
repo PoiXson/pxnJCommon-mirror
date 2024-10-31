@@ -114,16 +114,13 @@ public final class NumberUtils {
 
 	// double
 	public static double Round(final double value, final double product) {
-		final double val = Math.round( value / product );
-		return val * product;
+		return Math.round( value / product ) * product;
 	}
 	public static double Floor(final double value, final double product) {
-		final double val = Math.floor( value / product );
-		return val * product;
+		return Math.floor( value / product ) * product;
 	}
 	public static double Ceil(final double value, final double product) {
-		final double val = Math.ceil( value / product );
-		return val * product;
+		return Math.ceil( value / product ) * product;
 	}
 
 
@@ -160,14 +157,7 @@ public final class NumberUtils {
 
 
 	public static int SafeLongToInt(final long value) {
-		// < int min
-		if ( value < ((long)Integer.MIN_VALUE) )
-			return Integer.MIN_VALUE;
-		// > int max
-		if ( value > ((long)Integer.MAX_VALUE) )
-			return Integer.MAX_VALUE;
-		// within int range
-		return (int) value;
+		return (int) MathUtils.MinMax(value, (long)Integer.MIN_VALUE, (long)Integer.MAX_VALUE);
 	}
 
 
