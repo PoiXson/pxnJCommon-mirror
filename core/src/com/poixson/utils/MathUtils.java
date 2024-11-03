@@ -783,21 +783,55 @@ public final class MathUtils {
 			final int lowA, final int highA,
 			final int lowB, final int highB,
 			final int value) {
-		final double lA = (double) lowA;
-		final double hA = (double) highA;
-		final double lB = (double) lowB;
-		final double hB = (double) highB;
-		double result = (hB - lB) / (hA - lA);
-		result *= (value - lA);
-		result += lB;
-		return (int) result;
+		final double LA = (double) lowA;
+		final double HA = (double) highA;
+		final double LB = (double) lowB;
+		final double HB = (double) highB;
+		double result = (HB - LB) / (HA - LA);
+		result *= (value - LA);
+		result += LB;
+		return (int) Math.round(result);
+	}
+	public static long Remap(
+			final long lowA, final long highA,
+			final long lowB, final long highB,
+			final long value) {
+		final double LA = (double) lowA;
+		final double HA = (double) highA;
+		final double LB = (double) lowB;
+		final double HB = (double) highB;
+		double result = (HB - LB) / (HA - LA);
+		result *= (value - LA);
+		result += LB;
+		return (long) Math.round(result);
+	}
+	public static double Remap(
+			final double lowA, final double highA,
+			final double lowB, final double highB,
+			final double value) {
+		final double LA = (double) lowA;
+		final double HA = (double) highA;
+		final double LB = (double) lowB;
+		final double HB = (double) highB;
+		double result = (HB - LB) / (HA - LA);
+		result *= (value - LA);
+		result += LB;
+		return result;
 	}
 
 
 
 	public static int Remap(final int low, final int high, final double percent) {
-		double result = ((double)(high - low)) * percent;
-		return ((int)result) + low;
+		final double result = ((double)(high - low)) * percent;
+		return (int) Math.round(result) + low;
+	}
+	public static long Remap(final long low, final long high, final double percent) {
+		final double result = ((double)(high - low)) * percent;
+		return (long) Math.round(result) + low;
+	}
+	public static double Remap(final double low, final double high, final double percent) {
+		final double result = ((double)(high - low)) * percent;
+		return Math.round(result) + low;
 	}
 
 
