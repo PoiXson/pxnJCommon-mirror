@@ -49,8 +49,15 @@ public class CacheMap<K, V> implements Map<K, V> {
 
 
 
+	public V create(final K key) {
+		return null;
+	}
+
 	public V load(final K key) {
 		return null;
+	}
+	public void lazy_load(final K key, final boolean create) {
+		this.get(key, false, create);
 	}
 
 	public void save(final K key) {
@@ -208,11 +215,46 @@ public class CacheMap<K, V> implements Map<K, V> {
 
 	@Override
 	public V get(final Object key) {
-		final V value = this.map.get(key);
-		if (value == null)
+		return this.get(key, false, true);
+	}
+	public V get(final Object key,
+			final boolean lazy, final boolean create) {
+		final K k = this.castKey(key);
+		// cached
+		{
+			final V value = this.map.get(key);
+			if (value != null) {
+				this.mark_accessed(k);
+				return value;
+			}
+		}
+		// lazy load
+		if (lazy) {
+			this.lazy_load(k, create);
 			return null;
-		this.mark_accessed(this.castKey(key));
-		return value;
+		}
+		// load now
+		{
+			final V value = this.load(k);
+			if (value != null) {
+				this.mark_accessed(k);
+				return value;
+			}
+		}
+		// create new
+		if (create) {
+			final V value = this.create(k);
+			if (value != null) {
+				final V existing = this.map.putIfAbsent(k, value);
+				if (existing == null) {
+					this.mark_changed(k);
+					return value;
+				} else {
+					return existing;
+				}
+			}
+		}
+		return null;
 	}
 	@Override
 	public V put(final K key, final V value) {
