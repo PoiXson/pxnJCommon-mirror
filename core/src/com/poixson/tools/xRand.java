@@ -39,12 +39,16 @@ public class xRand {
 
 	// int
 	public int nextInt(final int min, final int max) {
+		if (min > max) throw new IllegalArgumentException("min greater than max");
+		if (min == max) return min;
 		final int value = this.rnd.nextInt(min, max);
 		this.seed += value;
 		this.rnd.setSeed(this.seed);
 		return value;
 	}
 	public int nextInt(final int min, final int max, final int last) {
+		if (min > max) throw new IllegalArgumentException("min greater than max");
+		if (min == max) return min;
 		for (int i=0; i<100; i++) {
 			final int value = this.nextInt(min, max);
 			if (value != last)
@@ -57,12 +61,16 @@ public class xRand {
 
 	// long
 	public long nextLong(final long min, final long max) {
+		if (min > max) throw new IllegalArgumentException("min greater than max");
+		if (min == max) return min;
 		final long value = this.rnd.nextLong(min, max);
 		this.seed += value;
 		this.rnd.setSeed(this.seed);
 		return value;
 	}
 	public long nextLong(final long min, final long max, final long last) {
+		if (min > max) throw new IllegalArgumentException("min greater than max");
+		if (min == max) return min;
 		for (int i=0; i<100; i++) {
 			final long value = this.rnd.nextLong(min, max);
 			if (value != last) {
@@ -78,12 +86,16 @@ public class xRand {
 
 	// double
 	public double nextDbl(final double min, final double max) {
+		if (min > max) throw new IllegalArgumentException("min greater than max");
+		if (min == max) return min;
 		final double value = this.rnd.nextDouble(min, max);
 		this.seed += (long) Math.ceil(value * 1000.0);
 		this.rnd.setSeed(this.seed);
 		return value;
 	}
 	public double nextDlb(final double min, final double max, final double last) {
+		if (min > max) throw new IllegalArgumentException("min greater than max");
+		if (min == max) return min;
 		for (int i=0; i<100; i++) {
 			final double value = this.nextDbl(min, max);
 			if (value != last)
