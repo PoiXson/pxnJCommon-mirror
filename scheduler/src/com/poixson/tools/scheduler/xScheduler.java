@@ -17,7 +17,7 @@ import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.types.xThreadPool_Main;
 import com.poixson.tools.xTime;
 import com.poixson.tools.abstractions.xStartable;
-import com.poixson.utils.NumberUtils;
+import com.poixson.utils.MathUtils;
 import com.poixson.utils.ThreadUtils;
 
 
@@ -121,7 +121,7 @@ public class xScheduler implements xStartable, Runnable {
 			// log sleep time
 			final double sleepSec = ((double)sleep) / 1000.0;
 			if (DEBUG_EXTRA)
-				this.log().finest("Sleeping.. %s sec", NumberUtils.FormatDecimal("0.000", sleepSec));
+				this.log().finest("Sleeping.. %s sec", MathUtils.FormatDecimal("0.000", sleepSec));
 			// sleep until next check
 			this.sleeping.set(true);
 			ThreadUtils.Sleep(sleep);

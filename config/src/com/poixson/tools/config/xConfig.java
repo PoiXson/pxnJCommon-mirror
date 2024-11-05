@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.poixson.tools.xTime;
 import com.poixson.tools.xTimeU;
-import com.poixson.utils.NumberUtils;
+import com.poixson.utils.MathUtils;
 import com.poixson.utils.ObjectUtils;
 
 
@@ -78,7 +78,7 @@ public class xConfig {
 
 	// boolean
 	public Boolean getBoolean(final String key) {
-		return NumberUtils.CastBoolean( this.read(key) );
+		return MathUtils.CastBoolean( this.read(key) );
 	}
 	public boolean getBool(final String key, final boolean defVal) {
 		try {
@@ -93,7 +93,7 @@ public class xConfig {
 
 	// integer
 	public Integer getInteger(final String key) {
-		return NumberUtils.CastInteger( this.read(key) );
+		return MathUtils.CastInteger( this.read(key) );
 	}
 	public int getInt(final String key, final int defVal) {
 		try {
@@ -108,7 +108,7 @@ public class xConfig {
 
 	// long
 	public Long getLong(final String key) {
-		return NumberUtils.CastLong( this.read(key) );
+		return MathUtils.CastLong( this.read(key) );
 	}
 	public long getLng(final String key, final long defVal) {
 		try {
@@ -123,7 +123,7 @@ public class xConfig {
 
 	// double
 	public Double getDouble(final String key) {
-		return NumberUtils.CastDouble( this.read(key) );
+		return MathUtils.CastDouble( this.read(key) );
 	}
 	public double getDbl(final String key, final double defVal) {
 		try {
@@ -138,7 +138,7 @@ public class xConfig {
 
 	// float
 	public Float getFloat(final String key) {
-		return NumberUtils.CastFloat( this.read(key) );
+		return MathUtils.CastFloat( this.read(key) );
 	}
 	public float getFlt(final String key, final float defVal) {
 		try {
