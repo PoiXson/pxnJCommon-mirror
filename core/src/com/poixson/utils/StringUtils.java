@@ -755,6 +755,41 @@ public final class StringUtils {
 		return buf.toString();
 	}
 
+	public static String MergeStrings(final String delim, final char...addThis) {
+		if (IsEmpty(addThis)) return "";
+		final String dlm = (IsEmpty(delim) ? null : delim);
+		final StringBuilder buf = new StringBuilder();
+		// no delim
+		if (dlm == null) {
+			for (final char part : addThis)
+				buf.append(part);
+			return buf.toString();
+		}
+		// merge with delim
+		boolean first = true;
+		for (final char part : addThis) {
+			if (IsEmpty(part)) continue;
+			if (first) first = false;
+			else       buf.append(dlm);
+			buf.append(part);
+		}
+		return buf.toString();
+	}
+	public static String MergeStrings(final char delim, final char...addThis) {
+		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
+		final StringBuilder buf = new StringBuilder();
+		boolean first = true;
+		for (final char line : addThis) {
+			if (IsEmpty(line)) continue;
+			if (!first)
+				buf.append(delim);
+			buf.append(line);
+			if (first && buf.length() > 0)
+				first = false;
+		}
+		return buf.toString();
+	}
+
 
 
 	// add objects to string with delimiter
