@@ -160,6 +160,10 @@ public final class MathUtils {
 		if (obj instanceof Byte   ) return Integer.valueOf( (int)Math.round( ((Byte  )obj).byteValue()   ) );
 		throw new IllegalArgumentException("Invalid integer value: "+obj.toString());
 	}
+	public static int CastInt(final Object obj, final int def) {
+		final Integer result = CastInteger(obj);
+		return (result==null ? def : result.intValue());
+	}
 
 
 
@@ -187,6 +191,10 @@ public final class MathUtils {
 		if (obj instanceof Float  ) return Byte.valueOf( (byte)Math.round( ((Float  )obj).floatValue()  ) );
 		if (obj instanceof Short  ) return Byte.valueOf( (byte)Math.round( ((Short  )obj).shortValue()  ) );
 		throw new IllegalArgumentException("Invalid byte value: "+obj.toString());
+	}
+	public static byte CastByt(final Object obj, final byte def) {
+		final Byte result = CastByte(obj);
+		return (result==null ? def : result.byteValue());
 	}
 
 
@@ -216,6 +224,10 @@ public final class MathUtils {
 		if (obj instanceof Byte   ) return Short.valueOf( (short)Math.round( ((Byte   )obj).byteValue()   ) );
 		throw new IllegalArgumentException("Invalid short value: "+obj.toString());
 	}
+	public static short CastShrt(final Object obj, final short def) {
+		final Short result = CastShort(obj);
+		return (result==null ? def : result.shortValue());
+	}
 
 
 
@@ -243,6 +255,10 @@ public final class MathUtils {
 		if (obj instanceof Short  ) return Long.valueOf( (long)Math.round( ((Short  )obj).shortValue()  ) );
 		if (obj instanceof Byte   ) return Long.valueOf( (long)Math.round( ((Byte   )obj).byteValue()   ) );
 		throw new IllegalArgumentException("Invalid long value: "+obj.toString());
+	}
+	public static long CastLng(final Object obj, final long def) {
+		final Long result = CastLong(obj);
+		return (result==null ? def : result.longValue());
 	}
 
 
@@ -272,6 +288,10 @@ public final class MathUtils {
 		if (obj instanceof Byte   ) return Double.valueOf( (double)Math.round( ((Byte   )obj).byteValue()   ) );
 		throw new IllegalArgumentException("Invalid double value: "+obj.toString());
 	}
+	public static double CastDbl(final Object obj, final double def) {
+		final Double result = CastDouble(obj);
+		return (result==null ? def : result.doubleValue());
+	}
 
 
 
@@ -299,6 +319,10 @@ public final class MathUtils {
 		if (obj instanceof Short  ) return Float.valueOf( (float)Math.round( ((Short  )obj).shortValue()  ) );
 		if (obj instanceof Byte   ) return Float.valueOf( (float)Math.round( ((Byte   )obj).byteValue()   ) );
 		throw new IllegalArgumentException("Invalid float value: "+obj.toString());
+	}
+	public static float CastFlt(final Object obj, final float def) {
+		final Float result = CastFloat(obj);
+		return (result==null ? def : result.floatValue());
 	}
 
 
@@ -360,6 +384,10 @@ public final class MathUtils {
 			}
 		}
 		throw new IllegalArgumentException("Invalid boolean value: "+obj.toString());
+	}
+	public static boolean CastBool(final Object obj, final boolean def) {
+		final Boolean result = CastBoolean(obj);
+		return (result==null ? def : result.booleanValue());
 	}
 
 
