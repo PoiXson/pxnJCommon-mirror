@@ -135,7 +135,7 @@ public final class MathUtils {
 
 
 
-	// parse number
+	// parse integer
 	public static Integer ToInteger(final String value) {
 		if (IsEmpty(value)) return null;
 		try {
@@ -144,10 +144,11 @@ public final class MathUtils {
 		return null;
 	}
 	public static int ToInteger(final String value, final int def) {
-		if (value == null) return def;
-		try {
-			return Integer.parseInt(value);
-		} catch (NumberFormatException ignore) {}
+		if (value != null) {
+			try {
+				return Integer.parseInt(value);
+			} catch (NumberFormatException ignore) {}
+		}
 		return def;
 	}
 	public static Integer CastInteger(final Object obj) {
@@ -176,10 +177,11 @@ public final class MathUtils {
 		return null;
 	}
 	public static byte ToByte(final String value, final byte def) {
-		if (value == null) return def;
-		try {
-			return Byte.parseByte(value);
-		} catch (NumberFormatException ignore) {}
+		if (value != null) {
+			try {
+				return Byte.parseByte(value);
+			} catch (NumberFormatException ignore) {}
+		}
 		return def;
 	}
 	public static Byte CastByte(final Object obj) {
@@ -208,10 +210,11 @@ public final class MathUtils {
 		return null;
 	}
 	public static short ToShort(final String value, final short def) {
-		if (value == null) return def;
-		try {
-			return Short.parseShort(value);
-		} catch (NumberFormatException ignore) {}
+		if (value != null) {
+			try {
+				return Short.parseShort(value);
+			} catch (NumberFormatException ignore) {}
+		}
 		return def;
 	}
 	public static Short CastShort(final Object obj) {
@@ -240,10 +243,11 @@ public final class MathUtils {
 		return null;
 	}
 	public static long ToLong(final String value, final long def) {
-		if (value == null) return def;
-		try {
-			return Long.parseLong(value);
-		} catch (NumberFormatException ignore) {}
+		if (value != null) {
+			try {
+				return Long.parseLong(value);
+			} catch (NumberFormatException ignore) {}
+		}
 		return def;
 	}
 	public static Long CastLong(final Object obj) {
@@ -272,10 +276,11 @@ public final class MathUtils {
 		return null;
 	}
 	public static double ToDouble(final String value, final double def) {
-		if (value == null) return def;
-		try {
-			return Double.parseDouble(value);
-		} catch (NumberFormatException ignore) {}
+		if (value != null) {
+			try {
+				return Double.parseDouble(value);
+			} catch (NumberFormatException ignore) {}
+		}
 		return def;
 	}
 	public static Double CastDouble(final Object obj) {
@@ -304,10 +309,11 @@ public final class MathUtils {
 		return null;
 	}
 	public static float ToFloat(final String value, final float def) {
-		if (value == null) return def;
-		try {
-			return Float.parseFloat(value);
-		} catch (NumberFormatException ignore) {}
+		if (value != null) {
+			try {
+				return Float.parseFloat(value);
+			} catch (NumberFormatException ignore) {}
+		}
 		return def;
 	}
 	public static Float CastFloat(final Object obj) {
