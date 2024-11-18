@@ -36,8 +36,8 @@ public final class FileUtils {
 
 
 
-	public static String SearchLocalFile(final String fileNames[], final int parents) {
-		if (IsEmpty(fileNames)) throw new RequiredArgumentException("fileNames");
+	public static String SearchLocalFile(final String filenames[], final int parents) {
+		if (IsEmpty(filenames)) throw new RequiredArgumentException("filenames");
 		final String[] workingPaths = (
 			FileUtils.inRunDir()
 			? new String[] { FileUtils.cwd() }
@@ -48,7 +48,7 @@ public final class FileUtils {
 			//LOOP_PATH:
 			for (final String workPath : workingPaths) {
 				//LOOP_FILE:
-				for (final String fileName : fileNames) {
+				for (final String fileName : filenames) {
 					final String path =
 						FileUtils.MergePaths(
 							workPath,
@@ -68,38 +68,36 @@ public final class FileUtils {
 
 
 	public static InputStream OpenLocalOrResource(final Class<?> clss,
-			final String fileLocal, final String fileRes) {
+			final String file_local, final String file_res) {
 		// local file
-		{
-			final File file = new File(fileLocal);
-			if (file.isFile()) {
-				try {
-					return new FileInputStream(file);
-				} catch (FileNotFoundException ignore) {}
-			}
+		final File file = new File(file_local);
+		if (file.isFile()) {
+			try {
+				return new FileInputStream(file);
+			} catch (FileNotFoundException ignore) {}
 		}
 		// resource file
-		return OpenResource(clss, fileRes);
+		return OpenResource(clss, file_res);
 	}
 
 
 
 	public static boolean SearchLocalOrResource(final Class<?> clss,
-			final String fileLocal, final String fileRes)
+			final String file_local, final String file_res)
 			throws FileNotFoundException {
 		// local file
-		if (!IsEmpty(fileLocal)) {
-			final File path = new File(fileLocal);
+		if (!IsEmpty(file_local)) {
+			final File path = new File(file_local);
 			if (path.isFile())
 				return true;
 		}
 		// resource file
-		if (!IsEmpty(fileRes)) {
-			final URL url = clss.getResource(fileRes);
+		if (!IsEmpty(file_res)) {
+			final URL url = clss.getResource(file_res);
 			if (url != null)
 				return false;
 		}
-		throw new FileNotFoundException(String.format("Loc:%s or Res:%s in %s", fileLocal, fileRes, clss.getName()));
+		throw new FileNotFoundException(String.format("Loc:%s or Res:%s in %s", file_local, file_res, clss.getName()));
 	}
 
 
