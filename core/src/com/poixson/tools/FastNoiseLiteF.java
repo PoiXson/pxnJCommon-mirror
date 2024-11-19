@@ -50,8 +50,9 @@ package com.poixson.tools;
 // VERSION: 1.0.1
 // https://github.com/Auburn/FastNoise
 
-import static com.poixson.utils.MathUtils.RotateX;
-import static com.poixson.utils.MathUtils.RotateY;
+import static com.poixson.utils.MathUtils.Rotate2D;
+
+import com.poixson.tools.dao.Fab;
 
 
 public class FastNoiseLiteF {
@@ -338,10 +339,8 @@ public class FastNoiseLiteF {
 	public float getNoise(float x, float y) {
 		if (this.angle == 0.0f)
 			return this.getNoise2F(x, y);
-		return this.getNoise2F(
-			RotateX(x, y, this.angle),
-			RotateY(x, y, this.angle)
-		);
+		final Fab rot = Rotate2D(x, y, this.angle);
+		return this.getNoise2F(rot.a, rot.b);
 	}
 	protected float getNoise2F(float x, float y) {
 		x *= this.mFrequency;
