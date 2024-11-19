@@ -49,6 +49,37 @@ public class Fabcdef implements Serializable, Cloneable {
 		return new Fabcdef(this.a, this.b, this.c, this.d, this.e, this.f);
 	}
 
+	public static Fabcdef From(final Iabcdef dao) {
+		return new Fabcdef(
+			(float) dao.a,
+			(float) dao.b,
+			(float) dao.c,
+			(float) dao.d,
+			(float) dao.e,
+			(float) dao.f
+		);
+	}
+	public static Fabcdef From(final Labcdef dao) {
+		return new Fabcdef(
+			(float) dao.a,
+			(float) dao.b,
+			(float) dao.c,
+			(float) dao.d,
+			(float) dao.e,
+			(float) dao.f
+		);
+	}
+	public static Fabcdef From(final Dabcdef dao) {
+		return new Fabcdef(
+			(float) dao.a,
+			(float) dao.b,
+			(float) dao.c,
+			(float) dao.d,
+			(float) dao.e,
+			(float) dao.f
+		);
+	}
+
 
 
 	@Override

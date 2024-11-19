@@ -45,6 +45,34 @@ public class Dabcde implements Serializable, Cloneable {
 		return new Dabcde(this.a, this.b, this.c, this.d, this.e);
 	}
 
+	public static Dabcde From(final Iabcde dao) {
+		return new Dabcde(
+			(double) dao.a,
+			(double) dao.b,
+			(double) dao.c,
+			(double) dao.d,
+			(double) dao.e
+		);
+	}
+	public static Dabcde From(final Labcde dao) {
+		return new Dabcde(
+			(double) dao.a,
+			(double) dao.b,
+			(double) dao.c,
+			(double) dao.d,
+			(double) dao.e
+		);
+	}
+	public static Dabcde From(final Fabcde dao) {
+		return new Dabcde(
+			(double) dao.a,
+			(double) dao.b,
+			(double) dao.c,
+			(double) dao.d,
+			(double) dao.e
+		);
+	}
+
 
 
 	@Override

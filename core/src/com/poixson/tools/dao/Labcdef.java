@@ -49,6 +49,37 @@ public class Labcdef implements Serializable, Cloneable {
 		return new Labcdef(this.a, this.b, this.c, this.d, this.e, this.f);
 	}
 
+	public static Labcdef From(final Iabcdef dao) {
+		return new Labcdef(
+			(long) dao.a,
+			(long) dao.b,
+			(long) dao.c,
+			(long) dao.d,
+			(long) dao.e,
+			(long) dao.f
+		);
+	}
+	public static Labcdef From(final Fabcdef dao) {
+		return new Labcdef(
+			(long) dao.a,
+			(long) dao.b,
+			(long) dao.c,
+			(long) dao.d,
+			(long) dao.e,
+			(long) dao.f
+		);
+	}
+	public static Labcdef From(final Dabcdef dao) {
+		return new Labcdef(
+			(long) dao.a,
+			(long) dao.b,
+			(long) dao.c,
+			(long) dao.d,
+			(long) dao.e,
+			(long) dao.f
+		);
+	}
+
 
 
 	@Override

@@ -37,6 +37,28 @@ public class Iabc implements Serializable, Cloneable {
 		return new Iabc(this.a, this.b, this.c);
 	}
 
+	public static Iabc From(final Labc dao) {
+		return new Iabc(
+			(int) dao.a,
+			(int) dao.b,
+			(int) dao.c
+		);
+	}
+	public static Iabc From(final Fabc dao) {
+		return new Iabc(
+			(int) dao.a,
+			(int) dao.b,
+			(int) dao.c
+		);
+	}
+	public static Iabc From(final Dabc dao) {
+		return new Iabc(
+			(int) dao.a,
+			(int) dao.b,
+			(int) dao.c
+		);
+	}
+
 
 
 	@Override

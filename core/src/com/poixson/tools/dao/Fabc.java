@@ -37,6 +37,28 @@ public class Fabc implements Serializable, Cloneable {
 		return new Fabc(this.a, this.b, this.c);
 	}
 
+	public static Fabc From(final Iabc dao) {
+		return new Fabc(
+			(float) dao.a,
+			(float) dao.b,
+			(float) dao.c
+		);
+	}
+	public static Fabc From(final Labc dao) {
+		return new Fabc(
+			(float) dao.a,
+			(float) dao.b,
+			(float) dao.c
+		);
+	}
+	public static Fabc From(final Dabc dao) {
+		return new Fabc(
+			(float) dao.a,
+			(float) dao.b,
+			(float) dao.c
+		);
+	}
+
 
 
 	@Override

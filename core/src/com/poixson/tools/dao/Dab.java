@@ -33,6 +33,25 @@ public class Dab implements Serializable, Cloneable {
 		return new Dab(this.a, this.b);
 	}
 
+	public static Dab From(final Iab dao) {
+		return new Dab(
+			(double) dao.a,
+			(double) dao.b
+		);
+	}
+	public static Dab From(final Lab dao) {
+		return new Dab(
+			(double) dao.a,
+			(double) dao.b
+		);
+	}
+	public static Dab From(final Fab dao) {
+		return new Dab(
+			(double) dao.a,
+			(double) dao.b
+		);
+	}
+
 
 
 	@Override
