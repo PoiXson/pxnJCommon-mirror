@@ -10,6 +10,10 @@ import java.time.ZoneOffset;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.tools.Keeper;
+import com.poixson.tools.dao.Dab;
+import com.poixson.tools.dao.Dabc;
+import com.poixson.tools.dao.Fab;
+import com.poixson.tools.dao.Fabc;
 
 
 public final class MathUtils {
@@ -812,22 +816,92 @@ public final class MathUtils {
 
 
 
-	public static double RotateX(final double x, final double y, final double angle) {
-		final double ang = Math.PI * angle;
-		return (Math.sin(ang) * y) - (Math.cos(ang) * x);
+	public static Dab Rotate2D(final double x, final double y,
+			final double angle) {
+		return Rotate2D(x, y, 0, 0, angle);
 	}
-	public static double RotateY(final double x, final double y, final double angle) {
+	public static Dab Rotate2D(final double x, final double y,
+			final double center_x, final double center_y,
+			final double angle) {
+		final double tx = x - center_x;
+		final double ty = y - center_y;
 		final double ang = Math.PI * angle;
-		return (Math.sin(ang) * x) + (Math.cos(ang) * y);
+		final double sin = Math.sin(ang);
+		final double cos = Math.cos(ang);
+		final double rot_x = (cos * tx) - (sin * ty);
+		final double rot_y = (sin * tx) + (cos * ty);
+		return new Dab(
+			rot_x + center_x,
+			rot_y + center_y
+		);
 	}
 
-	public static float RotateX(final float x, final float y, final float angle) {
-		final float ang = (float)( Math.PI * ((double)angle) );
-		return (float) ((Math.sin(ang) * y) - (Math.cos(ang) * x));
+	public static Dabc Rotate3D(final double x, final double y, final double z,
+			final double angleX, final double angleY, final double angleZ) {
+		return Rotate3D(x, y, z, 0, 0, 0, angleX, angleY, angleZ);
 	}
-	public static float RotateY(final float x, final float y, final float angle) {
-		final float ang = (float)( Math.PI * ((double)angle) );
-		return (float) ((Math.sin(ang) * x) + (Math.cos(ang) * y));
+	public static Dabc Rotate3D(final double x, final double y, final double z,
+			final double center_x, final double center_y, final double center_z,
+			final double angleX, final double angleY, final double angleZ) {
+		final double tx = x - center_x;
+		final double ty = y - center_y;
+		final double tz = z - center_z;
+		final double ang_x = Math.PI * angleX;
+		final double ang_y = Math.PI * angleY;
+		final double ang_z = Math.PI * angleZ;
+		final double sin_x = Math.sin(ang_x); final double cos_x = Math.cos(ang_x);
+		final double sin_y = Math.sin(ang_y); final double cos_y = Math.cos(ang_y);
+		final double sin_z = Math.sin(ang_z); final double cos_z = Math.cos(ang_z);
+		// x axis
+		double rot_y = (cos_x * ty) - (sin_x * tz);
+		double rot_z = (sin_x * ty) + (cos_x * tz);
+		// y axis
+		double rot_x = (cos_y * tx) + (sin_y * rot_z);
+		rot_x = ((0.0-sin_y) * tx) + (cos_y * rot_z);
+		// z axis
+		rot_x = (cos_z * rot_x) - (sin_z * rot_y);
+		rot_y = (sin_z * rot_x) + (cos_z * rot_y);
+		return new Dabc(
+			rot_x + center_x,
+			rot_y + center_y,
+			rot_z + center_z
+		);
+	}
+
+
+
+	public static Fab Rotate2D(final float x, final float y,
+			final float angle) {
+		return Fab.From(Rotate2D(
+			(double) x, (double) y,
+			(double) angle
+		));
+	}
+	public static Fab Rotate2D(final float x, final float y,
+			final float center_x, final float center_y,
+			final float angle) {
+		return Fab.From(Rotate2D(
+			(double) x, (double) y,
+			(double) center_x, (double) center_y,
+			(double) angle
+		));
+	}
+
+	public static Fabc Rotate3D(final float x, final float y, final float z,
+			final float angleX, final float angleY, final float angleZ) {
+		return Fabc.From(Rotate3D(
+			(double) x, (double) y, (double) z,
+			(double) angleX, (double) angleY, (double) angleZ
+		));
+	}
+	public static Fabc Rotate3D(final float x, final float y, final float z,
+			final float center_x, final float center_y, final float center_z,
+			final float angleX, final float angleY, final float angleZ) {
+		return Fabc.From(Rotate3D(
+			(double) x, (double) y, (double) z,
+			(double) center_x, (double) center_y, (double) center_z,
+			(double) angleX, (double) angleY, (double) angleZ
+		));
 	}
 
 
