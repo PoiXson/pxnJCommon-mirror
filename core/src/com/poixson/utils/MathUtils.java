@@ -837,30 +837,26 @@ public final class MathUtils {
 	}
 
 	public static Dabc Rotate3D(final double x, final double y, final double z,
-			final double angleX, final double angleY, final double angleZ) {
-		return Rotate3D(x, y, z, 0, 0, 0, angleX, angleY, angleZ);
+			final double yawing, final double pitch) {
+		return Rotate3D(x, y, z, 0, 0, 0, yawing, pitch);
 	}
 	public static Dabc Rotate3D(final double x, final double y, final double z,
 			final double center_x, final double center_y, final double center_z,
-			final double angleX, final double angleY, final double angleZ) {
-		final double tx = x - center_x;
-		final double ty = y - center_y;
-		final double tz = z - center_z;
-		final double ang_x = Math.PI * angleX;
-		final double ang_y = Math.PI * angleY;
-		final double ang_z = Math.PI * angleZ;
-		final double sin_x = Math.sin(ang_x); final double cos_x = Math.cos(ang_x);
-		final double sin_y = Math.sin(ang_y); final double cos_y = Math.cos(ang_y);
-		final double sin_z = Math.sin(ang_z); final double cos_z = Math.cos(ang_z);
-		// x axis
-		double rot_y = (cos_x * ty) - (sin_x * tz);
-		double rot_z = (sin_x * ty) + (cos_x * tz);
-		// y axis
-		double rot_x = (cos_y * tx) + (sin_y * rot_z);
-		rot_x = ((0.0-sin_y) * tx) + (cos_y * rot_z);
-		// z axis
-		rot_x = (cos_z * rot_x) - (sin_z * rot_y);
-		rot_y = (sin_z * rot_x) + (cos_z * rot_y);
+			final double yawing, final double pitch) {
+		final double xx = x - center_x;
+		final double yy = y - center_y;
+		final double zz = z - center_z;
+		final double yaw = Math.PI * yawing;
+		final double pit = Math.PI * pitch;
+		final double sin_yaw = Math.sin(yaw); final double cos_yaw = Math.cos(yaw);
+		final double sin_pit = Math.sin(pit); final double cos_pit = Math.cos(pit);
+		double rot_x, rot_y, rot_z, tmp_x;
+		// pitch - z axis
+		tmp_x = (cos_pit * xx) - (sin_pit * yy);
+		rot_y = (sin_pit * xx) + (cos_pit * yy);
+		// yaw - y axis
+		rot_x = (cos_yaw * tmp_x) + (sin_yaw * zz);
+		rot_z = (cos_yaw * zz   ) - (sin_yaw * tmp_x);
 		return new Dabc(
 			rot_x + center_x,
 			rot_y + center_y,
@@ -888,19 +884,19 @@ public final class MathUtils {
 	}
 
 	public static Fabc Rotate3D(final float x, final float y, final float z,
-			final float angleX, final float angleY, final float angleZ) {
+			final float yawing, final float pitch) {
 		return Fabc.From(Rotate3D(
 			(double) x, (double) y, (double) z,
-			(double) angleX, (double) angleY, (double) angleZ
+			(double) yawing, (double) pitch
 		));
 	}
 	public static Fabc Rotate3D(final float x, final float y, final float z,
 			final float center_x, final float center_y, final float center_z,
-			final float angleX, final float angleY, final float angleZ) {
+			final float yawing, final float pitch) {
 		return Fabc.From(Rotate3D(
 			(double) x, (double) y, (double) z,
 			(double) center_x, (double) center_y, (double) center_z,
-			(double) angleX, (double) angleY, (double) angleZ
+			(double) yawing, (double) pitch
 		));
 	}
 
