@@ -46,9 +46,7 @@ public class xRand {
 		this.rnd.setSeed(this.seed);
 		return value;
 	}
-	public int nextInt(final int min, final int max, final int last) {
-		if (min > max) throw new IllegalArgumentException("min greater than max");
-		if (min == max) return min;
+	public int newInt(final int min, final int max, final int last) {
 		for (int i=0; i<100; i++) {
 			final int value = this.nextInt(min, max);
 			if (value != last)
@@ -68,9 +66,7 @@ public class xRand {
 		this.rnd.setSeed(this.seed);
 		return value;
 	}
-	public long nextLong(final long min, final long max, final long last) {
-		if (min > max) throw new IllegalArgumentException("min greater than max");
-		if (min == max) return min;
+	public long newLong(final long min, final long max, final long last) {
 		for (int i=0; i<100; i++) {
 			final long value = this.rnd.nextLong(min, max);
 			if (value != last) {
@@ -93,9 +89,7 @@ public class xRand {
 		this.rnd.setSeed(this.seed);
 		return value;
 	}
-	public float nextFloat(final float min, final float max, final float last) {
-		if (min > max) throw new IllegalArgumentException("min greater than max");
-		if (min == max) return min;
+	public float newFloat(final float min, final float max, final float last) {
 		for (int i=0; i<100; i++) {
 			final float value = this.nextFloat(min, max);
 			if (value != last)
@@ -115,9 +109,7 @@ public class xRand {
 		this.rnd.setSeed(this.seed);
 		return value;
 	}
-	public double nextDouble(final double min, final double max, final double last) {
-		if (min > max) throw new IllegalArgumentException("min greater than max");
-		if (min == max) return min;
+	public double newDouble(final double min, final double max, final double last) {
 		for (int i=0; i<100; i++) {
 			final double value = this.nextDouble(min, max);
 			if (value != last)
