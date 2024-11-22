@@ -1,4 +1,4 @@
-package com.poixson.tools;
+package com.poixson.tools.noise;
 // https://github.com/Auburn/FastNoiseLite
 
 // MIT License
