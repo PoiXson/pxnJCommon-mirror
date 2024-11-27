@@ -911,55 +911,67 @@ public final class MathUtils {
 			final int lowA, final int highA,
 			final int lowB, final int highB,
 			final int value) {
-		final double LA = (double) lowA;
-		final double HA = (double) highA;
-		final double LB = (double) lowB;
-		final double HB = (double) highB;
-		double result = (HB - LB) / (HA - LA);
-		result *= (value - LA);
-		result += LB;
-		return (int) Math.round(result);
+		return Remap(lowA, highA, lowB, highB, value, 1.0);
 	}
 	public static long Remap(
 			final long lowA, final long highA,
 			final long lowB, final long highB,
 			final long value) {
-		final double LA = (double) lowA;
-		final double HA = (double) highA;
-		final double LB = (double) lowB;
-		final double HB = (double) highB;
-		double result = (HB - LB) / (HA - LA);
-		result *= (value - LA);
-		result += LB;
-		return (long) Math.round(result);
+		return Remap(lowA, highA, lowB, highB, value, 1.0);
 	}
 	public static double Remap(
 			final double lowA, final double highA,
 			final double lowB, final double highB,
 			final double value) {
-		final double LA = (double) lowA;
-		final double HA = (double) highA;
-		final double LB = (double) lowB;
-		final double HB = (double) highB;
-		double result = (HB - LB) / (HA - LA);
-		result *= (value - LA);
-		result += LB;
-		return result;
+		return Remap(lowA, highA, lowB, highB, value, 1.0);
+	}
+
+	public static int Remap(
+			final int lowA, final int highA,
+			final int lowB, final int highB,
+			final int value, final double weight) {
+		final double normal = ((double)(value-lowA)) / ((double)(highA-lowA));
+		return ((int)(Math.pow(normal, 1.0/weight) * (highB-lowB))) + lowB;
+	}
+	public static long Remap(
+			final long lowA, final long highA,
+			final long lowB, final long highB,
+			final long value, final double weight) {
+		final double normal = ((double)(value-lowA)) / ((double)(highA-lowA));
+		return ((long)(Math.pow(normal, 1.0/weight) * (highB-lowB))) + lowB;
+	}
+	public static double Remap(
+			final double lowA, final double highA,
+			final double lowB, final double highB,
+			final double value, final double weight) {
+		final double normal = (value-lowA) / (highA-lowA);
+		return (Math.pow(normal, 1.0/weight) * (highB-lowB)) + lowB;
 	}
 
 
 
 	public static int Remap(final int low, final int high, final double percent) {
-		final double result = ((double)(high - low)) * percent;
-		return (int) Math.round(result) + low;
+		return Remap(low, high, percent, 1.0);
 	}
 	public static long Remap(final long low, final long high, final double percent) {
-		final double result = ((double)(high - low)) * percent;
-		return (long) Math.round(result) + low;
+		return Remap(low, high, percent, 1.0);
 	}
 	public static double Remap(final double low, final double high, final double percent) {
-		final double result = ((double)(high - low)) * percent;
-		return Math.round(result) + low;
+		return Remap(low, high, percent, 1.0);
+	}
+
+	public static int Remap(final int low, final int high, final double percent, final double weight) {
+		return (int) Math.round(
+			((double)(high - low)) * Math.pow(percent, 1.0/weight)
+		) + low;
+	}
+	public static long Remap(final long low, final long high, final double percent, final double weight) {
+		return (long) Math.round(
+			((double)(high - low)) * Math.pow(percent, 1.0/weight)
+		) + low;
+	}
+	public static double Remap(final double low, final double high, final double percent, final double weight) {
+		return (high - low) * Math.pow(percent, 1.0/weight) + low;
 	}
 
 

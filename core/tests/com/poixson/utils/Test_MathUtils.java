@@ -284,13 +284,26 @@ public class Test_MathUtils {
 		// remap percent
 		Assert.assertEquals(  0,   MathUtils.Remap(0,   10,   0.0) );
 		Assert.assertEquals( 10,   MathUtils.Remap(0,   10,   1.0) );
+		Assert.assertEquals(  5,   MathUtils.Remap(0,   10,   0.5) );
 		Assert.assertEquals(  5,   MathUtils.Remap(0,    9,   0.5) );
 		Assert.assertEquals(  0L,  MathUtils.Remap(0L,  10L,  0.0) );
 		Assert.assertEquals( 10L,  MathUtils.Remap(0L,  10L,  1.0) );
 		Assert.assertEquals(  5L,  MathUtils.Remap(0L,   9L,  0.5) );
 		Assert.assertEquals(  0.0, MathUtils.Remap(0.0, 10.0, 0.0), DELTA);
 		Assert.assertEquals( 10.0, MathUtils.Remap(0.0, 10.0, 1.0), DELTA);
-		Assert.assertEquals(  5.0, MathUtils.Remap(0.0,  9.0, 0.5), DELTA);
+		Assert.assertEquals(  4.5, MathUtils.Remap(0.0,  9.0, 0.5), DELTA);
+		// remap percent weighted
+		Assert.assertEquals( 0.1,     MathUtils.Remap(0.1,  0.1,  0.5, 0.1), DELTA);
+		Assert.assertEquals( 2.5,     MathUtils.Remap(0.0, 10.0,  0.5, 0.5), DELTA);
+		Assert.assertEquals( 5.0,     MathUtils.Remap(0.0, 10.0,  0.5, 1.0), DELTA);
+		Assert.assertEquals( 0.03125, MathUtils.Remap(0.0, 32.0,  0.5, 0.1), DELTA);
+		Assert.assertEquals( 0.312,   MathUtils.Remap(0.31, 6.56, 0.2, 0.2), DELTA);
+		Assert.assertEquals( 0.712,   MathUtils.Remap(0.71, 6.96, 0.2, 0.2), DELTA);
+		Assert.assertEquals( 0.912,   MathUtils.Remap(0.91, 7.16, 0.2, 0.2), DELTA);
+		Assert.assertEquals( 1.012,   MathUtils.Remap(1.01, 7.26, 0.2, 0.2), DELTA);
+		Assert.assertEquals( 6.958,   MathUtils.Remap(6.96, 0.71, 0.2, 0.2), DELTA);
+		Assert.assertEquals( 7.058,   MathUtils.Remap(7.06, 0.81, 0.2, 0.2), DELTA);
+		Assert.assertEquals( 7.258,   MathUtils.Remap(7.26, 1.01, 0.2, 0.2), DELTA);
 		// remap range
 		Assert.assertEquals( 25,   MathUtils.Remap(1,   10,   21,   30,    5  ) );
 		Assert.assertEquals( 30,   MathUtils.Remap(1,   10,   21,   30,   10  ) );
