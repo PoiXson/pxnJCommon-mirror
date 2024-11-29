@@ -1,5 +1,7 @@
 package com.poixson.tools.sequences;
 
+import static com.poixson.utils.MathUtils.CeilNormal;
+
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -36,6 +38,16 @@ public class InnerToOuterSquareXYZ implements Iterator<Iabc> {
 	@Override
 	public boolean hasNext() {
 		return (this.index.get() < this.total);
+	}
+
+	public void nextXZ() {
+		final int index = this.index.get();
+		final int next = (
+			index % this.size_y == 0
+			? CeilNormal(index+this.size_y, this.size_y)
+			: CeilNormal(index,             this.size_y)
+		);
+		this.index.compareAndSet(index, next);
 	}
 
 
