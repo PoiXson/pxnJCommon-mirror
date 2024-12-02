@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.poixson.tools.abstractions.Triple;
@@ -19,6 +20,8 @@ public class CacheMap<K, V> implements Map<K, V> {
 	protected static final long DEFAULT_CYCLES_TIMEOUT  = (int) xTime.Parse( "2m").get(SECONDS_PER_CYCLE);
 	protected static final long DEFAULT_CYCLES_SAVE     = (int) xTime.Parse("20s").get(SECONDS_PER_CYCLE);
 	protected static final long DEFAULT_CYCLES_SAVE_MAX = (int) xTime.Parse( "1m").get(SECONDS_PER_CYCLE);
+
+	protected final AtomicBoolean inited = new AtomicBoolean(false);
 
 	protected final ConcurrentHashMap<K, V> map = new ConcurrentHashMap<K, V>();
 	// <accessed, changed-first, changed-last>
@@ -45,6 +48,12 @@ public class CacheMap<K, V> implements Map<K, V> {
 		this.cycles_timeout  = cycles_timeout;
 		this.cycles_save     = cycles_save;
 		this.cycles_save_max = cycles_save_max;
+	}
+
+
+
+	public boolean init() {
+		return this.inited.compareAndSet(false, true);
 	}
 
 
@@ -234,6 +243,7 @@ public class CacheMap<K, V> implements Map<K, V> {
 			return null;
 		}
 		// load now
+		this.init();
 		{
 			final V value = this.load(k);
 			if (value != null) {
