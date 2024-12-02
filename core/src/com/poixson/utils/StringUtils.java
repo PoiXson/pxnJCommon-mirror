@@ -1239,7 +1239,7 @@ public final class StringUtils {
 		if (IsEmpty(msg))  return msg;
 		if (IsEmpty(args)) return msg;
 		final StringBuilder result = new StringBuilder(msg);
-		LOOP_ARG:
+		LOOP_ARGS:
 		for (int index=0; index<args.length; index++) {
 			final Object obj = args[index];
 			final String str = ( obj == null ? "<null>" : ToString(obj) );
@@ -1254,21 +1254,21 @@ public final class StringUtils {
 					result.replace(pos, pos + tag.length(), str);
 					found = true;
 				} // end LOOP_REPLACE
-				if (found) continue LOOP_ARG;
+				if (found) continue LOOP_ARGS;
 			}
 			// {}
 			{
 				final int pos = result.indexOf("{}");
 				if (pos >= 0) {
 					result.replace(pos, pos + 2, str);
-					continue LOOP_ARG;
+					continue LOOP_ARGS;
 				}
 			}
 			// append
 			result
 				.append(' ')
 				.append(str);
-		} // end LOOP_ARG
+		} // end LOOP_ARGS
 		return result.toString();
 	}
 
@@ -1280,7 +1280,7 @@ public final class StringUtils {
 		if (IsEmpty(args)) return msgs;
 		String[] result = Arrays.copyOf(msgs, msgs.length);
 		final StringBuilder extras = new StringBuilder();
-		LOOP_ARG:
+		LOOP_ARGS:
 		for (int argIndex=0; argIndex<args.length; argIndex++) {
 			final String str = ( args[argIndex] == null ? "<null>" : ToString(args[argIndex]) );
 			// {#} - all instances
@@ -1299,7 +1299,7 @@ public final class StringUtils {
 						found = true;
 					} // end LOOP_REPLACE
 				} // end LOOP_LINE
-				if (found) continue LOOP_ARG;
+				if (found) continue LOOP_ARGS;
 			}
 			// {} - first found
 			{
@@ -1310,7 +1310,7 @@ public final class StringUtils {
 					final int pos = result[lineIndex].indexOf("{}");
 					if (pos == -1) continue LOOP_LINE;
 					result[lineIndex] = ReplaceStringRange( result[lineIndex], str, pos, pos + 2 );
-					continue LOOP_ARG;
+					continue LOOP_ARGS;
 				} // end LOOP_LINE
 			}
 			// append to end
@@ -1319,7 +1319,7 @@ public final class StringUtils {
 					extras.append(' ');
 				extras.append(str);
 			}
-		} // end LOOP_ARG
+		} // end LOOP_ARGS
 		if ( extras.length() != 0 ) {
 			if (result.length == 1) {
 				result[0] =
@@ -1344,7 +1344,7 @@ public final class StringUtils {
 		if (IsEmpty(msg))  return msg;
 		if (IsEmpty(args)) return msg;
 		final StringBuilder result = new StringBuilder(msg);
-		LOOP_ARG:
+		LOOP_ARGS:
 		for (final String key : args.keySet()) {
 			final Object obj = args.get(key);
 			final String str = ( obj == null ? "<null>" : ToString(obj) );
@@ -1359,7 +1359,7 @@ public final class StringUtils {
 					result.replace(pos, pos + tag.length(), str);
 					found = true;
 				} // end LOOP_REPLACE
-				if (found) continue LOOP_ARG;
+				if (found) continue LOOP_ARGS;
 			}
 			// {}
 			{
@@ -1369,7 +1369,7 @@ public final class StringUtils {
 				}
 			}
 			// don't append
-		} // end LOOP_ARG
+		} // end LOOP_ARGS
 		return result.toString();
 	}
 
@@ -1380,7 +1380,7 @@ public final class StringUtils {
 		if (IsEmpty(msgs)) return msgs;
 		if (IsEmpty(args)) return msgs;
 		String[] result = Arrays.copyOf(msgs, msgs.length);
-		LOOP_ARG:
+		LOOP_ARGS:
 		for (final String key : args.keySet()) {
 			final Object obj = args.get(key);
 			final String str = ( obj == null ? "<null>" : ToString(obj) );
@@ -1401,7 +1401,7 @@ public final class StringUtils {
 					} // end LOOP_REPLACE
 				} // end LOOP_LINE
 				if (found)
-					continue LOOP_ARG;
+					continue LOOP_ARGS;
 			}
 			// {}
 			{
@@ -1412,7 +1412,7 @@ public final class StringUtils {
 					final int pos = result[lineIndex].indexOf("{}");
 					if (pos != -1) {
 						result[lineIndex] = ReplaceStringRange( result[lineIndex], str, pos, pos + 2 );
-						continue LOOP_ARG;
+						continue LOOP_ARGS;
 					}
 				} // end LOOP_LINE
 			}
