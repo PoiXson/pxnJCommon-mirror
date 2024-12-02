@@ -1,5 +1,8 @@
 package com.poixson.utils;
 
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import com.poixson.tools.Keeper;
@@ -8,6 +11,62 @@ import com.poixson.tools.Keeper;
 public final class ArrayUtils {
 	private ArrayUtils() {}
 	static { Keeper.add(new ArrayUtils()); }
+
+
+
+	public static <T> Set<T> MergeSets(
+			final Set<T> setA, final List<T> setB) {
+		final HashSet<T> result = new HashSet<T>();
+		for (final T entry : setA) { if (entry != null) result.add(entry); }
+		for (final T entry : setB) { if (entry != null) result.add(entry); }
+		return result;
+	}
+	public static <T> Set<T> MergeSets(
+			final Set<T> setA, final Set<T> setB, final Set<T> setC) {
+		final HashSet<T> result = new HashSet<T>();
+		for (final T entry : setA) { if (entry != null) result.add(entry); }
+		for (final T entry : setB) { if (entry != null) result.add(entry); }
+		for (final T entry : setC) { if (entry != null) result.add(entry); }
+		return result;
+	}
+	public static <T> Set<T> MergeSets(
+			final Set<T> setA, final Set<T> setB,
+			final Set<T> setC, final Set<T> setD) {
+		final HashSet<T> result = new HashSet<T>();
+		for (final T entry : setA) { if (entry != null) result.add(entry); }
+		for (final T entry : setB) { if (entry != null) result.add(entry); }
+		for (final T entry : setC) { if (entry != null) result.add(entry); }
+		for (final T entry : setD) { if (entry != null) result.add(entry); }
+		return result;
+	}
+
+
+
+	public static <T> List<T> MergeLists(
+			final List<T> listA, final List<T> listB) {
+		final LinkedList<T> result = new LinkedList<T>();
+		for (final T entry : listA) { if (entry != null) result.addLast(entry); }
+		for (final T entry : listB) { if (entry != null) result.addLast(entry); }
+		return result;
+	}
+	public static <T> List<T> MergeLists(
+			final List<T> listA, final List<T> listB, final List<T> listC) {
+		final LinkedList<T> result = new LinkedList<T>();
+		for (final T entry : listA) { if (entry != null) result.addLast(entry); }
+		for (final T entry : listB) { if (entry != null) result.addLast(entry); }
+		for (final T entry : listC) { if (entry != null) result.addLast(entry); }
+		return result;
+	}
+	public static <T> List<T> MergeLists(
+			final List<T> listA, final List<T> listB,
+			final List<T> listC, final List<T> listD) {
+		final LinkedList<T> result = new LinkedList<T>();
+		for (final T entry : listA) { if (entry != null) result.addLast(entry); }
+		for (final T entry : listB) { if (entry != null) result.addLast(entry); }
+		for (final T entry : listC) { if (entry != null) result.addLast(entry); }
+		for (final T entry : listD) { if (entry != null) result.addLast(entry); }
+		return result;
+	}
 
 
 
