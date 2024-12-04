@@ -202,17 +202,18 @@ public final class StringUtils {
 			LOOP_DELIM:
 			for (final String str : delims) {
 				final int pos = line.indexOf(str, last);
-				if (pos == -1) continue LOOP_DELIM;
-				if (next == pos) {
-					if (str.length() > lenNext)
+				if (pos > -1) {
+					if (next == pos) {
+						if (str.length() > lenNext)
+							lenNext = str.length();
+					} else
+					if (next > pos) {
+						next = pos;
 						lenNext = str.length();
-				} else
-				if (next > pos) {
-					next = pos;
-					lenNext = str.length();
+					}
+					if (pos == last)   break LOOP_DELIM;
+					if (pos == last+1) break LOOP_DELIM;
 				}
-				if (pos == last)   break LOOP_DELIM;
-				if (pos == last+1) break LOOP_DELIM;
 			} // end LOOP_DELIM
 			// delim not found
 			if (next == lenLine) {
