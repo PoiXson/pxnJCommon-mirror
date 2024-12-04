@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -225,6 +226,48 @@ public final class StringUtils {
 			last = next + lenNext;
 		} // end LOOP_SPLIT
 		return result.toArray(new String[0]);
+	}
+
+	public static Map<String, String> SplitKeyVal(final String input, final String...delims) {
+		final int len_input = input.length();
+		final Map<String, String> result = new HashMap<>();
+		int pos_next;
+		int len_next;
+		int pos_last = 0;
+		String last_key = null;
+		LOOP_SPLIT:
+		while (true) {
+			// find next delimiter
+			pos_next = len_input;
+			len_next = 0;
+			String current_delim = null;
+			//LOOP_DELIM:
+			for (final String delim : delims) {
+				final int pos = input.indexOf(delim, pos_last);
+				if (pos > -1) {
+					if (pos_next > pos
+					|| (pos_next ==pos && delim.length() > len_next)) {
+						pos_next = pos;
+						len_next = delim.length();
+						current_delim = delim;
+					}
+				}
+			} // end LOOP_DELIM
+			// handle remaining string
+			if (current_delim == null) {
+				result.put(last_key, input.substring(pos_last));
+				break LOOP_SPLIT;
+			}
+			if (last_key == null) {
+				if (pos_last != pos_next)
+					result.put("", input.substring(pos_last, pos_next));
+			} else {
+				result.put(last_key, input.substring(pos_last, pos_next));
+			}
+			last_key = current_delim;
+			pos_last = pos_next + len_next;
+		} // end LOOP_SPLIT
+		return result;
 	}
 
 

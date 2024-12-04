@@ -1,5 +1,7 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.ArrayUtils.MatchMaps;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,6 +85,19 @@ public class Test_StringUtils {
 		Assert.assertArrayEquals( new String[] { "Abc", "def"        }, StringUtils.Split("Abc,,,,def",    ",,") );
 		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split(",,Abc,,",       ",,") );
 		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split("Abc",           ",,") );
+	}
+	@Test
+	public void testSplitKeyVal() {
+		// key/val delims
+		final Map<String, String> mapA = new HashMap<String, String>();
+		final Map<String, String> mapB = new HashMap<String, String>();
+		final Map<String, String> mapC = new HashMap<String, String>();
+		mapA.put("--", "Abc"); mapA.put("==", "def"); mapA.put("~~", "ghi");
+		mapB.put("",   "Abc"); mapB.put("--", "def"); mapB.put("==", "ghi"); mapB.put("~~", "");
+		mapC.put("~~", ""   ); mapC.put("--", ""   ); mapC.put("==", ""   );
+		Assert.assertTrue(MatchMaps(mapA, StringUtils.SplitKeyVal("--Abc==def~~ghi",   "--", "==", "~~")));
+		Assert.assertTrue(MatchMaps(mapB, StringUtils.SplitKeyVal(  "Abc--def==ghi~~", "--", "==", "~~")));
+		Assert.assertTrue(MatchMaps(mapC, StringUtils.SplitKeyVal("--==~~",            "--", "==", "~~")));
 	}
 
 
