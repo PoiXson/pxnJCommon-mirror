@@ -65,12 +65,14 @@ public class xScriptLoader_File extends xScriptLoader {
 		// load sources
 		{
 			final LinkedList<xScriptSourceDAO> list = new LinkedList<xScriptSourceDAO>();
-			final Map<String, String>        flags = new HashMap<String, String>();
-			final Set<String>              imports = new HashSet<String>();
-			final Set<String>              exports = new HashSet<String>();
+			final Map<String, String>         flags = new HashMap<String, String>();
+			final Set<String>               imports = new HashSet<String>();
+			final Set<String>               exports = new HashSet<String>();
+			// load prepend.js
 			try {
 				this.loadSources("prepend.js", list, flags, imports, exports);
 			} catch (FileNotFoundException ignore) {}
+			// load script
 			this.loadSources(this.filename, list, flags, imports, exports);
 			final xScriptSourceDAO[] sources = list.toArray(new xScriptSourceDAO[0]);
 			if (this.sources.compareAndSet(null, sources)) {
@@ -80,7 +82,7 @@ public class xScriptLoader_File extends xScriptLoader {
 				return sources;
 			}
 		}
-		return this.getSources();
+		return this.sources.get();
 	}
 
 
@@ -88,21 +90,20 @@ public class xScriptLoader_File extends xScriptLoader {
 	// load sources recursively
 	@Override
 	protected void loadSources(final String filename,
-			final LinkedList<xScriptSourceDAO> list,
-			final Map<String, String> flags,
+			final LinkedList<xScriptSourceDAO> list, final Map<String, String> flags,
 			final Set<String> imports, final Set<String> exports)
 			throws IOException {
 		// find local or resource file
-		final xScriptSourceDAO found =
+		final xScriptSourceDAO dao =
 			xScriptSourceDAO.Find(
 				this.clss,
 				this.path_local,
 				this.path_resource,
 				filename
 			);
-		if (found == null) throw new FileNotFoundException(filename);
-		this.parseHeader(found.code, list, flags, imports, exports);
-		list.add(found);
+		if (dao == null) throw new FileNotFoundException(filename);
+		this.parseHeader(dao.code, list, flags, imports, exports);
+		list.add(dao);
 	}
 
 
