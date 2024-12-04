@@ -1,8 +1,11 @@
 package com.poixson.utils;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.poixson.tools.Keeper;
@@ -119,6 +122,23 @@ public final class ArrayUtils {
 		for (int i=0; i<size; i++)
 			result[i] = copy[i].intValue();
 		return result;
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// maps
+
+
+
+	public static <K, V> boolean MatchMaps(final Map<K, V> expect, final Map<K, V> actual) {
+		final Map<K, V> copy = new HashMap<K, V>();
+		for (final Entry<K, V> entry : expect.entrySet())
+			copy.put(entry.getKey(), entry.getValue());
+		for (final Entry<K, V> entry : actual.entrySet())
+			if (!copy.remove(entry.getKey(), entry.getValue()))
+				return false;
+		return copy.isEmpty();
 	}
 
 
