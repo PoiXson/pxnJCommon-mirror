@@ -38,6 +38,41 @@ public class CoolDown {
 
 
 
+	public boolean peek() {
+		return this.peek(this.getCurrent());
+	}
+	public boolean peek(final long current) {
+		return this._peek(current, false);
+	}
+
+	// set current time if unset
+	public boolean peekOrDefault() {
+		return this.peekOrDefault(this.getCurrent());
+	}
+	public boolean peekOrDefault(final long current) {
+		return this._peek(current, true);
+	}
+
+	protected boolean _peek(final long current, final boolean setDefault) {
+		// disabled
+		final long duration = this.duration.get();
+		if (duration <= 0L)
+			return false;
+		// first run
+		final long last = this.last.get();
+		if (last <= 0L) {
+			if (setDefault) {
+				if (!this.last.compareAndSet(last, current))
+					return this.peek(current);
+			}
+			return false;
+		}
+		// check timeout
+		return (current - last >= duration);
+	}
+
+
+
 	public boolean again() {
 		return this.again( this.getCurrent() );
 	}
