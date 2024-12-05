@@ -84,9 +84,11 @@ public class CoolDown {
 		// first run
 		final long last = this.last.get();
 		if (last <= 0L) {
-			if (this.last.compareAndSet(last, current))
-				return true;
-			return this.again();
+			return (
+				this.last.compareAndSet(last, current)
+				? true
+				: this.again()
+			);
 		}
 		// check timeout
 		if (current - last >= duration) {
