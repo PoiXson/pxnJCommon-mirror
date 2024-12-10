@@ -126,27 +126,33 @@ public class xTime {
 
 
 
+	// -------------------------------------------------------------------------------
+	// modify
+
+
+
 	// add time
-	public void add(final long ms) {
+	public xTime add(final long ms) {
 		this.value.addAndGet(ms);
+		return this;
 	}
-	public void add(final long value, final xTimeU xunit) {
+	public xTime add(final long value, final xTimeU xunit) {
 		if (xunit == null) throw new RequiredArgumentException("unit");
-		this.value.addAndGet( xunit.convertTo(value) );
+		return this.add( xunit.convertTo(value) );
 	}
-	public void add(final long value, final TimeUnit unit) {
+	public xTime add(final long value, final TimeUnit unit) {
 		if (unit == null)      throw new RequiredArgumentException("unit");
 		final xTimeU xunit = xTimeU.GetUnit(unit);
 		if (xunit == null) throw new RuntimeException("Unknown time unit: "+unit.toString());
-		this.value.addAndGet( xunit.convertTo(value) );
+		return this.add( xunit.convertTo(value) );
 	}
-	public void add(final String str) {
-		if (IsEmpty(str)) throw new RequiredArgumentException("str");
-		this.value.addAndGet( ParseToLong(str) );
+	public xTime add(final String value) {
+		if (IsEmpty(value)) throw new RequiredArgumentException("value");
+		return this.add( ParseToLong(value) );
 	}
-	public void add(final xTime time) {
+	public xTime add(final xTime time) {
 		if (time == null) throw new RequiredArgumentException("time");
-		this.value.addAndGet( time.ms() );
+		return this.add( time.ms() );
 	}
 
 
