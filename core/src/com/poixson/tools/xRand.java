@@ -62,7 +62,7 @@ public class xRand {
 		} else {
 			final double n = this.rnd.nextDouble(0.0, 1.0);
 			final double w = 1.0 - Math.pow(n, this.weight);
-			result = (int)Math.round(w * ((max - min) + 1)) + min;
+			result = (int)Math.floor(w * ((max - min) + 1)) + min;
 		}
 		this.seed += (long)result;
 		this.rnd.setSeed(this.seed);
@@ -89,7 +89,7 @@ public class xRand {
 		} else {
 			final double n = this.rnd.nextDouble(0.0, 1.0);
 			final double w = Math.pow(n, 1.0/this.weight);
-			result = (long)Math.round(w * ((double)(max - min))) + min;
+			result = (long)Math.floor(w * ((double)(max - min))) + min;
 		}
 		this.seed += result;
 		return result;
