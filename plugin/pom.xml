@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated: Thu Jun  6 07:43:56 PM EDT 2024 -->
+<!-- Generated: Sun Dec 15 10:26:51 PM EST 2024 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -36,7 +36,6 @@
 		<common-config-version>[4.0.0,)</common-config-version>
 		<classgraph-version>[4,)</classgraph-version>
 		<snakeyaml-version>[2,)</snakeyaml-version>
-
 	</properties>
 	<scm>
 		<url>https://git.poixson.com/summary/pxn!pxnJCommon.git</url>
@@ -57,7 +56,6 @@
 		<outputDirectory>target/classes/</outputDirectory>
 		<finalName>${project.name}-${project.version}</finalName>
 		<plugins>
-
 			<!-- Compiler Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -69,14 +67,12 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
-
 			<!-- Jar Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>${maven-jar-plugin-version}</version>
 			</plugin>
-
 			<!-- Source Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -95,7 +91,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<!-- Eclipse Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -115,7 +110,6 @@
 					</additionalConfig>
 				</configuration>
 			</plugin>
-
 			<!-- Commit-ID Plugin -->
 			<plugin>
 				<groupId>pl.project13.maven</groupId>
@@ -134,7 +128,6 @@
 					<dotGitDirectory>.git/</dotGitDirectory>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 	<dependencies>
