@@ -621,33 +621,15 @@ public class FastNoiseLiteD {
 	};
 
 
-	private static double FastMin(double a, double b) {
-		return a < b ? a : b;
-	}
-	private static double FastMax(double a, double b) {
-		return a > b ? a : b;
-	}
-	private static double FastAbs(double f) {
-		return f < 0 ? -f : f;
-	}
-	private static double FastSqrt(double f) {
-		return (double)Math.sqrt(f);
-	}
-	private static int FastFloor(double f) {
-		return f >= 0 ? (int)f : (int)f - 1;
-	}
-	private static int FastRound(double f) {
-		return f >= 0 ? (int)(f + 0.5) : (int)(f - 0.5);
-	}
-	private static double Lerp(double a, double b, double t) {
-		return a + t * (b - a);
-	}
-	private static double InterpHermite(double t) {
-		return t * t * (3 - 2 * t);
-	}
-	private static double InterpQuintic(double t) {
-		return t * t * t * (t * (t * 6 - 15) + 10);
-	}
+	private static double FastMin (double a, double b) { return a < b ? a : b; }
+	private static double FastMax (double a, double b) { return a > b ? a : b; }
+	private static double FastAbs (double f) { return f < 0 ? -f : f; }
+	private static double FastSqrt(double f) { return (double)Math.sqrt(f); }
+	private static int FastFloor  (double f) { return f >= 0 ? (int)f : (int)f - 1; }
+	private static int FastRound  (double f) { return f >= 0 ? (int)(f + 0.5) : (int)(f - 0.5); }
+	private static double Lerp(double a, double b, double t) { return a + t * (b - a); }
+	private static double InterpHermite(double t) { return t * t * (3 - 2 * t); }
+	private static double InterpQuintic(double t) { return t * t * t * (t * (t * 6 - 15) + 10); }
 
 	private static double CubicLerp(double a, double b, double c, double d, double t) {
 		double p = (d - c) - (a - b);
@@ -691,14 +673,14 @@ public class FastNoiseLiteD {
 		int hash = Hash(seed, xPrimed, yPrimed);
 		hash *= hash;
 		hash ^= hash << 19;
-		return hash * (1 / 2147483648.0);
+		return hash * (1.0 / 2147483648.0);
 	}
 
 	private static double ValCoord(int seed, int xPrimed, int yPrimed, int zPrimed) {
 		int hash = Hash(seed, xPrimed, yPrimed, zPrimed);
 		hash *= hash;
 		hash ^= hash << 19;
-		return hash * (1 / 2147483648.0);
+		return hash * (1.0 / 2147483648.0);
 	}
 
 	private static double GradCoord(int seed, int xPrimed, int yPrimed, double xd, double yd) {

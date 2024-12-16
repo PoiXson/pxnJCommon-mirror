@@ -404,10 +404,10 @@ public class FastNoiseLiteF {
 				break;
 		}
 		switch (this.mFractalType) {
-			default:       return GenNoiseSingle(this.mSeed, x, y);
 			case FBm:      return GenFractalFBm(x, y);
 			case Ridged:   return GenFractalRidged(x, y);
 			case PingPong: return GenFractalPingPong(x, y);
+			default:       return GenNoiseSingle(this.mSeed, x, y);
 		}
 	}
 
@@ -567,22 +567,22 @@ public class FastNoiseLiteF {
 	};
 
 	private static final float[] Gradients3D = {
-		0, 1, 1, 0,  0,-1, 1, 0,  0, 1,-1, 0,  0,-1,-1, 0,
-		1, 0, 1, 0, -1, 0, 1, 0,  1, 0,-1, 0, -1, 0,-1, 0,
-		1, 1, 0, 0, -1, 1, 0, 0,  1,-1, 0, 0, -1,-1, 0, 0,
-		0, 1, 1, 0,  0,-1, 1, 0,  0, 1,-1, 0,  0,-1,-1, 0,
-		1, 0, 1, 0, -1, 0, 1, 0,  1, 0,-1, 0, -1, 0,-1, 0,
-		1, 1, 0, 0, -1, 1, 0, 0,  1,-1, 0, 0, -1,-1, 0, 0,
-		0, 1, 1, 0,  0,-1, 1, 0,  0, 1,-1, 0,  0,-1,-1, 0,
-		1, 0, 1, 0, -1, 0, 1, 0,  1, 0,-1, 0, -1, 0,-1, 0,
-		1, 1, 0, 0, -1, 1, 0, 0,  1,-1, 0, 0, -1,-1, 0, 0,
-		0, 1, 1, 0,  0,-1, 1, 0,  0, 1,-1, 0,  0,-1,-1, 0,
-		1, 0, 1, 0, -1, 0, 1, 0,  1, 0,-1, 0, -1, 0,-1, 0,
-		1, 1, 0, 0, -1, 1, 0, 0,  1,-1, 0, 0, -1,-1, 0, 0,
-		0, 1, 1, 0,  0,-1, 1, 0,  0, 1,-1, 0,  0,-1,-1, 0,
-		1, 0, 1, 0, -1, 0, 1, 0,  1, 0,-1, 0, -1, 0,-1, 0,
-		1, 1, 0, 0, -1, 1, 0, 0,  1,-1, 0, 0, -1,-1, 0, 0,
-		1, 1, 0, 0,  0,-1, 1, 0, -1, 1, 0, 0,  0,-1,-1, 0,
+		0f, 1f, 1f, 0f,  0f,-1f, 1f, 0f,  0f, 1f,-1f, 0f,  0f,-1f,-1f, 0f,
+		1f, 0f, 1f, 0f, -1f, 0f, 1f, 0f,  1f, 0f,-1f, 0f, -1f, 0f,-1f, 0f,
+		1f, 1f, 0f, 0f, -1f, 1f, 0f, 0f,  1f,-1f, 0f, 0f, -1f,-1f, 0f, 0f,
+		0f, 1f, 1f, 0f,  0f,-1f, 1f, 0f,  0f, 1f,-1f, 0f,  0f,-1f,-1f, 0f,
+		1f, 0f, 1f, 0f, -1f, 0f, 1f, 0f,  1f, 0f,-1f, 0f, -1f, 0f,-1f, 0f,
+		1f, 1f, 0f, 0f, -1f, 1f, 0f, 0f,  1f,-1f, 0f, 0f, -1f,-1f, 0f, 0f,
+		0f, 1f, 1f, 0f,  0f,-1f, 1f, 0f,  0f, 1f,-1f, 0f,  0f,-1f,-1f, 0f,
+		1f, 0f, 1f, 0f, -1f, 0f, 1f, 0f,  1f, 0f,-1f, 0f, -1f, 0f,-1f, 0f,
+		1f, 1f, 0f, 0f, -1f, 1f, 0f, 0f,  1f,-1f, 0f, 0f, -1f,-1f, 0f, 0f,
+		0f, 1f, 1f, 0f,  0f,-1f, 1f, 0f,  0f, 1f,-1f, 0f,  0f,-1f,-1f, 0f,
+		1f, 0f, 1f, 0f, -1f, 0f, 1f, 0f,  1f, 0f,-1f, 0f, -1f, 0f,-1f, 0f,
+		1f, 1f, 0f, 0f, -1f, 1f, 0f, 0f,  1f,-1f, 0f, 0f, -1f,-1f, 0f, 0f,
+		0f, 1f, 1f, 0f,  0f,-1f, 1f, 0f,  0f, 1f,-1f, 0f,  0f,-1f,-1f, 0f,
+		1f, 0f, 1f, 0f, -1f, 0f, 1f, 0f,  1f, 0f,-1f, 0f, -1f, 0f,-1f, 0f,
+		1f, 1f, 0f, 0f, -1f, 1f, 0f, 0f,  1f,-1f, 0f, 0f, -1f,-1f, 0f, 0f,
+		1f, 1f, 0f, 0f,  0f,-1f, 1f, 0f, -1f, 1f, 0f, 0f,  0f,-1f,-1f, 0f,
 	};
 
 	private static final float[] RandVecs3D = {
@@ -621,12 +621,12 @@ public class FastNoiseLiteF {
 	};
 
 
-	private static float FastMin(float a, float b) { return a < b ? a : b; }
-	private static float FastMax(float a, float b) { return a > b ? a : b; }
-	private static float FastAbs(float f) { return f < 0 ? -f : f; }
+	private static float FastMin (float a, float b) { return a < b ? a : b; }
+	private static float FastMax (float a, float b) { return a > b ? a : b; }
+	private static float FastAbs (float f) { return f < 0 ? -f : f; }
 	private static float FastSqrt(float f) { return (float)Math.sqrt(f); }
-	private static int FastFloor(float f) { return f >= 0 ? (int)f : (int)f - 1; }
-	private static int FastRound(float f) { return f >= 0 ? (int)(f + 0.5f) : (int)(f - 0.5f); }
+	private static int FastFloor (float f) { return f >= 0 ? (int)f : (int)f - 1; }
+	private static int FastRound (float f) { return f >= 0 ? (int)(f + 0.5f) : (int)(f - 0.5f); }
 	private static float Lerp(float a, float b, float t) { return a + t * (b - a); }
 	private static float InterpHermite(float t) { return t * t * (3 - 2 * t); }
 	private static float InterpQuintic(float t) { return t * t * t * (t * (t * 6 - 15) + 10); }
@@ -673,14 +673,14 @@ public class FastNoiseLiteF {
 		int hash = Hash(seed, xPrimed, yPrimed);
 		hash *= hash;
 		hash ^= hash << 19;
-		return hash * (1 / 2147483648.0f);
+		return hash * (1.0f / 2147483648.0f);
 	}
 
 	private static float ValCoord(int seed, int xPrimed, int yPrimed, int zPrimed) {
 		int hash = Hash(seed, xPrimed, yPrimed, zPrimed);
 		hash *= hash;
 		hash ^= hash << 19;
-		return hash * (1 / 2147483648.0f);
+		return hash * (1.0f / 2147483648.0f);
 	}
 
 	private static float GradCoord(int seed, int xPrimed, int yPrimed, float xd, float yd) {
