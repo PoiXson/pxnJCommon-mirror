@@ -165,6 +165,9 @@ public class FastNoiseLiteD {
 	public void setAngle(final double angle) {
 		this.angle = angle;
 	}
+	public double getAngle() {
+		return this.angle;
+	}
 
 	/// <summary>
 	/// Sets seed used for all noise types
@@ -174,6 +177,9 @@ public class FastNoiseLiteD {
 	/// </remarks>
 	public void setSeed(int seed) {
 		this.mSeed = seed;
+	}
+	public int getSeed() {
+		return this.mSeed;
 	}
 
 	/// <summary>
@@ -185,6 +191,9 @@ public class FastNoiseLiteD {
 	public void setFrequency(double frequency) {
 		this.mFrequency = frequency;
 	}
+	public double getFrequency() {
+		return this.mFrequency;
+	}
 
 	/// <summary>
 	/// Sets noise algorithm used for getNoise(...)
@@ -195,6 +204,9 @@ public class FastNoiseLiteD {
 	public void setNoiseType(NoiseType noiseType) {
 		this.mNoiseType = noiseType;
 		UpdateTransformType3D();
+	}
+	public NoiseType getNoiseType() {
+		return this.mNoiseType;
 	}
 
 	/// <summary>
@@ -209,6 +221,9 @@ public class FastNoiseLiteD {
 		UpdateTransformType3D();
 		UpdateWarpTransformType3D();
 	}
+	public RotationType3D getRotationType3D() {
+		return this.mRotationType3D;
+	}
 
 	/// <summary>
 	/// Sets method for combining octaves in all fractal noise types
@@ -219,6 +234,9 @@ public class FastNoiseLiteD {
 	/// </remarks>
 	public void setFractalType(FractalType fractalType) {
 		this.mFractalType = fractalType;
+	}
+	public FractalType getFractalType() {
+		return this.mFractalType;
 	}
 
 	/// <summary>
@@ -231,6 +249,9 @@ public class FastNoiseLiteD {
 		this.mOctaves = octaves;
 		CalculateFractalBounding();
 	}
+	public int getFractalOctaves() {
+		return this.mOctaves;
+	}
 
 	/// <summary>
 	/// Sets octave lacunarity for all fractal noise types
@@ -240,6 +261,9 @@ public class FastNoiseLiteD {
 	/// </remarks>
 	public void setFractalLacunarity(double lacunarity) {
 		this.mLacunarity = lacunarity;
+	}
+	public double getFractalLacunarity() {
+		return this.mLacunarity;
 	}
 
 	/// <summary>
@@ -252,6 +276,9 @@ public class FastNoiseLiteD {
 		this.mGain = gain;
 		CalculateFractalBounding();
 	}
+	public double getFractalGain() {
+		return this.mGain;
+	}
 
 	/// <summary>
 	/// Sets octave weighting for all none DomainWarp fratal types
@@ -263,6 +290,9 @@ public class FastNoiseLiteD {
 	public void setFractalWeightedStrength(double weightedStrength) {
 		this.mWeightedStrength = weightedStrength;
 	}
+	public double getFractalWeightedStrength() {
+		return this.mWeightedStrength;
+	}
 
 	/// <summary>
 	/// Sets strength of the fractal ping pong effect
@@ -273,7 +303,9 @@ public class FastNoiseLiteD {
 	public void setFractalPingPongStrength(double pingPongStrength) {
 		this.mPingPongStrength = pingPongStrength;
 	}
-
+	public double getFractalPingPongStrength() {
+		return this.mPingPongStrength;
+	}
 
 	/// <summary>
 	/// Sets distance function used in cellular noise calculations
@@ -284,6 +316,9 @@ public class FastNoiseLiteD {
 	public void setCellularDistanceFunction(CellularDistanceFunction cellularDistanceFunction) {
 		this.mCellularDistanceFunction = cellularDistanceFunction;
 	}
+	public CellularDistanceFunction getCellularDistanceFunction() {
+		return this.mCellularDistanceFunction;
+	}
 
 	/// <summary>
 	/// Sets return type from cellular noise calculations
@@ -293,6 +328,9 @@ public class FastNoiseLiteD {
 	/// </remarks>
 	public void setCellularReturnType(CellularReturnType cellularReturnType) {
 		this.mCellularReturnType = cellularReturnType;
+	}
+	public CellularReturnType getCellularReturnType() {
+		return this.mCellularReturnType;
 	}
 
 	/// <summary>
@@ -305,7 +343,9 @@ public class FastNoiseLiteD {
 	public void setCellularJitter(double cellularJitter) {
 		this.mCellularJitterModifier = cellularJitter;
 	}
-
+	public double getCellularJitter() {
+		return this.mCellularJitterModifier;
+	}
 
 	/// <summary>
 	/// Sets the warp algorithm when using DomainWarp(...)
@@ -317,7 +357,9 @@ public class FastNoiseLiteD {
 		this.mDomainWarpType = domainWarpType;
 		UpdateWarpTransformType3D();
 	}
-
+	public DomainWarpType getDomainWarpType() {
+		return this.mDomainWarpType;
+	}
 
 	/// <summary>
 	/// Sets the maximum warp distance from original position when using DomainWarp(...)
@@ -327,6 +369,9 @@ public class FastNoiseLiteD {
 	/// </remarks>
 	public void setDomainWarpAmp(double domainWarpAmp) {
 		this.mDomainWarpAmp = domainWarpAmp;
+	}
+	public double setDomainWarpAmp() {
+		return this.mDomainWarpAmp;
 	}
 
 
