@@ -68,9 +68,9 @@ public final class FileUtils {
 
 
 	public static InputStream OpenLocalOrResource(final Class<?> clss,
-			final String file_local, final String file_res) {
+			final String file_loc, final String file_res) {
 		// local file
-		final File file = new File(file_local);
+		final File file = new File(file_loc);
 		if (file.isFile()) {
 			try {
 				return new FileInputStream(file);
@@ -83,11 +83,11 @@ public final class FileUtils {
 
 
 	public static boolean SearchLocalOrResource(final Class<?> clss,
-			final String file_local, final String file_res)
+			final String file_loc, final String file_res)
 			throws FileNotFoundException {
 		// local file
-		if (!IsEmpty(file_local)) {
-			final File path = new File(file_local);
+		if (!IsEmpty(file_loc)) {
+			final File path = new File(file_loc);
 			if (path.isFile())
 				return true;
 		}
@@ -97,7 +97,7 @@ public final class FileUtils {
 			if (url != null)
 				return false;
 		}
-		throw new FileNotFoundException(String.format("Loc:%s or Res:%s in %s", file_local, file_res, clss.getName()));
+		throw new FileNotFoundException(String.format("Loc:%s or Res:%s in %s", file_loc, file_res, clss.getName()));
 	}
 
 
