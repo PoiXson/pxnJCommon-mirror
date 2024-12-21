@@ -666,7 +666,7 @@ public final class MathUtils {
 
 
 
-	public static double Distance2D(
+	public static double DistanceRadial(
 			final int x1, final int z1,
 			final int x2, final int z2) {
 		return Math.sqrt(
@@ -674,7 +674,7 @@ public final class MathUtils {
 			(double) Square(z1 - z2)
 		);
 	}
-	public static double Distance2D(
+	public static double DistanceRadial(
 			final long x1, final long z1,
 			final long x2, final long z2) {
 		return Math.sqrt(
@@ -682,7 +682,7 @@ public final class MathUtils {
 			(double) Square(z1 - z2)
 		);
 	}
-	public static double Distance2D(
+	public static double DistanceRadial(
 			final double x1, final double z1,
 			final double x2, final double z2) {
 		return Math.sqrt(
@@ -691,7 +691,7 @@ public final class MathUtils {
 		);
 	}
 
-	public static double Distance3D(
+	public static double DistanceRadial(
 			final int x1, final int y1, final int z1,
 			final int x2, final int y2, final int z2) {
 		return Math.sqrt(
@@ -700,7 +700,7 @@ public final class MathUtils {
 			(double) Square(z1 - z2)
 		);
 	}
-	public static double Distance3D(
+	public static double DistanceRadial(
 			final long x1, final long y1, final long z1,
 			final long x2, final long y2, final long z2) {
 		return Math.sqrt(
@@ -709,7 +709,7 @@ public final class MathUtils {
 			(double) Square(z1 - z2)
 		);
 	}
-	public static double Distance3D(
+	public static double DistanceRadial(
 			final double x1, final double y1, final double z1,
 			final double x2, final double y2, final double z2) {
 		return Math.sqrt(
@@ -721,7 +721,7 @@ public final class MathUtils {
 
 
 
-	public static double DistanceFast2D(
+	public static double DistanceAxial(
 			final int x1, final int z1,
 			final int x2, final int z2) {
 		return Max(
@@ -729,7 +729,7 @@ public final class MathUtils {
 			(double) Math.abs(z1 - z2)
 		);
 	}
-	public static double DistanceFast2D(
+	public static double DistanceAxial(
 			final long x1, final long z1,
 			final long x2, final long z2) {
 		return Max(
@@ -737,7 +737,7 @@ public final class MathUtils {
 			(double) Math.abs(z1 - z2)
 		);
 	}
-	public static double DistanceFast2D(
+	public static double DistanceAxial(
 			final double x1, final double z1,
 			final double x2, final double z2) {
 		return Max(
@@ -746,7 +746,7 @@ public final class MathUtils {
 		);
 	}
 
-	public static double DistanceFast3D(
+	public static double DistanceAxial(
 			final int x1, final int y1, final int z1,
 			final int x2, final int y2, final int z2) {
 		return Max(
@@ -755,7 +755,7 @@ public final class MathUtils {
 			(double) Math.abs(z1 - z2)
 		);
 	}
-	public static double DistanceFast3D(
+	public static double DistanceAxial(
 			final long x1, final long y1, final long z1,
 			final long x2, final long y2, final long z2) {
 		return Max(
@@ -764,7 +764,7 @@ public final class MathUtils {
 			(double) Math.abs(z1 - z2)
 		);
 	}
-	public static double DistanceFast3D(
+	public static double DistanceAxial(
 			final double x1, final double y1, final double z1,
 			final double x2, final double y2, final double z2) {
 		return Max(
