@@ -682,6 +682,14 @@ public final class MathUtils {
 			(double) Square(z1 - z2)
 		);
 	}
+	public static float DistanceRadial(
+			final float x1, final float z1,
+			final float x2, final float z2) {
+		return (float)Math.sqrt(
+			Square(x1 - x2) +
+			Square(z1 - z2)
+		);
+	}
 	public static double DistanceRadial(
 			final double x1, final double z1,
 			final double x2, final double z2) {
@@ -707,6 +715,15 @@ public final class MathUtils {
 			(double) Square(x1 - x2) +
 			(double) Square(y1 - y2) +
 			(double) Square(z1 - z2)
+		);
+	}
+	public static float DistanceRadial(
+			final float x1, final float y1, final float z1,
+			final float x2, final float y2, final float z2) {
+		return (float)Math.sqrt(
+			Square(x1 - x2) +
+			Square(y1 - y2) +
+			Square(z1 - z2)
 		);
 	}
 	public static double DistanceRadial(
@@ -737,6 +754,14 @@ public final class MathUtils {
 			(double) Math.abs(z1 - z2)
 		);
 	}
+	public static float DistanceAxial(
+			final float x1, final float z1,
+			final float x2, final float z2) {
+		return Max(
+			Math.abs(x1 - x2),
+			Math.abs(z1 - z2)
+		);
+	}
 	public static double DistanceAxial(
 			final double x1, final double z1,
 			final double x2, final double z2) {
@@ -762,6 +787,15 @@ public final class MathUtils {
 			(double) Math.abs(x1 - x2),
 			(double) Math.abs(y1 - y2),
 			(double) Math.abs(z1 - z2)
+		);
+	}
+	public static float DistanceAxial(
+			final float x1, final float y1, final float z1,
+			final float x2, final float y2, final float z2) {
+		return Max(
+			Math.abs(x1 - x2),
+			Math.abs(y1 - y2),
+			Math.abs(z1 - z2)
 		);
 	}
 	public static double DistanceAxial(
@@ -919,6 +953,12 @@ public final class MathUtils {
 			final long value) {
 		return Remap(lowA, highA, lowB, highB, value, 1.0);
 	}
+	public static float Remap(
+			final float lowA, final float highA,
+			final float lowB, final float highB,
+			final float value) {
+		return Remap(lowA, highA, lowB, highB, value, 1.0f);
+	}
 	public static double Remap(
 			final double lowA, final double highA,
 			final double lowB, final double highB,
@@ -940,6 +980,13 @@ public final class MathUtils {
 		final double normal = ((double)(value-lowA)) / ((double)(highA-lowA));
 		return ((long)(Math.pow(normal, 1.0/weight) * (highB-lowB))) + lowB;
 	}
+	public static float Remap(
+			final float lowA, final float highA,
+			final float lowB, final float highB,
+			final float value, final float weight) {
+		final float normal = (value-lowA) / (highA-lowA);
+		return ( ((float)Math.pow(normal, 1.0f/weight)) * (highB-lowB) ) + lowB;
+	}
 	public static double Remap(
 			final double lowA, final double highA,
 			final double lowB, final double highB,
@@ -956,6 +1003,9 @@ public final class MathUtils {
 	public static long Remap(final long low, final long high, final double percent) {
 		return Remap(low, high, percent, 1.0);
 	}
+	public static float Remap(final float low, final float high, final float percent) {
+		return Remap(low, high, percent, 1.0f);
+	}
 	public static double Remap(final double low, final double high, final double percent) {
 		return Remap(low, high, percent, 1.0);
 	}
@@ -969,6 +1019,9 @@ public final class MathUtils {
 		return (long) Math.round(
 			((double)(high - low)) * Math.pow(percent, 1.0/weight)
 		) + low;
+	}
+	public static float Remap(final float low, final float high, final float percent, final float weight) {
+		return (high - low) * ((float)Math.pow(percent, 1.0f/weight)) + low;
 	}
 	public static double Remap(final double low, final double high, final double percent, final double weight) {
 		return (high - low) * Math.pow(percent, 1.0/weight) + low;
