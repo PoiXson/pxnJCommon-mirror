@@ -280,16 +280,19 @@ public class Test_MathUtils {
 	@Test
 	public void testRemap() {
 		// remap percent
-		Assert.assertEquals(  0,   MathUtils.Remap(0,   10,   0.0) );
-		Assert.assertEquals( 10,   MathUtils.Remap(0,   10,   1.0) );
-		Assert.assertEquals(  5,   MathUtils.Remap(0,   10,   0.5) );
-		Assert.assertEquals(  5,   MathUtils.Remap(0,    9,   0.5) );
-		Assert.assertEquals(  0L,  MathUtils.Remap(0L,  10L,  0.0) );
-		Assert.assertEquals( 10L,  MathUtils.Remap(0L,  10L,  1.0) );
-		Assert.assertEquals(  5L,  MathUtils.Remap(0L,   9L,  0.5) );
-		Assert.assertEquals(  0.0, MathUtils.Remap(0.0, 10.0, 0.0), DELTA);
-		Assert.assertEquals( 10.0, MathUtils.Remap(0.0, 10.0, 1.0), DELTA);
-		Assert.assertEquals(  4.5, MathUtils.Remap(0.0,  9.0, 0.5), DELTA);
+		Assert.assertEquals(  0,    MathUtils.Remap(0,    10,    0.0 )       );
+		Assert.assertEquals( 10,    MathUtils.Remap(0,    10,    1.0 )       );
+		Assert.assertEquals(  5,    MathUtils.Remap(0,    10,    0.5 )       );
+		Assert.assertEquals(  5,    MathUtils.Remap(0,     9,    0.5 )       );
+		Assert.assertEquals(  0L,   MathUtils.Remap(0L,   10L,   0.0 )       );
+		Assert.assertEquals( 10L,   MathUtils.Remap(0L,   10L,   1.0 )       );
+		Assert.assertEquals(  5L,   MathUtils.Remap(0L,    9L,   0.5 )       );
+		Assert.assertEquals(  0.0f, MathUtils.Remap(0.0f, 10.0f, 0.0f), DELTA);
+		Assert.assertEquals( 10.0f, MathUtils.Remap(0.0f, 10.0f, 1.0f), DELTA);
+		Assert.assertEquals(  4.5f, MathUtils.Remap(0.0f,  9.0f, 0.5f), DELTA);
+		Assert.assertEquals(  0.0,  MathUtils.Remap(0.0,  10.0,  0.0 ), DELTA);
+		Assert.assertEquals( 10.0,  MathUtils.Remap(0.0,  10.0,  1.0 ), DELTA);
+		Assert.assertEquals(  4.5,  MathUtils.Remap(0.0,   9.0,  0.5 ), DELTA);
 		// remap percent weighted
 		Assert.assertEquals( 0.1,     MathUtils.Remap(0.1,  0.1,  0.5, 0.1), DELTA);
 		Assert.assertEquals( 2.5,     MathUtils.Remap(0.0, 10.0,  0.5, 0.5), DELTA);
@@ -303,12 +306,14 @@ public class Test_MathUtils {
 		Assert.assertEquals( 7.058,   MathUtils.Remap(7.06, 0.81, 0.2, 0.2), DELTA);
 		Assert.assertEquals( 7.258,   MathUtils.Remap(7.26, 1.01, 0.2, 0.2), DELTA);
 		// remap range
-		Assert.assertEquals( 25,   MathUtils.Remap(1,   10,   21,   30,    5  ) );
-		Assert.assertEquals( 30,   MathUtils.Remap(1,   10,   21,   30,   10  ) );
-		Assert.assertEquals( 25L,  MathUtils.Remap(1L,  10L,  21L,  30L,   5L ) );
-		Assert.assertEquals( 30L,  MathUtils.Remap(1L,  10L,  21L,  30L,  10L ) );
-		Assert.assertEquals( 25.0, MathUtils.Remap(1.0, 10.0, 21.0, 30.0,  5.0), DELTA);
-		Assert.assertEquals( 30.0, MathUtils.Remap(1.0, 10.0, 21.0, 30.0, 10.0), DELTA);
+		Assert.assertEquals( 25,    MathUtils.Remap(1,    10,    21,    30,     5   )       );
+		Assert.assertEquals( 30,    MathUtils.Remap(1,    10,    21,    30,    10   )       );
+		Assert.assertEquals( 25L,   MathUtils.Remap(1L,   10L,   21L,   30L,    5L  )       );
+		Assert.assertEquals( 30L,   MathUtils.Remap(1L,   10L,   21L,   30L,   10L  )       );
+		Assert.assertEquals( 25.0f, MathUtils.Remap(1.0f, 10.0f, 21.0f, 30.0f,  5.0f), DELTA);
+		Assert.assertEquals( 30.0f, MathUtils.Remap(1.0f, 10.0f, 21.0f, 30.0f, 10.0f), DELTA);
+		Assert.assertEquals( 25.0,  MathUtils.Remap(1.0,  10.0,  21.0,  30.0,   5.0 ), DELTA);
+		Assert.assertEquals( 30.0,  MathUtils.Remap(1.0,  10.0,  21.0,  30.0,  10.0 ), DELTA);
 		// remap 8 bit color
 		Assert.assertEquals( Color.BLACK, MathUtils.Remap8BitColor(0B00000000) );
 		Assert.assertEquals( Color.WHITE, MathUtils.Remap8BitColor(0B11111111) );
