@@ -821,7 +821,7 @@ public final class MathUtils {
 
 
 	// hybrid 2D
-	public static double DistanceHybrid(final double shape,
+	public static double DistanceHybrid2D(final double shape,
 			final int x1, final int z1,
 			final int x2, final int z2) {
 		return Remap(
@@ -830,7 +830,7 @@ public final class MathUtils {
 			shape
 		);
 	}
-	public static double DistanceHybrid(final double shape,
+	public static double DistanceHybrid2D(final double shape,
 			final long x1, final long z1,
 			final long x2, final long z2) {
 		return Remap(
@@ -839,7 +839,7 @@ public final class MathUtils {
 			shape
 		);
 	}
-	public static float DistanceHybrid(final float shape,
+	public static float DistanceHybrid2D(final float shape,
 			final float x1, final float z1,
 			final float x2, final float z2) {
 		return Remap(
@@ -848,7 +848,7 @@ public final class MathUtils {
 			shape
 		);
 	}
-	public static double DistanceHybrid(final double shape,
+	public static double DistanceHybrid2D(final double shape,
 			final double x1, final double z1,
 			final double x2, final double z2) {
 		return Remap(
@@ -859,7 +859,7 @@ public final class MathUtils {
 	}
 
 	// hybrid 3D
-	public static double DistanceHybrid(final double shape,
+	public static double DistanceHybrid3D(final double shape,
 			final int x1, final int y1, final int z1,
 			final int x2, final int y2, final int z2) {
 		return Remap(
@@ -868,7 +868,7 @@ public final class MathUtils {
 			shape
 		);
 	}
-	public static double DistanceHybrid(final double shape,
+	public static double DistanceHybrid3D(final double shape,
 			final long x1, final long y1, final long z1,
 			final long x2, final long y2, final long z2) {
 		return Remap(
@@ -877,7 +877,7 @@ public final class MathUtils {
 			shape
 		);
 	}
-	public static float DistanceHybrid(final float shape,
+	public static float DistanceHybrid3D(final float shape,
 			final float x1, final float y1, final float z1,
 			final float x2, final float y2, final float z2) {
 		return Remap(
@@ -886,7 +886,7 @@ public final class MathUtils {
 			shape
 		);
 	}
-	public static double DistanceHybrid(final double shape,
+	public static double DistanceHybrid3D(final double shape,
 			final double x1, final double y1, final double z1,
 			final double x2, final double y2, final double z2) {
 		return Remap(
