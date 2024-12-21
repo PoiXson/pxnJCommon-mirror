@@ -666,6 +666,7 @@ public final class MathUtils {
 
 
 
+	// circular 2D
 	public static double DistanceRadial(
 			final int x1, final int z1,
 			final int x2, final int z2) {
@@ -699,6 +700,7 @@ public final class MathUtils {
 		);
 	}
 
+	// circular 3D
 	public static double DistanceRadial(
 			final int x1, final int y1, final int z1,
 			final int x2, final int y2, final int z2) {
@@ -738,6 +740,7 @@ public final class MathUtils {
 
 
 
+	// square 2D
 	public static double DistanceAxial(
 			final int x1, final int z1,
 			final int x2, final int z2) {
@@ -771,6 +774,7 @@ public final class MathUtils {
 		);
 	}
 
+	// square 3D
 	public static double DistanceAxial(
 			final int x1, final int y1, final int z1,
 			final int x2, final int y2, final int z2) {
@@ -810,6 +814,7 @@ public final class MathUtils {
 
 
 
+	// hybrid 2D
 	public static double DistanceHybrid(final double shape,
 			final int x1, final int z1,
 			final int x2, final int z2) {
@@ -847,6 +852,7 @@ public final class MathUtils {
 		);
 	}
 
+	// hybrid 3D
 	public static double DistanceHybrid(final double shape,
 			final int x1, final int y1, final int z1,
 			final int x2, final int y2, final int z2) {

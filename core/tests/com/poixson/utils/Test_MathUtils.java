@@ -211,59 +211,54 @@ public class Test_MathUtils {
 	@Test
 	public void testDistance() {
 		final double delta = 0.001;
-		final double x1 =   0.0; final double y1 = x1; final double z1 = x1;
-		final double x2 =   1.0; final double y2 = x2; final double z2 = x2;
-		final double x3 =   5.0; final double y3 = x3; final double z3 = x3;
-		final double x4 =  90.0; final double y4 = x4; final double z4 = x4;
-		final double x5 = 999.9; final double y5 = x5; final double z5 = x5;
-		// 2d distance
-		Assert.assertEquals(   0.0,   DistanceRadial(x1, z1, x1, z1), delta);
-		Assert.assertEquals(   1.414, DistanceRadial(x1, z1, x2, z2), delta);
-		Assert.assertEquals(   7.071, DistanceRadial(x1, z1, x3, z3), delta);
-		Assert.assertEquals(   5.656, DistanceRadial(x2, z2, x3, z3), delta);
-		Assert.assertEquals( 120.208, DistanceRadial(x3, z3, x4, z4), delta);
-		Assert.assertEquals(1407.001, DistanceRadial(x3, z3, x5, z5), delta);
-		Assert.assertEquals(1414.072, DistanceRadial(x1, z1, x5, z5), delta);
-		Assert.assertEquals(   1.0,   DistanceRadial(x1, z1, x2, z1), delta);
-		Assert.assertEquals(   1.0,   DistanceRadial(x1, z1, x1, z2), delta);
-		Assert.assertEquals(   1.414, DistanceRadial(x2, z2, x1, z1), delta);
-		// 3d distance
-		Assert.assertEquals(   0.0,   DistanceRadial(x1, y1, z1, x1, y1, z1), delta);
-		Assert.assertEquals(   1.732, DistanceRadial(x1, y1, z1, x2, y2, z2), delta);
-		Assert.assertEquals(   8.66,  DistanceRadial(x1, y1, z1, x3, y3, z3), delta);
-		Assert.assertEquals(   6.928, DistanceRadial(x2, y2, z2, x3, y3, z3), delta);
-		Assert.assertEquals( 147.224, DistanceRadial(x3, y3, z3, x4, y4, z4), delta);
-		Assert.assertEquals(1723.217, DistanceRadial(x3, y3, z3, x5, y5, z5), delta);
-		Assert.assertEquals(1731.877, DistanceRadial(x1, y1, z1, x5, y5, z5), delta);
-		Assert.assertEquals(   1.0,   DistanceRadial(x1, y1, z1, x2, y1, z1), delta);
-		Assert.assertEquals(   1.0,   DistanceRadial(x1, y1, z1, x1, y2, z1), delta);
-		Assert.assertEquals(   1.0,   DistanceRadial(x1, y1, z1, x1, y1, z2), delta);
-		Assert.assertEquals(   1.0,   DistanceRadial(x1, y1, z1, x1, y2, z1), delta);
-		Assert.assertEquals(   1.732, DistanceRadial(x2, y2, z2, x1, y1, z1), delta);
-		// 2d fast distance
-		Assert.assertEquals(  0.0, DistanceAxial(x1, z1, x1, z1), delta);
-		Assert.assertEquals(  1.0, DistanceAxial(x1, z1, x2, z2), delta);
-		Assert.assertEquals(  5.0, DistanceAxial(x1, z1, x3, z3), delta);
-		Assert.assertEquals(  4.0, DistanceAxial(x2, z2, x3, z3), delta);
-		Assert.assertEquals( 85.0, DistanceAxial(x3, z3, x4, z4), delta);
-		Assert.assertEquals(994.9, DistanceAxial(x3, z3, x5, z5), delta);
-		Assert.assertEquals(999.9, DistanceAxial(x1, z1, x5, z5), delta);
-		Assert.assertEquals(  1.0, DistanceAxial(x1, z1, x2, z1), delta);
-		Assert.assertEquals(  1.0, DistanceAxial(x1, z1, x1, z2), delta);
-		Assert.assertEquals(  1.0, DistanceAxial(x2, z2, x1, z1), delta);
-		// 3d fast distance
-		Assert.assertEquals(  0.0, DistanceAxial(x1, y1, z1, x1, y1, z1), delta);
-		Assert.assertEquals(  1.0, DistanceAxial(x1, y1, z1, x2, y2, z2), delta);
-		Assert.assertEquals(  5.0, DistanceAxial(x1, y1, z1, x3, y3, z3), delta);
-		Assert.assertEquals(  4.0, DistanceAxial(x2, y2, z2, x3, y3, z3), delta);
-		Assert.assertEquals( 85.0, DistanceAxial(x3, y3, z3, x4, y4, z4), delta);
-		Assert.assertEquals(994.9, DistanceAxial(x3, y3, z3, x5, y5, z5), delta);
-		Assert.assertEquals(999.9, DistanceAxial(x1, y1, z1, x5, y5, z5), delta);
-		Assert.assertEquals(  1.0, DistanceAxial(x1, y1, z1, x2, y1, z1), delta);
-		Assert.assertEquals(  1.0, DistanceAxial(x1, y1, z1, x1, y2, z1), delta);
-		Assert.assertEquals(  1.0, DistanceAxial(x1, y1, z1, x1, y1, z2), delta);
-		Assert.assertEquals(  1.0, DistanceAxial(x1, y1, z1, x1, y2, z1), delta);
-		Assert.assertEquals(  1.0, DistanceAxial(x2, y2, z2, x1, y1, z1), delta);
+		// 2d circular distance
+		Assert.assertEquals(   0.0,   DistanceRadial(0.0, 0.0,   0.0,   0.0), delta);
+		Assert.assertEquals(   1.414, DistanceRadial(0.0, 0.0,   1.0,   1.0), delta);
+		Assert.assertEquals(   7.071, DistanceRadial(0.0, 0.0,   5.0,   5.0), delta);
+		Assert.assertEquals(   5.656, DistanceRadial(1.0, 1.0,   5.0,   5.0), delta);
+		Assert.assertEquals( 120.208, DistanceRadial(5.0, 5.0,  90.0,  90.0), delta);
+		Assert.assertEquals(1407.001, DistanceRadial(5.0, 5.0, 999.9, 999.9), delta);
+		Assert.assertEquals(1414.072, DistanceRadial(0.0, 0.0, 999.9, 999.9), delta);
+		Assert.assertEquals(   1.0,   DistanceRadial(0.0, 0.0,   1.0,   0.0), delta);
+		Assert.assertEquals(   1.0,   DistanceRadial(0.0, 0.0,   0.0,   1.0), delta);
+		Assert.assertEquals(   1.414, DistanceRadial(1.0, 1.0,   0.0,   0.0), delta);
+		// 3d circular distance
+		Assert.assertEquals(   0.0,   DistanceRadial(0.0, 0.0, 0.0,   0.0,   0.0,   0.0), delta);
+		Assert.assertEquals(   1.732, DistanceRadial(0.0, 0.0, 0.0,   1.0,   1.0,   1.0), delta);
+		Assert.assertEquals(   8.66,  DistanceRadial(0.0, 0.0, 0.0,   5.0,   5.0,   5.0), delta);
+		Assert.assertEquals(   6.928, DistanceRadial(1.0, 1.0, 1.0,   5.0,   5.0,   5.0), delta);
+		Assert.assertEquals( 147.224, DistanceRadial(5.0, 5.0, 5.0,  90.0,  90.0,  90.0), delta);
+		Assert.assertEquals(1723.217, DistanceRadial(5.0, 5.0, 5.0, 999.9, 999.9, 999.9), delta);
+		Assert.assertEquals(1731.877, DistanceRadial(0.0, 0.0, 0.0, 999.9, 999.9, 999.9), delta);
+		Assert.assertEquals(   1.0,   DistanceRadial(0.0, 0.0, 0.0,   1.0,   0.0,   0.0), delta);
+		Assert.assertEquals(   1.0,   DistanceRadial(0.0, 0.0, 0.0,   0.0,   1.0,   0.0), delta);
+		Assert.assertEquals(   1.0,   DistanceRadial(0.0, 0.0, 0.0,   0.0,   0.0,   1.0), delta);
+		Assert.assertEquals(   1.0,   DistanceRadial(0.0, 0.0, 0.0,   0.0,   1.0,   0.0), delta);
+		Assert.assertEquals(   1.732, DistanceRadial(1.0, 1.0, 1.0,   0.0,   0.0,   0.0), delta);
+		// 2d square distance
+		Assert.assertEquals(  0.0, DistanceAxial(0.0, 0.0,   0.0,   0.0), delta);
+		Assert.assertEquals(  1.0, DistanceAxial(0.0, 0.0,   1.0,   1.0), delta);
+		Assert.assertEquals(  5.0, DistanceAxial(0.0, 0.0,   5.0,   5.0), delta);
+		Assert.assertEquals(  4.0, DistanceAxial(1.0, 1.0,   5.0,   5.0), delta);
+		Assert.assertEquals( 85.0, DistanceAxial(5.0, 5.0,  90.0,  90.0), delta);
+		Assert.assertEquals(994.9, DistanceAxial(5.0, 5.0, 999.9, 999.9), delta);
+		Assert.assertEquals(999.9, DistanceAxial(0.0, 0.0, 999.9, 999.9), delta);
+		Assert.assertEquals(  1.0, DistanceAxial(0.0, 0.0,   1.0,   0.0), delta);
+		Assert.assertEquals(  1.0, DistanceAxial(0.0, 0.0,   0.0,   1.0), delta);
+		Assert.assertEquals(  1.0, DistanceAxial(1.0, 1.0,   0.0,   0.0), delta);
+		// 3d square distance
+		Assert.assertEquals(  0.0, DistanceAxial(0.0, 0.0, 0.0,   0.0,   0.0,   0.0), delta);
+		Assert.assertEquals(  1.0, DistanceAxial(0.0, 0.0, 0.0,   1.0,   1.0,   1.0), delta);
+		Assert.assertEquals(  5.0, DistanceAxial(0.0, 0.0, 0.0,   5.0,   5.0,   5.0), delta);
+		Assert.assertEquals(  4.0, DistanceAxial(1.0, 1.0, 1.0,   5.0,   5.0,   5.0), delta);
+		Assert.assertEquals( 85.0, DistanceAxial(5.0, 5.0, 5.0,  90.0,  90.0,  90.0), delta);
+		Assert.assertEquals(994.9, DistanceAxial(5.0, 5.0, 5.0, 999.9, 999.9, 999.9), delta);
+		Assert.assertEquals(999.9, DistanceAxial(0.0, 0.0, 0.0, 999.9, 999.9, 999.9), delta);
+		Assert.assertEquals(  1.0, DistanceAxial(0.0, 0.0, 0.0,   1.0,   0.0,   0.0), delta);
+		Assert.assertEquals(  1.0, DistanceAxial(0.0, 0.0, 0.0,   0.0,   1.0,   0.0), delta);
+		Assert.assertEquals(  1.0, DistanceAxial(0.0, 0.0, 0.0,   0.0,   0.0,   1.0), delta);
+		Assert.assertEquals(  1.0, DistanceAxial(0.0, 0.0, 0.0,   0.0,   1.0,   0.0), delta);
+		Assert.assertEquals(  1.0, DistanceAxial(1.0, 1.0, 1.0,   0.0,   0.0,   0.0), delta);
 		// 2d hybrid distance
 		Assert.assertEquals(0.0, DistanceHybrid(0.0, 0.0, 0.0, 0.0, 0.0), delta);
 			Assert.assertEquals(0.0, DistanceHybrid(0.1, 0.0, 0.0, 0.0, 0.0), delta);
