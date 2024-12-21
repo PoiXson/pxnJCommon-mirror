@@ -89,5 +89,17 @@ public class xHandlerGeneric extends xHandler<xEvent> {
 
 
 
+	@Override
+	public void unregister(final Object object) {
+	}
+
+
+
+	@Override
+	public void unregister(final Object object, final String methodName) {
+	}
+
+
+
 }
 */
