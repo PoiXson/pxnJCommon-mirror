@@ -664,6 +664,12 @@ public final class MathUtils {
 	// -------------------------------------------------------------------------------
 	// distance
 
+	//        |   2D   |   3D
+	//-----------------------------
+	// circle | Radial | Vectorial
+	// square | Linear | Axial
+	// hybrid | Hybrid | Hybrid
+
 
 
 	// circular 2D
@@ -701,7 +707,7 @@ public final class MathUtils {
 	}
 
 	// circular 3D
-	public static double DistanceRadial(
+	public static double DistanceVectorial(
 			final int x1, final int y1, final int z1,
 			final int x2, final int y2, final int z2) {
 		return Math.sqrt(
@@ -710,7 +716,7 @@ public final class MathUtils {
 			(double) Square(z1 - z2)
 		);
 	}
-	public static double DistanceRadial(
+	public static double DistanceVectorial(
 			final long x1, final long y1, final long z1,
 			final long x2, final long y2, final long z2) {
 		return Math.sqrt(
@@ -719,7 +725,7 @@ public final class MathUtils {
 			(double) Square(z1 - z2)
 		);
 	}
-	public static float DistanceRadial(
+	public static float DistanceVectorial(
 			final float x1, final float y1, final float z1,
 			final float x2, final float y2, final float z2) {
 		return (float)Math.sqrt(
@@ -728,7 +734,7 @@ public final class MathUtils {
 			Square(z1 - z2)
 		);
 	}
-	public static double DistanceRadial(
+	public static double DistanceVectorial(
 			final double x1, final double y1, final double z1,
 			final double x2, final double y2, final double z2) {
 		return Math.sqrt(
@@ -741,7 +747,7 @@ public final class MathUtils {
 
 
 	// square 2D
-	public static double DistanceAxial(
+	public static double DistanceLinear(
 			final int x1, final int z1,
 			final int x2, final int z2) {
 		return Max(
@@ -749,7 +755,7 @@ public final class MathUtils {
 			(double) Math.abs(z1 - z2)
 		);
 	}
-	public static double DistanceAxial(
+	public static double DistanceLinear(
 			final long x1, final long z1,
 			final long x2, final long z2) {
 		return Max(
@@ -757,7 +763,7 @@ public final class MathUtils {
 			(double) Math.abs(z1 - z2)
 		);
 	}
-	public static float DistanceAxial(
+	public static float DistanceLinear(
 			final float x1, final float z1,
 			final float x2, final float z2) {
 		return Max(
@@ -765,7 +771,7 @@ public final class MathUtils {
 			Math.abs(z1 - z2)
 		);
 	}
-	public static double DistanceAxial(
+	public static double DistanceLinear(
 			final double x1, final double z1,
 			final double x2, final double z2) {
 		return Max(
@@ -819,7 +825,7 @@ public final class MathUtils {
 			final int x1, final int z1,
 			final int x2, final int z2) {
 		return Remap(
-			DistanceAxial( x1, z1, x2, z2),
+			DistanceLinear(x1, z1, x2, z2),
 			DistanceRadial(x1, z1, x2, z2),
 			shape
 		);
@@ -828,7 +834,7 @@ public final class MathUtils {
 			final long x1, final long z1,
 			final long x2, final long z2) {
 		return Remap(
-			DistanceAxial( x1, z1, x2, z2),
+			DistanceLinear(x1, z1, x2, z2),
 			DistanceRadial(x1, z1, x2, z2),
 			shape
 		);
@@ -837,7 +843,7 @@ public final class MathUtils {
 			final float x1, final float z1,
 			final float x2, final float z2) {
 		return Remap(
-			DistanceAxial( x1, z1, x2, z2),
+			DistanceLinear(x1, z1, x2, z2),
 			DistanceRadial(x1, z1, x2, z2),
 			shape
 		);
@@ -846,7 +852,7 @@ public final class MathUtils {
 			final double x1, final double z1,
 			final double x2, final double z2) {
 		return Remap(
-			DistanceAxial( x1, z1, x2, z2),
+			DistanceLinear(x1, z1, x2, z2),
 			DistanceRadial(x1, z1, x2, z2),
 			shape
 		);
@@ -857,8 +863,8 @@ public final class MathUtils {
 			final int x1, final int y1, final int z1,
 			final int x2, final int y2, final int z2) {
 		return Remap(
-			DistanceAxial( x1, y1, z1, x2, y2, z2),
-			DistanceRadial(x1, y1, z1, x2, y2, z2),
+			DistanceAxial(    x1, y1, z1, x2, y2, z2),
+			DistanceVectorial(x1, y1, z1, x2, y2, z2),
 			shape
 		);
 	}
@@ -866,8 +872,8 @@ public final class MathUtils {
 			final long x1, final long y1, final long z1,
 			final long x2, final long y2, final long z2) {
 		return Remap(
-			DistanceAxial( x1, y1, z1, x2, y2, z2),
-			DistanceRadial(x1, y1, z1, x2, y2, z2),
+			DistanceAxial(    x1, y1, z1, x2, y2, z2),
+			DistanceVectorial(x1, y1, z1, x2, y2, z2),
 			shape
 		);
 	}
@@ -875,8 +881,8 @@ public final class MathUtils {
 			final float x1, final float y1, final float z1,
 			final float x2, final float y2, final float z2) {
 		return Remap(
-			DistanceAxial( x1, y1, z1, x2, y2, z2),
-			DistanceRadial(x1, y1, z1, x2, y2, z2),
+			DistanceAxial(    x1, y1, z1, x2, y2, z2),
+			DistanceVectorial(x1, y1, z1, x2, y2, z2),
 			shape
 		);
 	}
@@ -884,8 +890,8 @@ public final class MathUtils {
 			final double x1, final double y1, final double z1,
 			final double x2, final double y2, final double z2) {
 		return Remap(
-			DistanceAxial( x1, y1, z1, x2, y2, z2),
-			DistanceRadial(x1, y1, z1, x2, y2, z2),
+			DistanceAxial(    x1, y1, z1, x2, y2, z2),
+			DistanceVectorial(x1, y1, z1, x2, y2, z2),
 			shape
 		);
 	}
