@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -1119,6 +1120,93 @@ public final class StringUtils {
 
 
 	// -------------------------------------------------------------------------------
+	// replace tags
+
+
+
+	// replace {} or {#} tags
+	public static String ReplaceTags(final String line, final Object...args) {
+		if (IsEmpty(args)) return line;
+		if (IsEmpty(line)) return MergeObjects(' ', args);
+		final StringBuilder result = new StringBuilder(line);
+		final int num_args = args.length;
+		int used = 0;
+		// {}
+		{
+			LOOP_ARGS:
+			for (final Object arg : args) {
+				final int pos = result.indexOf("{}");
+				if (pos == -1) break LOOP_ARGS;
+				final String val = (arg==null ? "<null>" : ToString(arg));
+				result.replace(pos, pos + 2, val);
+				used++;
+			} // end LOOP_ARGS
+		}
+		// {n}
+		boolean found = true;
+		//LOOP_CHANGES:
+		while (found) {
+			found = false;
+			//LOOP_ARGS:
+			for (int index=0; index<num_args; index++) {
+				final Object arg = args[index];
+				final String val = (arg==null ? "<null>" : ToString(arg));
+				final String tag = String.format("{%d}", Integer.valueOf(index+1));
+				LOOP_REPLACE:
+				while (true) {
+					final int pos = result.indexOf(tag);
+					if (pos == -1) break LOOP_REPLACE;
+					result.replace(pos, pos+tag.length(), val);
+					found = true;
+					if (used < index + 1)
+						used = index + 1;
+				} // end LOOP_REPLACE:
+			} // end LOOP_ARGS
+		} // end LOOP_CHANGES
+		if (num_args > used) {
+			for (int index=used; index<num_args; index++) {
+				final Object arg = args[index];
+				final String val = (arg==null ? "<null>" : ToString(arg));
+				result.append(' ').append(val);
+			}
+		}
+		return result.toString();
+	}
+
+
+
+	// replace {key} tags
+	public static String ReplaceTags(final String line, final Map<String, Object> args) {
+		if (IsEmpty(line)) return line;
+		if (IsEmpty(args)) return line;
+		final StringBuilder result = new StringBuilder(line);
+		// {key}
+		{
+			boolean found = true;
+			//LOOP_CHANGES:
+			while (found) {
+				found = false;
+				//LOOP_ARGS:
+				for (final Entry<String, Object> entry : args.entrySet()) {
+					final Object arg = entry.getValue();
+					final String val = (arg==null ? "<null>" : ToString(arg));
+					final String tag = String.format("{%s}", entry.getKey());
+					LOOP_REPLACE:
+					while (true) {
+						final int pos = result.indexOf(tag);
+						if (pos == -1) break LOOP_REPLACE;
+						result.replace(pos, pos + tag.length(), val);
+						found = true;
+					} // end LOOP_REPLACE
+				} // end LOOP_ARGS
+			} // end LOOP_CHANGES
+		}
+		return result.toString();
+	}
+
+
+
+	// -------------------------------------------------------------------------------
 	// generate string
 
 
@@ -1268,202 +1356,6 @@ public final class StringUtils {
 			return (double) diff;
 		}
 	}
-
-
-
-//TODO: remove this?
-/*
-	// -------------------------------------------------------------------------------
-	// replace {} tags
-
-
-
-	// replace {} or {#} tags
-	public static String ReplaceTags(final String msg, final Object...args) {
-		if (IsEmpty(msg))  return msg;
-		if (IsEmpty(args)) return msg;
-		final StringBuilder result = new StringBuilder(msg);
-		LOOP_ARGS:
-		for (int index=0; index<args.length; index++) {
-			final Object obj = args[index];
-			final String str = ( obj == null ? "<null>" : ToString(obj) );
-			// {#}
-			{
-				final String tag = (new StringBuilder()).append('{').append(index + 1).append('}').toString();
-				boolean found = false;
-				LOOP_REPLACE:
-				while (true) {
-					final int pos = result.indexOf(tag);
-					if (pos == -1) break LOOP_REPLACE;
-					result.replace(pos, pos + tag.length(), str);
-					found = true;
-				} // end LOOP_REPLACE
-				if (found) continue LOOP_ARGS;
-			}
-			// {}
-			{
-				final int pos = result.indexOf("{}");
-				if (pos >= 0) {
-					result.replace(pos, pos + 2, str);
-					continue LOOP_ARGS;
-				}
-			}
-			// append
-			result
-				.append(' ')
-				.append(str);
-		} // end LOOP_ARGS
-		return result.toString();
-	}
-
-
-
-	// replace {} or {#} tags (in multiple lines)
-	public static String[] ReplaceTags(final String[] msgs, final Object...args) {
-		if (IsEmpty(msgs)) return msgs;
-		if (IsEmpty(args)) return msgs;
-		String[] result = Arrays.copyOf(msgs, msgs.length);
-		final StringBuilder extras = new StringBuilder();
-		LOOP_ARGS:
-		for (int argIndex=0; argIndex<args.length; argIndex++) {
-			final String str = ( args[argIndex] == null ? "<null>" : ToString(args[argIndex]) );
-			// {#} - all instances
-			{
-				final String tag = (new StringBuilder()).append('{').append(argIndex + 1).append('}').toString();
-				boolean found = false;
-				LOOP_LINE:
-				for (int lineIndex=0; lineIndex<msgs.length; lineIndex++) {
-					if (IsEmpty( result[lineIndex] ))
-						continue LOOP_LINE;
-					//LOOP_REPLACE:
-					while (true) {
-						final int pos = result[lineIndex].indexOf(tag);
-						if (pos == -1) continue LOOP_LINE;
-						result[lineIndex] = ReplaceStringRange( result[lineIndex], str, pos, pos + tag.length() );
-						found = true;
-					} // end LOOP_REPLACE
-				} // end LOOP_LINE
-				if (found) continue LOOP_ARGS;
-			}
-			// {} - first found
-			{
-				LOOP_LINE:
-				for (int lineIndex=0; lineIndex<msgs.length; lineIndex++) {
-					if (IsEmpty( result[lineIndex] ))
-						continue LOOP_LINE;
-					final int pos = result[lineIndex].indexOf("{}");
-					if (pos == -1) continue LOOP_LINE;
-					result[lineIndex] = ReplaceStringRange( result[lineIndex], str, pos, pos + 2 );
-					continue LOOP_ARGS;
-				} // end LOOP_LINE
-			}
-			// append to end
-			{
-				if ( extras.length() != 0 )
-					extras.append(' ');
-				extras.append(str);
-			}
-		} // end LOOP_ARGS
-		if ( extras.length() != 0 ) {
-			if (result.length == 1) {
-				result[0] =
-					(new StringBuilder())
-						.append( result[0] )
-						.append( ' '       )
-						.append( extras    )
-						.toString();
-				return result;
-			}
-			String[] newResult = new String[ result.length + 1 ];
-			newResult[result.length] = extras.toString();
-			return newResult;
-		}
-		return result;
-	}
-
-
-
-	// replace {key} tags
-	public static String ReplaceTags(final String msg, final Map<String, Object> args) {
-		if (IsEmpty(msg))  return msg;
-		if (IsEmpty(args)) return msg;
-		final StringBuilder result = new StringBuilder(msg);
-		LOOP_ARGS:
-		for (final String key : args.keySet()) {
-			final Object obj = args.get(key);
-			final String str = ( obj == null ? "<null>" : ToString(obj) );
-			// {key}
-			{
-				final String tag = (new StringBuilder()).append('{').append(key).append('}').toString();
-				boolean found = false;
-				LOOP_REPLACE:
-				while (true) {
-					final int pos = result.indexOf(tag);
-					if (pos == -1) break LOOP_REPLACE;
-					result.replace(pos, pos + tag.length(), str);
-					found = true;
-				} // end LOOP_REPLACE
-				if (found) continue LOOP_ARGS;
-			}
-			// {}
-			{
-				final int pos = result.indexOf("{}");
-				if (pos != -1) {
-					result.replace(pos, pos + 2, str);
-				}
-			}
-			// don't append
-		} // end LOOP_ARGS
-		return result.toString();
-	}
-
-
-
-	// replace {key} tags (in multiple lines)
-	public static String[] ReplaceTags(final String[] msgs, final Map<String, Object> args) {
-		if (IsEmpty(msgs)) return msgs;
-		if (IsEmpty(args)) return msgs;
-		String[] result = Arrays.copyOf(msgs, msgs.length);
-		LOOP_ARGS:
-		for (final String key : args.keySet()) {
-			final Object obj = args.get(key);
-			final String str = ( obj == null ? "<null>" : ToString(obj) );
-			// {key}
-			{
-				final String tag = (new StringBuilder()).append('{').append(key).append('}').toString();
-				boolean found = false;
-				LOOP_LINE:
-				for (int lineIndex=0; lineIndex<msgs.length; lineIndex++) {
-					if (IsEmpty( result[lineIndex] ))
-						continue LOOP_LINE;
-					//LOOP_REPLACE:
-					while (true) {
-						final int pos = result[lineIndex].indexOf(tag);
-						if (pos == -1) continue LOOP_LINE;
-						result[lineIndex] = ReplaceStringRange( result[lineIndex], str, pos, pos + tag.length() );
-						found = true;
-					} // end LOOP_REPLACE
-				} // end LOOP_LINE
-				if (found)
-					continue LOOP_ARGS;
-			}
-			// {}
-			{
-				LOOP_LINE:
-				for (int lineIndex=0; lineIndex<msgs.length; lineIndex++) {
-					if (IsEmpty( result[lineIndex] ))
-						continue LOOP_LINE;
-					final int pos = result[lineIndex].indexOf("{}");
-					if (pos != -1) {
-						result[lineIndex] = ReplaceStringRange( result[lineIndex], str, pos, pos + 2 );
-						continue LOOP_ARGS;
-					}
-				} // end LOOP_LINE
-			}
-		}
-		return result;
-	}
-*/
 
 
 
