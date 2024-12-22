@@ -70,7 +70,7 @@ public class Test_ArrayUtils {
 		mapA.put("abc", "123");
 		mapA.put("def", "456");
 		mapA.put("ghi", "789");
-		Assert.assertTrue(MatchMaps(mapA, ArrayUtils.ArrayToMap(arrayA)));
+		Assert.assertTrue(MatchMaps(mapA, ArrayUtils.ssArrayToMap(arrayA)));
 	}
 
 

@@ -551,39 +551,39 @@ public class Test_StringUtils {
 	public void testReplaceTags() {
 		// array tags
 		{
-			Assert.assertEquals( null,        StringUtils.ReplaceTags(null                ) );
-			Assert.assertEquals( "",          StringUtils.ReplaceTags(""                  ) );
-			Assert.assertEquals( "abc",       StringUtils.ReplaceTags("abc"               ) );
-			Assert.assertEquals( "1 2 3",     StringUtils.ReplaceTags(null,        1, 2, 3) );
-			Assert.assertEquals( "1 2 3",     StringUtils.ReplaceTags("",          1, 2, 3) );
-			Assert.assertEquals( "abc 1",     StringUtils.ReplaceTags("abc",       1      ) );
-			Assert.assertEquals( "abc 1 2",   StringUtils.ReplaceTags("abc",       1, 2   ) );
-			Assert.assertEquals( "abc 1 2 3", StringUtils.ReplaceTags("abc",       1, 2, 3) );
-			Assert.assertEquals( "a{}b{}c",   StringUtils.ReplaceTags("a{}b{}c"           ) );
-			Assert.assertEquals( "a1b{}c",    StringUtils.ReplaceTags("a{}b{}c",   1      ) );
-			Assert.assertEquals( "a1b2c",     StringUtils.ReplaceTags("a{}b{}c",   1, 2   ) );
-			Assert.assertEquals( "a1b2c 3",   StringUtils.ReplaceTags("a{}b{}c",   1, 2, 3) );
-			Assert.assertEquals( "a{1}b{2}c", StringUtils.ReplaceTags("a{1}b{2}c"         ) );
-			Assert.assertEquals( "a1b{2}c",   StringUtils.ReplaceTags("a{1}b{2}c", 1      ) );
-			Assert.assertEquals( "a1b2c",     StringUtils.ReplaceTags("a{1}b{2}c", 1, 2   ) );
-			Assert.assertEquals( "a1b2c 3",   StringUtils.ReplaceTags("a{1}b{2}c", 1, 2, 3) );
-			Assert.assertEquals( "a{2}b{1}c", StringUtils.ReplaceTags("a{2}b{1}c"         ) );
-			Assert.assertEquals( "a{2}b1c",   StringUtils.ReplaceTags("a{2}b{1}c", 1      ) );
-			Assert.assertEquals( "a2b1c",     StringUtils.ReplaceTags("a{2}b{1}c", 1, 2   ) );
-			Assert.assertEquals( "a2b1c 3",   StringUtils.ReplaceTags("a{2}b{1}c", 1, 2, 3) );
-			Assert.assertEquals( "a1b1c 2 3", StringUtils.ReplaceTags("a{1}b{}c",  1, 2, 3) );
-			Assert.assertEquals( "a3b1c",     StringUtils.ReplaceTags("a{3}b{}c",  1, 2, 3) );
-			Assert.assertEquals( "a2b1c 3",   StringUtils.ReplaceTags("a{2}b{}c",  1, 2, 3) );
-			Assert.assertEquals( "a1b1c 2 3", StringUtils.ReplaceTags("a{}b{1}c",  1, 2, 3) );
-			Assert.assertEquals( "a1b2c 3",   StringUtils.ReplaceTags("a{}b{2}c",  1, 2, 3) );
-			Assert.assertEquals( "a1bc 2 3",  StringUtils.ReplaceTags("a{}bc",     1, 2, 3) );
-			Assert.assertEquals( "a1bc 2 3",  StringUtils.ReplaceTags("a{1}bc",    1, 2, 3) );
-			Assert.assertEquals( "a2bc 3",    StringUtils.ReplaceTags("a{2}bc",    1, 2, 3) );
-			Assert.assertEquals( "a3bc",      StringUtils.ReplaceTags("a{3}bc",    1, 2, 3) );
-			Assert.assertEquals( "ad3fb2c",   StringUtils.ReplaceTags("a{}b{}c", "d{3}f", 2, 3 ) );
-			Assert.assertEquals( "ad2fbc 3",  StringUtils.ReplaceTags("a{}bc",   "d{2}f", 2, 3 ) );
-			Assert.assertEquals( "a123b123.456c 123.456", StringUtils.ReplaceTags("a{1}b{2}c", 123L, 123.456f, 123.456) );
-			Assert.assertEquals( "abc TRUE false", StringUtils.ReplaceTags("abc", true, false ) );
+			Assert.assertEquals( null,        StringUtils.oReplaceTags(null                ) );
+			Assert.assertEquals( "",          StringUtils.oReplaceTags(""                  ) );
+			Assert.assertEquals( "abc",       StringUtils.oReplaceTags("abc"               ) );
+			Assert.assertEquals( "1 2 3",     StringUtils.oReplaceTags(null,        1, 2, 3) );
+			Assert.assertEquals( "1 2 3",     StringUtils.oReplaceTags("",          1, 2, 3) );
+			Assert.assertEquals( "abc 1",     StringUtils.oReplaceTags("abc",       1      ) );
+			Assert.assertEquals( "abc 1 2",   StringUtils.oReplaceTags("abc",       1, 2   ) );
+			Assert.assertEquals( "abc 1 2 3", StringUtils.oReplaceTags("abc",       1, 2, 3) );
+			Assert.assertEquals( "a{}b{}c",   StringUtils.oReplaceTags("a{}b{}c"           ) );
+			Assert.assertEquals( "a1b{}c",    StringUtils.oReplaceTags("a{}b{}c",   1      ) );
+			Assert.assertEquals( "a1b2c",     StringUtils.oReplaceTags("a{}b{}c",   1, 2   ) );
+			Assert.assertEquals( "a1b2c 3",   StringUtils.oReplaceTags("a{}b{}c",   1, 2, 3) );
+			Assert.assertEquals( "a{1}b{2}c", StringUtils.oReplaceTags("a{1}b{2}c"         ) );
+			Assert.assertEquals( "a1b{2}c",   StringUtils.oReplaceTags("a{1}b{2}c", 1      ) );
+			Assert.assertEquals( "a1b2c",     StringUtils.oReplaceTags("a{1}b{2}c", 1, 2   ) );
+			Assert.assertEquals( "a1b2c 3",   StringUtils.oReplaceTags("a{1}b{2}c", 1, 2, 3) );
+			Assert.assertEquals( "a{2}b{1}c", StringUtils.oReplaceTags("a{2}b{1}c"         ) );
+			Assert.assertEquals( "a{2}b1c",   StringUtils.oReplaceTags("a{2}b{1}c", 1      ) );
+			Assert.assertEquals( "a2b1c",     StringUtils.oReplaceTags("a{2}b{1}c", 1, 2   ) );
+			Assert.assertEquals( "a2b1c 3",   StringUtils.oReplaceTags("a{2}b{1}c", 1, 2, 3) );
+			Assert.assertEquals( "a1b1c 2 3", StringUtils.oReplaceTags("a{1}b{}c",  1, 2, 3) );
+			Assert.assertEquals( "a3b1c",     StringUtils.oReplaceTags("a{3}b{}c",  1, 2, 3) );
+			Assert.assertEquals( "a2b1c 3",   StringUtils.oReplaceTags("a{2}b{}c",  1, 2, 3) );
+			Assert.assertEquals( "a1b1c 2 3", StringUtils.oReplaceTags("a{}b{1}c",  1, 2, 3) );
+			Assert.assertEquals( "a1b2c 3",   StringUtils.oReplaceTags("a{}b{2}c",  1, 2, 3) );
+			Assert.assertEquals( "a1bc 2 3",  StringUtils.oReplaceTags("a{}bc",     1, 2, 3) );
+			Assert.assertEquals( "a1bc 2 3",  StringUtils.oReplaceTags("a{1}bc",    1, 2, 3) );
+			Assert.assertEquals( "a2bc 3",    StringUtils.oReplaceTags("a{2}bc",    1, 2, 3) );
+			Assert.assertEquals( "a3bc",      StringUtils.oReplaceTags("a{3}bc",    1, 2, 3) );
+			Assert.assertEquals( "ad3fb2c",   StringUtils.oReplaceTags("a{}b{}c", "d{3}f", 2, 3 ) );
+			Assert.assertEquals( "ad2fbc 3",  StringUtils.oReplaceTags("a{}bc",   "d{2}f", 2, 3 ) );
+			Assert.assertEquals( "a123b123.456c 123.456", StringUtils.oReplaceTags("a{1}b{2}c", 123L, 123.456f, 123.456) );
+			Assert.assertEquals( "abc TRUE false",        StringUtils.oReplaceTags("abc",       true, false            ) );
 		}
 		// map tags
 		{
@@ -591,14 +591,14 @@ public class Test_StringUtils {
 			tags.put("letters", "abc");
 			tags.put("numbers", 123  );
 			tags.put("boolean", true );
-			Assert.assertEquals( null,           StringUtils.ReplaceTags(null,                                   tags) );
-			Assert.assertEquals( "",             StringUtils.ReplaceTags("",                                     tags) );
-			Assert.assertEquals( null,           StringUtils.ReplaceTags(null,          new HashMap<String, Object>()) );
-			Assert.assertEquals( "",             StringUtils.ReplaceTags("",            new HashMap<String, Object>()) );
-			Assert.assertEquals( "{}-{}-{}",     StringUtils.ReplaceTags("{}-{}-{}",    new HashMap<String, Object>()) );
-			Assert.assertEquals( "{1}-{2}-{3}",  StringUtils.ReplaceTags("{1}-{2}-{3}", new HashMap<String, Object>()) );
-			Assert.assertEquals( "{a}-{b}-{c}",  StringUtils.ReplaceTags("{a}-{b}-{c}", new HashMap<String, Object>()) );
-			Assert.assertEquals( "TRUE 123 abc", StringUtils.ReplaceTags("{boolean} {numbers} {letters}",        tags) );
+			Assert.assertEquals( null,           StringUtils.soReplaceTags(null,                                   tags) );
+			Assert.assertEquals( "",             StringUtils.soReplaceTags("",                                     tags) );
+			Assert.assertEquals( null,           StringUtils.soReplaceTags(null,          new HashMap<String, Object>()) );
+			Assert.assertEquals( "",             StringUtils.soReplaceTags("",            new HashMap<String, Object>()) );
+			Assert.assertEquals( "{}-{}-{}",     StringUtils.soReplaceTags("{}-{}-{}",    new HashMap<String, Object>()) );
+			Assert.assertEquals( "{1}-{2}-{3}",  StringUtils.soReplaceTags("{1}-{2}-{3}", new HashMap<String, Object>()) );
+			Assert.assertEquals( "{a}-{b}-{c}",  StringUtils.soReplaceTags("{a}-{b}-{c}", new HashMap<String, Object>()) );
+			Assert.assertEquals( "TRUE 123 abc", StringUtils.soReplaceTags("{boolean} {numbers} {letters}",        tags) );
 		}
 	}
 
