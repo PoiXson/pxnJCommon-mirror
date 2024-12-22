@@ -60,6 +60,22 @@ public class Test_ArrayUtils {
 
 
 	@Test
+	public void testArrayToMap() {
+		final String[] arrayA = new String[] {
+			"abc", "123",
+			"def", "456",
+			"ghi", "789",
+		};
+		final Map<String, String> mapA = new HashMap<String, String>();
+		mapA.put("abc", "123");
+		mapA.put("def", "456");
+		mapA.put("ghi", "789");
+		Assert.assertTrue(MatchMaps(mapA, ArrayUtils.ArrayToMap(arrayA)));
+	}
+
+
+
+	@Test
 	public void testMatchMaps() {
 		final Map<String, String> mapA = new HashMap<String, String>();
 		final Map<String, String> mapB = new HashMap<String, String>();
