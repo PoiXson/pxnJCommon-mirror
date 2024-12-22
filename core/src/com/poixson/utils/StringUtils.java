@@ -1125,19 +1125,26 @@ public final class StringUtils {
 
 
 	// replace {} or {#} tags
-	public static String ReplaceTags(final String line, final Object...args) {
+	public static String oReplaceTags(final String line, final Object...args) {
+		final String[] array = new String[args.length];
+		final int len = args.length;
+		for (int index=0; index<len; index++)
+			array[index] = ToString(args[index]);
+		return sReplaceTags(line, array);
+	}
+	public static String sReplaceTags(final String line, final String...args) {
 		if (IsEmpty(args)) return line;
-		if (IsEmpty(line)) return MergeObjects(' ', args);
+		if (IsEmpty(line)) return MergeStrings(' ', args);
 		final StringBuilder result = new StringBuilder(line);
 		final int num_args = args.length;
 		int used = 0;
 		// {}
 		{
 			LOOP_ARGS:
-			for (final Object arg : args) {
+			for (final String arg : args) {
 				final int pos = result.indexOf("{}");
 				if (pos == -1) break LOOP_ARGS;
-				final String val = (arg==null ? "<null>" : ToString(arg));
+				final String val = (arg==null ? "<null>" : arg);
 				result.replace(pos, pos + 2, val);
 				used++;
 			} // end LOOP_ARGS
@@ -1149,8 +1156,7 @@ public final class StringUtils {
 			found = false;
 			//LOOP_ARGS:
 			for (int index=0; index<num_args; index++) {
-				final Object arg = args[index];
-				final String val = (arg==null ? "<null>" : ToString(arg));
+				final String val = (args[index]==null ? "<null>" : args[index]);
 				final String tag = String.format("{%d}", Integer.valueOf(index+1));
 				LOOP_REPLACE:
 				while (true) {
@@ -1165,8 +1171,7 @@ public final class StringUtils {
 		} // end LOOP_CHANGES
 		if (num_args > used) {
 			for (int index=used; index<num_args; index++) {
-				final Object arg = args[index];
-				final String val = (arg==null ? "<null>" : ToString(arg));
+				final String val = (args[index]==null ? "<null>" : args[index]);
 				result.append(' ').append(val);
 			}
 		}
@@ -1176,7 +1181,13 @@ public final class StringUtils {
 
 
 	// replace {key} tags
-	public static String ReplaceTags(final String line, final Map<String, Object> args) {
+	public static String soReplaceTags(final String line, final Map<String, Object> args) {
+		final Map<String, String> map = new HashMap<String, String>();
+		for (final Entry<String, Object> entry : args.entrySet())
+			map.put(entry.getKey(), ToString(entry.getValue()));
+		return ssReplaceTags(line, map);
+	}
+	public static String ssReplaceTags(final String line, final Map<String, String> args) {
 		if (IsEmpty(line)) return line;
 		if (IsEmpty(args)) return line;
 		final StringBuilder result = new StringBuilder(line);
@@ -1187,9 +1198,9 @@ public final class StringUtils {
 			while (found) {
 				found = false;
 				//LOOP_ARGS:
-				for (final Entry<String, Object> entry : args.entrySet()) {
-					final Object arg = entry.getValue();
-					final String val = (arg==null ? "<null>" : ToString(arg));
+				for (final Entry<String, String> entry : args.entrySet()) {
+					final String arg = entry.getValue();
+					final String val = (arg==null ? "<null>" : arg);
 					final String tag = String.format("{%s}", entry.getKey());
 					LOOP_REPLACE:
 					while (true) {
