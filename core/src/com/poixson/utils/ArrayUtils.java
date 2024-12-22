@@ -115,7 +115,7 @@ public final class ArrayUtils {
 
 
 
-	public static int[] SetToArray(final Set<Integer> set) {
+	public static int[] iSetToArray(final Set<Integer> set) {
 		final Integer[] copy = set.toArray(new Integer[0]);
 		final int size = copy.length;
 		final int[] result = new int[size];
@@ -126,7 +126,7 @@ public final class ArrayUtils {
 
 
 
-	public static Map<String, String> ArrayToMap(final String[] array) {
+	public static Map<String, String> ssArrayToMap(final String[] array) {
 		final int len = array.length;
 		if (len % 2 != 0) throw new IllegalArgumentException("Invalid number of arguments");
 		final Map<String, String> map = new HashMap<String, String>();
