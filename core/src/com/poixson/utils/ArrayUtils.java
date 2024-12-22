@@ -126,6 +126,17 @@ public final class ArrayUtils {
 
 
 
+	public static Map<String, String> ArrayToMap(final String[] array) {
+		final int len = array.length;
+		if (len % 2 != 0) throw new IllegalArgumentException("Invalid number of arguments");
+		final Map<String, String> map = new HashMap<String, String>();
+		for (int index=0; index<len; index+=2)
+			map.put(array[index], array[index+1]);
+		return map;
+	}
+
+
+
 	// -------------------------------------------------------------------------------
 	// maps
 
