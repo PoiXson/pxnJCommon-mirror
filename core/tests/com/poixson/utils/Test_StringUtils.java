@@ -584,6 +584,10 @@ public class Test_StringUtils {
 			Assert.assertEquals( "ad2fbc 3",  StringUtils.oReplaceTags("a{}bc",   "d{2}f", 2, 3 ) );
 			Assert.assertEquals( "a123b123.456c 123.456", StringUtils.oReplaceTags("a{1}b{2}c", 123L, 123.456f, 123.456) );
 			Assert.assertEquals( "abc TRUE false",        StringUtils.oReplaceTags("abc",       true, false            ) );
+			Assert.assertEquals( "a<1>b<2>c", StringUtils.o_ReplaceTags("<%s>", "a<1>b<2>c"         ) );
+			Assert.assertEquals( "a1b<2>c",   StringUtils.o_ReplaceTags("<%s>", "a<1>b<2>c", 1      ) );
+			Assert.assertEquals( "a1b2c",     StringUtils.o_ReplaceTags("<%s>", "a<1>b<2>c", 1, 2   ) );
+			Assert.assertEquals( "a1b2c 3",   StringUtils.o_ReplaceTags("<%s>", "a<1>b<2>c", 1, 2, 3) );
 		}
 		// map tags
 		{
