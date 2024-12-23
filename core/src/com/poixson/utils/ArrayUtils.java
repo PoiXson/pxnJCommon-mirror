@@ -17,6 +17,39 @@ public final class ArrayUtils {
 
 
 
+	public static <T> LinkedList<T> MergeArrays(final T[] arrayA) {
+		final LinkedList<T> list = new LinkedList<T>();
+		for (final T entry : arrayA) list.addLast(entry);
+		return list;
+	}
+	public static <T> LinkedList<T> MergeArrays(
+			final T[] arrayA, final T[] arrayB) {
+		final LinkedList<T> list = new LinkedList<T>();
+		for (final T entry : arrayA) list.addLast(entry);
+		for (final T entry : arrayB) list.addLast(entry);
+		return list;
+	}
+	public static <T> LinkedList<T> MergeArrays(
+			final T[] arrayA, final T[] arrayB, final T[] arrayC) {
+		final LinkedList<T> list = new LinkedList<T>();
+		for (final T entry : arrayA) list.addLast(entry);
+		for (final T entry : arrayB) list.addLast(entry);
+		for (final T entry : arrayC) list.addLast(entry);
+		return list;
+	}
+	public static <T> LinkedList<T> MergeArrays(
+			final T[] arrayA, final T[] arrayB,
+			final T[] arrayC, final T[] arrayD) {
+		final LinkedList<T> list = new LinkedList<T>();
+		for (final T entry : arrayA) list.addLast(entry);
+		for (final T entry : arrayB) list.addLast(entry);
+		for (final T entry : arrayC) list.addLast(entry);
+		for (final T entry : arrayD) list.addLast(entry);
+		return list;
+	}
+
+
+
 	public static <T> Set<T> MergeSets(
 			final Set<T> setA, final List<T> setB) {
 		final HashSet<T> result = new HashSet<T>();
