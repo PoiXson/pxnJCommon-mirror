@@ -64,6 +64,9 @@ public class AppProps {
 		this.orgUrl    = props.getProperty("org_url");
 		this.issueName = props.getProperty("issue_name");
 		this.issueUrl  = props.getProperty("issue_url");
+		if (IsEmpty(this.name   ) || this.name   .startsWith("$")) throw new RuntimeException("Invalid build; something went wrong");
+		if (IsEmpty(this.title  ) || this.title  .startsWith("$")) throw new RuntimeException("Invalid build; something went wrong");
+		if (IsEmpty(this.version) || this.version.startsWith("$")) throw new RuntimeException("Invalid build; something went wrong");
 		// commit hash
 		{
 			final String hash = props.getProperty("commit");
