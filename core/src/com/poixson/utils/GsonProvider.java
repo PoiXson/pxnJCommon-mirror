@@ -19,18 +19,25 @@ public final class GsonProvider {
 			.setPrettyPrinting();
 	}
 
-	public static Gson GSON() {
-		return GSON(GSON_Builder());
-	}
-
-	public static Gson GSON(final TypeAdapter<?>...adapters) {
-		return GSON(GSON_Builder(), adapters);
-	}
-
-	public static Gson GSON(final GsonBuilder builder, final TypeAdapter<?>...adapters) {
-		for (final TypeAdapter<?> adapter : adapters)
-			builder.registerTypeAdapter(adapter.getClass(), adapter);
-		return builder.create();
+	public static Gson GSON(final Object...args) {
+		if (args.length == 0)
+			return GSON_Builder().create();
+		{
+			GsonBuilder builder = null;
+			int index = 0;
+			if (args[index] instanceof GsonBuilder) {
+				builder = (GsonBuilder) args[index];
+				index++;
+			}
+			if (builder == null)
+				builder = GSON_Builder();
+			for (; index<args.length; index+=2) {
+				final Class<?>       type    = (Class<?>)       args[index  ];
+				final TypeAdapter<?> adapter = (TypeAdapter<?>) args[index+1];
+				builder.registerTypeAdapter(type, adapter);
+			}
+			return builder.create();
+		}
 	}
 
 
