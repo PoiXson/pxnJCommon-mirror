@@ -603,6 +603,7 @@ public class Test_StringUtils {
 			Assert.assertEquals( "{1}-{2}-{3}",  StringUtils.soReplaceTags("{1}-{2}-{3}", new HashMap<String, Object>()) );
 			Assert.assertEquals( "{a}-{b}-{c}",  StringUtils.soReplaceTags("{a}-{b}-{c}", new HashMap<String, Object>()) );
 			Assert.assertEquals( "TRUE 123 abc", StringUtils.soReplaceTags("{boolean} {numbers} {letters}",        tags) );
+			Assert.assertEquals( "-TRUE-123-abc-",StringUtils.so_ReplaceTags("<%s>", "-<bool>-<num>-<let>-",           tags) );
 		}
 		{
 			final HashMap<String, String> tags = new HashMap<String, String>();
@@ -616,6 +617,7 @@ public class Test_StringUtils {
 			Assert.assertEquals( "{1}-{2}-{3}", StringUtils.ssReplaceTags("{1}-{2}-{3}", new HashMap<String, String>()) );
 			Assert.assertEquals( "{a}-{b}-{c}", StringUtils.ssReplaceTags("{a}-{b}-{c}", new HashMap<String, String>()) );
 			Assert.assertEquals( "def-jkl",     StringUtils.ssReplaceTags("{abc}-{ghi}",                          tags) );
+			Assert.assertEquals( "def-jkl",    StringUtils.ss_ReplaceTags("<%s>", "<abc>-<ghi>",                  tags) );
 		}
 	}
 
