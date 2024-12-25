@@ -3,7 +3,6 @@ package com.poixson.app;
 import static com.poixson.utils.Utils.GetMS;
 import static com.poixson.utils.Utils.IsEmpty;
 
-import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -17,7 +16,7 @@ import com.poixson.logger.xLog;
 import com.poixson.logger.handlers.xLogHandler;
 import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.types.xThreadPool_Main;
-import com.poixson.tools.AppProps;
+import com.poixson.tools.AppProperties;
 import com.poixson.tools.HangCatcher;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;
@@ -40,14 +39,14 @@ import com.poixson.utils.ThreadUtils;
  *  10 | garbage collect
  *   1 | exit
  */
-public abstract class xApp implements xStartable, Runnable, xFailableApp {
+public abstract class xApp implements AppProperties, xStartable, Runnable, xFailableApp {
 
 	public static final int EXIT_HUNG = 3;
 
 	// app instances
 	protected static final CopyOnWriteArraySet<xApp> apps = new CopyOnWriteArraySet<xApp>();
 
-	protected final AppProps props;
+	protected final AppPropsDAO props = AppPropsDAO.LoadSafe();
 
 	protected final xTime time_start = new xTime();
 
@@ -74,18 +73,6 @@ public abstract class xApp implements xStartable, Runnable, xFailableApp {
 	public xApp(final String[] args) {
 		StdIO.Init();
 		AddApp(this);
-		// load app.properties
-		{
-			final AppProps props;
-			try {
-				props = AppProps.LoadFromClassRef( this.getClass() );
-			} catch (IOException e) {
-				this.props = null;
-				this.fail(e);
-				return;
-			}
-			this.props = props;
-		}
 		xDebug.Init();
 		// queue app->start()
 		xThreadPool_Main.Get()
@@ -531,6 +518,13 @@ public abstract class xApp implements xStartable, Runnable, xFailableApp {
 
 
 	// -------------------------------------------------------------------------------
+	// properties
+
+
+
+	public AppPropsDAO getProps() {
+		return this.props;
+	}
 
 
 
@@ -545,47 +539,6 @@ public abstract class xApp implements xStartable, Runnable, xFailableApp {
 
 	protected String getLockFile() {
 		return this.getTitle()+".lock";
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// properties
-
-
-
-	public String getName() {
-		return this.props.name;
-	}
-	public String getTitle() {
-		return (IsEmpty(this.props.title) ? this.getName() : this.props.title);
-	}
-	public String getVersion() {
-		return this.props.version;
-	}
-	public String getLicense() {
-		return this.props.license;
-	}
-	public String getCommitHashFull() {
-		return this.props.commitHashFull;
-	}
-	public String getCommitHashShort() {
-		return this.props.commitHashShort;
-	}
-	public String getURL() {
-		return this.props.url;
-	}
-	public String getOrgName() {
-		return this.props.orgName;
-	}
-	public String getOrgURL() {
-		return this.props.orgUrl;
-	}
-	public String getIssueName() {
-		return this.props.issueName;
-	}
-	public String getIssueURL() {
-		return this.props.issueUrl;
 	}
 
 
