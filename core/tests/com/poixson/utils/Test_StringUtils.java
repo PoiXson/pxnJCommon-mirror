@@ -592,17 +592,17 @@ public class Test_StringUtils {
 		// map tags
 		{
 			final HashMap<String, Object> tags = new HashMap<String, Object>();
-			tags.put("letters", "abc");
-			tags.put("numbers", 123  );
-			tags.put("boolean", true );
-			Assert.assertEquals( null,           StringUtils.soReplaceTags(null,                                   tags) );
-			Assert.assertEquals( "",             StringUtils.soReplaceTags("",                                     tags) );
-			Assert.assertEquals( null,           StringUtils.soReplaceTags(null,          new HashMap<String, Object>()) );
-			Assert.assertEquals( "",             StringUtils.soReplaceTags("",            new HashMap<String, Object>()) );
-			Assert.assertEquals( "{}-{}-{}",     StringUtils.soReplaceTags("{}-{}-{}",    new HashMap<String, Object>()) );
-			Assert.assertEquals( "{1}-{2}-{3}",  StringUtils.soReplaceTags("{1}-{2}-{3}", new HashMap<String, Object>()) );
-			Assert.assertEquals( "{a}-{b}-{c}",  StringUtils.soReplaceTags("{a}-{b}-{c}", new HashMap<String, Object>()) );
-			Assert.assertEquals( "TRUE 123 abc", StringUtils.soReplaceTags("{boolean} {numbers} {letters}",        tags) );
+			tags.put("let",  "abc");
+			tags.put("num",  123  );
+			tags.put("bool", true );
+			Assert.assertEquals( null,             StringUtils.soReplaceTags(null,                                     tags) );
+			Assert.assertEquals( "",               StringUtils.soReplaceTags("",                                       tags) );
+			Assert.assertEquals( null,             StringUtils.soReplaceTags(null,            new HashMap<String, Object>()) );
+			Assert.assertEquals( "",               StringUtils.soReplaceTags("",              new HashMap<String, Object>()) );
+			Assert.assertEquals( "-{}-{}-{}-",     StringUtils.soReplaceTags("-{}-{}-{}-",    new HashMap<String, Object>()) );
+			Assert.assertEquals( "-{1}-{2}-{3}-",  StringUtils.soReplaceTags("-{1}-{2}-{3}-", new HashMap<String, Object>()) );
+			Assert.assertEquals( "-{a}-{b}-{c}-",  StringUtils.soReplaceTags("-{a}-{b}-{c}-", new HashMap<String, Object>()) );
+			Assert.assertEquals( "-TRUE-123-abc-", StringUtils.soReplaceTags("-{bool}-{num}-{let}-",                   tags) );
 			Assert.assertEquals( "-TRUE-123-abc-",StringUtils.so_ReplaceTags("<%s>", "-<bool>-<num>-<let>-",           tags) );
 		}
 		{
