@@ -16,11 +16,6 @@ public class Test_StringUtils {
 
 
 
-	// -------------------------------------------------------------------------------
-	// convert string
-
-
-
 	@Test
 	public void testToString() {
 		Assert.assertEquals( "Abcdef", StringUtils.ToString("Abcdef"         ) );
@@ -53,51 +48,54 @@ public class Test_StringUtils {
 
 
 
-//TODO
-//	@Test
-//	public void testDecode() {
-//	}
+	// -------------------------------------------------------------------------------
+	// string equals
 
 
 
 	@Test
-	public void testSplitLines() {
-		Assert.assertArrayEquals( new String[] { "Abc"                       }, StringUtils.SplitLines(new String[] { "Abc"                   }) );
-		Assert.assertArrayEquals( new String[] { "A", "b", "c"               }, StringUtils.SplitLines(new String[] { "A\nb\nc"               }) );
-		Assert.assertArrayEquals( new String[] { "Abc", "def", "ghi"         }, StringUtils.SplitLines(new String[] { "Abc", "def", "ghi"     }) );
-		Assert.assertArrayEquals( new String[] { "Abc", "d", "e", "f", "ghi" }, StringUtils.SplitLines(new String[] { "Abc", "d\ne\nf", "ghi" }) );
-		Assert.assertArrayEquals( new String[0], StringUtils.SplitLines(new String[] { "\n\n" }) );
-		Assert.assertArrayEquals( new String[0], StringUtils.SplitLines(new String[0]          ) );
-		Assert.assertArrayEquals( null,          StringUtils.SplitLines(null                   ) );
+	public void testMatchString() {
+		Assert.assertEquals( true,  StringUtils.MatchString("Abc", "Abc") );
+		Assert.assertEquals( false, StringUtils.MatchString("Abc", "abc") );
+		Assert.assertEquals( false, StringUtils.MatchString("Abc", ""   ) );
+		Assert.assertEquals( false, StringUtils.MatchString("Abc", null ) );
+		Assert.assertEquals( true,  StringUtils.MatchString(null,  null ) );
+		Assert.assertEquals( true,  StringUtils.MatchString("",    ""   ) );
+		Assert.assertEquals( true,  StringUtils.MatchString("",    null ) );
+		Assert.assertEquals( true,  StringUtils.MatchString(null,  ""   ) );
+	}
+	@Test
+	public void testMatchStringIgnoreCase() {
+		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase("Abc", "Abc") );
+		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase("Abc", "abc") );
+		Assert.assertEquals( false, StringUtils.MatchStringIgnoreCase("Abc", ""   ) );
+		Assert.assertEquals( false, StringUtils.MatchStringIgnoreCase("Abc", null ) );
+		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase(null,  null ) );
+		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase("",    ""   ) );
+		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase("",    null ) );
+		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase(null,  ""   ) );
+	}
+	@Test
+	public void testMatchStringExact() {
+		Assert.assertEquals( true,  StringUtils.MatchStringExact("Abc", "Abc") );
+		Assert.assertEquals( false, StringUtils.MatchStringExact("Abc", "abc") );
+		Assert.assertEquals( false, StringUtils.MatchStringExact("Abc", ""   ) );
+		Assert.assertEquals( false, StringUtils.MatchStringExact("Abc", null ) );
+		Assert.assertEquals( true,  StringUtils.MatchStringExact(null,  null ) );
+		Assert.assertEquals( true,  StringUtils.MatchStringExact("",    ""   ) );
+		Assert.assertEquals( false, StringUtils.MatchStringExact("",    null ) );
+		Assert.assertEquals( false, StringUtils.MatchStringExact(null,  ""   ) );
 	}
 
 
 
 	@Test
-	public void testSplit() {
-		// char delims
-		Assert.assertArrayEquals( new String[] { "Abc", "def", "ghi" }, StringUtils.Split("Abc,def,ghi", ',') );
-		Assert.assertArrayEquals( new String[] { "Abc", "def"        }, StringUtils.Split(",Abc,,def,",  ',') );
-		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split(",Abc,",       ',') );
-		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split("Abc",         ',') );
-		// string delims
-		Assert.assertArrayEquals( new String[] { "Abc", "def", "ghi" }, StringUtils.Split("Abc,,def,,ghi", ",,") );
-		Assert.assertArrayEquals( new String[] { "Abc", "def"        }, StringUtils.Split("Abc,,,,def",    ",,") );
-		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split(",,Abc,,",       ",,") );
-		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split("Abc",           ",,") );
-	}
-	@Test
-	public void testSplitKeyVal() {
-		// key/val delims
-		final Map<String, String> mapA = new HashMap<String, String>();
-		final Map<String, String> mapB = new HashMap<String, String>();
-		final Map<String, String> mapC = new HashMap<String, String>();
-		mapA.put("--", "Abc"); mapA.put("==", "def"); mapA.put("~~", "ghi");
-		mapB.put("",   "Abc"); mapB.put("--", "def"); mapB.put("==", "ghi"); mapB.put("~~", "");
-		mapC.put("~~", ""   ); mapC.put("--", ""   ); mapC.put("==", ""   );
-		Assert.assertTrue(MatchMaps(mapA, StringUtils.SplitKeyVal("--Abc==def~~ghi",   "--", "==", "~~")));
-		Assert.assertTrue(MatchMaps(mapB, StringUtils.SplitKeyVal(  "Abc--def==ghi~~", "--", "==", "~~")));
-		Assert.assertTrue(MatchMaps(mapC, StringUtils.SplitKeyVal("--==~~",            "--", "==", "~~")));
+	public void testWildcardToRegex() {
+		Assert.assertEquals( "^ab.*c$",  StringUtils.WildcardToRegex("ab*c") );
+		Assert.assertEquals( "^ab.c$",   StringUtils.WildcardToRegex("ab?c") );
+		Assert.assertEquals( "^ab\\$c$", StringUtils.WildcardToRegex("ab$c") );
+		Assert.assertEquals( "",         StringUtils.WildcardToRegex(""    ) );
+		Assert.assertEquals( null,       StringUtils.WildcardToRegex(null  ) );
 	}
 
 
@@ -146,38 +144,28 @@ public class Test_StringUtils {
 
 
 
+	// -------------------------------------------------------------------------------
+	// compare versions
+
+
+
 	@Test
-	public void testMatchString() {
-		Assert.assertEquals( true,  StringUtils.MatchString("Abc", "Abc") );
-		Assert.assertEquals( false, StringUtils.MatchString("Abc", "abc") );
-		Assert.assertEquals( false, StringUtils.MatchString("Abc", ""   ) );
-		Assert.assertEquals( false, StringUtils.MatchString("Abc", null ) );
-		Assert.assertEquals( true,  StringUtils.MatchString(null,  null ) );
-		Assert.assertEquals( true,  StringUtils.MatchString("",    ""   ) );
-		Assert.assertEquals( true,  StringUtils.MatchString("",    null ) );
-		Assert.assertEquals( true,  StringUtils.MatchString(null,  ""   ) );
-	}
-	@Test
-	public void testMatchStringIgnoreCase() {
-		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase("Abc", "Abc") );
-		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase("Abc", "abc") );
-		Assert.assertEquals( false, StringUtils.MatchStringIgnoreCase("Abc", ""   ) );
-		Assert.assertEquals( false, StringUtils.MatchStringIgnoreCase("Abc", null ) );
-		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase(null,  null ) );
-		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase("",    ""   ) );
-		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase("",    null ) );
-		Assert.assertEquals( true,  StringUtils.MatchStringIgnoreCase(null,  ""   ) );
-	}
-	@Test
-	public void testMatchStringExact() {
-		Assert.assertEquals( true,  StringUtils.MatchStringExact("Abc", "Abc") );
-		Assert.assertEquals( false, StringUtils.MatchStringExact("Abc", "abc") );
-		Assert.assertEquals( false, StringUtils.MatchStringExact("Abc", ""   ) );
-		Assert.assertEquals( false, StringUtils.MatchStringExact("Abc", null ) );
-		Assert.assertEquals( true,  StringUtils.MatchStringExact(null,  null ) );
-		Assert.assertEquals( true,  StringUtils.MatchStringExact("",    ""   ) );
-		Assert.assertEquals( false, StringUtils.MatchStringExact("",    null ) );
-		Assert.assertEquals( false, StringUtils.MatchStringExact(null,  ""   ) );
+	public void testCompareVersions() {
+		Assert.assertEquals(       0.0, StringUtils.CompareVersions("1.2.3", "1.2.3"), 0.0);
+		Assert.assertEquals(       1.0, StringUtils.CompareVersions("1.2.3", "1.2.4"), 0.0);
+		Assert.assertEquals(      -1.0, StringUtils.CompareVersions("1.2.3", "1.2.2"), 0.0);
+		Assert.assertEquals(    1000.0, StringUtils.CompareVersions("1.2.0", "1.3.0"), 0.0);
+		Assert.assertEquals(   -1000.0, StringUtils.CompareVersions("1.2.0", "1.1.0"), 0.0);
+		Assert.assertEquals( 2000000.0, StringUtils.CompareVersions("1.2.3", "3.2.3"), 0.0);
+		Assert.assertEquals(-1000000.0, StringUtils.CompareVersions("1.2.3", "0.2.3"), 0.0);
+		Assert.assertEquals(      -3.0, StringUtils.CompareVersions("1.2.3", "1.2"  ), 0.0);
+		Assert.assertEquals(       3.0, StringUtils.CompareVersions("1.2",   "1.2.3"), 0.0);
+		Assert.assertEquals(    -997.0, StringUtils.CompareVersions("1.3",   "1.2.3"), 0.0);
+		Assert.assertEquals(    2003.0, StringUtils.CompareVersions("1",     "1.2.3"), 0.0);
+		Assert.assertEquals(       0.5, StringUtils.CompareVersions("1.2.3", "1.2.3-SNAPSHOT"), 0.0);
+		Assert.assertEquals(      -0.5, StringUtils.CompareVersions("1.2.3-SNAPSHOT", "1.2.3"), 0.0);
+		Assert.assertEquals(      -0.5, StringUtils.CompareVersions("1.2.4", "1.2.3-SNAPSHOT"), 0.0);
+		Assert.assertEquals(       0.5, StringUtils.CompareVersions("1.2.3", "1.2.3-R0.1-SNAPSHOT"), 0.0);
 	}
 
 
@@ -277,6 +265,55 @@ public class Test_StringUtils {
 		Assert.assertEquals( "",       StringUtils.ceTrim("-=-=-",   '=', '-'     ) );
 		Assert.assertEquals( "",       StringUtils.ceTrim("",        '=', '-'     ) );
 		Assert.assertEquals( null,     StringUtils.ceTrim(null,      '=', '-'     ) );
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// pad string
+
+
+
+	@Test
+	public void testPad() {
+		// pad front
+		Assert.assertEquals( "--abc", StringUtils.PadFront(5, "abc", '-') );
+		Assert.assertEquals( "abc",   StringUtils.PadFront(3, "abc", '-') );
+		Assert.assertEquals( "abc",   StringUtils.PadFront(1, "abc", '-') );
+		// pad end
+		Assert.assertEquals( "abc--", StringUtils.PadEnd(5, "abc", '-') );
+		Assert.assertEquals( "abc",   StringUtils.PadEnd(3, "abc", '-') );
+		Assert.assertEquals( "abc",   StringUtils.PadEnd(1, "abc", '-') );
+		// pad center
+		Assert.assertEquals( "-abc-", StringUtils.PadCenter(5, "abc", '-') );
+		Assert.assertEquals( "abc",   StringUtils.PadCenter(3, "abc", '-') );
+		Assert.assertEquals( "abc",   StringUtils.PadCenter(1, "abc", '-') );
+	}
+	@Test
+	public void testPadZero_Int() {
+		// pad front
+		Assert.assertEquals( null,  StringUtils.PadFront(0, 1) );
+		Assert.assertEquals( "1",   StringUtils.PadFront(1, 1) );
+		Assert.assertEquals( "01",  StringUtils.PadFront(2, 1) );
+		Assert.assertEquals( "001", StringUtils.PadFront(3, 1) );
+		// pad end
+		Assert.assertEquals( null,  StringUtils.PadEnd(0, 1) );
+		Assert.assertEquals( "1",   StringUtils.PadEnd(1, 1) );
+		Assert.assertEquals( "10",  StringUtils.PadEnd(2, 1) );
+		Assert.assertEquals( "100", StringUtils.PadEnd(3, 1) );
+	}
+	@Test
+	public void testPadZero_Long() {
+		// pad front
+		Assert.assertEquals( null,  StringUtils.PadFront(0, 1L) );
+		Assert.assertEquals( "1",   StringUtils.PadFront(1, 1L) );
+		Assert.assertEquals( "01",  StringUtils.PadFront(2, 1L) );
+		Assert.assertEquals( "001", StringUtils.PadFront(3, 1L) );
+		// pad end
+		Assert.assertEquals( null,  StringUtils.PadEnd(0, 1L) );
+		Assert.assertEquals( "1",   StringUtils.PadEnd(1, 1L) );
+		Assert.assertEquals( "10",  StringUtils.PadEnd(2, 1L) );
+		Assert.assertEquals( "100", StringUtils.PadEnd(3, 1L) );
 	}
 
 
@@ -385,43 +422,7 @@ public class Test_StringUtils {
 
 
 	// -------------------------------------------------------------------------------
-	// build string
-
-
-
-	@Test
-	public void testMergeStrings() {
-		Assert.assertEquals( "a-b-c", StringUtils.MergeStrings("-",  "a", "b", "c") );
-		Assert.assertEquals( "a-b-c", StringUtils.MergeStrings('-',  "a", "b", "c") );
-		Assert.assertEquals( "abc",   StringUtils.MergeStrings("",   "a", "b", "c") );
-		Assert.assertEquals( "abc",   StringUtils.MergeStrings(null, "a", "b", "c") );
-	}
-
-
-
-	@Test
-	public void testMergeObjects() {
-		Assert.assertEquals( "a-b-c", StringUtils.MergeObjects("-",  "a", "b", "c") );
-		Assert.assertEquals( "a-b-c", StringUtils.MergeObjects('-',  "a", "b", "c") );
-		Assert.assertEquals( "abc",   StringUtils.MergeObjects("",   "a", "b", "c") );
-		Assert.assertEquals( "abc",   StringUtils.MergeObjects(null, "a", "b", "c") );
-	}
-
-
-
-	@Test
-	public void testWildcardToRegex() {
-		Assert.assertEquals( "^ab.*c$",  StringUtils.WildcardToRegex("ab*c") );
-		Assert.assertEquals( "^ab.c$",   StringUtils.WildcardToRegex("ab?c") );
-		Assert.assertEquals( "^ab\\$c$", StringUtils.WildcardToRegex("ab$c") );
-		Assert.assertEquals( "",         StringUtils.WildcardToRegex(""    ) );
-		Assert.assertEquals( null,       StringUtils.WildcardToRegex(null  ) );
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// find position
+	// index of - find position
 
 
 
@@ -624,6 +625,85 @@ public class Test_StringUtils {
 
 
 	// -------------------------------------------------------------------------------
+	// arrays
+
+
+
+	@Test
+	public void testMergeStrings() {
+		Assert.assertEquals( "a-b-c", StringUtils.MergeStrings("-",  "a", "b", "c") );
+		Assert.assertEquals( "a-b-c", StringUtils.MergeStrings('-',  "a", "b", "c") );
+		Assert.assertEquals( "abc",   StringUtils.MergeStrings("",   "a", "b", "c") );
+		Assert.assertEquals( "abc",   StringUtils.MergeStrings(null, "a", "b", "c") );
+	}
+
+
+
+	@Test
+	public void testMergeObjects() {
+		Assert.assertEquals( "a-b-c", StringUtils.MergeObjects("-",  "a", "b", "c") );
+		Assert.assertEquals( "a-b-c", StringUtils.MergeObjects('-',  "a", "b", "c") );
+		Assert.assertEquals( "abc",   StringUtils.MergeObjects("",   "a", "b", "c") );
+		Assert.assertEquals( "abc",   StringUtils.MergeObjects(null, "a", "b", "c") );
+	}
+
+
+
+	@Test
+	public void testSplitLines() {
+		Assert.assertArrayEquals( new String[] { "Abc"                       }, StringUtils.SplitLines(new String[] { "Abc"                   }) );
+		Assert.assertArrayEquals( new String[] { "A", "b", "c"               }, StringUtils.SplitLines(new String[] { "A\nb\nc"               }) );
+		Assert.assertArrayEquals( new String[] { "Abc", "def", "ghi"         }, StringUtils.SplitLines(new String[] { "Abc", "def", "ghi"     }) );
+		Assert.assertArrayEquals( new String[] { "Abc", "d", "e", "f", "ghi" }, StringUtils.SplitLines(new String[] { "Abc", "d\ne\nf", "ghi" }) );
+		Assert.assertArrayEquals( new String[0], StringUtils.SplitLines(new String[] { "\n\n" }) );
+		Assert.assertArrayEquals( new String[0], StringUtils.SplitLines(new String[0]          ) );
+		Assert.assertArrayEquals( null,          StringUtils.SplitLines(null                   ) );
+	}
+
+
+
+	@Test
+	public void testSplit() {
+		// char delims
+		Assert.assertArrayEquals( new String[] { "Abc", "def", "ghi" }, StringUtils.Split("Abc,def,ghi", ',') );
+		Assert.assertArrayEquals( new String[] { "Abc", "def"        }, StringUtils.Split(",Abc,,def,",  ',') );
+		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split(",Abc,",       ',') );
+		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split("Abc",         ',') );
+		// string delims
+		Assert.assertArrayEquals( new String[] { "Abc", "def", "ghi" }, StringUtils.Split("Abc,,def,,ghi", ",,") );
+		Assert.assertArrayEquals( new String[] { "Abc", "def"        }, StringUtils.Split("Abc,,,,def",    ",,") );
+		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split(",,Abc,,",       ",,") );
+		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split("Abc",           ",,") );
+	}
+	@Test
+	public void testSplitKeyVal() {
+		// key/val delims
+		final Map<String, String> mapA = new HashMap<String, String>();
+		final Map<String, String> mapB = new HashMap<String, String>();
+		final Map<String, String> mapC = new HashMap<String, String>();
+		mapA.put("--", "Abc"); mapA.put("==", "def"); mapA.put("~~", "ghi");
+		mapB.put("",   "Abc"); mapB.put("--", "def"); mapB.put("==", "ghi"); mapB.put("~~", "");
+		mapC.put("~~", ""   ); mapC.put("--", ""   ); mapC.put("==", ""   );
+		Assert.assertTrue(MatchMaps(mapA, StringUtils.SplitKeyVal("--Abc==def~~ghi",   "--", "==", "~~")));
+		Assert.assertTrue(MatchMaps(mapB, StringUtils.SplitKeyVal(  "Abc--def==ghi~~", "--", "==", "~~")));
+		Assert.assertTrue(MatchMaps(mapC, StringUtils.SplitKeyVal("--==~~",            "--", "==", "~~")));
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// convert string
+
+
+
+//TODO
+//	@Test
+//	public void testDecode() {
+//	}
+
+
+
+	// -------------------------------------------------------------------------------
 	// generate string
 
 
@@ -643,81 +723,6 @@ public class Test_StringUtils {
 		Assert.assertEquals( "-----",    StringUtils.Repeat(5, "-") );
 		Assert.assertEquals( "",         StringUtils.Repeat(0, "-") );
 		Assert.assertEquals( "12-12-12", StringUtils.Repeat(3, "12", "-") );
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// pad string
-
-
-
-	@Test
-	public void testPad() {
-		// pad front
-		Assert.assertEquals( "--abc", StringUtils.PadFront(5, "abc", '-') );
-		Assert.assertEquals( "abc",   StringUtils.PadFront(3, "abc", '-') );
-		Assert.assertEquals( "abc",   StringUtils.PadFront(1, "abc", '-') );
-		// pad end
-		Assert.assertEquals( "abc--", StringUtils.PadEnd(5, "abc", '-') );
-		Assert.assertEquals( "abc",   StringUtils.PadEnd(3, "abc", '-') );
-		Assert.assertEquals( "abc",   StringUtils.PadEnd(1, "abc", '-') );
-		// pad center
-		Assert.assertEquals( "-abc-", StringUtils.PadCenter(5, "abc", '-') );
-		Assert.assertEquals( "abc",   StringUtils.PadCenter(3, "abc", '-') );
-		Assert.assertEquals( "abc",   StringUtils.PadCenter(1, "abc", '-') );
-	}
-	@Test
-	public void testPadZero_Int() {
-		// pad front
-		Assert.assertEquals( null,  StringUtils.PadFront(0, 1) );
-		Assert.assertEquals( "1",   StringUtils.PadFront(1, 1) );
-		Assert.assertEquals( "01",  StringUtils.PadFront(2, 1) );
-		Assert.assertEquals( "001", StringUtils.PadFront(3, 1) );
-		// pad end
-		Assert.assertEquals( null,  StringUtils.PadEnd(0, 1) );
-		Assert.assertEquals( "1",   StringUtils.PadEnd(1, 1) );
-		Assert.assertEquals( "10",  StringUtils.PadEnd(2, 1) );
-		Assert.assertEquals( "100", StringUtils.PadEnd(3, 1) );
-	}
-	@Test
-	public void testPadZero_Long() {
-		// pad front
-		Assert.assertEquals( null,  StringUtils.PadFront(0, 1L) );
-		Assert.assertEquals( "1",   StringUtils.PadFront(1, 1L) );
-		Assert.assertEquals( "01",  StringUtils.PadFront(2, 1L) );
-		Assert.assertEquals( "001", StringUtils.PadFront(3, 1L) );
-		// pad end
-		Assert.assertEquals( null,  StringUtils.PadEnd(0, 1L) );
-		Assert.assertEquals( "1",   StringUtils.PadEnd(1, 1L) );
-		Assert.assertEquals( "10",  StringUtils.PadEnd(2, 1L) );
-		Assert.assertEquals( "100", StringUtils.PadEnd(3, 1L) );
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// compare versions
-
-
-
-	@Test
-	public void testCompareVersions() {
-		Assert.assertEquals(       0.0, StringUtils.CompareVersions("1.2.3", "1.2.3"), 0.0);
-		Assert.assertEquals(       1.0, StringUtils.CompareVersions("1.2.3", "1.2.4"), 0.0);
-		Assert.assertEquals(      -1.0, StringUtils.CompareVersions("1.2.3", "1.2.2"), 0.0);
-		Assert.assertEquals(    1000.0, StringUtils.CompareVersions("1.2.0", "1.3.0"), 0.0);
-		Assert.assertEquals(   -1000.0, StringUtils.CompareVersions("1.2.0", "1.1.0"), 0.0);
-		Assert.assertEquals( 2000000.0, StringUtils.CompareVersions("1.2.3", "3.2.3"), 0.0);
-		Assert.assertEquals(-1000000.0, StringUtils.CompareVersions("1.2.3", "0.2.3"), 0.0);
-		Assert.assertEquals(      -3.0, StringUtils.CompareVersions("1.2.3", "1.2"  ), 0.0);
-		Assert.assertEquals(       3.0, StringUtils.CompareVersions("1.2",   "1.2.3"), 0.0);
-		Assert.assertEquals(    -997.0, StringUtils.CompareVersions("1.3",   "1.2.3"), 0.0);
-		Assert.assertEquals(    2003.0, StringUtils.CompareVersions("1",     "1.2.3"), 0.0);
-		Assert.assertEquals(       0.5, StringUtils.CompareVersions("1.2.3", "1.2.3-SNAPSHOT"), 0.0);
-		Assert.assertEquals(      -0.5, StringUtils.CompareVersions("1.2.3-SNAPSHOT", "1.2.3"), 0.0);
-		Assert.assertEquals(      -0.5, StringUtils.CompareVersions("1.2.4", "1.2.3-SNAPSHOT"), 0.0);
-		Assert.assertEquals(       0.5, StringUtils.CompareVersions("1.2.3", "1.2.3-R0.1-SNAPSHOT"), 0.0);
 	}
 
 

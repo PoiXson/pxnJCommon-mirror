@@ -38,11 +38,6 @@ public final class StringUtils {
 
 
 
-	// -------------------------------------------------------------------------------
-	// convert string
-
-
-
 	// object to string
 	public static String ToString(final Object obj) {
 		// null
@@ -84,193 +79,68 @@ public final class StringUtils {
 
 
 
-	// decode string
-	public static String Decode(final String raw) {
-		return Decode(raw, null, null);
-	}
-	public static String DecodeDef(final String raw, final String defaultStr) {
-		return Decode(raw, defaultStr, null);
-	}
-	public static String DecodeCh(final String raw, final String charset) {
-		return Decode(raw, null, charset);
-	}
-	public static String Decode(final String raw, final String defaultStr, final String charset) {
-		if (charset == null)
-			return Decode(raw, defaultStr, DEFAULT_CHARSET.name());
-		try {
-			return URLDecoder.decode(raw, charset);
-		} catch (UnsupportedEncodingException ignore) {}
-		return defaultStr;
-	}
+	// -------------------------------------------------------------------------------
+	// string equals
 
 
 
-	public static boolean ArrayContains(final String match, final String[] array) {
-		if (match == null || match.isEmpty())   return false;
-		if (array == null || array.length == 0) return false;
-		for (final String entry : array) {
-			if (MatchString(match, entry))
-				return true;
-		}
-		return false;
+	public static boolean MatchString(final String expect, final String actual) {
+		final boolean expectEmpty = (expect == null || expect.isEmpty());
+		final boolean actualEmpty = (actual == null || actual.isEmpty());
+		if (expectEmpty || actualEmpty)
+			return (expectEmpty == actualEmpty);
+		return expect.equals(actual);
+	}
+	public static boolean MatchStringIgnoreCase(final String expect, final String actual) {
+		final boolean expectEmpty = (expect == null || expect.isEmpty());
+		final boolean actualEmpty = (actual == null || actual.isEmpty());
+		if (expectEmpty || actualEmpty)
+			return (expectEmpty == actualEmpty);
+		return expect.equalsIgnoreCase(actual);
+	}
+	public static boolean MatchStringExact(final String expect, final String actual) {
+		if (expect == null && actual == null) return true;
+		if (expect == null || actual == null) return false;
+		return expect.equals(actual);
 	}
 
 
 
-	public static String[] RemoveTruncatedDuplicates(final String[] array) {
-		final ArrayList<String> result = new ArrayList<String>();
-		for (final String entry : array) {
-			if (entry.isEmpty()) continue;
-			boolean dup = false;
-			for (final String match : array) {
-				if (match.isEmpty()) continue;
-				// match with self
-				if (entry.equals(match)) continue;
-				if (match.startsWith(entry)) {
-					dup = true;
-					break;
-				}
-			}
-			if (!dup)
-				result.add(entry);
-		}
-		return result.toArray(new String[0]);
-	}
-
-
-
-	public static String[] SplitLines(final String lines[]) {
-		if (lines == null) return null;
-		if (lines.length == 0) return new String[0];
-		final List<String> result = new ArrayList<String>(lines.length);
-		for (final String line : lines) {
-			if (!line.contains("\n")) {
-				result.add(line);
-				continue;
-			}
-			final String[] split = line.split("\n");
-			if (!IsEmpty(split)) {
-				for (final String str : split)
-					result.add(str);
+	// generate regex from string with wildcard *
+	public static String WildcardToRegex(final String wildcard) {
+		if (IsEmpty(wildcard)) return wildcard;
+		final StringBuilder buf = new StringBuilder(wildcard.length());
+		buf.append('^');
+		final int len = wildcard.length();
+		for (int i = 0; i < len; i++) {
+			char c = wildcard.charAt(i);
+			switch (c) {
+			case '*':
+				buf.append(".*");
+				break;
+			case '?':
+				buf.append('.');
+				break;
+			case '(':
+			case ')':
+			case '[':
+			case ']':
+			case '$':
+			case '^':
+			case '.':
+			case '{':
+			case '}':
+			case '|':
+			case '\\':
+				buf.append('\\').append(c);
+				break;
+			default:
+				buf.append(c);
+				break;
 			}
 		}
-		return result.toArray(new String[0]);
-	}
-
-
-
-	public static String[] Split(final String line, final char...delims) {
-		final int len = line.length();
-		final List<String> result = new ArrayList<String>();
-		int next;
-		int last = 0;
-		LOOP_SPLIT:
-		while (true) {
-			// find next delim
-			next = len;
-			LOOP_DELIM:
-			for (final char chr : delims) {
-				final int pos = line.indexOf(chr, last);
-				if (pos == -1) continue LOOP_DELIM;
-				if (next > pos)
-					next = pos;
-				if (pos == last)   break LOOP_DELIM;
-				if (pos == last+1) break LOOP_DELIM;
-			} // end LOOP_DELIM
-			// delim not found
-			if (next == len) {
-				if (last < len)
-					result.add(line.substring(last));
-				break LOOP_SPLIT;
-			}
-			// delim found
-			if (last != next)
-				result.add(line.substring(last, next));
-			last = next + 1;
-		} // end LOOP_SPLIT
-		return result.toArray(new String[0]);
-	}
-	public static String[] Split(final String line, final String...delims) {
-		final int lenLine = line.length();
-		final List<String> result = new ArrayList<String>();
-		int next;
-		int lenNext;
-		int last = 0;
-		LOOP_SPLIT:
-		while (true) {
-			// find next delim
-			next = lenLine;
-			lenNext = 0;
-			LOOP_DELIM:
-			for (final String str : delims) {
-				final int pos = line.indexOf(str, last);
-				if (pos > -1) {
-					if (next == pos) {
-						if (str.length() > lenNext)
-							lenNext = str.length();
-					} else
-					if (next > pos) {
-						next = pos;
-						lenNext = str.length();
-					}
-					if (pos == last)   break LOOP_DELIM;
-					if (pos == last+1) break LOOP_DELIM;
-				}
-			} // end LOOP_DELIM
-			// delim not found
-			if (next == lenLine) {
-				if (last < lenLine)
-					result.add(line.substring(last));
-				break LOOP_SPLIT;
-			}
-			// delim found
-			if (last != next)
-				result.add(line.substring(last, next));
-			last = next + lenNext;
-		} // end LOOP_SPLIT
-		return result.toArray(new String[0]);
-	}
-
-	public static Map<String, String> SplitKeyVal(final String input, final String...delims) {
-		final int len_input = input.length();
-		final Map<String, String> result = new HashMap<>();
-		int pos_next;
-		int len_next;
-		int pos_last = 0;
-		String last_key = null;
-		LOOP_SPLIT:
-		while (true) {
-			// find next delimiter
-			pos_next = len_input;
-			len_next = 0;
-			String current_delim = null;
-			//LOOP_DELIM:
-			for (final String delim : delims) {
-				final int pos = input.indexOf(delim, pos_last);
-				if (pos > -1) {
-					if (pos_next > pos
-					|| (pos_next ==pos && delim.length() > len_next)) {
-						pos_next = pos;
-						len_next = delim.length();
-						current_delim = delim;
-					}
-				}
-			} // end LOOP_DELIM
-			// handle remaining string
-			if (current_delim == null) {
-				result.put(last_key, input.substring(pos_last));
-				break LOOP_SPLIT;
-			}
-			if (last_key == null) {
-				if (pos_last != pos_next)
-					result.put("", input.substring(pos_last, pos_next));
-			} else {
-				result.put(last_key, input.substring(pos_last, pos_next));
-			}
-			last_key = current_delim;
-			pos_last = pos_next + len_next;
-		} // end LOOP_SPLIT
-		return result;
+		buf.append('$');
+		return buf.toString();
 	}
 
 
@@ -348,28 +218,40 @@ public final class StringUtils {
 
 
 	// -------------------------------------------------------------------------------
-	// string equals
+	// version strings
 
 
 
-	public static boolean MatchString(final String expect, final String actual) {
-		final boolean expectEmpty = (expect == null || expect.isEmpty());
-		final boolean actualEmpty = (actual == null || actual.isEmpty());
-		if (expectEmpty || actualEmpty)
-			return (expectEmpty == actualEmpty);
-		return expect.equals(actual);
-	}
-	public static boolean MatchStringIgnoreCase(final String expect, final String actual) {
-		final boolean expectEmpty = (expect == null || expect.isEmpty());
-		final boolean actualEmpty = (actual == null || actual.isEmpty());
-		if (expectEmpty || actualEmpty)
-			return (expectEmpty == actualEmpty);
-		return expect.equalsIgnoreCase(actual);
-	}
-	public static boolean MatchStringExact(final String expect, final String actual) {
-		if (expect == null && actual == null) return true;
-		if (expect == null || actual == null) return false;
-		return expect.equals(actual);
+	//   = | a = b
+	//   + | a < b
+	//   - | a > b
+	// +.5 | a = b-snap
+	// -.5 | a-snap = b
+	public static double CompareVersions(final String versionA, final String versionB) {
+		if (versionA.endsWith("-SNAPSHOT")) return CompareVersions(versionA.substring(0, versionA.length()-9), versionB) - 0.5;
+		if (versionB.endsWith("-SNAPSHOT")) return CompareVersions(versionA, versionB.substring(0, versionB.length()-9)) + 0.5;
+		{
+			int pos;
+			pos = versionA.indexOf('-'); if (pos > 0) return CompareVersions(versionA.substring(0, pos), versionB);
+			pos = versionB.indexOf('-'); if (pos > 0) return CompareVersions(versionA, versionB.substring(0, pos));
+		}
+		{
+			final String[] partsA = versionA.split("[.]");
+			final String[] partsB = versionB.split("[.]");
+			final int num_parts = Math.max(partsA.length, partsB.length);
+			int sizeA = partsA.length;
+			int sizeB = partsB.length;
+			int valA, valB, pow;
+			int diff = 0;
+			for (int i=0; i<num_parts; i++) {
+				pow = (int) Math.pow(10.0, (num_parts-i-1) * 3.0);
+				valA = (i < sizeA ? Integer.parseInt(partsA[i]) : 0);
+				valB = (i < sizeB ? Integer.parseInt(partsB[i]) : 0);
+				if (valA > valB
+				||  valA < valB) { diff += (valB - valA) * pow; continue; }
+			}
+			return (double) diff;
+		}
 	}
 
 
@@ -600,6 +482,63 @@ public final class StringUtils {
 
 
 	// -------------------------------------------------------------------------------
+	// pad string
+
+
+
+	public static String PadFront(final int width, final String text, final char padding) {
+		if (width < 1) return null;
+		final int count = width - text.length();
+		if (count < 1) return text;
+		return
+			(new StringBuilder(width))
+				.append( Repeat(count, padding) )
+				.append( text                   )
+				.toString();
+	}
+	public static String PadEnd(final int width, final String text, final char padding) {
+		if (width < 1) return null;
+		final int count = width - text.length();
+		if (count < 1) return text;
+		return
+			(new StringBuilder(width))
+				.append( text                   )
+				.append( Repeat(count, padding) )
+				.toString();
+	}
+	public static String PadCenter(final int width, final String text, final char padding) {
+		if (width < 1) return null;
+		if (IsEmpty(text))
+			return Repeat(width, padding);
+		final double count = ( ((double) width) - ((double) text.length()) ) / 2.0;
+		if (Math.ceil(count) < 1.0) return text;
+		return
+			(new StringBuilder(width))
+				.append( Repeat( (int)Math.floor(count), padding) )
+				.append( text                                     )
+				.append( Repeat( (int)Math.ceil(count), padding)  )
+				.toString();
+	}
+
+
+
+	public static String PadFront(final int width, final int value) {
+		return PadFront(  width, Integer.toString(value), '0' );
+	}
+	public static String PadEnd(final int width, final int value) {
+		return PadEnd(    width, Integer.toString(value), '0' );
+	}
+
+	public static String PadFront(final int width, final long value) {
+		return PadFront(  width, Long.toString(value), '0' );
+	}
+	public static String PadEnd(final int width, final long value) {
+		return PadEnd(    width, Long.toString(value), '0' );
+	}
+
+
+
+	// -------------------------------------------------------------------------------
 	// modify string
 
 
@@ -761,148 +700,7 @@ public final class StringUtils {
 
 
 	// -------------------------------------------------------------------------------
-	// build string
-
-
-
-	// add strings with delimiter
-	public static String MergeStrings(final String delim, final String...addThis) {
-		if (IsEmpty(addThis)) return "";
-		final String dlm = (IsEmpty(delim) ? null : delim);
-		final StringBuilder buf = new StringBuilder();
-		// no delim
-		if (dlm == null) {
-			for (final String part : addThis)
-				buf.append(part);
-			return buf.toString();
-		}
-		// merge with delim
-		boolean first = true;
-		for (final String part : addThis) {
-			if (IsEmpty(part)) continue;
-			if (first) first = false;
-			else       buf.append(dlm);
-			buf.append(part);
-		}
-		return buf.toString();
-	}
-	public static String MergeStrings(final char delim, final String...addThis) {
-		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
-		final StringBuilder buf = new StringBuilder();
-		boolean first = true;
-		for (final String line : addThis) {
-			if (IsEmpty(line)) continue;
-			if (!first)
-				buf.append(delim);
-			buf.append(line);
-			if (first && buf.length() > 0)
-				first = false;
-		}
-		return buf.toString();
-	}
-
-	public static String MergeStrings(final String delim, final char...addThis) {
-		if (IsEmpty(addThis)) return "";
-		final String dlm = (IsEmpty(delim) ? null : delim);
-		final StringBuilder buf = new StringBuilder();
-		// no delim
-		if (dlm == null) {
-			for (final char part : addThis)
-				buf.append(part);
-			return buf.toString();
-		}
-		// merge with delim
-		boolean first = true;
-		for (final char part : addThis) {
-			if (IsEmpty(part)) continue;
-			if (first) first = false;
-			else       buf.append(dlm);
-			buf.append(part);
-		}
-		return buf.toString();
-	}
-	public static String MergeStrings(final char delim, final char...addThis) {
-		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
-		final StringBuilder buf = new StringBuilder();
-		boolean first = true;
-		for (final char line : addThis) {
-			if (IsEmpty(line)) continue;
-			if (!first)
-				buf.append(delim);
-			buf.append(line);
-			if (first && buf.length() > 0)
-				first = false;
-		}
-		return buf.toString();
-	}
-
-
-
-	// add objects to string with delimiter
-	public static String MergeObjects(final String delim, final Object...addThis) {
-		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
-		String[] addStrings = new String[ addThis.length ];
-		int index = 0;
-		for (final Object obj : addThis) {
-			addStrings[index] = ToString(obj);
-			index++;
-		}
-		return MergeStrings(delim, addStrings);
-	}
-	public static String MergeObjects(final char delim, final Object...addThis) {
-		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
-		String[] addStrings = new String[ addThis.length ];
-		int index = 0;
-		for (final Object obj : addThis) {
-			addStrings[index] = ToString(obj);
-			index++;
-		}
-		return MergeStrings(delim, addStrings);
-	}
-
-
-
-	// generate regex from string with wildcard *
-	public static String WildcardToRegex(final String wildcard) {
-		if (IsEmpty(wildcard)) return wildcard;
-		final StringBuilder buf = new StringBuilder(wildcard.length());
-		buf.append('^');
-		final int len = wildcard.length();
-		for (int i = 0; i < len; i++) {
-			char c = wildcard.charAt(i);
-			switch (c) {
-			case '*':
-				buf.append(".*");
-				break;
-			case '?':
-				buf.append('.');
-				break;
-			case '(':
-			case ')':
-			case '[':
-			case ']':
-			case '$':
-			case '^':
-			case '.':
-			case '{':
-			case '}':
-			case '|':
-			case '\\':
-				buf.append('\\').append(c);
-				break;
-			default:
-				buf.append(c);
-				break;
-			}
-		}
-		buf.append('$');
-		return buf.toString();
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// find position
+	// index of - find position
 
 
 
@@ -1237,6 +1035,304 @@ public final class StringUtils {
 
 
 	// -------------------------------------------------------------------------------
+	// arrays
+
+
+
+	public static boolean ArrayContains(final String match, final String[] array) {
+		if (match == null || match.isEmpty())   return false;
+		if (array == null || array.length == 0) return false;
+		for (final String entry : array) {
+			if (MatchString(match, entry))
+				return true;
+		}
+		return false;
+	}
+
+
+
+	public static String[] RemoveTruncatedDuplicates(final String[] array) {
+		final ArrayList<String> result = new ArrayList<String>();
+		for (final String entry : array) {
+			if (entry.isEmpty()) continue;
+			boolean dup = false;
+			for (final String match : array) {
+				if (match.isEmpty()) continue;
+				// match with self
+				if (entry.equals(match)) continue;
+				if (match.startsWith(entry)) {
+					dup = true;
+					break;
+				}
+			}
+			if (!dup)
+				result.add(entry);
+		}
+		return result.toArray(new String[0]);
+	}
+
+
+
+	// add strings with delimiter
+	public static String MergeStrings(final String delim, final String...addThis) {
+		if (IsEmpty(addThis)) return "";
+		final String dlm = (IsEmpty(delim) ? null : delim);
+		final StringBuilder buf = new StringBuilder();
+		// no delim
+		if (dlm == null) {
+			for (final String part : addThis)
+				buf.append(part);
+			return buf.toString();
+		}
+		// merge with delim
+		boolean first = true;
+		for (final String part : addThis) {
+			if (IsEmpty(part)) continue;
+			if (first) first = false;
+			else       buf.append(dlm);
+			buf.append(part);
+		}
+		return buf.toString();
+	}
+	public static String MergeStrings(final char delim, final String...addThis) {
+		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
+		final StringBuilder buf = new StringBuilder();
+		boolean first = true;
+		for (final String line : addThis) {
+			if (IsEmpty(line)) continue;
+			if (!first)
+				buf.append(delim);
+			buf.append(line);
+			if (first && buf.length() > 0)
+				first = false;
+		}
+		return buf.toString();
+	}
+
+	public static String MergeStrings(final String delim, final char...addThis) {
+		if (IsEmpty(addThis)) return "";
+		final String dlm = (IsEmpty(delim) ? null : delim);
+		final StringBuilder buf = new StringBuilder();
+		// no delim
+		if (dlm == null) {
+			for (final char part : addThis)
+				buf.append(part);
+			return buf.toString();
+		}
+		// merge with delim
+		boolean first = true;
+		for (final char part : addThis) {
+			if (IsEmpty(part)) continue;
+			if (first) first = false;
+			else       buf.append(dlm);
+			buf.append(part);
+		}
+		return buf.toString();
+	}
+	public static String MergeStrings(final char delim, final char...addThis) {
+		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
+		final StringBuilder buf = new StringBuilder();
+		boolean first = true;
+		for (final char line : addThis) {
+			if (IsEmpty(line)) continue;
+			if (!first)
+				buf.append(delim);
+			buf.append(line);
+			if (first && buf.length() > 0)
+				first = false;
+		}
+		return buf.toString();
+	}
+
+
+
+	// add objects to string with delimiter
+	public static String MergeObjects(final String delim, final Object...addThis) {
+		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
+		String[] addStrings = new String[ addThis.length ];
+		int index = 0;
+		for (final Object obj : addThis) {
+			addStrings[index] = ToString(obj);
+			index++;
+		}
+		return MergeStrings(delim, addStrings);
+	}
+	public static String MergeObjects(final char delim, final Object...addThis) {
+		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
+		String[] addStrings = new String[ addThis.length ];
+		int index = 0;
+		for (final Object obj : addThis) {
+			addStrings[index] = ToString(obj);
+			index++;
+		}
+		return MergeStrings(delim, addStrings);
+	}
+
+
+
+	public static String[] SplitLines(final String lines[]) {
+		if (lines == null) return null;
+		if (lines.length == 0) return new String[0];
+		final List<String> result = new ArrayList<String>(lines.length);
+		for (final String line : lines) {
+			if (!line.contains("\n")) {
+				result.add(line);
+				continue;
+			}
+			final String[] split = line.split("\n");
+			if (!IsEmpty(split)) {
+				for (final String str : split)
+					result.add(str);
+			}
+		}
+		return result.toArray(new String[0]);
+	}
+
+
+
+	public static String[] Split(final String line, final char...delims) {
+		final int len = line.length();
+		final List<String> result = new ArrayList<String>();
+		int next;
+		int last = 0;
+		LOOP_SPLIT:
+		while (true) {
+			// find next delim
+			next = len;
+			LOOP_DELIM:
+			for (final char chr : delims) {
+				final int pos = line.indexOf(chr, last);
+				if (pos == -1) continue LOOP_DELIM;
+				if (next > pos)
+					next = pos;
+				if (pos == last)   break LOOP_DELIM;
+				if (pos == last+1) break LOOP_DELIM;
+			} // end LOOP_DELIM
+			// delim not found
+			if (next == len) {
+				if (last < len)
+					result.add(line.substring(last));
+				break LOOP_SPLIT;
+			}
+			// delim found
+			if (last != next)
+				result.add(line.substring(last, next));
+			last = next + 1;
+		} // end LOOP_SPLIT
+		return result.toArray(new String[0]);
+	}
+	public static String[] Split(final String line, final String...delims) {
+		final int lenLine = line.length();
+		final List<String> result = new ArrayList<String>();
+		int next;
+		int lenNext;
+		int last = 0;
+		LOOP_SPLIT:
+		while (true) {
+			// find next delim
+			next = lenLine;
+			lenNext = 0;
+			LOOP_DELIM:
+			for (final String str : delims) {
+				final int pos = line.indexOf(str, last);
+				if (pos > -1) {
+					if (next == pos) {
+						if (str.length() > lenNext)
+							lenNext = str.length();
+					} else
+					if (next > pos) {
+						next = pos;
+						lenNext = str.length();
+					}
+					if (pos == last)   break LOOP_DELIM;
+					if (pos == last+1) break LOOP_DELIM;
+				}
+			} // end LOOP_DELIM
+			// delim not found
+			if (next == lenLine) {
+				if (last < lenLine)
+					result.add(line.substring(last));
+				break LOOP_SPLIT;
+			}
+			// delim found
+			if (last != next)
+				result.add(line.substring(last, next));
+			last = next + lenNext;
+		} // end LOOP_SPLIT
+		return result.toArray(new String[0]);
+	}
+
+	public static Map<String, String> SplitKeyVal(final String input, final String...delims) {
+		final int len_input = input.length();
+		final Map<String, String> result = new HashMap<>();
+		int pos_next;
+		int len_next;
+		int pos_last = 0;
+		String last_key = null;
+		LOOP_SPLIT:
+		while (true) {
+			// find next delimiter
+			pos_next = len_input;
+			len_next = 0;
+			String current_delim = null;
+			//LOOP_DELIM:
+			for (final String delim : delims) {
+				final int pos = input.indexOf(delim, pos_last);
+				if (pos > -1) {
+					if (pos_next > pos
+					|| (pos_next ==pos && delim.length() > len_next)) {
+						pos_next = pos;
+						len_next = delim.length();
+						current_delim = delim;
+					}
+				}
+			} // end LOOP_DELIM
+			// handle remaining string
+			if (current_delim == null) {
+				result.put(last_key, input.substring(pos_last));
+				break LOOP_SPLIT;
+			}
+			if (last_key == null) {
+				if (pos_last != pos_next)
+					result.put("", input.substring(pos_last, pos_next));
+			} else {
+				result.put(last_key, input.substring(pos_last, pos_next));
+			}
+			last_key = current_delim;
+			pos_last = pos_next + len_next;
+		} // end LOOP_SPLIT
+		return result;
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// convert string
+
+
+
+	// decode string
+	public static String Decode(final String raw) {
+		return Decode(raw, null, null);
+	}
+	public static String DecodeDef(final String raw, final String defaultStr) {
+		return Decode(raw, defaultStr, null);
+	}
+	public static String DecodeCh(final String raw, final String charset) {
+		return Decode(raw, null, charset);
+	}
+	public static String Decode(final String raw, final String defaultStr, final String charset) {
+		if (charset == null)
+			return Decode(raw, defaultStr, DEFAULT_CHARSET.name());
+		try {
+			return URLDecoder.decode(raw, charset);
+		} catch (UnsupportedEncodingException ignore) {}
+		return defaultStr;
+	}
+
+
+
+	// -------------------------------------------------------------------------------
 	// generate string
 
 
@@ -1289,102 +1385,6 @@ public final class StringUtils {
 		for (int i = 0; i < count; i++)
 			result.append(chr);
 		return result.toString();
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// pad string
-
-
-
-	public static String PadFront(final int width, final String text, final char padding) {
-		if (width < 1) return null;
-		final int count = width - text.length();
-		if (count < 1) return text;
-		return
-			(new StringBuilder(width))
-				.append( Repeat(count, padding) )
-				.append( text                   )
-				.toString();
-	}
-	public static String PadEnd(final int width, final String text, final char padding) {
-		if (width < 1) return null;
-		final int count = width - text.length();
-		if (count < 1) return text;
-		return
-			(new StringBuilder(width))
-				.append( text                   )
-				.append( Repeat(count, padding) )
-				.toString();
-	}
-	public static String PadCenter(final int width, final String text, final char padding) {
-		if (width < 1) return null;
-		if (IsEmpty(text))
-			return Repeat(width, padding);
-		final double count = ( ((double) width) - ((double) text.length()) ) / 2.0;
-		if (Math.ceil(count) < 1.0) return text;
-		return
-			(new StringBuilder(width))
-				.append( Repeat( (int)Math.floor(count), padding) )
-				.append( text                                     )
-				.append( Repeat( (int)Math.ceil(count), padding)  )
-				.toString();
-	}
-
-
-
-	public static String PadFront(final int width, final int value) {
-		return PadFront(  width, Integer.toString(value), '0' );
-	}
-	public static String PadEnd(final int width, final int value) {
-		return PadEnd(    width, Integer.toString(value), '0' );
-	}
-
-	public static String PadFront(final int width, final long value) {
-		return PadFront(  width, Long.toString(value), '0' );
-	}
-	public static String PadEnd(final int width, final long value) {
-		return PadEnd(    width, Long.toString(value), '0' );
-	}
-
-
-
-	// -------------------------------------------------------------------------------
-	// version strings
-
-
-
-	//   = | a = b
-	//   + | a < b
-	//   - | a > b
-	// +.5 | a = b-snap
-	// -.5 | a-snap = b
-	public static double CompareVersions(final String versionA, final String versionB) {
-		if (versionA.endsWith("-SNAPSHOT")) return CompareVersions(versionA.substring(0, versionA.length()-9), versionB) - 0.5;
-		if (versionB.endsWith("-SNAPSHOT")) return CompareVersions(versionA, versionB.substring(0, versionB.length()-9)) + 0.5;
-		{
-			int pos;
-			pos = versionA.indexOf('-'); if (pos > 0) return CompareVersions(versionA.substring(0, pos), versionB);
-			pos = versionB.indexOf('-'); if (pos > 0) return CompareVersions(versionA, versionB.substring(0, pos));
-		}
-		{
-			final String[] partsA = versionA.split("[.]");
-			final String[] partsB = versionB.split("[.]");
-			final int num_parts = Math.max(partsA.length, partsB.length);
-			int sizeA = partsA.length;
-			int sizeB = partsB.length;
-			int valA, valB, pow;
-			int diff = 0;
-			for (int i=0; i<num_parts; i++) {
-				pow = (int) Math.pow(10.0, (num_parts-i-1) * 3.0);
-				valA = (i < sizeA ? Integer.parseInt(partsA[i]) : 0);
-				valB = (i < sizeB ? Integer.parseInt(partsB[i]) : 0);
-				if (valA > valB
-				||  valA < valB) { diff += (valB - valA) * pow; continue; }
-			}
-			return (double) diff;
-		}
 	}
 
 
