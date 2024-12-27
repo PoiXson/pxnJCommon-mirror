@@ -50,15 +50,6 @@ public class xCallable<V> extends xRunnable implements Callable<V> {
 
 
 
-	@Override
-	@Deprecated
-	public void finalize() throws Throwable {
-		super.finalize();
-		this.releaseCallDepth();
-	}
-
-
-
 	// -------------------------------------------------------------------------------
 	// run task
 
