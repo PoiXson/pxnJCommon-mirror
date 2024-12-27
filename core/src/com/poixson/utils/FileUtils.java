@@ -183,6 +183,27 @@ public final class FileUtils {
 
 
 
+	public static long GetLastModifiedSafe(final String file) {
+		try {
+			return GetLastModified(file);
+		} catch (IOException ignore) {}
+		return Long.MIN_VALUE;
+	}
+	public static long GetLastModifiedSafe(final File file) {
+		try {
+			return GetLastModified(file);
+		} catch (IOException ignore) {}
+		return Long.MIN_VALUE;
+	}
+	public static long GetLastModifiedSafe(final Path path) {
+		try {
+			return GetLastModified(path);
+		} catch (IOException ignore) {}
+		return Long.MIN_VALUE;
+	}
+
+
+
 	public static long GetLastModified(final String fileStr) throws IOException {
 		if (IsEmpty(fileStr)) return 0;
 		return GetLastModified( Paths.get(fileStr) );
