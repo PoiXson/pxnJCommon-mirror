@@ -1,6 +1,7 @@
 package com.poixson.scripting.loader;
 
 import static com.poixson.utils.FileUtils.GetLastModified;
+import static com.poixson.utils.FileUtils.OpenResource;
 import static com.poixson.utils.FileUtils.ReadInputStream;
 import static com.poixson.utils.StringUtils.ForceEnds;
 import static com.poixson.utils.StringUtils.ForceStarts;
@@ -11,8 +12,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import com.poixson.utils.FileUtils;
 
 
 public class xScriptSourceDAO {
@@ -48,7 +47,7 @@ public class xScriptSourceDAO {
 			if (path_resource != null) {
 				resFile = ForceStarts('/', ForceEnds('/', path_resource)) + filename;
 				if (in == null)
-					in = FileUtils.OpenResource(clss, resFile);
+					in = OpenResource(clss, resFile);
 			}
 			if (in == null) throw new IOException(filename);
 			final String code = ReadInputStream(in);

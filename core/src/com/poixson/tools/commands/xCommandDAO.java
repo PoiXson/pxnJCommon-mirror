@@ -1,5 +1,6 @@
 package com.poixson.tools.commands;
 
+import static com.poixson.utils.StringUtils.SplitByChars;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.lang.reflect.InvocationTargetException;
@@ -7,7 +8,6 @@ import java.lang.reflect.Method;
 
 import com.poixson.logger.xLog;
 import com.poixson.threadpool.types.xThreadPool_Main;
-import com.poixson.utils.StringUtils;
 
 
 public class xCommandDAO {
@@ -27,7 +27,7 @@ public class xCommandDAO {
 		this.container      = container;
 		this.method         = method;
 		this.name           = anno.Name();
-		this.aliases        = StringUtils.Split(anno.Aliases(), ',');
+		this.aliases        = SplitByChars(anno.Aliases(), ',');
 		this.auto_handled   = anno.autoHandled();
 		this.ignore_handled = anno.ignoreHandled();
 	}

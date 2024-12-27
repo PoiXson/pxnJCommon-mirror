@@ -9,9 +9,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JTextField;
 
-import com.poixson.utils.StringUtils;
-import com.poixson.utils.Utils;
-
 
 public class JTextFieldGhostable extends JTextField implements FocusListener {
 	private static final long serialVersionUID = 1L;
@@ -30,7 +27,7 @@ public class JTextFieldGhostable extends JTextField implements FocusListener {
 		super(text);
 		this.addFocusListener(this);
 		this.defaultForeground = this.getForeground();
-		this.ghostText.set( Utils.ifEmpty(ghostText, "") );
+		this.ghostText.set( IfEmpty(ghostText, "") );
 		if (IsEmpty(text)) {
 			this.ghosting.set(true);
 			this.update();
@@ -57,7 +54,7 @@ public class JTextFieldGhostable extends JTextField implements FocusListener {
 			this.setHorizontalAlignment(JTextField.CENTER);
 			this.setForeground(Color.GRAY);
 		} else {
-			if (StringUtils.MatchString(this.ghostText.get(), this.getText()))
+			if (MatchString(this.ghostText.get(), this.getText()))
 				super.setText("");
 			this.setHorizontalAlignment(JTextField.LEFT);
 			this.setForeground(this.defaultForeground);

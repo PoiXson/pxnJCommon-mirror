@@ -1,5 +1,6 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.StringUtils.DecodeDef;
 import static com.poixson.utils.Utils.IsEmpty;
 import static com.poixson.utils.Utils.SafeClose;
 
@@ -150,7 +151,7 @@ public final class FileUtils {
 		if (pwd.get() != null && exe.get() != null) return;
 		final CodeSource source = FileUtils.class.getProtectionDomain().getCodeSource();
 		final String pathRaw = source.getLocation().getPath();
-		final String path = StringUtils.decodeDef(pathRaw, pathRaw);
+		final String path = DecodeDef(pathRaw, pathRaw);
 		if (IsEmpty(path)) throw new RuntimeException("Failed to get pwd path");
 		final int pos = path.lastIndexOf('/');
 		if (pos < 0) throw new RuntimeException("Invalid pwd path: "+path);

@@ -1,5 +1,9 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.StringUtils.FindLongestLine;
+import static com.poixson.utils.StringUtils.ForceStarts;
+import static com.poixson.utils.StringUtils.MergeStrings;
+import static com.poixson.utils.StringUtils.Repeat;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.util.ArrayList;
@@ -8,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.utils.StringUtils;
 
 
 public class AsciiArtBuilder {
@@ -44,7 +47,7 @@ public class AsciiArtBuilder {
 		final String bgColor = this.getBgColor();
 		final int indent = this.indent;
 		final StringBuilder buf = new StringBuilder();
-		final int maxLineSize = StringUtils.FindLongestLine(this.lines);
+		final int maxLineSize = FindLongestLine(this.lines);
 		boolean withinTag = false;
 		LOOP_LINE:
 		for (int lineIndex=0; lineIndex<lineCount; lineIndex++) {
@@ -52,7 +55,7 @@ public class AsciiArtBuilder {
 			// blank line
 			if (IsEmpty(line)) {
 				result[ lineIndex ] =
-					StringUtils.Repeat(
+					Repeat(
 						(indent * 2) + maxLineSize,
 						' '
 					);
@@ -61,7 +64,7 @@ public class AsciiArtBuilder {
 			buf.setLength(0);
 			if (indent > 0) {
 				buf.append(
-					StringUtils.Repeat(indent, ' ')
+					Repeat(indent, ' ')
 				);
 			}
 			// handle colors
@@ -135,7 +138,7 @@ public class AsciiArtBuilder {
 			}
 			if (indent > 0) {
 				buf.append(
-					StringUtils.Repeat(
+					Repeat(
 						(maxLineSize - line.length()) + indent,
 						' '
 					)
@@ -162,7 +165,7 @@ public class AsciiArtBuilder {
 		return (IsEmpty(bgColor) ? null : bgColor);
 	}
 	public AsciiArtBuilder setBgColor(final String bgColor) {
-		this.bgColor = StringUtils.ForceStarts("bg_", bgColor);
+		this.bgColor = ForceStarts("bg_", bgColor);
 		return this;
 	}
 
@@ -199,7 +202,7 @@ public class AsciiArtBuilder {
 		final String existing = entry.get( Integer.valueOf(posX) );
 		entry.put(
 			Integer.valueOf(posX),
-			StringUtils.MergeStrings(
+			MergeStrings(
 				',',
 				existing,
 				color
@@ -212,7 +215,7 @@ public class AsciiArtBuilder {
 		if (IsEmpty(bgColor)) throw new RequiredArgumentException("bgColor");
 		return
 			this.setColor(
-				StringUtils.ForceStarts("bg_", bgColor),
+				ForceStarts("bg_", bgColor),
 				posX,
 				posY
 			);

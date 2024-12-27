@@ -1,5 +1,9 @@
 package com.poixson.app;
 
+import static com.poixson.utils.StringUtils.FindLongestLine;
+import static com.poixson.utils.StringUtils.MergeStrings;
+import static com.poixson.utils.StringUtils.PadCenter;
+import static com.poixson.utils.StringUtils.Repeat;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.util.Iterator;
@@ -12,7 +16,6 @@ import com.poixson.logger.xLog;
 import com.poixson.tools.AsciiArtBuilder;
 import com.poixson.tools.xDebug;
 import com.poixson.utils.ProcUtils;
-import com.poixson.utils.StringUtils;
 
 
 public class xAppLogo {
@@ -34,7 +37,7 @@ public class xAppLogo {
 		return this.app.getVersion();
 	}
 	protected String getAppVersionPadded() {
-		return StringUtils.PadCenter(VERSION_WIDTH, this.getAppVersion(), ' ');
+		return PadCenter(VERSION_WIDTH, this.getAppVersion(), ' ');
 	}
 
 	protected String getLicense() {
@@ -85,7 +88,7 @@ public class xAppLogo {
 		result.put("Log Level", log_level.toString());
 		final String[] args = app.getArgs();
 		if (!IsEmpty(args))
-			result.put("Args", StringUtils.MergeStrings(", ", args));
+			result.put("Args", MergeStrings(", ", args));
 		return result;
 	}
 	public String[] build_startup_vars() {
@@ -93,7 +96,7 @@ public class xAppLogo {
 		final Map<String, String> vars = GetStartupVars(this.app);
 		final Iterator<Entry<String, String>> it = vars.entrySet().iterator();
 		final int maxLineSize =
-			StringUtils.FindLongestLine(
+			FindLongestLine(
 				vars.keySet().toArray(new String[0])
 			) + 1;
 		while (it.hasNext()) {
@@ -105,7 +108,7 @@ public class xAppLogo {
 				.append(' ')
 				.append(key)
 				.append(':')
-				.append( StringUtils.Repeat(maxLineSize - key.length(), ' ') )
+				.append( Repeat(maxLineSize - key.length(), ' ') )
 				.append(val)
 				.toString()
 			);

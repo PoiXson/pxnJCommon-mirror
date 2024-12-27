@@ -1,11 +1,11 @@
 package com.poixson.tools.commands;
 
+import static com.poixson.utils.StringUtils.FirstPart;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.logger.xLog;
-import com.poixson.utils.StringUtils;
 
 
 public class xCommandProcessor {
@@ -23,7 +23,7 @@ public class xCommandProcessor {
 		if (IsEmpty(line)) return false;
 		final xCommandEvent event = new xCommandEvent(line);
 		final xCommandDAO[] cmds = this.getCommands();
-		final String first = StringUtils.FirstPart(line, ' ');
+		final String first = FirstPart(line, ' ');
 		if (IsEmpty(first)) return false;
 		// command name
 		for (final xCommandDAO dao : cmds) {

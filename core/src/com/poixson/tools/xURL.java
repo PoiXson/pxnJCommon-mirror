@@ -1,9 +1,8 @@
 package com.poixson.tools;
 
 import static com.poixson.utils.MathUtils.CastInteger;
+import static com.poixson.utils.StringUtils.ceTrim;
 import static com.poixson.utils.Utils.IsEmpty;
-
-import com.poixson.utils.StringUtils;
 
 
 // protocol:[//[user[:password]@]host[:port]][/path]
@@ -106,7 +105,7 @@ public class xURL {
 			pos = buf.indexOf("//");
 			if (pos != -1) {
 				this.protocol =
-					StringUtils.ceTrim(
+					ceTrim(
 						buf.substring(0, pos),
 						':'
 					);

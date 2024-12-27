@@ -1,5 +1,7 @@
 package com.poixson.app;
 
+import static com.poixson.utils.StringUtils.MatchString;
+import static com.poixson.utils.StringUtils.sifTrim;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.lang.reflect.InvocationTargetException;
@@ -10,7 +12,6 @@ import com.poixson.app.xAppStep.PauseWhen;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.tools.abstractions.RunnableNamed;
-import com.poixson.utils.StringUtils;
 
 
 public class xAppStepDAO implements RunnableNamed {
@@ -54,7 +55,7 @@ public class xAppStepDAO implements RunnableNamed {
 			this.title = anno.title();
 		} else {
 			final String name =
-				StringUtils.sifTrim(
+				sifTrim(
 					method.getName(),
 					"_",
 					"startup",
@@ -175,8 +176,8 @@ public class xAppStepDAO implements RunnableNamed {
 	}
 	@Override
 	public boolean equalsTaskName(final String name) {
-		return StringUtils.MatchString(name, this.title)
-			|| StringUtils.MatchString(name, this.title_full);
+		return MatchString(name, this.title)
+			|| MatchString(name, this.title_full);
 	}
 
 

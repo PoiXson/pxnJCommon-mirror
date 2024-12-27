@@ -1,5 +1,6 @@
 package com.poixson.tools.abstractions;
 
+import static com.poixson.utils.StringUtils.sfTrim;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.lang.reflect.InvocationTargetException;
@@ -8,7 +9,6 @@ import java.lang.reflect.Method;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.utils.ReflectUtils;
-import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
@@ -101,7 +101,7 @@ public abstract class RemappedEventListener {
 
 
 	public String getListenerName() {
-		return StringUtils.sfTrim(ReflectUtils.GetClassName(this), "Remapped" );
+		return sfTrim(ReflectUtils.GetClassName(this), "Remapped" );
 	}
 
 

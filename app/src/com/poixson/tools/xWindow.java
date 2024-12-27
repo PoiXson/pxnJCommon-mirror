@@ -1,5 +1,6 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.StringUtils.PutUnique;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.util.Iterator;
@@ -13,7 +14,6 @@ import com.poixson.logger.xLog;
 import com.poixson.threadpool.types.xThreadPool_GUI;
 import com.poixson.tools.abstractions.xCloseable;
 import com.poixson.utils.ReflectUtils;
-import com.poixson.utils.StringUtils;
 import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.guiUtils;
 
@@ -49,7 +49,7 @@ public abstract class xWindow extends JFrame implements xCloseable {
 		} else {
 			name = key;
 		}
-		this.key = StringUtils.PutUnique(all, name, this);
+		this.key = PutUnique(all, name, this);
 		if (IsEmpty(this.key)) throw new RuntimeException("Failed to find a unique window key");
 //TODO
 //		// hooks/listeners

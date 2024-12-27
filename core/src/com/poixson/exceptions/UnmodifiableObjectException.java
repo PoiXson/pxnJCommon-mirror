@@ -1,9 +1,10 @@
 package com.poixson.exceptions;
 
+import static com.poixson.utils.StringUtils.LastPart;
+import static com.poixson.utils.StringUtils.cTrim;
+
 import java.util.Arrays;
 import java.util.Iterator;
-
-import com.poixson.utils.StringUtils;
 
 
 public class UnmodifiableObjectException extends UnsupportedOperationException {
@@ -22,8 +23,8 @@ public class UnmodifiableObjectException extends UnsupportedOperationException {
 				return
 					String.format(
 						"Object cannot be modified! %s->%s()",
-						StringUtils.LastPart(className, '.'),
-						StringUtils.cTrim(e.getMethodName(), '<', '>')
+						LastPart(className, '.'),
+						cTrim(e.getMethodName(), '<', '>')
 					);
 			}
 		}

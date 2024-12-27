@@ -1,5 +1,6 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.StringUtils.ForceStarts;
 import static com.poixson.utils.Utils.IsEmpty;
 import static com.poixson.utils.Utils.SafeClose;
 
@@ -8,7 +9,6 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.utils.StringUtils;
 
 
 public interface AppProperties {
@@ -50,7 +50,7 @@ public interface AppProperties {
 			InputStream in = null;
 			try {
 				in = clss.getResourceAsStream(
-					StringUtils.ForceStarts("/", AppProperties.PROPS_FILE)
+					ForceStarts("/", AppProperties.PROPS_FILE)
 				);
 				if (in == null) {
 					throw new IOException(

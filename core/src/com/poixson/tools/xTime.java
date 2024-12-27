@@ -1,5 +1,6 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.StringUtils.IsWhiteSpace;
 import static com.poixson.utils.Utils.GetMS;
 import static com.poixson.utils.Utils.IsEmpty;
 
@@ -194,7 +195,7 @@ public class xTime {
 					continue;
 				}
 			}
-			if (StringUtils.IsWhiteSpace(chr)) {
+			if (IsWhiteSpace(chr)) {
 				if (moreNumbers) {
 					moreNumbers = false;
 				} else {

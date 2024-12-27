@@ -1,5 +1,6 @@
 package com.poixson.tools.abstractions;
 
+import static com.poixson.utils.StringUtils.MatchStringExact;
 import static com.poixson.utils.Utils.IfEmpty;
 import static com.poixson.utils.Utils.IsEmpty;
 
@@ -10,7 +11,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.utils.StringUtils;
 
 
 public class xRunnable implements RunnableNamed {
@@ -133,7 +133,7 @@ public class xRunnable implements RunnableNamed {
 	}
 	@Override
 	public boolean equalsTaskName(final String matchName) {
-		return StringUtils.MatchStringExact(this.getTaskName(), matchName);
+		return MatchStringExact(this.getTaskName(), matchName);
 	}
 
 

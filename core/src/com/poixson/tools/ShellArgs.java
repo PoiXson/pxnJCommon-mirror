@@ -1,5 +1,6 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.StringUtils.TrimToNull;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.util.ArrayList;
@@ -10,7 +11,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import com.poixson.utils.StringUtils;
 
 public class ShellArgs {
 
@@ -62,7 +62,7 @@ public class ShellArgs {
 					// peek next arg
 					final String nextArg = it.next();
 					// blank value
-					if (IsEmpty(StringUtils.TrimToNull(nextArg))) {
+					if (IsEmpty(TrimToNull(nextArg))) {
 						flags.put(
 							arg,
 							"true"

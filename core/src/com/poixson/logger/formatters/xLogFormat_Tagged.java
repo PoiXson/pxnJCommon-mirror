@@ -1,5 +1,9 @@
 package com.poixson.logger.formatters;
 
+import static com.poixson.utils.StringUtils.FindLongestLine;
+import static com.poixson.utils.StringUtils.PadCenter;
+import static com.poixson.utils.StringUtils.PadEnd;
+import static com.poixson.utils.StringUtils.SplitByChars;
 import static com.poixson.utils.Utils.IfEmpty;
 import static com.poixson.utils.Utils.IsEmpty;
 
@@ -8,7 +12,6 @@ import java.text.SimpleDateFormat;
 import com.poixson.logger.xLevel;
 import com.poixson.logger.records.xLogRecord;
 import com.poixson.logger.records.xLogRecord_Msg;
-import com.poixson.utils.StringUtils;
 
 
 public class xLogFormat_Tagged implements xLogFormat {
@@ -66,7 +69,7 @@ public class xLogFormat_Tagged implements xLogFormat {
 			if (this.containsLevel) {
 				final String levelStr = record.getLevelName();
 				if (!IsEmpty(levelStr))
-					result = result.replace("{level}", StringUtils.PadCenter(7, levelStr, ' '));
+					result = result.replace("{level}", PadCenter(7, levelStr, ' '));
 			}
 			if (this.containsCrumbs)
 				result = result.replace("{crumbs}", this.genCrumbs(record, this.formatCrumb));
@@ -80,7 +83,7 @@ public class xLogFormat_Tagged implements xLogFormat {
 		final String[] tree = record.getNameTree();
 		if (IsEmpty(tree))
 			return "";
-		final String[] parts = StringUtils.Split(formatCrumb, '{', '}');
+		final String[] parts = SplitByChars(formatCrumb, '{', '}');
 		final String start, mid, end;
 		if (IsEmpty(parts)) {
 			start = "";
@@ -133,11 +136,11 @@ public class xLogFormat_Tagged implements xLogFormat {
 		}
 		final String msg = record.toString();
 		final String[] lines = msg.split("\n");
-		final int length = StringUtils.FindLongestLine(lines);
+		final int length = FindLongestLine(lines);
 		final StringBuilder result = new StringBuilder();
 		for (final String line : lines) {
 			result.append(strPre)
-				.append( StringUtils.PadEnd(length, line, ' ') )
+				.append( PadEnd(length, line, ' ') )
 				.append(strPost);
 		}
 		return result.toString();

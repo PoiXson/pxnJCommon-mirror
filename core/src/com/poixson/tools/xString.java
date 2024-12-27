@@ -1,8 +1,17 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.StringUtils.ForceEnds;
+import static com.poixson.utils.StringUtils.ForceStarts;
+import static com.poixson.utils.StringUtils.IndexOf;
+import static com.poixson.utils.StringUtils.IndexOfLast;
+import static com.poixson.utils.StringUtils.PadCenter;
+import static com.poixson.utils.StringUtils.PadEnd;
+import static com.poixson.utils.StringUtils.PadFront;
+import static com.poixson.utils.StringUtils.RemoveFromString;
+import static com.poixson.utils.StringUtils.ReplaceWith;
+import static com.poixson.utils.StringUtils.ToString;
+import static com.poixson.utils.StringUtils.sTrim;
 import static com.poixson.utils.Utils.IsEmpty;
-
-import com.poixson.utils.StringUtils;
 
 
 public class xString {
@@ -27,7 +36,7 @@ public class xString {
 		this.data = data;
 	}
 	public xString(final Object obj) {
-		this.data = StringUtils.ToString(obj);
+		this.data = ToString(obj);
 	}
 
 
@@ -63,7 +72,7 @@ public class xString {
 	public xString remove(final String...strip) {
 		final String data = this.data;
 		if (data != null) {
-			this.data = StringUtils.RemoveFromString(
+			this.data = RemoveFromString(
 				data,
 				strip
 			);
@@ -100,7 +109,7 @@ public class xString {
 	public xString trims(final String...strip) {
 		final String data = this.data;
 		if (data != null) {
-			this.data = StringUtils.sTrim(data, strip);
+			this.data = sTrim(data, strip);
 		}
 		return this;
 	}
@@ -137,19 +146,19 @@ public class xString {
 		final String data = this.data;
 		if (data == null)
 			return -1;
-		return StringUtils.IndexOf(data, delims);
+		return IndexOf(data, delims);
 	}
 	public int indexOf(final int fromIndex, final String...delims) {
 		final String data = this.data;
 		if (data == null)
 			return -1;
-		return StringUtils.IndexOf(data, fromIndex, delims);
+		return IndexOf(data, fromIndex, delims);
 	}
 	public int indexOfLast(final String...delims) {
 		final String data = this.data;
 		if (data == null)
 			return -1;
-		return StringUtils.IndexOfLast(data, delims);
+		return IndexOfLast(data, delims);
 	}
 
 
@@ -157,14 +166,14 @@ public class xString {
 	public xString ensureStarts(final String start) {
 		final String data = this.data;
 		if (data != null) {
-			this.data = StringUtils.ForceStarts(start, data);
+			this.data = ForceStarts(start, data);
 		}
 		return this;
 	}
 	public xString ensureEnds(final String end) {
 		final String data = this.data;
 		if (data != null) {
-			this.data = StringUtils.ForceEnds(end, data);
+			this.data = ForceEnds(end, data);
 		}
 		return this;
 	}
@@ -174,7 +183,7 @@ public class xString {
 	public xString replaceWith(final String replaceWhat, final String[] withWhat) {
 		final String data = this.data;
 		if (data != null) {
-			this.data = StringUtils.ReplaceWith(data, replaceWhat, withWhat);
+			this.data = ReplaceWith(data, replaceWhat, withWhat);
 		}
 		return this;
 	}
@@ -184,21 +193,21 @@ public class xString {
 	public xString padFront(final int width, final char padding) {
 		final String data = this.data;
 		if (data != null) {
-			this.data = StringUtils.PadFront(width, data, padding);
+			this.data = PadFront(width, data, padding);
 		}
 		return this;
 	}
 	public xString padEnd(final int width, final char padding) {
 		final String data = this.data;
 		if (data != null) {
-			this.data = StringUtils.PadEnd(width, data, padding);
+			this.data = PadEnd(width, data, padding);
 		}
 		return this;
 	}
 	public xString padCenter(final int width, final char padding) {
 		final String data = this.data;
 		if (data != null) {
-			this.data = StringUtils.PadCenter(width, data, padding);
+			this.data = PadCenter(width, data, padding);
 		}
 		return this;
 	}

@@ -1,6 +1,7 @@
 package com.poixson.exceptions;
 
-import com.poixson.utils.StringUtils;
+import static com.poixson.utils.StringUtils.ToString;
+
 
 public class InvalidValueException extends IllegalArgumentException {
 	private static final long serialVersionUID = 1L;
@@ -11,7 +12,7 @@ public class InvalidValueException extends IllegalArgumentException {
 		super("Invalid value: "+name);
 	}
 	public InvalidValueException(final String name, final Object value) {
-		super("Invalid value: "+name+" = "+StringUtils.ToString(value));
+		super(String.format("Invalid value: %s = %s", name, ToString(value)));
 	}
 
 
