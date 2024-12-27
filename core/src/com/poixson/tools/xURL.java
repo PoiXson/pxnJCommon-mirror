@@ -262,6 +262,21 @@ public class xURL {
 		return this;
 	}
 	public int getPort() {
+		{
+			final int port = this.port;
+			if (port > 0) return port;
+		}
+		{
+			final String protocol = this.getProtocol();
+			if (!IsEmpty(protocol)) {
+				SWITCH_PROTOCOL:
+				switch (protocol) {
+				case "http":  this.port( 80); break SWITCH_PROTOCOL;
+				case "https": this.port(443); break SWITCH_PROTOCOL;
+				default: break SWITCH_PROTOCOL;
+				}
+			}
+		}
 		return this.port;
 	}
 	public boolean hasPort() {
