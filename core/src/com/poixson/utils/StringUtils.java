@@ -85,19 +85,18 @@ public final class StringUtils {
 
 
 	// decode string
-	public static String decode(final String raw) {
-		return decode(raw, null, null);
+	public static String Decode(final String raw) {
+		return Decode(raw, null, null);
 	}
-	public static String decodeDef(final String raw, final String defaultStr) {
-		return decode(raw, defaultStr, null);
+	public static String DecodeDef(final String raw, final String defaultStr) {
+		return Decode(raw, defaultStr, null);
 	}
-	public static String decodeCh(final String raw, final String charset) {
-		return decode(raw, null, charset);
+	public static String DecodeCh(final String raw, final String charset) {
+		return Decode(raw, null, charset);
 	}
-	public static String decode(final String raw, final String defaultStr, final String charset) {
-		if (charset == null) {
-			return decode(raw, defaultStr, DEFAULT_CHARSET.name());
-		}
+	public static String Decode(final String raw, final String defaultStr, final String charset) {
+		if (charset == null)
+			return Decode(raw, defaultStr, DEFAULT_CHARSET.name());
 		try {
 			return URLDecoder.decode(raw, charset);
 		} catch (UnsupportedEncodingException ignore) {}
