@@ -9,8 +9,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.xThreadPoolWorker;
-import com.poixson.utils.NumberUtils;
-import com.poixson.utils.ThreadUtils;
 
 
 public abstract class xThreadPool_Multi extends xThreadPool {

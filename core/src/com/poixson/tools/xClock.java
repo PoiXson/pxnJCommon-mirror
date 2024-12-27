@@ -17,8 +17,6 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.poixson.logger.xLog;
-import com.poixson.utils.NumberUtils;
-import com.poixson.utils.Utils;
 
 
 //TODO: add cooldown to update again

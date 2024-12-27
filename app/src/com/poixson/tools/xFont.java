@@ -4,9 +4,6 @@ package com.poixson.tools;
 import java.awt.Font;
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.poixson.utils.NumberUtils;
-import com.poixson.utils.Utils;
-
 
 public class xFont {
 

@@ -94,7 +94,6 @@ public class xLogHandler_StdIO extends xLogHandler {
 
 
 }
-
 //	public InputStream getInOrDefault() {
 //		final InputStream in = this.getIn();
 //		return (in==null ? StdIO.OriginalIn() : in);

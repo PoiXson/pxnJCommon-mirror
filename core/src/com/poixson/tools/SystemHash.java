@@ -25,8 +25,6 @@ import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 
-import com.poixson.utils.NumberUtils;
-
 
 / **
  * A GUID generator.
