@@ -1,6 +1,6 @@
 package com.poixson.scripting.loader;
 
-import static com.poixson.utils.FileUtils.GetLastModified;
+import static com.poixson.utils.FileUtils.GetLastModifiedSafe;
 import static com.poixson.utils.FileUtils.OpenResource;
 import static com.poixson.utils.FileUtils.ReadInputStream;
 import static com.poixson.utils.StringUtils.ForceEnds;
@@ -76,18 +76,17 @@ public class xScriptSourceDAO {
 		this.path_resource = path_resource;
 		this.filename      = filename;
 		this.code          = code;
-		this.timestamp = GetMS();
+		final long last_modified = GetLastModifiedSafe(new File(this.path_local, this.filename));
+		this.timestamp = (last_modified>0L ? last_modified : GetMS());
 	}
 
 
 
 	public boolean hasFileChanged() {
 		if (this.isLocal) {
-			final File file = new File(this.path_local, this.filename);
-			try {
-				final long last = GetLastModified(file);
-				return (last > 0L) && (last*1000L > this.timestamp);
-			} catch (IOException ignore) {}
+			final long last_modified = GetLastModifiedSafe(new File(this.path_local, this.filename));
+			if (last_modified > 0L)
+				return (last_modified*1000L > this.timestamp);
 		}
 		return false;
 	}
