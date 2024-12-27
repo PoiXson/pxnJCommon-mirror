@@ -46,7 +46,7 @@ public abstract class xApp implements AppProperties, xStartable, Runnable, xFail
 	// app instances
 	protected static final CopyOnWriteArraySet<xApp> apps = new CopyOnWriteArraySet<xApp>();
 
-	protected final AppPropsDAO props = AppPropsDAO.LoadSafe();
+	protected final AppPropsDAO props = AppPropsDAO.LoadSafe(this.getClass());
 
 	protected final xTime time_start = new xTime();
 

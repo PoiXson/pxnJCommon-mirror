@@ -37,9 +37,9 @@ public interface AppProperties {
 		public final String issueName;
 		public final String issueUrl;
 
-		public static AppPropsDAO LoadSafe() {
+		public static AppPropsDAO LoadSafe(final Class<?> clss) {
 			try {
-				return LoadFromClassRef(AppProperties.class);
+				return LoadFromClassRef(clss);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
