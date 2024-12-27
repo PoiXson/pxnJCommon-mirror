@@ -17,6 +17,17 @@ public class Test_StringUtils {
 
 
 	@Test
+	public void testSafeString() {
+		Assert.assertEquals("",    StringUtils.SafeString(null ));
+		Assert.assertEquals("",    StringUtils.SafeString(""   ));
+		Assert.assertEquals("Abc", StringUtils.SafeString("Abc"));
+		Assert.assertEquals("123", StringUtils.SafeString("123"));
+		Assert.assertEquals("\n",  StringUtils.SafeString("\n" ));
+	}
+
+
+
+	@Test
 	public void testToString() {
 		Assert.assertEquals( "Abcdef", StringUtils.ToString("Abcdef"         ) );
 		Assert.assertEquals( "Abcdef", StringUtils.ToString((Object) "Abcdef") );

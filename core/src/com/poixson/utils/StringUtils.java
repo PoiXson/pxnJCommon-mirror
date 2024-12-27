@@ -38,6 +38,12 @@ public final class StringUtils {
 
 
 
+	public static String SafeString(final String str) {
+		return (IsEmpty(str) ? "" : str);
+	}
+
+
+
 	// object to string
 	public static String ToString(final Object obj) {
 		// null
