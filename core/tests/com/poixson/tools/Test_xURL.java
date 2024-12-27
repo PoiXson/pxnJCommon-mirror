@@ -1,6 +1,10 @@
 package com.poixson.tools;
 
 import static com.poixson.tools.xURL.XURL;
+import static com.poixson.utils.ArrayUtils.MatchMaps;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -67,6 +71,19 @@ public class Test_xURL {
 				.param("letters", "xyz")
 				.build()
 		);
+		{
+			final Map<String, String> params = new HashMap<String, String>();
+			params.put("num",     "123");
+			params.put("letters", "abc");
+			final xURL url = XURL("https://admin:abc123@example.com/abc/def?num=123&letters=abc");
+			Assert.assertEquals("https",       url.getProtocol());
+			Assert.assertEquals("admin",       url.getUser());
+			Assert.assertEquals("abc123",      url.getPass());
+			Assert.assertEquals("example.com", url.getHost());
+			Assert.assertEquals(443,           url.getPort());
+			Assert.assertEquals("/abc/def",    url.getPath());
+			Assert.assertTrue(MatchMaps(params, url.getParamsMap()));
+		}
 	}
 
 

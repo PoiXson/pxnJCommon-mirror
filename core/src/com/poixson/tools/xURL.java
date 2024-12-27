@@ -7,6 +7,7 @@ import static com.poixson.utils.StringUtils.SafeString;
 import static com.poixson.utils.StringUtils.ToLower;
 import static com.poixson.utils.StringUtils.ToString;
 import static com.poixson.utils.StringUtils.ceTrim;
+import static com.poixson.utils.StringUtils.cfTrim;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.poixson.exceptions.RequiredArgumentException;
+import com.poixson.utils.MathUtils;
 
 
 // protocol:[//[user[:password]@]host[:port]][/path][?key=val[&key=val]..]
@@ -31,6 +33,9 @@ public class xURL {
 
 	public static xURL XURL() {
 		return new xURL();
+	}
+	public static xURL XURL(final String url) {
+		return XURL().set(url);
 	}
 
 	public xURL() {
@@ -129,70 +134,48 @@ public class xURL {
 
 
 	public xURL set(final String url) {
-//TODO
-		return this;
-	}
-/*
-	public xURL setURI(final String uri) {
-		String buf = uri;
-		int pos;
-		this.reset();
-		// protocol://
-		{
-			pos = buf.indexOf("//");
-			if (pos != -1) {
-				this.protocol =
-					ceTrim(
-						buf.substring(0, pos),
-						':'
-					);
-				buf = buf.substring(pos + 2);
-			}
+		if (IsEmpty(url)) return null;
+		String str = url;
+		// protocol
+		if (str.contains("://")) {
+			final String[] parts = str.split("\\:\\/\\/", 2);
+			str = parts[1];
+			this.protocol(parts[0]);
 		}
 		// user:pass
-		{
-			pos = buf.indexOf('@');
-			if (pos != -1) {
-				final String str = buf.substring(0, pos);
-				buf = buf.substring(pos + 1);
-				pos = str.indexOf(':');
-				if (pos == -1) {
-					this.user = str;
-				} else {
-					this.user = str.substring(0, pos);
-					this.pass = str.substring(pos + 1);
-				}
+		if (str.contains("@")) {
+			final String[] parts = str.split("\\@", 2);
+			str = parts[1];
+			if (parts[0].contains(":")) {
+				final String[] pts = parts[0].split("\\:", 2);
+				this.user(pts[0]);
+				this.pass(pts[1]);
+			} else {
+				this.user(parts[0]);
 			}
 		}
 		// host:port
-		{
-			pos = buf.indexOf('/');
-			if (pos != -1) {
-				final String str = buf.substring(0, pos);
-				buf = buf.substring(pos);
-				pos = str.indexOf(':');
-				if (pos != -1) {
-					this.host = str.substring(0, pos);
-					final Integer i =
-						CastInteger(
-							str.substring(pos + 1)
-						);
-					this.port = (
-						i == null
-						? -1
-						: i.intValue()
-					);
-				}
+		if (str.contains("/")) {
+			final String[] parts = str.split("\\/", 2);
+			str = parts[1];
+			if (parts[0].contains(":")) {
+				final String[] pts = parts[0].split("\\:");
+				this.host(pts[0]);
+				this.port(MathUtils.ToInteger(pts[1], -1));
+			} else {
+				this.host(parts[0]);
 			}
 		}
-		// path
-		{
-			if (!IsEmpty(buf))
-				this.path = buf;
+		// path?params
+		if (str.contains("?")) {
+			final String[] parts = str.split("\\?");
+			this.path = ""; this.path(parts[0]);
+			this.setParams(parts[1]);
+		} else {
+			this.path = ""; this.path(str);
 		}
 		return this;
 	}
-*/
 
 
 
@@ -315,7 +298,14 @@ public class xURL {
 	public String getParam(final String key) {
 		return this.params.get(key);
 	}
-
+	public xURL setParams(final String params) {
+		final String[] parts = cfTrim(params, '?').split("\\&");
+		for (final String part : parts) {
+			final String [] pts = part.split("\\=", 2);
+			this.param(pts[0], pts[1]);
+		}
+		return this;
+	}
 	public xURL setParams(final Map<String, String> params) {
 		this.params = params;
 		return this;
