@@ -651,13 +651,13 @@ public class Test_StringUtils {
 
 	@Test
 	public void testSplitLines() {
-		Assert.assertArrayEquals( new String[] { "Abc"                       }, StringUtils.SplitLines(new String[] { "Abc"                   }) );
-		Assert.assertArrayEquals( new String[] { "A", "b", "c"               }, StringUtils.SplitLines(new String[] { "A\nb\nc"               }) );
-		Assert.assertArrayEquals( new String[] { "Abc", "def", "ghi"         }, StringUtils.SplitLines(new String[] { "Abc", "def", "ghi"     }) );
-		Assert.assertArrayEquals( new String[] { "Abc", "d", "e", "f", "ghi" }, StringUtils.SplitLines(new String[] { "Abc", "d\ne\nf", "ghi" }) );
-		Assert.assertArrayEquals( new String[0], StringUtils.SplitLines(new String[] { "\n\n" }) );
-		Assert.assertArrayEquals( new String[0], StringUtils.SplitLines(new String[0]          ) );
-		Assert.assertArrayEquals( null,          StringUtils.SplitLines(null                   ) );
+		Assert.assertArrayEquals( new String[] { "Abc"                       }, StringUtils.SplitByLines(new String[] { "Abc"                   }) );
+		Assert.assertArrayEquals( new String[] { "A", "b", "c"               }, StringUtils.SplitByLines(new String[] { "A\nb\nc"               }) );
+		Assert.assertArrayEquals( new String[] { "Abc", "def", "ghi"         }, StringUtils.SplitByLines(new String[] { "Abc", "def", "ghi"     }) );
+		Assert.assertArrayEquals( new String[] { "Abc", "d", "e", "f", "ghi" }, StringUtils.SplitByLines(new String[] { "Abc", "d\ne\nf", "ghi" }) );
+		Assert.assertArrayEquals( new String[0],                                StringUtils.SplitByLines(new String[] { "\n\n"                  }) );
+		Assert.assertArrayEquals( new String[0],                                StringUtils.SplitByLines(new String[0]                           ) );
+		Assert.assertArrayEquals( null,                                         StringUtils.SplitByLines(null                                    ) );
 	}
 
 
@@ -665,15 +665,15 @@ public class Test_StringUtils {
 	@Test
 	public void testSplit() {
 		// char delims
-		Assert.assertArrayEquals( new String[] { "Abc", "def", "ghi" }, StringUtils.Split("Abc,def,ghi", ',') );
-		Assert.assertArrayEquals( new String[] { "Abc", "def"        }, StringUtils.Split(",Abc,,def,",  ',') );
-		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split(",Abc,",       ',') );
-		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split("Abc",         ',') );
+		Assert.assertArrayEquals( new String[] { "Abc", "def", "ghi" }, StringUtils.SplitByChars("Abc,def,ghi", ',') );
+		Assert.assertArrayEquals( new String[] { "Abc", "def"        }, StringUtils.SplitByChars(",Abc,,def,",  ',') );
+		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.SplitByChars(",Abc,",       ',') );
+		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.SplitByChars("Abc",         ',') );
 		// string delims
-		Assert.assertArrayEquals( new String[] { "Abc", "def", "ghi" }, StringUtils.Split("Abc,,def,,ghi", ",,") );
-		Assert.assertArrayEquals( new String[] { "Abc", "def"        }, StringUtils.Split("Abc,,,,def",    ",,") );
-		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split(",,Abc,,",       ",,") );
-		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.Split("Abc",           ",,") );
+		Assert.assertArrayEquals( new String[] { "Abc", "def", "ghi" }, StringUtils.SplitByStrings("Abc,,def,,ghi", ",,") );
+		Assert.assertArrayEquals( new String[] { "Abc", "def"        }, StringUtils.SplitByStrings("Abc,,,,def",    ",,") );
+		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.SplitByStrings(",,Abc,,",       ",,") );
+		Assert.assertArrayEquals( new String[] { "Abc",              }, StringUtils.SplitByStrings("Abc",           ",,") );
 	}
 	@Test
 	public void testSplitKeyVal() {
@@ -684,9 +684,9 @@ public class Test_StringUtils {
 		mapA.put("--", "Abc"); mapA.put("==", "def"); mapA.put("~~", "ghi");
 		mapB.put("",   "Abc"); mapB.put("--", "def"); mapB.put("==", "ghi"); mapB.put("~~", "");
 		mapC.put("~~", ""   ); mapC.put("--", ""   ); mapC.put("==", ""   );
-		Assert.assertTrue(MatchMaps(mapA, StringUtils.SplitKeyVal("--Abc==def~~ghi",   "--", "==", "~~")));
-		Assert.assertTrue(MatchMaps(mapB, StringUtils.SplitKeyVal(  "Abc--def==ghi~~", "--", "==", "~~")));
-		Assert.assertTrue(MatchMaps(mapC, StringUtils.SplitKeyVal("--==~~",            "--", "==", "~~")));
+		Assert.assertTrue(MatchMaps(mapA, StringUtils.SplitByKeyVal("--Abc==def~~ghi",   "--", "==", "~~")));
+		Assert.assertTrue(MatchMaps(mapB, StringUtils.SplitByKeyVal(  "Abc--def==ghi~~", "--", "==", "~~")));
+		Assert.assertTrue(MatchMaps(mapC, StringUtils.SplitByKeyVal("--==~~",            "--", "==", "~~")));
 	}
 
 

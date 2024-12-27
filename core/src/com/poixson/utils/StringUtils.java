@@ -1170,7 +1170,7 @@ public final class StringUtils {
 
 
 
-	public static String[] SplitLines(final String lines[]) {
+	public static String[] SplitByLines(final String lines[]) {
 		if (lines == null) return null;
 		if (lines.length == 0) return new String[0];
 		final List<String> result = new ArrayList<String>(lines.length);
@@ -1190,7 +1190,7 @@ public final class StringUtils {
 
 
 
-	public static String[] Split(final String line, final char...delims) {
+	public static String[] SplitByChars(final String line, final char...delims) {
 		final int len = line.length();
 		final List<String> result = new ArrayList<String>();
 		int next;
@@ -1221,7 +1221,7 @@ public final class StringUtils {
 		} // end LOOP_SPLIT
 		return result.toArray(new String[0]);
 	}
-	public static String[] Split(final String line, final String...delims) {
+	public static String[] SplitByStrings(final String line, final String...delims) {
 		final int lenLine = line.length();
 		final List<String> result = new ArrayList<String>();
 		int next;
@@ -1262,7 +1262,7 @@ public final class StringUtils {
 		return result.toArray(new String[0]);
 	}
 
-	public static Map<String, String> SplitKeyVal(final String input, final String...delims) {
+	public static Map<String, String> SplitByKeyVal(final String input, final String...delims) {
 		final int len_input = input.length();
 		final Map<String, String> result = new HashMap<>();
 		int pos_next;
