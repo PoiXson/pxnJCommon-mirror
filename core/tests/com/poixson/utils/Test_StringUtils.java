@@ -25,6 +25,34 @@ public class Test_StringUtils {
 		Assert.assertEquals("\n",  StringUtils.SafeString("\n" ));
 	}
 
+	@Test
+	public void testNullNorm() {
+		Assert.assertEquals(null,  StringUtils.NullNorm(null ));
+		Assert.assertEquals(null,  StringUtils.NullNorm(""   ));
+		Assert.assertEquals("Abc", StringUtils.NullNorm("Abc"));
+		Assert.assertEquals("123", StringUtils.NullNorm("123"));
+		Assert.assertEquals("\n",  StringUtils.NullNorm("\n" ));
+	}
+
+
+
+	@Test
+	public void testToUpper() {
+		Assert.assertEquals(null,  StringUtils.ToUpper(null ));
+		Assert.assertEquals("",    StringUtils.ToUpper(""   ));
+		Assert.assertEquals("ABC", StringUtils.ToUpper("Abc"));
+		Assert.assertEquals("123", StringUtils.ToUpper("123"));
+		Assert.assertEquals("\n",  StringUtils.ToUpper("\n" ));
+	}
+	@Test
+	public void testToLower() {
+		Assert.assertEquals(null,  StringUtils.ToLower(null ));
+		Assert.assertEquals("",    StringUtils.ToLower(""   ));
+		Assert.assertEquals("abc", StringUtils.ToLower("Abc"));
+		Assert.assertEquals("123", StringUtils.ToLower("123"));
+		Assert.assertEquals("\n",  StringUtils.ToLower("\n" ));
+	}
+
 
 
 	@Test

@@ -41,6 +41,18 @@ public final class StringUtils {
 	public static String SafeString(final String str) {
 		return (IsEmpty(str) ? "" : str);
 	}
+	public static String NullNorm(final String str) {
+		return (IsEmpty(str) ? null : str);
+	}
+
+
+
+	public static String ToUpper(final String str) {
+		return (IsEmpty(str) ? str : str.toUpperCase());
+	}
+	public static String ToLower(final String str) {
+		return (IsEmpty(str) ? str : str.toLowerCase());
+	}
 
 
 
