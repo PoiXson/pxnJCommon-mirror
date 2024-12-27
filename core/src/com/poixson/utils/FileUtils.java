@@ -205,9 +205,9 @@ public final class FileUtils {
 
 
 
-	public static long GetLastModified(final String fileStr) throws IOException {
-		if (IsEmpty(fileStr)) return 0;
-		return GetLastModified( Paths.get(fileStr) );
+	public static long GetLastModified(final String file) throws IOException {
+		if (IsEmpty(file)) return 0;
+		return GetLastModified( Paths.get(file) );
 	}
 	public static long GetLastModified(final File file) throws IOException {
 		if (file == null) return 0;

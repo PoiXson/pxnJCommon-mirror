@@ -34,6 +34,7 @@ public class xScriptLoader_File extends xScriptLoader {
 
 
 
+//TODO: this needs to be finished using FileUtils::GetLastModifiedSafe() - and also in PlotterCache
 //TODO: use this
 	@Override
 	public boolean hasChanged() {

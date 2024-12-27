@@ -16,7 +16,6 @@ import com.poixson.logger.xLog;
 import com.poixson.logger.xLogRoot;
 import com.poixson.utils.FileUtils;
 import com.poixson.utils.NativeUtils;
-import com.poixson.utils.StringUtils;
 import com.poixson.utils.Utils;
 
 
