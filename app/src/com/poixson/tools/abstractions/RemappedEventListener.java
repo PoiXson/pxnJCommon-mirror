@@ -1,15 +1,14 @@
 package com.poixson.tools.abstractions;
 
+import static com.poixson.utils.ReflectUtils.GetClassName;
 import static com.poixson.utils.StringUtils.sfTrim;
 import static com.poixson.utils.Utils.IsEmpty;
+import static com.poixson.utils.Utils.log;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.logger.xLog;
-import com.poixson.utils.ReflectUtils;
-import com.poixson.utils.Utils;
 
 
 public abstract class RemappedEventListener {
@@ -53,7 +52,7 @@ public abstract class RemappedEventListener {
 		}
 		// method not found
 		if (method == null) {
-			this.log().trace(
+			log().trace(
 				new NoSuchMethodException(
 					String.format(
 						"Method not found: %s::%s(%s)",
@@ -65,7 +64,7 @@ public abstract class RemappedEventListener {
 			);
 			return null;
 		}
-		this.log()
+		log()
 			.detail(
 				"New %s created for: %s::%s(%s)",
 				this.getListenerName(),
@@ -101,14 +100,7 @@ public abstract class RemappedEventListener {
 
 
 	public String getListenerName() {
-		return sfTrim(ReflectUtils.GetClassName(this), "Remapped" );
-	}
-
-
-
-	// logger
-	public xLog log() {
-		return Utils.log();
+		return sfTrim(GetClassName(this), "Remapped" );
 	}
 
 

@@ -1,5 +1,7 @@
 package com.poixson.app;
 
+import static com.poixson.utils.ProcUtils.IsDebugWireEnabled;
+import static com.poixson.utils.ThreadUtils.Sleep;
 import static com.poixson.utils.Utils.GetMS;
 import static com.poixson.utils.Utils.IsEmpty;
 
@@ -25,8 +27,6 @@ import com.poixson.tools.xTime;
 import com.poixson.tools.abstractions.RunnableMethod;
 import com.poixson.tools.abstractions.xFailableApp;
 import com.poixson.tools.abstractions.xStartable;
-import com.poixson.utils.ProcUtils;
-import com.poixson.utils.ThreadUtils;
 
 
 /*
@@ -457,7 +457,7 @@ public abstract class xApp implements AppProperties, xStartable, Runnable, xFail
 				final xThreadPool_Main poolMain = xThreadPool_Main.Get();
 				poolMain.stopMain();
 				poolMain.join(EXIT_TIMEOUT);
-				ThreadUtils.Sleep(10L);
+				Sleep(10L);
 //TODO
 //				ThreadUtils.DisplayStillRunning( xApp.this.log() );
 				StdIO.OriginalOut().println();
@@ -484,7 +484,7 @@ public abstract class xApp implements AppProperties, xStartable, Runnable, xFail
 			if (catcher != null)
 				return catcher;
 		}
-		if (!ProcUtils.isDebugWireEnabled()) {
+		if (!IsDebugWireEnabled()) {
 			final HangCatcher catcher = new HangCatcher(
 				new Runnable() {
 					@Override

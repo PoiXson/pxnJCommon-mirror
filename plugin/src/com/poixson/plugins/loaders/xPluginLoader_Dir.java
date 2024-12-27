@@ -1,5 +1,6 @@
 package com.poixson.plugins.loaders;
 
+import static com.poixson.utils.FileUtils.ListDirContents;
 import static com.poixson.utils.Utils.IfEmpty;
 
 import java.io.File;
@@ -7,7 +8,6 @@ import java.io.IOException;
 
 import com.poixson.plugins.xJavaPlugin;
 import com.poixson.plugins.xPluginManager;
-import com.poixson.utils.FileUtils;
 
 
 // load all plugins from dir
@@ -37,7 +37,7 @@ public class xPluginLoader_Dir<T extends xJavaPlugin> extends xPluginLoader<T> {
 				throw new IOException("Failed to create plugins directory: "+dir.getName());
 		}
 		// list dir contents
-		final File[] files = FileUtils.ListDirContents(dir, ".jar");
+		final File[] files = ListDirContents(dir, ".jar");
 		if (files == null) throw new RuntimeException("Failed to list plugins directory: "+dir.getName());
 		// no plugins found
 		if (files.length == 0) {

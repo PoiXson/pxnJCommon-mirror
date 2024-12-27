@@ -1,5 +1,6 @@
 package com.poixson.tools.netty;
 
+import static com.poixson.tools.xDebug.IsDebug;
 import static com.poixson.utils.Utils.SafeClose;
 
 import java.net.InetAddress;
@@ -11,7 +12,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.net.ssl.SSLException;
 
-import com.poixson.tools.xDebug;
 import com.poixson.tools.abstractions.xStartable;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -74,7 +74,7 @@ public class NetServer implements xStartable {
 		}
 		this.bootstrap.childHandler(new NetServerSocketInitializer(this, this.context_ssl));
 		// debug
-		if (xDebug.isDebug()) {
+		if (IsDebug()) {
 			final LoggingHandler handlerLogger = new LoggingHandler(LogLevel.INFO);
 			this.bootstrap.handler(handlerLogger);
 			this.bootstrap.childHandler(handlerLogger);

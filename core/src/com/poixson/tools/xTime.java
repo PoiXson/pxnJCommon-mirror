@@ -1,6 +1,7 @@
 package com.poixson.tools;
 
 import static com.poixson.utils.StringUtils.IsWhiteSpace;
+import static com.poixson.utils.StringUtils.MergeStrings;
 import static com.poixson.utils.Utils.GetMS;
 import static com.poixson.utils.Utils.IsEmpty;
 
@@ -10,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.utils.StringUtils;
 
 
 public class xTime {
@@ -306,7 +306,7 @@ public class xTime {
 			&& ++units >= places)
 				break LOOP_UNITS;
 		}
-		return StringUtils.MergeStrings(' ', result.toArray(new String[0]));
+		return MergeStrings(' ', result.toArray(new String[0]));
 	}
 
 

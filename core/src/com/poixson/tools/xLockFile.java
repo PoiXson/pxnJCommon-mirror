@@ -1,5 +1,7 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.ProcUtils.GetPid;
+import static com.poixson.utils.ReflectUtils.GetClassName;
 import static com.poixson.utils.Utils.IsEmpty;
 import static com.poixson.utils.Utils.SafeClose;
 
@@ -16,8 +18,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
-import com.poixson.utils.ProcUtils;
-import com.poixson.utils.ReflectUtils;
 
 
 public class xLockFile {
@@ -117,7 +117,7 @@ public class xLockFile {
 				this.channel = null;
 				return false;
 			}
-			final int pid = ProcUtils.GetPid();
+			final int pid = GetPid();
 			this.handle.write(
 				Integer.toString(pid).getBytes()
 			);
@@ -192,7 +192,7 @@ public class xLockFile {
 		return this.log();
 	}
 	protected xLog _log() {
-		return xLog.Get( ReflectUtils.GetClassName(this) );
+		return xLog.Get( GetClassName(this) );
 	}
 
 

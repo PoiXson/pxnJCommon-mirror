@@ -103,15 +103,15 @@ public final class ThreadUtils {
 
 
 
-	public static Thread getDispatchThreadSafe() {
+	public static Thread GetDispatchThreadSafe() {
 		try {
-			return getDispatchThread();
+			return GetDispatchThread();
 		} catch (InvocationTargetException ignore) {
 		} catch (InterruptedException ignore) {
 		}
 		return null;
 	}
-	public static Thread getDispatchThread()
+	public static Thread GetDispatchThread()
 			throws InvocationTargetException, InterruptedException {
 		final xCallable<Thread> call = new xCallable<Thread>() {
 			@Override
@@ -142,11 +142,11 @@ public final class ThreadUtils {
 
 
 
-	public static int getSystemCores() {
+	public static int GetSystemCores() {
 		return Runtime.getRuntime().availableProcessors();
 	}
-	public static int getSystemCoresPlus(final int add) {
-		return getSystemCores() + add;
+	public static int GetSystemCoresPlus(final int add) {
+		return GetSystemCores() + add;
 	}
 
 

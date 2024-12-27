@@ -1,5 +1,6 @@
 package com.poixson.logger;
 
+import static com.poixson.utils.ReflectUtils.InvokeMethod;
 import static com.poixson.utils.StringUtils.ExceptionToString;
 import static com.poixson.utils.Utils.IsEmpty;
 
@@ -18,7 +19,6 @@ import com.poixson.logger.records.xLogRecord_Special;
 import com.poixson.logger.records.xLogRecord_Special.SpecialType;
 import com.poixson.shell.xConsole;
 import com.poixson.tools.StdIO;
-import com.poixson.utils.ReflectUtils;
 
 
 //simplest - uncached
@@ -143,7 +143,7 @@ public class xLog {
 	// initialize root logger
 	public static void InitRoot() {
 		if (root.get() == null)
-			ReflectUtils.InvokeMethod("com.poixson.logger.xLogRoot", "InitRoot");
+			InvokeMethod("com.poixson.logger.xLogRoot", "InitRoot");
 	}
 
 	// logger factory

@@ -1,9 +1,8 @@
 package com.poixson.tools.byref;
 
 import static com.poixson.utils.StringUtils.IndexOf;
+import static com.poixson.utils.StringUtils.IndexOfLast;
 import static com.poixson.utils.Utils.IsEmpty;
-
-import com.poixson.utils.StringUtils;
 
 
 public class StringRef implements StringRefInterface {
@@ -132,7 +131,7 @@ public class StringRef implements StringRefInterface {
 		return (
 			val == null
 			? -1
-			: StringUtils.IndexOfLast(val, delims)
+			: IndexOfLast(val, delims)
 		);
 	}
 	@Override
@@ -141,7 +140,7 @@ public class StringRef implements StringRefInterface {
 		return (
 			val == null
 			? -1
-			: StringUtils.IndexOfLast(val, delims)
+			: IndexOfLast(val, delims)
 		);
 	}
 

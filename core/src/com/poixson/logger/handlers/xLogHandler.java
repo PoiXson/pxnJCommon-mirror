@@ -1,5 +1,7 @@
 package com.poixson.logger.handlers;
 
+import static com.poixson.utils.ShellUtils.StripColorTags;
+
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
@@ -8,7 +10,6 @@ import com.poixson.logger.xLevel;
 import com.poixson.logger.formatters.xLogFormat;
 import com.poixson.logger.records.xLogRecord;
 import com.poixson.tools.StdIO;
-import com.poixson.utils.ShellUtils;
 
 
 public abstract class xLogHandler {
@@ -56,7 +57,7 @@ public abstract class xLogHandler {
 		if (format == null)
 			return record.toString();
 		final String result = format.format(record);
-		return ShellUtils.StripColorTags(result);
+		return StripColorTags(result);
 	}
 
 	public xLogFormat getFormat() {

@@ -1,5 +1,7 @@
 package com.poixson.app;
 
+import static com.poixson.tools.xDebug.IsDebug;
+import static com.poixson.utils.ProcUtils.GetPid;
 import static com.poixson.utils.StringUtils.FindLongestLine;
 import static com.poixson.utils.StringUtils.MergeStrings;
 import static com.poixson.utils.StringUtils.PadCenter;
@@ -14,8 +16,6 @@ import java.util.Map.Entry;
 
 import com.poixson.logger.xLog;
 import com.poixson.tools.AsciiArtBuilder;
-import com.poixson.tools.xDebug;
-import com.poixson.utils.ProcUtils;
 
 
 public class xAppLogo {
@@ -75,7 +75,7 @@ public class xAppLogo {
 
 	public static Map<String, String> GetStartupVars(final xApp app) {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
-		result.put( "Pid",         Integer.toString(ProcUtils.GetPid()) );
+		result.put( "Pid",         Integer.toString(GetPid()) );
 		result.put( "Version",     app.getVersion()                     );
 		result.put( "Commit",      app.getCommitHashShort()             );
 		result.put( "Running as",  System.getProperty("user.name")      );
@@ -83,7 +83,7 @@ public class xAppLogo {
 		result.put( "Java home",   System.getProperty("java.home")      );
 		final StringBuilder log_level = new StringBuilder();
 		log_level.append( xLog.Get().getLevel() );
-		if (xDebug.isDebug())
+		if (IsDebug())
 			log_level.append(" <debug>");
 		result.put("Log Level", log_level.toString());
 		final String[] args = app.getArgs();

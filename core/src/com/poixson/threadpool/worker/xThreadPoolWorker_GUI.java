@@ -1,12 +1,12 @@
 package com.poixson.threadpool.worker;
 
+import static com.poixson.utils.ThreadUtils.GetDispatchThreadSafe;
 import static com.poixson.threadpool.xThreadPool.DEBUG_EXTRA;
 
 import javax.swing.SwingUtilities;
 
 import com.poixson.threadpool.task.xThreadPoolTask;
 import com.poixson.threadpool.types.xThreadPool_GUI;
-import com.poixson.utils.ThreadUtils;
 
 
 public class xThreadPoolWorker_GUI extends xThreadPoolWorker {
@@ -15,7 +15,7 @@ public class xThreadPoolWorker_GUI extends xThreadPoolWorker {
 
 	public xThreadPoolWorker_GUI(final xThreadPool_GUI pool, final String poolName) {
 		super(pool, (Thread) null, poolName);
-		final Thread thread = ThreadUtils.getDispatchThreadSafe();
+		final Thread thread = GetDispatchThreadSafe();
 		if (thread == null)
 			throw new RuntimeException("Failed to get dispatch thread");
 		if (!super.thread.compareAndSet(null, thread))

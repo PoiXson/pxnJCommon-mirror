@@ -2,6 +2,7 @@ package com.poixson.threadpool.worker;
 
 import static com.poixson.threadpool.xThreadPool.DEBUG_EXTRA;
 import static com.poixson.threadpool.xThreadPool.WORKER_START_TIMEOUT;
+import static com.poixson.utils.ThreadUtils.Sleep;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.lang.ref.SoftReference;
@@ -15,7 +16,6 @@ import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.task.xThreadPoolTask;
 import com.poixson.tools.CoolDown;
 import com.poixson.tools.abstractions.xStartable;
-import com.poixson.utils.ThreadUtils;
 
 
 public class xThreadPoolWorker implements xStartable, Runnable {
@@ -90,7 +90,7 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 				break LOOP_WAIT;
 			}
 			sleep += 5L;
-			ThreadUtils.Sleep(sleep);
+			Sleep(sleep);
 		} // end LOOP_WAIT
 	}
 

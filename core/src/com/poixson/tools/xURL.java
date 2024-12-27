@@ -1,6 +1,7 @@
 package com.poixson.tools;
 
 import static com.poixson.utils.MathUtils.MAX_PORT;
+import static com.poixson.utils.MathUtils.ToInteger;
 import static com.poixson.utils.StringUtils.ForceStarts;
 import static com.poixson.utils.StringUtils.NullNorm;
 import static com.poixson.utils.StringUtils.SafeString;
@@ -15,7 +16,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.utils.MathUtils;
 
 
 // protocol:[//[user[:password]@]host[:port]][/path][?key=val[&key=val]..]
@@ -161,7 +161,7 @@ public class xURL {
 			if (parts[0].contains(":")) {
 				final String[] pts = parts[0].split("\\:");
 				this.host(pts[0]);
-				this.port(MathUtils.ToInteger(pts[1], -1));
+				this.port(ToInteger(pts[1], -1));
 			} else {
 				this.host(parts[0]);
 			}

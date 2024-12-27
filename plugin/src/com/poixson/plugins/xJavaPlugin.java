@@ -1,5 +1,6 @@
 package com.poixson.plugins;
 
+import static com.poixson.utils.StringUtils.LastPart;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -10,7 +11,6 @@ import com.poixson.tools.abstractions.RunnableMethod;
 import com.poixson.tools.abstractions.xFailable;
 import com.poixson.tools.abstractions.xStartStop;
 import com.poixson.tools.config.xConfig;
-import com.poixson.utils.StringUtils;
 
 
 public abstract class xJavaPlugin implements xStartStop, Runnable, xFailable {
@@ -126,7 +126,7 @@ public abstract class xJavaPlugin implements xStartStop, Runnable, xFailable {
 				return name;
 		} catch (RuntimeException ignore) {}
 		{
-			final String class_name = StringUtils.LastPart(this.getClass().getName(), '.');
+			final String class_name = LastPart(this.getClass().getName(), '.');
 			if (IsEmpty(class_name))
 				throw new RuntimeException("Failed to detect window class name");
 			return class_name;

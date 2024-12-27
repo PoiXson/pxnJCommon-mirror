@@ -1,5 +1,6 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.ThreadUtils.Sleep;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -7,7 +8,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.tools.abstractions.xStartable;
-import com.poixson.utils.ThreadUtils;
 
 
 public class HangCatcher implements xStartable, Runnable {
@@ -116,7 +116,7 @@ public class HangCatcher implements xStartable, Runnable {
 					this.trigger();
 					break;
 				}
-				ThreadUtils.Sleep(this.sleep);
+				Sleep(this.sleep);
 			}
 		} finally {
 			this.thread.set(null);

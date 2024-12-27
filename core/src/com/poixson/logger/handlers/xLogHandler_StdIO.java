@@ -1,5 +1,6 @@
 package com.poixson.logger.handlers;
 
+import static com.poixson.utils.ShellUtils.RenderAnsi;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.io.InputStream;
@@ -9,7 +10,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.poixson.logger.records.xLogRecord;
 import com.poixson.shell.xConsole;
 import com.poixson.tools.StdIO;
-import com.poixson.utils.ShellUtils;
 
 
 public class xLogHandler_StdIO extends xLogHandler {
@@ -52,7 +52,7 @@ public class xLogHandler_StdIO extends xLogHandler {
 			} else {
 				final String[] lines = msg.split("\n");
 				for (final String line : lines)
-					out.println( ShellUtils.RenderAnsi(line) );
+					out.println( RenderAnsi(line) );
 				out.flush();
 			}
 		} finally {

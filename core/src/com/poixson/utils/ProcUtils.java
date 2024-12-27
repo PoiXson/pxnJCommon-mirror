@@ -21,7 +21,7 @@ public final class ProcUtils {
 
 
 
-	public static boolean isDebugWireEnabled() {
+	public static boolean IsDebugWireEnabled() {
 		return debugWireEnabled;
 	}
 	private static boolean InitDebugWire() {

@@ -2,6 +2,7 @@ package com.poixson.shell;
 
 import static com.poixson.utils.ShellUtils.RawTerminal;
 import static com.poixson.utils.ShellUtils.RestoreTerminal;
+import static com.poixson.utils.ThreadUtils.Sleep;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.io.IOException;
@@ -17,7 +18,6 @@ import com.poixson.logger.handlers.xLogHandler_StdIO;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;
 import com.poixson.tools.commands.xCommandProcessor;
-import com.poixson.utils.ThreadUtils;
 
 
 public class xConsolePrompt extends xConsole {
@@ -79,7 +79,7 @@ public class xConsolePrompt extends xConsole {
 		if (!this.thread.compareAndSet(null, thread))
 			throw new IllegalStateException("Prompt thread already started");
 		thread.start();
-		ThreadUtils.Sleep(50L);
+		Sleep(50L);
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class xConsolePrompt extends xConsole {
 			try {
 				thread.notifyAll();
 			} catch (Exception ignore) {}
-			ThreadUtils.Sleep(10L);
+			Sleep(10L);
 		}
 	}
 

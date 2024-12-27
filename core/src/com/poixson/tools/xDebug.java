@@ -1,5 +1,7 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.FileUtils.SearchLocalFile;
+import static com.poixson.utils.ProcUtils.IsDebugWireEnabled;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -7,8 +9,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.logger.xLevel;
 import com.poixson.logger.xLog;
-import com.poixson.utils.FileUtils;
-import com.poixson.utils.ProcUtils;
 
 
 public final class xDebug {
@@ -31,7 +31,7 @@ public final class xDebug {
 		if (inited.compareAndSet(false, true)) {
 			Keeper.add(new xDebug());
 			// debug in ide
-			if (ProcUtils.isDebugWireEnabled()) {
+			if (IsDebugWireEnabled()) {
 				SetDebug(true);
 				final xLog log = xLog.Get();
 				if (log != null)
@@ -40,10 +40,10 @@ public final class xDebug {
 				SetDebug(DEFAULT_DEBUG);
 			}
 			// search for .debug file
-			if (!isDebug()) {
+			if (!IsDebug()) {
 				if (!IsEmpty(SEARCH_DEBUG_FILES)) {
 					final String result =
-						FileUtils.SearchLocalFile(
+						SearchLocalFile(
 							SEARCH_DEBUG_FILES,
 							SEARCH_DEBUG_PARENTS
 						);
@@ -51,7 +51,7 @@ public final class xDebug {
 						SetDebug(true);
 				}
 			}
-			if (isDebug())
+			if (IsDebug())
 				xLog.Get().setLevel(xLevel.ALL);
 		}
 	}
@@ -61,7 +61,7 @@ public final class xDebug {
 
 
 
-	public static boolean isDebug() {
+	public static boolean IsDebug() {
 		final Boolean value = debugValue.get();
 		if (value == null)
 			return DEFAULT_DEBUG;

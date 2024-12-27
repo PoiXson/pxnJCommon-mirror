@@ -1,6 +1,8 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.ReflectUtils.GetClassName;
 import static com.poixson.utils.StringUtils.PutUnique;
+import static com.poixson.utils.ThreadUtils.Sleep;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.util.Iterator;
@@ -13,8 +15,6 @@ import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 import com.poixson.threadpool.types.xThreadPool_GUI;
 import com.poixson.tools.abstractions.xCloseable;
-import com.poixson.utils.ReflectUtils;
-import com.poixson.utils.ThreadUtils;
 import com.poixson.utils.guiUtils;
 
 
@@ -44,7 +44,7 @@ public abstract class xWindow extends JFrame implements xCloseable {
 		}
 		final String name;
 		if (IsEmpty(key)) {
-			name = ReflectUtils.GetClassName(this);
+			name = GetClassName(this);
 			if (IsEmpty(name)) throw new RuntimeException("Failed to detect window class name");
 		} else {
 			name = key;
@@ -134,7 +134,7 @@ public abstract class xWindow extends JFrame implements xCloseable {
 		LOOP_OUTER:
 		while (true) {
 			if (changed)
-				ThreadUtils.Sleep(10L);
+				Sleep(10L);
 			changed = false;
 			final Iterator<xWindow> it = all.values().iterator();
 			//LOOP_IT:

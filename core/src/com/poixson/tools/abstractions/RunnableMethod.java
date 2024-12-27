@@ -1,12 +1,15 @@
 package com.poixson.tools.abstractions;
 
+import static com.poixson.utils.ReflectUtils.ArgsToClasses;
+import static com.poixson.utils.ReflectUtils.GetClassName;
+import static com.poixson.utils.ReflectUtils.GetMethodByName;
+import static com.poixson.utils.ReflectUtils.InvokeMethod;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.utils.ReflectUtils;
 
 
 public class RunnableMethod<V> extends xRunnable {
@@ -24,10 +27,10 @@ public class RunnableMethod<V> extends xRunnable {
 		if (container == null)   throw new RequiredArgumentException("container");
 		if (IsEmpty(methodName)) throw new RequiredArgumentException("method");
 		this.method =
-			ReflectUtils.GetMethodByName(
+			GetMethodByName(
 				container,
 				methodName,
-				ReflectUtils.ArgsToClasses(args)
+				ArgsToClasses(args)
 			);
 		this.container = container;
 		this.args      = args;
@@ -46,10 +49,10 @@ public class RunnableMethod<V> extends xRunnable {
 		if (container == null)   throw new RequiredArgumentException("container");
 		if (IsEmpty(methodName)) throw new RequiredArgumentException("method");
 		this.method =
-			ReflectUtils.GetMethodByName(
+			GetMethodByName(
 				container,
 				methodName,
-				ReflectUtils.ArgsToClasses(args)
+				ArgsToClasses(args)
 			);
 		this.container = container;
 		this.args      = args;
@@ -77,7 +80,7 @@ public class RunnableMethod<V> extends xRunnable {
 	public void run() {
 		this.runCount.getAndIncrement();
 		this.result.set(
-			(V) ReflectUtils.InvokeMethod(
+			(V) InvokeMethod(
 				this.container,
 				this.method,
 				this.args
@@ -94,7 +97,7 @@ public class RunnableMethod<V> extends xRunnable {
 	public String getFullName() {
 		return
 			(new StringBuilder())
-			.append( ReflectUtils.GetClassName(this.container) )
+			.append( GetClassName(this.container) )
 			.append("->")
 			.append( this.method.getName())
 			.append("()")

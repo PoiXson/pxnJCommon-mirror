@@ -1,5 +1,8 @@
 package com.poixson.tools.config;
 
+import static com.poixson.utils.FileUtils.ExportResource;
+import static com.poixson.utils.FileUtils.OpenResource;
+import static com.poixson.utils.FileUtils.ReadInputStream;
 import static com.poixson.utils.Utils.IsEmpty;
 import static com.poixson.utils.Utils.SafeClose;
 
@@ -18,7 +21,6 @@ import org.yaml.snakeyaml.Yaml;
 import com.poixson.exceptions.CreateDefaultYmlFileException;
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
-import com.poixson.utils.FileUtils;
 
 
 public final class xConfigLoader {
@@ -78,7 +80,7 @@ public final class xConfigLoader {
 			throws IOException {
 		if (in == null) throw new RequiredArgumentException("in");
 		final Yaml yml = new Yaml();
-		String data = FileUtils.ReadInputStream(in);
+		String data = ReadInputStream(in);
 		data = data.replace('\t', ' ');
 		final Map<String, Object> datamap = yml.loadAs(data, Map.class);
 		return datamap;
@@ -138,7 +140,7 @@ public final class xConfigLoader {
 			return CastConfig(FromJar(filepath+".json", clss));
 		InputStream in = null;
 		try {
-			in = FileUtils.OpenResource(clss, filepath);
+			in = OpenResource(clss, filepath);
 			if (in == null) return null;
 			final Map<String, Object> datamap = LoadYamlFromStream(in);
 			if (datamap == null) return null;
@@ -172,7 +174,7 @@ public final class xConfigLoader {
 					// copy default file
 					try {
 						xLog.Get().info("Creating default file:", filepath);
-						FileUtils.ExportResource(filepath, FileUtils.OpenResource(clss, filepath));
+						ExportResource(filepath, OpenResource(clss, filepath));
 						return cfg;
 					} catch (Exception e) {
 						throw new CreateDefaultYmlFileException(filepath, e);
