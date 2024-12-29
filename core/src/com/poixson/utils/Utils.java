@@ -2,6 +2,7 @@ package com.poixson.utils;
 
 import java.awt.Color;
 import java.io.Closeable;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -403,7 +404,7 @@ public final class Utils {
 
 
 	// -------------------------------------------------------------------------------
-	// close safely
+	// close
 
 
 
@@ -424,6 +425,29 @@ public final class Utils {
 		try {
 			obj.close();
 		} catch (Exception ignore) {}
+	}
+
+
+
+	public static void SafeCloseMany(final Closeable...objects) {
+		for (final Closeable obj : objects) {
+			try {
+				obj.close();
+			} catch (Exception ignore) {}
+		}
+	}
+	public static void CloseMany(final Closeable...objects) throws IOException {
+		IOException ex = null;
+		for (final Closeable obj : objects) {
+			try {
+				obj.close();
+			} catch (IOException e) {
+				if (ex == null) ex = e;
+				else            ex.addSuppressed(e);
+			}
+		}
+		if (ex != null)
+			throw ex;
 	}
 
 
