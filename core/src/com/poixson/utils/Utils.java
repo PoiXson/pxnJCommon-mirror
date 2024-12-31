@@ -459,9 +459,7 @@ public final class Utils {
 
 	public static Throwable RootCause(final Throwable e) {
 		final Throwable cause = e.getCause();
-		if (cause == null)
-			return e;
-		return RootCause(cause);
+		return (cause==null ? e : RootCause(cause));
 	}
 
 

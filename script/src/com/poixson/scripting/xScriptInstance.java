@@ -72,7 +72,7 @@ public class xScriptInstance extends xScript {
 		this.active.set(true);
 		this.resetLastUsed();
 		final Context context = Context.enter();
-		final Object result;
+		Object result = null;
 		try {
 			final Object func_obj = this.scope.get(func_name, this.scope);
 			if (  func_obj == null             ) throw new JSFunctionNotFoundException(this.loader.getName(), func_name, func_obj);
