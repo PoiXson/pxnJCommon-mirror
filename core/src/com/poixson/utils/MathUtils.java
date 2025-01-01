@@ -170,6 +170,13 @@ public final class MathUtils {
 		return (result==null ? def : result.intValue());
 	}
 
+	public static int ToInt(final Integer value) {
+		return ToInt(value, Integer.MIN_VALUE);
+	}
+	public static int ToInt(final Integer value, final int def) {
+		return (value==null ? def : value.intValue());
+	}
+
 
 
 	// parse byte
@@ -201,6 +208,13 @@ public final class MathUtils {
 	public static byte CastByt(final Object obj, final byte def) {
 		final Byte result = CastByte(obj);
 		return (result==null ? def : result.byteValue());
+	}
+
+	public static byte ToByt(final Byte value) {
+		return ToByt(value, Byte.MIN_VALUE);
+	}
+	public static byte ToByt(final Byte value, final byte def) {
+		return (value==null ? def : value.byteValue());
 	}
 
 
@@ -236,6 +250,13 @@ public final class MathUtils {
 		return (result==null ? def : result.shortValue());
 	}
 
+	public static short ToSht(final Short value) {
+		return ToSht(value, Short.MIN_VALUE);
+	}
+	public static short ToSht(final Short value, final short def) {
+		return (value==null ? def : value.shortValue());
+	}
+
 
 
 	// parse long
@@ -267,6 +288,13 @@ public final class MathUtils {
 	public static long CastLng(final Object obj, final long def) {
 		final Long result = CastLong(obj);
 		return (result==null ? def : result.longValue());
+	}
+
+	public static long ToLng(final Long value) {
+		return ToLng(value, Long.MIN_VALUE);
+	}
+	public static long ToLng(final Long value, final long def) {
+		return (value==null ? def : value.longValue());
 	}
 
 
@@ -302,6 +330,13 @@ public final class MathUtils {
 		return (result==null ? def : result.doubleValue());
 	}
 
+	public static double ToDbl(final Double value) {
+		return ToDbl(value, Double.MIN_VALUE);
+	}
+	public static double ToDbl(final Double value, final double def) {
+		return (value==null ? def : value.doubleValue());
+	}
+
 
 
 	// parse float
@@ -333,6 +368,13 @@ public final class MathUtils {
 	public static float CastFlt(final Object obj, final float def) {
 		final Float result = CastFloat(obj);
 		return (result==null ? def : result.floatValue());
+	}
+
+	public static float ToFlt(final Float value) {
+		return ToFlt(value, Float.MIN_VALUE);
+	}
+	public static float ToFlt(final Float value, final float def) {
+		return (value==null ? def : value.floatValue());
 	}
 
 
@@ -398,6 +440,14 @@ public final class MathUtils {
 	public static boolean CastBool(final Object obj, final boolean def) {
 		final Boolean result = CastBoolean(obj);
 		return (result==null ? def : result.booleanValue());
+	}
+
+	public static boolean ToBool(final Boolean value) {
+		if (value == null) throw new NullPointerException();
+		return value.booleanValue();
+	}
+	public static boolean ToBool(final Boolean value, final boolean def) {
+		return (value==null ? def : value.booleanValue());
 	}
 
 
