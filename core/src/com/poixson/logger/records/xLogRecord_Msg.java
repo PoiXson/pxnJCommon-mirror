@@ -5,6 +5,8 @@ import static com.poixson.utils.Utils.IsEmpty;
 
 import com.poixson.logger.xLevel;
 import com.poixson.logger.xLog;
+import com.poixson.logger.xLogRoot;
+import com.poixson.tools.lang.LangTable;
 
 
 public class xLogRecord_Msg implements xLogRecord {
@@ -43,6 +45,11 @@ public class xLogRecord_Msg implements xLogRecord {
 		if (this.level == null)
 			return null;
 		return this.level.toString();
+	}
+	public String getLevelNameLocal() {
+		final LangTable lang = xLogRoot.GetLangTable();
+		final String level = this.getLevelName();
+		return (lang==null ? level : lang.phrase(level));
 	}
 
 

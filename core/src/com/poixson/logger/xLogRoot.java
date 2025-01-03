@@ -1,17 +1,21 @@
 package com.poixson.logger;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.logger.formatters.xLogFormat_Tagged;
 import com.poixson.logger.handlers.xLogHandler;
 import com.poixson.logger.handlers.xLogHandler_StdIO;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;
+import com.poixson.tools.lang.LangTable;
 
 
 public class xLogRoot extends xLog {
 
 	protected static final AtomicBoolean inited = new AtomicBoolean(false);
+
+	protected static final AtomicReference<LangTable> lang = new AtomicReference<LangTable>(null);
 
 
 
@@ -47,6 +51,27 @@ public class xLogRoot extends xLog {
 		final xLogHandler handler = new xLogHandler_StdIO();
 		handler.setFormat(new xLogFormat_Tagged());
 		return handler;
+	}
+
+
+
+	public static LangTable GetLangTable() {
+		// existing
+		{
+			final LangTable table = lang.get();
+			if (table != null)
+				return table;
+		}
+		// new instance
+		{
+			final LangTable table = LangTable.Create();
+			if (lang.compareAndSet(null, table))
+				return table;
+		}
+		return lang.get();
+	}
+	public static void SetLangTable(final LangTable table) {
+		lang.set(table);
 	}
 
 
