@@ -1,0 +1,9 @@
+{
+	"greeting":     "Hello, welcome to the server!",
+	"welcome_back": "Welcome back, {player}!",
+	"farewell":     "Goodbye, see you next time!",
+	"help":         "Type /help for a list of commands.",
+	"error":        "An error has occurred. Please try again.",
+	"join":         "You have joined the game.",
+	"leave":        "You have left the game."
+}

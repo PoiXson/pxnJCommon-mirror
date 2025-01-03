@@ -1,0 +1,9 @@
+{
+	"greeting":     "Hola, bienvenido al servidor!",
+	"welcome_back": "Bienvenido de nuevo, {player}!",
+	"farewell":     "Adios, nos vemos la proxima!",
+	"help":         "Escriba /help para obtener una lista de comandos.",
+	"error":        "Se ha producido un error. Inténtalo de nuevo.",
+	"join":         "Te has unido al juego.",
+	"leave":        "Has abandonado el juego."
+}
