@@ -79,7 +79,7 @@ public class LangTable {
 
 
 	public void load() {
-		final String lg = this.lg.get();
+		final String lg = this.lg();
 		if (!ValidateLang(lg)) throw new IllegalArgumentException("Invalid language: "+lg);
 		// load lang file
 		final String file_res = ForceEnds(".json", MergePaths(       "languages",     lg));
@@ -120,13 +120,17 @@ public class LangTable {
 
 
 
-	public LangTable lang(final String lg) {
+	public LangTable lg(final String lg) {
 		this.lg.set(lg);
 		this.reload();
 		return this;
 	}
+
+	public LangTable lang(final String lang) {
+		return this.lg(lang);
+	}
 	public String lang() {
-		return this.lg.get();
+		return this.lg();
 	}
 
 
