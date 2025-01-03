@@ -384,16 +384,6 @@ public class Test_MathUtils {
 
 
 
-/*
-	@Test
-	public void testCeilDiv() {
-		Assert.assertEquals(4, MathUtils.ceilDiv(10, 3));
-		Assert.assertEquals(2, MathUtils.ceilDiv( 3, 2));
-	}
-*/
-
-
-
 	@Test
 	public void testRemap() {
 		// remap percent
