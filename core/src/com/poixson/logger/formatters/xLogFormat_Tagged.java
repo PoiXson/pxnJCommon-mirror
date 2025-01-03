@@ -67,9 +67,9 @@ public class xLogFormat_Tagged implements xLogFormat {
 			if (this.containsTime)
 				result = result.replace("{time}", this.genTimestamp(record));
 			if (this.containsLevel) {
-				final String levelStr = record.getLevelName();
-				if (!IsEmpty(levelStr))
-					result = result.replace("{level}", PadCenter(7, levelStr, ' '));
+				final String level_loc = record.getLevelNameLocal();
+				if (!IsEmpty(level_loc))
+					result = result.replace("{level}", PadCenter(7, level_loc, ' '));
 			}
 			if (this.containsCrumbs)
 				result = result.replace("{crumbs}", this.genCrumbs(record, this.formatCrumb));

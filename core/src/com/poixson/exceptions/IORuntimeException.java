@@ -12,11 +12,11 @@ public class IORuntimeException extends RuntimeException {
 	public IORuntimeException(final String msg) {
 		super(msg);
 	}
-	public IORuntimeException(final String msg, final Throwable e) {
-		super(msg, e);
-	}
 	public IORuntimeException(final Throwable e) {
 		super(e);
+	}
+	public IORuntimeException(final String msg, final Throwable e) {
+		super(msg, e);
 	}
 
 

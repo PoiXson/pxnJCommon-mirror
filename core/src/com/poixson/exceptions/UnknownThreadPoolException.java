@@ -6,8 +6,8 @@ public class UnknownThreadPoolException extends RuntimeException {
 
 
 
-	public UnknownThreadPoolException(final String poolName) {
-		super("Unknown xThreadPool: "+poolName);
+	public UnknownThreadPoolException(final String pool_name) {
+		super("Unknown xThreadPool: "+pool_name);
 	}
 
 
