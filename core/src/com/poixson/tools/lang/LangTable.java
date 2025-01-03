@@ -23,6 +23,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.google.gson.reflect.TypeToken;
+import com.poixson.exceptions.DevIdiotException;
 import com.poixson.exceptions.LangTableLoadException;
 
 
@@ -124,6 +125,19 @@ public class LangTable {
 		this.lg.set(lg);
 		this.reload();
 		return this;
+	}
+	public String lg() {
+		final String lg = this.lg.get();
+		if (IsEmpty(lg)) {
+			if (IsEmpty(DEFAULT_LANG)) throw new DevIdiotException();
+			this.lg.compareAndSet(lg, DEFAULT_LANG);
+			return this.lg();
+		}
+		if (!ValidateLang(lg)) {
+			this.lg.compareAndSet(lg, null);
+			return this.lg();
+		}
+		return lg;
 	}
 
 	public LangTable lang(final String lang) {
