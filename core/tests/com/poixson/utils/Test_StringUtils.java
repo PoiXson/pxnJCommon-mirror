@@ -591,6 +591,17 @@ public class Test_StringUtils {
 	public void testReplaceTags() {
 		// array tags
 		{
+			// string array tags
+			Assert.assertEquals( null,        StringUtils.sReplaceTags(null                ) );
+			Assert.assertEquals( "",          StringUtils.sReplaceTags(""                  ) );
+			Assert.assertEquals( "abc",       StringUtils.sReplaceTags("abc"               ) );
+			Assert.assertEquals( "1 2 3",     StringUtils.sReplaceTags(null,  "1", "2", "3") );
+			Assert.assertEquals( "1 2 3",     StringUtils.sReplaceTags("",    "1", "2", "3") );
+			Assert.assertEquals( "abc 1",     StringUtils.sReplaceTags("abc", "1"          ) );
+			Assert.assertEquals( "abc 1 2",   StringUtils.sReplaceTags("abc", "1", "2"     ) );
+			Assert.assertEquals( "abc 1 2 3", StringUtils.sReplaceTags("abc", "1", "2", "3") );
+			Assert.assertEquals( "a{}b{}c",   StringUtils.sReplaceTags("a{}b{}c"           ) );
+			// object array tags
 			Assert.assertEquals( null,        StringUtils.oReplaceTags(null                ) );
 			Assert.assertEquals( "",          StringUtils.oReplaceTags(""                  ) );
 			Assert.assertEquals( "abc",       StringUtils.oReplaceTags("abc"               ) );
