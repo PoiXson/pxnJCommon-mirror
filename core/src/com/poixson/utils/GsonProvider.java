@@ -1,5 +1,7 @@
 package com.poixson.utils;
 
+import java.lang.reflect.Type;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
@@ -32,7 +34,7 @@ public final class GsonProvider {
 			if (builder == null)
 				builder = GSON_Builder();
 			for (; index<args.length; index+=2) {
-				final Class<?>       type    = (Class<?>)       args[index  ];
+				final Type           type    = (Type)           args[index  ];
 				final TypeAdapter<?> adapter = (TypeAdapter<?>) args[index+1];
 				builder.registerTypeAdapter(type, adapter);
 			}
