@@ -60,6 +60,11 @@ public class LangTable {
 
 
 
+	// -------------------------------------------------------------------------------
+	// get
+
+
+
 	public String getPhrase(final String key, final String...args) {
 		if (IsEmpty(key)) return null;
 		final String phrase = this.getPhrase(key);
@@ -95,6 +100,18 @@ public class LangTable {
 				return tup;
 		}
 		return null;
+	}
+
+
+
+	public String getPhrase(final Object key, final String...args) {
+		return this.getPhrase(key.toString(), args);
+	}
+	public String getPhrase(final Object key) {
+		return this.getPhrase(key.toString());
+	}
+	public Tuple<String[], AtomicModularInteger> getPhrases(final Object key) {
+		return this.getPhrases(key.toString());
 	}
 
 
