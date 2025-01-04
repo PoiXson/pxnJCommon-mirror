@@ -1,5 +1,10 @@
 {
-	"greeting":     "Hola, bienvenido al servidor!",
+	"greeting": [
+		"Hola, bienvenido al servidor!",
+		"Saludos, bienvenido al servidor!",
+		"Hola, bienvenido al servidor!",
+		"Ahoy compañero, bienvenido al servidor!"
+	],
 	"welcome_back": "Bienvenido de nuevo, {player}!",
 	"farewell":     "Adios, nos vemos la proxima!",
 	"help":         "Escriba /help para obtener una lista de comandos.",

@@ -1,5 +1,10 @@
 {
-	"greeting":     "Hello, welcome to the server!",
+	"greeting": [
+		"Hello, welcome to the server!",
+		"Greetings, welcome to the server!",
+		"Howdy, welcome to the server!",
+		"Ahoy matey, welcome to the server!"
+	],
 	"welcome_back": "Welcome back, {player}!",
 	"farewell":     "Goodbye, see you next time!",
 	"help":         "Type /help for a list of commands.",
