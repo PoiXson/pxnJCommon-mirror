@@ -113,7 +113,7 @@ public class LangTable {
 		final Map<String, String[]> map;
 		try {
 			final InputStream in = OpenLocalOrResource(this.getClass(), file_loc, file_res);
-			if (in == null) throw new LangTableLoadException("Failed to load language: "+lg);
+			if (in == null) throw new LangTableLoadException("Language file not found or failed to load: "+file_res);
 			final String json = ReadInputStream(in);
 			if (IsEmpty(json)) throw new LangTableLoadException("Failed to parse json for language: "+lg);
 			final Type token = new TypeToken<Map<String, String[]>>() {}.getType();
@@ -203,8 +203,8 @@ public class LangTable {
 
 
 	public static boolean ValidateLang(final String lg) {
-		if (IsEmpty(lg))      return false;
-		if (lg.length() != 2) return false;
+		if (IsEmpty(lg)                      ) return false;
+		if (lg.length() != 2                 ) return false;
 		if (!IsMinMax(lg.charAt(0), 'a', 'z')) return false;
 		if (!IsMinMax(lg.charAt(1), 'a', 'z')) return false;
 		return true;

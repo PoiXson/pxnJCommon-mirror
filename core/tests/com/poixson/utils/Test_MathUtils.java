@@ -197,12 +197,6 @@ public class Test_MathUtils {
 	// -------------------------------------------------------------------------------
 	// min/max
 
-	//        |   2D   |   3D
-	//-----------------------------
-	// circle | Radial | Vectorial
-	// square | Linear | Axial
-	// hybrid | Hybrid | Hybrid
-
 
 
 	@Test
@@ -214,6 +208,17 @@ public class Test_MathUtils {
 		Assert.assertEquals( 5, Max(-5, 0, 5      ));
 		Assert.assertEquals( 9, Max( 9, 8, 7, 5, 6));
 	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// min/max
+
+	//        |   2D   |   3D
+	//-----------------------------
+	// circle | Radial | Vectorial
+	// square | Linear | Axial
+	// hybrid | Hybrid | Hybrid
 
 
 

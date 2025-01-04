@@ -49,7 +49,7 @@ public class xLogRecord_Msg implements xLogRecord {
 	public String getLevelNameLocal() {
 		final LangTable lang = xLogRoot.GetLangTable();
 		final String level = this.getLevelName();
-		return (lang==null ? level : lang.phrase(level));
+		return (lang==null ? level : lang.getPhrase(level));
 	}
 
 
