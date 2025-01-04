@@ -54,6 +54,56 @@ public class LangTable {
 
 
 
+	// -------------------------------------------------------------------------------
+	// load
+
+
+
+	public void load() {
+		final String lg = this.lg();
+		if (!ValidateLang(lg)) throw new IllegalArgumentException("Invalid language: "+lg);
+		// load lang file
+		final String file_res = ForceEnds(".json", MergePaths(       "languages",     lg));
+		final String file_loc = ForceEnds(".json", MergePaths(cwd(), "testresources", lg));
+		final Map<String, String[]> map;
+		try {
+			final InputStream in = OpenLocalOrResource(this.getClass(), file_loc, file_res);
+			if (in == null) throw new LangTableLoadException("Language file not found or failed to load: "+file_res);
+			final String json = ReadInputStream(in);
+			if (IsEmpty(json)) throw new LangTableLoadException("Failed to parse json for language: "+lg);
+			final Type token = new TypeToken<Map<String, String[]>>() {}.getType();
+			final Gson gson = GSON(
+				token, new GsonAdapter_LangTable()
+			);
+			map = gson.fromJson(json, token);
+		} catch (IOException e) {
+			throw new LangTableLoadException(e);
+		}
+		// copy into this.phrases
+		final LinkedList<String> found = new LinkedList<String>();
+		for (final Entry<String, String[]> entry : map.entrySet()) {
+			final String   key     = entry.getKey();
+			final String[] phrases = entry.getValue();
+			found.addLast(key);
+			final int len = phrases.length;
+			final AtomicModularInteger index = (len>1 ? new AtomicModularInteger(0, 0, len-1) : null);
+			final Tuple<String[], AtomicModularInteger> tup = new Tuple<String[], AtomicModularInteger>(phrases, index);
+			this.phrase_book.put(key, tup);
+		}
+		// check for entries to remove
+		final LinkedList<String> remove = new LinkedList<String>();
+		for (final String key : this.phrase_book.keySet()) {
+			// key not found in new phrases
+			if (!found.remove(key))
+				remove.addLast(key);
+		}
+		// remove unloaded phrases
+		for (final String key : remove)
+			this.phrase_book.remove(key);
+	}
+
+
+
 	public void reload() {
 		this.phrase_book.clear();
 	}
@@ -117,57 +167,17 @@ public class LangTable {
 
 
 	// -------------------------------------------------------------------------------
-	// load
-
-
-
-	public void load() {
-		final String lg = this.lg();
-		if (!ValidateLang(lg)) throw new IllegalArgumentException("Invalid language: "+lg);
-		// load lang file
-		final String file_res = ForceEnds(".json", MergePaths(       "languages",     lg));
-		final String file_loc = ForceEnds(".json", MergePaths(cwd(), "testresources", lg));
-		final Map<String, String[]> map;
-		try {
-			final InputStream in = OpenLocalOrResource(this.getClass(), file_loc, file_res);
-			if (in == null) throw new LangTableLoadException("Language file not found or failed to load: "+file_res);
-			final String json = ReadInputStream(in);
-			if (IsEmpty(json)) throw new LangTableLoadException("Failed to parse json for language: "+lg);
-			final Type token = new TypeToken<Map<String, String[]>>() {}.getType();
-			final Gson gson = GSON(
-				token, new GsonAdapter_LangTable()
-			);
-			map = gson.fromJson(json, token);
-		} catch (IOException e) {
-			throw new LangTableLoadException(e);
-		}
-		// copy into this.phrases
-		final LinkedList<String> found = new LinkedList<String>();
-		for (final Entry<String, String[]> entry : map.entrySet()) {
-			final String   key     = entry.getKey();
-			final String[] phrases = entry.getValue();
-			found.addLast(key);
-			final int len = phrases.length;
-			final AtomicModularInteger index = (len>1 ? new AtomicModularInteger(0, 0, len-1) : null);
-			final Tuple<String[], AtomicModularInteger> tup = new Tuple<String[], AtomicModularInteger>(phrases, index);
-			this.phrase_book.put(key, tup);
-		}
-		// check for entries to remove
-		final LinkedList<String> remove = new LinkedList<String>();
-		for (final String key : this.phrase_book.keySet()) {
-			// key not found in new phrases
-			if (!found.remove(key))
-				remove.addLast(key);
-		}
-		// remove unloaded phrases
-		for (final String key : remove)
-			this.phrase_book.remove(key);
-	}
-
-
-
-	// -------------------------------------------------------------------------------
 	// properties
+
+
+
+	public static boolean ValidateLang(final String lg) {
+		if (IsEmpty(lg)                      ) return false;
+		if (lg.length() != 2                 ) return false;
+		if (!IsMinMax(lg.charAt(0), 'a', 'z')) return false;
+		if (!IsMinMax(lg.charAt(1), 'a', 'z')) return false;
+		return true;
+	}
 
 
 
@@ -215,16 +225,6 @@ public class LangTable {
 	}
 	public String getPathRes() {
 		return this.path_res.get();
-	}
-
-
-
-	public static boolean ValidateLang(final String lg) {
-		if (IsEmpty(lg)                      ) return false;
-		if (lg.length() != 2                 ) return false;
-		if (!IsMinMax(lg.charAt(0), 'a', 'z')) return false;
-		if (!IsMinMax(lg.charAt(1), 'a', 'z')) return false;
-		return true;
 	}
 
 
