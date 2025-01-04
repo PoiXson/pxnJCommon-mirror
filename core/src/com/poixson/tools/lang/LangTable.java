@@ -14,7 +14,6 @@ import static com.poixson.utils.Utils.IsEmpty;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,9 +21,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.poixson.exceptions.DevIdiotException;
 import com.poixson.exceptions.LangTableLoadException;
+import com.poixson.tools.abstractions.Tuple;
+import com.poixson.tools.atomic.AtomicModularInteger;
+import com.poixson.tools.gson.GsonAdapter_LangTable;
 
 
 public class LangTable {
@@ -35,7 +38,8 @@ public class LangTable {
 	protected final AtomicReference<String> path_loc = new AtomicReference<String>("languages");
 	protected final AtomicReference<String> path_res = new AtomicReference<String>("languages");
 
-	protected final ConcurrentHashMap<String, String> phrases = new ConcurrentHashMap<String, String>();
+	protected final ConcurrentHashMap<String, Tuple<String[], AtomicModularInteger>> phrase_book =
+			new ConcurrentHashMap<String, Tuple<String[], AtomicModularInteger>>();
 	protected final AtomicReference<String> lg = new AtomicReference<String>(null);
 
 
@@ -51,23 +55,44 @@ public class LangTable {
 
 
 	public void reload() {
-		this.phrases.clear();
+		this.phrase_book.clear();
 	}
 
 
 
-	public String msg(final String key, final String...args) {
+	public String getPhrase(final String key, final String...args) {
 		if (IsEmpty(key)) return null;
-		final String phrase = this.phrase(key);
+		final String phrase = this.getPhrase(key);
 		return ssReplaceTags(phrase, ssArrayToMap(args));
 	}
-	public String phrase(final String key) {
-		for (int i=0; i<2; i++) {
-			if (this.phrases.isEmpty())
+	public String getPhrase(final String key) {
+		final Tuple<String[], AtomicModularInteger> tup = this.getPhrases(key);
+		if (tup == null) return null;
+		final String[] phrases = tup.key;
+		final int len = phrases.length;
+		if (len > 1) {
+			final AtomicModularInteger index = tup.val;
+			final int idx = (index==null ? 0 : index.getAndIncrement());
+			return phrases[idx];
+		}
+		return phrases[0];
+	}
+	public Tuple<String[], AtomicModularInteger> getPhrases(final String key) {
+		// try 1
+		{
+			if (this.phrase_book.isEmpty())
 				this.load();
-			final String phrase = this.phrases.get(key);
-			if (!IsEmpty(phrase))
-				return phrase;
+			final Tuple<String[], AtomicModularInteger> tup = this.phrase_book.get(key);
+			if (tup != null)
+				return tup;
+		}
+		// try 2
+		{
+			if (this.phrase_book.isEmpty())
+				this.load();
+			final Tuple<String[], AtomicModularInteger> tup = this.phrase_book.get(key);
+			if (tup != null)
+				return tup;
 		}
 		return null;
 	}
@@ -85,33 +110,41 @@ public class LangTable {
 		// load lang file
 		final String file_res = ForceEnds(".json", MergePaths(       "languages",     lg));
 		final String file_loc = ForceEnds(".json", MergePaths(cwd(), "testresources", lg));
-		final Map<String, String> map;
+		final Map<String, String[]> map;
 		try {
 			final InputStream in = OpenLocalOrResource(this.getClass(), file_loc, file_res);
 			if (in == null) throw new LangTableLoadException("Failed to load language: "+lg);
 			final String json = ReadInputStream(in);
 			if (IsEmpty(json)) throw new LangTableLoadException("Failed to parse json for language: "+lg);
-			final Type token = new TypeToken<HashMap<String, String>>() {}.getType();
-			map = GSON().fromJson(json, token);
+			final Type token = new TypeToken<Map<String, String[]>>() {}.getType();
+			final Gson gson = GSON(
+				token, new GsonAdapter_LangTable()
+			);
+			map = gson.fromJson(json, token);
 		} catch (IOException e) {
 			throw new LangTableLoadException(e);
 		}
 		// copy into this.phrases
 		final LinkedList<String> found = new LinkedList<String>();
-		for (final Entry<String, String> entry : map.entrySet()) {
-			found.addLast(entry.getKey());
-			this.phrases.put(entry.getKey(), entry.getValue());
+		for (final Entry<String, String[]> entry : map.entrySet()) {
+			final String   key     = entry.getKey();
+			final String[] phrases = entry.getValue();
+			found.addLast(key);
+			final int len = phrases.length;
+			final AtomicModularInteger index = (len>1 ? new AtomicModularInteger(0, 0, len-1) : null);
+			final Tuple<String[], AtomicModularInteger> tup = new Tuple<String[], AtomicModularInteger>(phrases, index);
+			this.phrase_book.put(key, tup);
 		}
 		// check for entries to remove
 		final LinkedList<String> remove = new LinkedList<String>();
-		for (final String key : this.phrases.keySet()) {
+		for (final String key : this.phrase_book.keySet()) {
 			// key not found in new phrases
 			if (!found.remove(key))
 				remove.addLast(key);
 		}
 		// remove unloaded phrases
 		for (final String key : remove)
-			this.phrases.remove(key);
+			this.phrase_book.remove(key);
 	}
 
 
