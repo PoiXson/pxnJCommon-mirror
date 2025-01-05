@@ -1,5 +1,8 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -14,6 +17,49 @@ import com.poixson.tools.Keeper;
 public final class ArrayUtils {
 	private ArrayUtils() {}
 	static { Keeper.add(new ArrayUtils()); }
+
+
+
+	public static <T> T[] EmptyArray(final Class<?> type) {
+		return NewArray(0, type);
+	}
+	@SuppressWarnings("unchecked")
+	public static <T> T[] NewArray(final int size, final Class<?> type) {
+		return (T[]) Array.newInstance(type, size);
+	}
+
+
+
+	public static <T> T[] SafeArray(final T[] array, final Class<T> type) {
+		return (IsEmpty(array) ? EmptyArray(type) : array);
+	}
+	public static <T> T[] NullNormArray(final T[] array) {
+		return (IsEmpty(array) ? null : array);
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// remove first entry
+
+
+
+	public static <T> T[] DropFirst(final T[] array) {
+		if (IsEmpty(array)) return array;
+		final int len = array.length;
+		@SuppressWarnings("unchecked")
+		T[] result = (T[]) Array.newInstance(array[0].getClass(), len-1);
+		if (len > 1) {
+			for (int i=0; i<len-1; i++)
+				result[i] = (T) array[i+1];
+		}
+		return result;
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// merge arrays
 
 
 

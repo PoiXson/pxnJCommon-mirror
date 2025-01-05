@@ -15,6 +15,36 @@ public class Test_ArrayUtils {
 
 
 	@Test
+	public void testArrayUtils() {
+		// EmptyArray()
+		Assert.assertArrayEquals(new String[0],               ArrayUtils.EmptyArray(String.class));
+		// NewArray()
+		Assert.assertArrayEquals(new String[0],               ArrayUtils.NewArray(0, String.class));
+		Assert.assertArrayEquals(new String[] { null       }, ArrayUtils.NewArray(1, String.class));
+		Assert.assertArrayEquals(new String[] { null, null }, ArrayUtils.NewArray(2, String.class));
+		// SafeArray()
+		Assert.assertArrayEquals(new String[0],               ArrayUtils.SafeArray(null,                   String.class));
+		Assert.assertArrayEquals(new String[0],               ArrayUtils.SafeArray(new String[0],          String.class));
+		Assert.assertArrayEquals(new String[] { "Abc" },      ArrayUtils.SafeArray(new String[] { "Abc" }, String.class));
+		// NullNormArray()
+		Assert.assertNull(                                    ArrayUtils.NullNormArray(null                  ));
+		Assert.assertNull(                                    ArrayUtils.NullNormArray(new String[0]         ));
+		Assert.assertArrayEquals(new String[] { "Abc" },      ArrayUtils.NullNormArray(new String[] { "Abc" }));
+	}
+
+
+
+	@Test
+	public void testDropFirst() {
+		Assert.assertArrayEquals(new String[0],                 ArrayUtils.DropFirst(new String[0]                       ));
+		Assert.assertArrayEquals(new String[0],                 ArrayUtils.DropFirst(new String[] { "Abc"               }));
+		Assert.assertArrayEquals(new String[] { "def"        }, ArrayUtils.DropFirst(new String[] { "Abc", "def"        }));
+		Assert.assertArrayEquals(new String[] { "def", "ghi" }, ArrayUtils.DropFirst(new String[] { "Abc", "def", "ghi" }));
+	}
+
+
+
+	@Test
 	public void testGetSafe() {
 		final double[] array = {
 			-1.1,
