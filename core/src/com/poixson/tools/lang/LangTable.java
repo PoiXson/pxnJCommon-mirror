@@ -84,11 +84,12 @@ public class LangTable {
 		for (final Entry<String, String[]> entry : map.entrySet()) {
 			final String   key     = entry.getKey();
 			final String[] phrases = entry.getValue();
-			found.addLast(key);
+			final String key_norm = NormKey(key);
+			found.addLast(key_norm);
 			final int len = phrases.length;
 			final AtomicModularInteger index = (len>1 ? new AtomicModularInteger(0, 0, len-1) : null);
 			final Tuple<String[], AtomicModularInteger> tup = new Tuple<String[], AtomicModularInteger>(phrases, index);
-			this.phrase_book.put(key, tup);
+			this.phrase_book.put(key_norm, tup);
 		}
 		// check for entries to remove
 		final LinkedList<String> remove = new LinkedList<String>();
@@ -112,6 +113,15 @@ public class LangTable {
 
 	// -------------------------------------------------------------------------------
 	// get
+
+
+
+	public static String NormKey(final String key) {
+		if (IsEmpty(key)) return key;
+		return key
+			.replace('-', '_')
+			.replace('.', '_');
+	}
 
 
 
