@@ -3,8 +3,10 @@ package com.poixson.utils;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.lang.reflect.Array;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +37,117 @@ public final class ArrayUtils {
 	}
 	public static <T> T[] NullNormArray(final T[] array) {
 		return (IsEmpty(array) ? null : array);
+	}
+
+
+
+	public static boolean IsArray(final Object obj) {
+		return (obj==null ? false : obj.getClass().isArray());
+	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// to primitive array
+
+
+
+	// boolean
+	public static boolean[] BoolToPrimArray(final Collection<Boolean> collect) {
+		if (collect == null)   return null;
+		if (collect.isEmpty()) return new boolean[0];
+		final int size = collect.size();
+		final boolean[] result = new boolean[size];
+		final Iterator<Boolean> it = collect.iterator();
+		int index = 0;
+		while (it.hasNext()) {
+			result[index++] = it.next().booleanValue();
+		}
+		return result;
+	}
+	// integer
+	public static int[] IntToPrimArray(final Collection<Integer> collect) {
+		if (collect == null)   return null;
+		if (collect.isEmpty()) return new int[0];
+		final int size = collect.size();
+		final int[] result = new int[size];
+		final Iterator<Integer> it = collect.iterator();
+		int index = 0;
+		while (it.hasNext()) {
+			result[index] = it.next().intValue();
+			index++;
+		}
+		return result;
+	}
+	// byte
+	public static byte[] ByteToPrimArray(final Collection<Byte> collect) {
+		if (collect == null)   return null;
+		if (collect.isEmpty()) return new byte[0];
+		final int size = collect.size();
+		final byte[] result = new byte[size];
+		final Iterator<Byte> it = collect.iterator();
+		int index = 0;
+		while (it.hasNext()) {
+			result[index] = it.next().byteValue();
+			index++;
+		}
+		return result;
+	}
+	// short
+	public static short[] ShortToPrimArray(final Collection<Short> collect) {
+		if (collect == null)   return null;
+		if (collect.isEmpty()) return new short[0];
+		final int size = collect.size();
+		final short[] result = new short[size];
+		final Iterator<Short> it = collect.iterator();
+		int index = 0;
+		while (it.hasNext()) {
+			result[index] = it.next().shortValue();
+			index++;
+		}
+		return result;
+	}
+	// long
+	public static long[] LongToPrimArray(final Collection<Long> collect) {
+		if (collect == null)   return null;
+		if (collect.isEmpty()) return new long[0];
+		final int size = collect.size();
+		final long[] result = new long[size];
+		final Iterator<Long> it = collect.iterator();
+		int index = 0;
+		while (it.hasNext()) {
+			result[index] = it.next().longValue();
+			index++;
+		}
+		return result;
+	}
+	// double
+	public static double[] DoubleToPrimArray(final Collection<Double> collect) {
+		if (collect == null)   return null;
+		if (collect.isEmpty()) return new double[0];
+		final int size = collect.size();
+		final double[] result = new double[size];
+		final Iterator<Double> it = collect.iterator();
+		int index = 0;
+		while (it.hasNext()) {
+			result[index] = it.next().doubleValue();
+			index++;
+		}
+		return result;
+	}
+	// float
+	public static float[] FloatToPrimArray(final Collection<Float> collect) {
+		if (collect == null)   return null;
+		if (collect.isEmpty()) return new float[0];
+		final int size = collect.size();
+		final float[] result = new float[size];
+		final Iterator<Float> it = collect.iterator();
+		int index = 0;
+		while (it.hasNext()) {
+			result[index] = it.next().floatValue();
+			index++;
+		}
+		return result;
 	}
 
 
