@@ -1,4 +1,4 @@
-package com.poixson;
+package com.poixson.utils;
 
 import static com.poixson.utils.StringUtils.MergeObjects;
 import static com.poixson.utils.StringUtils.ToString;
