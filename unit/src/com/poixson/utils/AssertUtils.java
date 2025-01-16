@@ -10,8 +10,8 @@ import java.util.List;
 import org.junit.Assert;
 
 
-public final class TestUtils {
-	private TestUtils() {}
+public final class AssertUtils {
+	private AssertUtils() {}
 
 
 
