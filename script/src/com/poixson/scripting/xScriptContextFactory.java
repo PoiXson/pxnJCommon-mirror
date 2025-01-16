@@ -28,7 +28,6 @@ public class xScriptContextFactory extends ContextFactory {
 	protected Context makeContext() {
 		final Context context = super.makeContext();
 		context.setLanguageVersion(Context.VERSION_ES6);
-		context.setOptimizationLevel(9);
 		return context;
 	}
 

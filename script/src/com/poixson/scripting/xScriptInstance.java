@@ -109,8 +109,6 @@ public class xScriptInstance extends xScript {
 		this.resetLastUsed();
 		final Context context = Context.enter();
 		try {
-//TODO: check how long this takes
-			context.setOptimizationLevel(9);
 			context.setLanguageVersion(Context.VERSION_ES6);
 			final xScriptSourceDAO[] sources = this.getSources();
 			final LinkedList<Script> list = new LinkedList<Script>();
