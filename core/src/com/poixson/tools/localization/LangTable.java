@@ -1,4 +1,4 @@
-package com.poixson.tools.lang;
+package com.poixson.tools.localization;
 
 import static com.poixson.utils.ArrayUtils.ssArrayToMap;
 import static com.poixson.utils.FileUtils.MergePaths;
