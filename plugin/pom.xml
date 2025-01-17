@@ -39,7 +39,7 @@
 		<!-- Dependencies -->
 		<common-core-version>[4.2.0${snap},4.3.0${snap})</common-core-version>
 		<common-config-version>[4.2.0${snap},4.3.0${snap})</common-config-version>
-		<classgraph-version>[4,)</classgraph-version>
+		<classgraph-version>4.8.179</classgraph-version>
 		<gson-version>2.11.0</gson-version>
 
 	</properties>
