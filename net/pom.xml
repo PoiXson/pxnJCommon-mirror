@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated: Wed Jan 15 07:53:56 PM EST 2025 -->
+<!-- Generated: Fri Jan 17 01:08:50 AM EST 2025 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -16,6 +16,7 @@
 		<url>https://poixson.com</url>
 	</organization>
 	<properties>
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<project.license>AGPLv3</project.license>
@@ -40,6 +41,7 @@
 		<netty-common-version>4.2.0.RC1</netty-common-version>
 		<netty-handler-version>4.2.0.RC1</netty-handler-version>
 		<netty-codec-version>4.2.0.RC1</netty-codec-version>
+
 	</properties>
 	<scm>
 		<url>https://git.poixson.com/summary/pxn!pxnJCommon.git</url>
