@@ -35,13 +35,15 @@ public final class Assertions implements AfterAllCallback {
 		final int c_asserts = count_asserts      .getAndSet(0);
 		final int c_total   = count_asserts_total.intValue();
 		System.out.println(String.format(
-			"Assertions ran: %d  [total: %d]",
+			" Assertions: %s+%d [%d]%s",
+			"\033[1;32m", // green/bold
 			Integer.valueOf(c_asserts),
-			Integer.valueOf(c_total  )
+			Integer.valueOf(c_total),
+			"\033[0m" // reset
 		));
 		if (c_total > 9000) {
 			if (count_over_ninet.compareAndSet(false, true))
-				System.out.println("Over 9000 asserts!!!");
+				System.out.println("\033[1;32mOver 9000 asserts!!!\033[0m");
 		}
 	}
 
