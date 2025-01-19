@@ -1,3 +1,4 @@
+/*
 package com.poixson.plugins.loaders;
 
 import java.io.IOException;
@@ -53,3 +54,4 @@ public class xPluginFactory<T extends xJavaPlugin> {
 
 
 }
+*/

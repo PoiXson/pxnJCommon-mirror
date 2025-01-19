@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.scheduler.trigger;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -63,3 +64,4 @@ public abstract class xSchedTrigger {
 
 
 }
+*/

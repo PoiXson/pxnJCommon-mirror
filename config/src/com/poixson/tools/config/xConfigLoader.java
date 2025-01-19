@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.config;
 
 import static com.poixson.utils.FileUtils.ExportResource;
@@ -71,11 +72,11 @@ public final class xConfigLoader {
 
 
 
-	/**
+	/ **
 	 * Load and parse yaml data from an input stream. 
 	 * @param in InputStream to read from.
 	 * @return Map<String, Object> datamap contents of yml file.
-	 */
+	 * /
 	public static Map<String, Object> LoadYamlFromStream(final InputStream in)
 			throws IOException {
 		if (in == null) throw new RequiredArgumentException("in");
@@ -190,3 +191,4 @@ public final class xConfigLoader {
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.scheduler.trigger;
 
 
@@ -60,3 +61,4 @@ public class xSchedTrigger_Interval extends xSchedTrigger {
 
 
 }
+*/

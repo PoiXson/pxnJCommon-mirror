@@ -1,3 +1,4 @@
+/*
 package com.poixson.plugins;
 
 
@@ -12,3 +13,4 @@ public enum xPluginState {
 	TERMINATING
 
 }
+*/

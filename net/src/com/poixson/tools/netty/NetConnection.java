@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.netty;
 
 import static com.poixson.utils.Utils.IsEmpty;
@@ -60,3 +61,4 @@ public abstract class NetConnection implements xCloseable {
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.poixson.plugins;
 
 import static com.poixson.utils.Utils.IsEmpty;
@@ -331,3 +332,4 @@ public abstract class xPluginManager<T extends xJavaPlugin> {
 
 
 }
+*/

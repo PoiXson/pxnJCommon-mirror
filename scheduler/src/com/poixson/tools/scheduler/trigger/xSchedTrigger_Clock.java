@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.scheduler.trigger;
 
 import java.text.ParseException;
@@ -70,3 +71,4 @@ public class xSchedTrigger_Clock extends xSchedTrigger {
 
 
 }
+*/

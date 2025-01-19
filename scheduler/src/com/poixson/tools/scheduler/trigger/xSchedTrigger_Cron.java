@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.scheduler.trigger;
 
 import java.util.Date;
@@ -9,7 +10,7 @@ import org.quartz.impl.triggers.CronTriggerImpl;
 import com.poixson.exceptions.RequiredArgumentException;
 
 
-/*
+/ *
   1 | Seconds
   2 | Minutes
   3 | Hours
@@ -17,7 +18,7 @@ import com.poixson.exceptions.RequiredArgumentException;
   5 | Month
   6 | Day-of-Week
   7 | Year (optional field)
- */
+ * /
 public class xSchedTrigger_Cron extends xSchedTrigger {
 
 	protected final CronTriggerImpl trigger;
@@ -78,3 +79,4 @@ public class xSchedTrigger_Cron extends xSchedTrigger {
 
 
 }
+*/
