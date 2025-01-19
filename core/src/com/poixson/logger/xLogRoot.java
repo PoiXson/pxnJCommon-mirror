@@ -8,7 +8,7 @@ import com.poixson.logger.handlers.xLogHandler;
 import com.poixson.logger.handlers.xLogHandler_StdIO;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;
-import com.poixson.tools.lang.LangTable;
+import com.poixson.tools.localization.LangTable;
 
 
 public class xLogRoot extends xLog {

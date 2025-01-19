@@ -6,7 +6,7 @@ import static com.poixson.utils.Utils.IsEmpty;
 import com.poixson.logger.xLevel;
 import com.poixson.logger.xLog;
 import com.poixson.logger.xLogRoot;
-import com.poixson.tools.lang.LangTable;
+import com.poixson.tools.localization.LangTable;
 
 
 public class xLogRecord_Msg implements xLogRecord {

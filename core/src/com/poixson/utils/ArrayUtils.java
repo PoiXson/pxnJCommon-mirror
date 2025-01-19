@@ -60,9 +60,8 @@ public final class ArrayUtils {
 		final boolean[] result = new boolean[size];
 		final Iterator<Boolean> it = collect.iterator();
 		int index = 0;
-		while (it.hasNext()) {
+		while (it.hasNext())
 			result[index++] = it.next().booleanValue();
-		}
 		return result;
 	}
 	// integer
@@ -271,8 +270,8 @@ public final class ArrayUtils {
 
 
 	public static double GetSafeOrZero(final double[] array, final int index) {
-		if (index < 0           ) return 0;
-		if (index >=array.length) return 0;
+		if (index < 0           ) return 0.0;
+		if (index >=array.length) return 0.0;
 		return array[index];
 	}
 	public static double GetSafeOrNear(final double[] array, final int index) {
@@ -295,9 +294,11 @@ public final class ArrayUtils {
 		if (index < 0)
 			return array[0] + GetSafeLooped(array, index-1);
 		final int count = array.length;
-		if (index >= count)
-			return GetSafeLooped(array, index-1) + GetSafeLooped(array, index);
-		return array[index];
+		return (
+			index < count
+			? array[index]
+			: GetSafeLooped(array, index-1) + GetSafeLooped(array, index)
+		);
 	}
 
 

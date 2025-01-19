@@ -17,12 +17,6 @@ public final class Utils {
 
 
 
-//TODO
-//	private static final AtomicInteger jLineVersion = new AtomicInteger(-1);
-//	private static final AtomicInteger RxTxVersion  = new AtomicInteger(-1);
-
-
-
 	// -------------------------------------------------------------------------------
 	// is empty
 
@@ -37,8 +31,6 @@ public final class Utils {
 		return (IsEmpty(value) ? def : value);
 	}
 
-
-
 	// string builder
 	public static boolean IsEmpty(final StringBuilder str) {
 		if (str == null) return true;
@@ -47,8 +39,6 @@ public final class Utils {
 	public static StringBuilder IfEmpty(final StringBuilder value, final String def) {
 		return (IsEmpty(value) ? (new StringBuilder()).append(def) : value);
 	}
-
-
 
 	// string array
 	public static boolean IsEmpty(final String[] array) {
@@ -65,8 +55,6 @@ public final class Utils {
 	public static <T extends Object> T IfEmpty(final T obj, final T def) {
 		return (obj == null ? def : obj);
 	}
-
-
 
 	// object array
 	public static boolean IsEmpty(final Object[] array) {
@@ -88,8 +76,6 @@ public final class Utils {
 		return (IsEmpty(collect) ? def : collect);
 	}
 
-
-
 	// map
 	public static boolean IsEmpty(final Map<?, ?> map) {
 		if (map == null) return true;
@@ -106,8 +92,6 @@ public final class Utils {
 		return (byt == null ? def : byt);
 	}
 
-
-
 	// byte array
 	public static boolean IsEmpty(final byte[] bytes) {
 		if (bytes == null) return true;
@@ -123,8 +107,6 @@ public final class Utils {
 	public static char IfEmpty(final char chr, final char def) {
 		return (chr == 0 ? def : chr);
 	}
-
-
 
 	// char array
 	public static boolean IsEmpty(final char[] chars) {
@@ -145,8 +127,6 @@ public final class Utils {
 		return (IsEmpty(chr) ? def : chr);
 	}
 
-
-
 	// character array
 	public static boolean IsEmpty(final Character[] chars) {
 		if (chars == null) return true;
@@ -162,8 +142,6 @@ public final class Utils {
 	public static Short IfEmpty(final Short value, final Short def) {
 		return (value == null ? def : value);
 	}
-
-
 
 	// short array
 	public static boolean IsEmpty(final short[] shorts) {
@@ -181,8 +159,6 @@ public final class Utils {
 		return (value == null ? def : value);
 	}
 
-
-
 	// integer array
 	public static boolean IsEmpty(final int[] ints) {
 		if (ints == null) return true;
@@ -198,8 +174,6 @@ public final class Utils {
 	public static Long IfEmpty(final Long value, final Long def) {
 		return (value == null ? def : value);
 	}
-
-
 
 	// long array
 	public static boolean IsEmpty(final long[] longs) {
@@ -217,8 +191,6 @@ public final class Utils {
 		return (value == null ? def : value);
 	}
 
-
-
 	// double array
 	public static boolean IsEmpty(final double[] doubles) {
 		if (doubles == null) return true;
@@ -235,8 +207,6 @@ public final class Utils {
 		return (value == null ? def : value);
 	}
 
-
-
 	// float array
 	public static boolean IsEmpty(final float[] floats) {
 		if (floats == null) return true;
@@ -252,8 +222,6 @@ public final class Utils {
 	public static Boolean IfEmpty(final Boolean bool, final Boolean def) {
 		return (bool == null ? def : bool);
 	}
-
-
 
 	// boolean array
 	public static boolean IsEmpty(final boolean[] bools) {

@@ -522,6 +522,7 @@ public abstract class xApp implements AppProperties, xStartable, Runnable, xFail
 
 
 
+	@Override
 	public AppPropsDAO getProps() {
 		return this.props;
 	}
