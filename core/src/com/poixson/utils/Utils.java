@@ -307,9 +307,9 @@ public final class Utils {
 
 
 
-	public static Throwable RootCause(final Throwable e) {
+	public static Throwable GetRootCause(final Throwable e) {
 		final Throwable cause = e.getCause();
-		return (cause==null ? e : RootCause(cause));
+		return (cause==null ? e : GetRootCause(cause));
 	}
 
 
