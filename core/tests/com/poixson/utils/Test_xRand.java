@@ -1,7 +1,9 @@
 package com.poixson.utils;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static com.poixson.tools.Assertions.AssertFalse;
+import static com.poixson.tools.Assertions.AssertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import com.poixson.tools.xRand;
 
@@ -19,13 +21,13 @@ public class Test_xRand {
 		final xRand rnd = (new xRand()).seed_time();
 		for (int i=0; i<1000; i++) {
 			final int value = rnd.nextInt(min, max);
-			Assert.assertFalse(value+"<min"+min, value < min);
-			Assert.assertFalse(value+">max"+max, value > max);
+			AssertFalse((value<min), value+"<min"+min);
+			AssertFalse((value>max), value+">max"+max);
 			if (value == min  ) found_min = true;
 			if (value == max-1) found_max = true;
 		}
-		Assert.assertTrue("min int not found", found_min);
-		Assert.assertTrue("max int not found", found_max);
+		AssertTrue(found_min, "min int not found");
+		AssertTrue(found_max, "max int not found");
 	}
 
 	@Test
@@ -37,13 +39,13 @@ public class Test_xRand {
 		final xRand rnd = (new xRand()).seed_time();
 		for (int i=0; i<1000; i++) {
 			final long value = rnd.nextLong(min, max);
-			Assert.assertFalse(value+"<min"+min, value < min);
-			Assert.assertFalse(value+">max"+max, value > max);
+			AssertFalse((value<min), value+"<min"+min);
+			AssertFalse((value>max), value+">max"+max);
 			if (value == min   ) found_min = true;
 			if (value == max-1L) found_max = true;
 		}
-		Assert.assertTrue("min long not found", found_min);
-		Assert.assertTrue("max long not found", found_max);
+		AssertTrue(found_min, "min long not found");
+		AssertTrue(found_max, "max long not found");
 	}
 
 	@Test
@@ -55,13 +57,13 @@ public class Test_xRand {
 		final xRand rnd = (new xRand()).seed_time();
 		for (int i=0; i<1000; i++) {
 			final float value = rnd.nextFloat(min, max);
-			Assert.assertFalse(value+"<min"+min, value < min);
-			Assert.assertFalse(value+">max"+max, value > max);
+			AssertFalse((value<min), value+"<min"+min);
+			AssertFalse((value>max), value+">max"+max);
 			if (value >= min      && value < min+1.0f) found_min = true;
 			if (value >= max-1.0f && value < max     ) found_max = true;
 		}
-		Assert.assertTrue("min float not found", found_min);
-		Assert.assertTrue("max float not found", found_max);
+		AssertTrue(found_min, "min float not found");
+		AssertTrue(found_max, "max float not found");
 	}
 
 	@Test
@@ -73,13 +75,13 @@ public class Test_xRand {
 		final xRand rnd = (new xRand()).seed_time();
 		for (int i=0; i<1000; i++) {
 			final double value = rnd.nextDouble(min, max);
-			Assert.assertFalse(value+"<min"+min, value < min);
-			Assert.assertFalse(value+">max"+max, value > max);
+			AssertFalse((value<min), value+"<min"+min);
+			AssertFalse((value>max), value+">max"+max);
 			if (value >= min     && value < min+1.0) found_min = true;
 			if (value >= max-1.0 && value < max    ) found_max = true;
 		}
-		Assert.assertTrue("min double not found", found_min);
-		Assert.assertTrue("max double not found", found_max);
+		AssertTrue(found_min, "min double not found");
+		AssertTrue(found_max, "max double not found");
 	}
 
 

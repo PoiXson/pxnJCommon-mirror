@@ -1,7 +1,9 @@
 package com.poixson.tools.abstractions;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static com.poixson.tools.Assertions.AssertEquals;
+import static com.poixson.tools.Assertions.AssertTrue;
+
+import org.junit.jupiter.api.Test;
 
 
 public class Test_HashMapTimeout {
@@ -15,13 +17,13 @@ public class Test_HashMapTimeout {
 		map.put("abc", "def");
 		for (int i=0; i<10; i++) {
 			if (i == 2) map.put("ghi", "jkl");
-			if (i < 2) Assert.assertEquals("Index: "+Integer.toString(i), 1, map.size()); else
-			if (i < 6) Assert.assertEquals("Index: "+Integer.toString(i), 2, map.size()); else
-			if (i < 8) Assert.assertEquals("Index: "+Integer.toString(i), 1, map.size()); else
-				Assert.assertEquals(0, map.size());
+			if (i < 2) AssertEquals(1, map.size(), "Index: "+Integer.toString(i)); else
+			if (i < 6) AssertEquals(2, map.size(), "Index: "+Integer.toString(i)); else
+			if (i < 8) AssertEquals(1, map.size(), "Index: "+Integer.toString(i)); else
+				AssertEquals(0, map.size());
 			map.run();
 		}
-		Assert.assertTrue(map.isEmpty());
+		AssertTrue(map.isEmpty());
 	}
 
 

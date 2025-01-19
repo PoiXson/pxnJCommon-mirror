@@ -1,9 +1,10 @@
 package com.poixson.tools;
 
+import static com.poixson.tools.Assertions.AssertEquals;
+
 import java.util.LinkedList;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.poixson.tools.JsonChunker.ChunkProcessor;
 
@@ -40,8 +41,8 @@ public class Test_JsonChunker {
 		final ChunkProcessorTest chunk = new ChunkProcessorTest();
 		final JsonChunker buffer = new JsonChunker(chunk);
 		buffer.process(" " + JSON_A + " , \n\t" + JSON_B + " \n");
-		Assert.assertEquals(JSON_A, chunk.results.get(0));
-		Assert.assertEquals(JSON_B, chunk.results.get(1));
+		AssertEquals(JSON_A, chunk.results.get(0));
+		AssertEquals(JSON_B, chunk.results.get(1));
 	}
 
 

@@ -1,13 +1,14 @@
 package com.poixson.tools;
 
+import static com.poixson.tools.Assertions.AssertEquals;
+import static com.poixson.tools.Assertions.AssertTrue;
 import static com.poixson.tools.xURL.XURL;
 import static com.poixson.utils.ArrayUtils.MatchMaps;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 public class Test_xURL {
@@ -16,52 +17,52 @@ public class Test_xURL {
 
 	@Test
 	public void testXURL() {
-		Assert.assertEquals("", XURL().build());
+		AssertEquals("", XURL().build());
 		// protocol
-		Assert.assertEquals("example.com",          XURL().host("example.com").protocol(null   ).build());
-		Assert.assertEquals("example.com",          XURL().host("example.com").protocol(""     ).build());
-		Assert.assertEquals( "http://example.com/", XURL().host("example.com").protocol("http" ).build());
-		Assert.assertEquals("https://example.com/", XURL().host("example.com").protocol("https").build());
-		Assert.assertEquals( "http://example.com/", XURL().host("example.com").http()           .build());
-		Assert.assertEquals("https://example.com/", XURL().host("example.com").https()          .build());
+		AssertEquals("example.com",          XURL().host("example.com").protocol(null   ).build());
+		AssertEquals("example.com",          XURL().host("example.com").protocol(""     ).build());
+		AssertEquals( "http://example.com/", XURL().host("example.com").protocol("http" ).build());
+		AssertEquals("https://example.com/", XURL().host("example.com").protocol("https").build());
+		AssertEquals( "http://example.com/", XURL().host("example.com").http()           .build());
+		AssertEquals("https://example.com/", XURL().host("example.com").https()          .build());
 		// user
-		Assert.assertEquals(        "example.com", XURL().host("example.com").user(null   ).build());
-		Assert.assertEquals(        "example.com", XURL().host("example.com").user(""     ).build());
-		Assert.assertEquals(  "admin@example.com", XURL().host("example.com").user("admin").build());
+		AssertEquals(        "example.com", XURL().host("example.com").user(null   ).build());
+		AssertEquals(        "example.com", XURL().host("example.com").user(""     ).build());
+		AssertEquals(  "admin@example.com", XURL().host("example.com").user("admin").build());
 		// pass
-		Assert.assertEquals(        "example.com", XURL().host("example.com").pass(null    ).build());
-		Assert.assertEquals(        "example.com", XURL().host("example.com").pass(""      ).build());
-		Assert.assertEquals(":abc123@example.com", XURL().host("example.com").pass("abc123").build());
+		AssertEquals(        "example.com", XURL().host("example.com").pass(null    ).build());
+		AssertEquals(        "example.com", XURL().host("example.com").pass(""      ).build());
+		AssertEquals(":abc123@example.com", XURL().host("example.com").pass("abc123").build());
 		// host
-		Assert.assertEquals("",                XURL().host(null             ).build());
-		Assert.assertEquals("",                XURL().host(""               ).build());
-		Assert.assertEquals(    "example.com", XURL().host(    "example.com").build());
-		Assert.assertEquals("www.example.com", XURL().host("www.example.com").build());
+		AssertEquals("",                XURL().host(null             ).build());
+		AssertEquals("",                XURL().host(""               ).build());
+		AssertEquals(    "example.com", XURL().host(    "example.com").build());
+		AssertEquals("www.example.com", XURL().host("www.example.com").build());
 		// port
-		Assert.assertEquals("example.com",      XURL().host("example.com").port(Integer.MIN_VALUE).build());
-		Assert.assertEquals("example.com",      XURL().host("example.com").port(  -1).build());
-		Assert.assertEquals("example.com",      XURL().host("example.com").port(   0).build());
-		Assert.assertEquals("example.com:1",    XURL().host("example.com").port(   1).build());
-		Assert.assertEquals("example.com:2",    XURL().host("example.com").port(   2).build());
-		Assert.assertEquals("example.com:11",   XURL().host("example.com").port(  11).build());
-		Assert.assertEquals("example.com:1142", XURL().host("example.com").port(1142).build());
-		Assert.assertEquals("example.com:9999", XURL().host("example.com").port(9999).build());
+		AssertEquals("example.com",      XURL().host("example.com").port(Integer.MIN_VALUE).build());
+		AssertEquals("example.com",      XURL().host("example.com").port(  -1).build());
+		AssertEquals("example.com",      XURL().host("example.com").port(   0).build());
+		AssertEquals("example.com:1",    XURL().host("example.com").port(   1).build());
+		AssertEquals("example.com:2",    XURL().host("example.com").port(   2).build());
+		AssertEquals("example.com:11",   XURL().host("example.com").port(  11).build());
+		AssertEquals("example.com:1142", XURL().host("example.com").port(1142).build());
+		AssertEquals("example.com:9999", XURL().host("example.com").port(9999).build());
 		// default port
-		Assert.assertEquals("http://example.com/",     XURL().http() .host("example.com").port( 80).build());
-		Assert.assertEquals("http://example.com:443/", XURL().http() .host("example.com").port(443).build());
-		Assert.assertEquals("https://example.com:80/", XURL().https().host("example.com").port( 80).build());
-		Assert.assertEquals("https://example.com/",    XURL().https().host("example.com").port(443).build());
+		AssertEquals("http://example.com/",     XURL().http() .host("example.com").port( 80).build());
+		AssertEquals("http://example.com:443/", XURL().http() .host("example.com").port(443).build());
+		AssertEquals("https://example.com:80/", XURL().https().host("example.com").port( 80).build());
+		AssertEquals("https://example.com/",    XURL().https().host("example.com").port(443).build());
 		// path
-		Assert.assertEquals("/abc",          XURL().path( "abc" )                            .build());
-		Assert.assertEquals("/abc/",         XURL().path("/abc/")                            .build());
-		Assert.assertEquals("/abc/def/ghi",  XURL().path( "abc" ).path( "def" ).path( "ghi" ).build());
-		Assert.assertEquals("/abc/def/ghi/", XURL().path("/abc/").path("/def/").path("/ghi/").build());
+		AssertEquals("/abc",          XURL().path( "abc" )                            .build());
+		AssertEquals("/abc/",         XURL().path("/abc/")                            .build());
+		AssertEquals("/abc/def/ghi",  XURL().path( "abc" ).path( "def" ).path( "ghi" ).build());
+		AssertEquals("/abc/def/ghi/", XURL().path("/abc/").path("/def/").path("/ghi/").build());
 		// params
-		Assert.assertEquals("?abc=123", XURL().param("abc", 123).build());
-		Assert.assertEquals("?abc=123&def=456&ghi=789",
+		AssertEquals("?abc=123", XURL().param("abc", 123).build());
+		AssertEquals("?abc=123&def=456&ghi=789",
 			XURL().param("abc", 123).param("def", 456).param("ghi", 789).build());
 		// everything
-		Assert.assertEquals("https://admin:abc123@example.com:440/abc/def?num=123&letters=xyz",
+		AssertEquals("https://admin:abc123@example.com:440/abc/def?num=123&letters=xyz",
 			XURL()
 				.https().host("example.com")
 				.user("admin").pass("abc123")
@@ -76,13 +77,13 @@ public class Test_xURL {
 			params.put("num",     "123");
 			params.put("letters", "abc");
 			final xURL url = XURL("https://admin:abc123@example.com/abc/def?num=123&letters=abc");
-			Assert.assertEquals("https",       url.getProtocol());
-			Assert.assertEquals("admin",       url.getUser());
-			Assert.assertEquals("abc123",      url.getPass());
-			Assert.assertEquals("example.com", url.getHost());
-			Assert.assertEquals(443,           url.getPort());
-			Assert.assertEquals("/abc/def",    url.getPath());
-			Assert.assertTrue(MatchMaps(params, url.getParamsMap()));
+			AssertEquals("https",       url.getProtocol());
+			AssertEquals("admin",       url.getUser());
+			AssertEquals("abc123",      url.getPass());
+			AssertEquals("example.com", url.getHost());
+			AssertEquals(443,           url.getPort());
+			AssertEquals("/abc/def",    url.getPath());
+			AssertTrue(MatchMaps(params, url.getParamsMap()));
 		}
 	}
 
