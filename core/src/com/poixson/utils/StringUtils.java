@@ -859,6 +859,23 @@ public final class StringUtils {
 
 
 	// -------------------------------------------------------------------------------
+	// substring
+
+
+
+	public static String SubString(final String str, final int start, final int width) {
+		if (IsEmpty(str)) return str;
+		if (width <= 0) return "";
+		final int len = str.length();
+		if (start > len) return "";
+		if (start+width > len)
+			return str.substring(start);
+		return str.substring(start, start+width);
+	}
+
+
+
+	// -------------------------------------------------------------------------------
 	// replace within string
 
 
