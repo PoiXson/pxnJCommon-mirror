@@ -38,21 +38,11 @@ public final class StringUtils {
 
 
 
-	public static String SafeString(final String str) {
-		return (IsEmpty(str) ? "" : str);
-	}
-	public static String NullNorm(final String str) {
-		return (IsEmpty(str) ? null : str);
-	}
+	public static String SafeString(final String str) { return (IsEmpty(str) ? ""   : str); }
+	public static String NullNorm  (final String str) { return (IsEmpty(str) ? null : str); }
 
-
-
-	public static String ToUpper(final String str) {
-		return (IsEmpty(str) ? str : str.toUpperCase());
-	}
-	public static String ToLower(final String str) {
-		return (IsEmpty(str) ? str : str.toLowerCase());
-	}
+	public static String ToUpper(final String str) { return (IsEmpty(str) ? str : str.toUpperCase()); }
+	public static String ToLower(final String str) { return (IsEmpty(str) ? str : str.toLowerCase()); }
 
 
 
@@ -63,22 +53,19 @@ public final class StringUtils {
 		// array
 		if (obj.getClass().isArray()) {
 			final StringBuilder result = new StringBuilder();
-			int count = 0;
 			for (final Object o : (Object[]) obj) {
-				if (o == null) continue;
-				if (count > 0)
+				if (!result.isEmpty())
 					result.append(' ');
-				count++;
-				result.append('{').append( ToString(o) ).append('}');
+				result.append('{').append(ToString(o)).append('}');
 			}
 			return result.toString();
 		}
+		if (obj instanceof Boolean  ) return ( ((Boolean)obj).booleanValue() ? "<TRUE>" : "<false>" );
 		if (obj instanceof String   ) return (String) obj;
-		if (obj instanceof Boolean  ) return ( ((Boolean)obj).booleanValue() ? "TRUE" : "false" );
 		if (obj instanceof Integer  ) return ((Integer) obj).toString();
-		if (obj instanceof Long     ) return ((Long) obj).toString();
-		if (obj instanceof Double   ) return ((Double) obj).toString();
-		if (obj instanceof Float    ) return ((Float) obj).toString();
+		if (obj instanceof Long     ) return ((Long)    obj).toString();
+		if (obj instanceof Double   ) return ((Double)  obj).toString();
+		if (obj instanceof Float    ) return ((Float)   obj).toString();
 		if (obj instanceof Exception) return ExceptionToString((Exception) obj);
 		// unknown object
 		return obj.toString();
@@ -105,16 +92,20 @@ public final class StringUtils {
 	public static boolean MatchString(final String expect, final String actual) {
 		final boolean expectEmpty = (expect == null || expect.isEmpty());
 		final boolean actualEmpty = (actual == null || actual.isEmpty());
-		if (expectEmpty || actualEmpty)
-			return (expectEmpty == actualEmpty);
-		return expect.equals(actual);
+		return (
+			(expectEmpty || actualEmpty)
+			? (expectEmpty == actualEmpty)
+			: expect.equals(actual)
+		);
 	}
 	public static boolean MatchStringIgnoreCase(final String expect, final String actual) {
 		final boolean expectEmpty = (expect == null || expect.isEmpty());
 		final boolean actualEmpty = (actual == null || actual.isEmpty());
-		if (expectEmpty || actualEmpty)
-			return (expectEmpty == actualEmpty);
-		return expect.equalsIgnoreCase(actual);
+		return (
+			(expectEmpty || actualEmpty)
+			? (expectEmpty == actualEmpty)
+			: expect.equalsIgnoreCase(actual)
+		);
 	}
 	public static boolean MatchStringExact(final String expect, final String actual) {
 		if (expect == null && actual == null) return true;
@@ -133,12 +124,8 @@ public final class StringUtils {
 		for (int i = 0; i < len; i++) {
 			char c = wildcard.charAt(i);
 			switch (c) {
-			case '*':
-				buf.append(".*");
-				break;
-			case '?':
-				buf.append('.');
-				break;
+			case '*': buf.append(".*"); break;
+			case '?': buf.append('.');  break;
 			case '(':
 			case ')':
 			case '[':
@@ -149,12 +136,8 @@ public final class StringUtils {
 			case '{':
 			case '}':
 			case '|':
-			case '\\':
-				buf.append('\\').append(c);
-				break;
-			default:
-				buf.append(c);
-				break;
+			case '\\': buf.append('\\').append(c); break;
+			default:   buf.append(c);              break;
 			}
 		}
 		buf.append('$');
@@ -266,7 +249,10 @@ public final class StringUtils {
 				valA = (i < sizeA ? Integer.parseInt(partsA[i]) : 0);
 				valB = (i < sizeB ? Integer.parseInt(partsB[i]) : 0);
 				if (valA > valB
-				||  valA < valB) { diff += (valB - valA) * pow; continue; }
+				||  valA < valB) {
+					diff += (valB - valA) * pow;
+					continue;
+				}
 			}
 			return (double) diff;
 		}
@@ -372,129 +358,129 @@ public final class StringUtils {
 
 
 	private static String doTrim(
-			final boolean trimFront, final boolean trimEnd,
-			final boolean ignoreCase,
+			final boolean trim_front, final boolean trim_end,
+			final boolean ignore_case,
 			final String str, final char...strip) {
-		if (!trimFront && !trimEnd) return str;
-		if (IsEmpty(str))           return str;
-		if (IsEmpty(strip))         return str;
-		final int stripCount = strip.length;
+		if (!trim_front && !trim_end) return str;
+		if (IsEmpty(str))             return str;
+		final int num_strips = strip.length;
 		final char[] stripChars;
-		final String strPrep;
-		if (ignoreCase) {
-			stripChars = new char[stripCount];
-			for (int i=0; i<stripCount; i++)
+		final String str_prep;
+		if (ignore_case) {
+			stripChars = new char[num_strips];
+			for (int i=0; i<num_strips; i++)
 				stripChars[i] = Character.toLowerCase(strip[i]);
-			strPrep = str.toLowerCase();
+			str_prep = str.toLowerCase();
 		} else {
 			stripChars = strip;
-			strPrep = str;
+			str_prep = str;
 		}
 		final int size = str.length();
-		int leftIndex  = 0;
-		int rightIndex = 0;
+		int index_left  = 0;
+		int index_right = 0;
 		boolean changed = true;
 		//LOOP_CHANGE:
 		while (changed) {
 			changed = false;
 			//LOOP_STRIP:
-			for (int index=0; index<stripCount; index++) {
-				if (trimFront) {
-					LOOP_INNER_FRONT:
+			for (int index=0; index<num_strips; index++) {
+				if (trim_front) {
+					LOOP_FRONT:
 					while (true) {
-						if (leftIndex + rightIndex >= size)
+						if (index_left + index_right >= size)
 							return "";
-						if (strPrep.charAt(leftIndex) != stripChars[index])
-							break LOOP_INNER_FRONT;
-						leftIndex++;
+						if (str_prep.charAt(index_left) != stripChars[index])
+							break LOOP_FRONT;
+						index_left++;
 						changed = true;
 					}
 				}
-				if (trimEnd) {
-					LOOP_INNER_END:
+				if (trim_end) {
+					LOOP_END:
 					while (true) {
-						if (leftIndex + rightIndex >= size)
+						if (index_left + index_right >= size)
 							return "";
-						if (strPrep.charAt(size-(rightIndex+1)) != stripChars[index])
-							break LOOP_INNER_END;
-						rightIndex++;
+						if (str_prep.charAt(size-(index_right+1)) != stripChars[index])
+							break LOOP_END;
+						index_right++;
 						changed = true;
 					}
 				}
 			} // end LOOP_STRIP
 		} // end LOOP_CHANGE
-		return str.substring( leftIndex, size - rightIndex );
+		return SubString(str, index_left, size-(index_left+index_right));
 	}
 	private static String doTrim(
-			final boolean trimFront, final boolean trimEnd,
-			final boolean ignoreCase,
+			final boolean trim_front, final boolean trim_end, final boolean ignore_case,
 			final String str, final String...strip) {
-		if (!trimFront && !trimEnd) return str;
-		if (IsEmpty(str))           return str;
-		if (IsEmpty(strip))         return str;
-		final int stripCount = strip.length;
+		if (!trim_front && !trim_end) return str;
+		if (IsEmpty(str))             return str;
+		final int num_strips = strip.length;
 		// default strip
-		if (stripCount == 0) {
+		if (num_strips == 0) {
 			final String[] strip_def = Arrays.asList(
 				" ",
 				"\t",
 				"\r",
 				"\n"
 			).toArray(new String[0]);
-			return doTrim(trimFront, trimEnd, ignoreCase, str, strip_def);
+			return doTrim(trim_front, trim_end, ignore_case, str, strip_def);
 		}
-		final String[] stripStrings;
-		final String strPrep;
-		final int[] stripLen = new int[stripCount];
-		if (ignoreCase) {
-			stripStrings = new String[stripCount];
-			for (int i=0; i<stripCount; i++) {
-				stripStrings[i] = strip[i].toLowerCase();
-				stripLen[i] = stripStrings[i].length();
+		final String[] strip_strings;
+		final String str_prep;
+		final int[] strip_len = new int[num_strips];
+		if (ignore_case) {
+			strip_strings = new String[num_strips];
+			for (int i=0; i<num_strips; i++) {
+				strip_strings[i] = strip[i].toLowerCase();
+				strip_len[i] = strip_strings[i].length();
 			}
-			strPrep = str.toLowerCase();
+			str_prep = str.toLowerCase();
 		} else {
-			stripStrings = strip;
-			for (int i=0; i<stripCount; i++) {
-				stripLen[i] = stripStrings[i].length();
-			}
-			strPrep = str;
+			strip_strings = strip;
+			for (int i=0; i<num_strips; i++)
+				strip_len[i] = strip_strings[i].length();
+			str_prep = str;
 		}
 		final int size = str.length();
-		int leftIndex  = 0;
-		int rightIndex = 0;
+		int index_left  = 0;
+		int index_right = 0;
 		boolean changed = true;
 		//LOOP_CHANGE:
 		while (changed) {
 			changed = false;
 			//LOOP_STRIP:
-			for (int index=0; index<stripCount; index++) {
-				if (trimFront) {
-					LOOP_INNER_FRONT:
+			for (int index=0; index<num_strips; index++) {
+				if (trim_front) {
+					LOOP_FRONT:
 					while (true) {
-						if (leftIndex + rightIndex >= size) return "";
-						if (!strPrep.substring(leftIndex, leftIndex + stripLen[index]).equals(stripStrings[index]))
-							break LOOP_INNER_FRONT;
-						leftIndex += stripLen[index];
+						if (index_left + index_right >= size) return "";
+						if (!strip_strings[index].equals(SubString(str_prep, index_left, strip_len[index])))
+							break LOOP_FRONT;
+						index_left += strip_len[index];
 						changed = true;
 					}
 				}
-				if (trimEnd) {
-					LOOP_INNER_END:
+				if (trim_end) {
+					LOOP_END:
 					while (true) {
-						if (leftIndex + rightIndex >= size) return "";
-						final int pos = size - (rightIndex + stripLen[index]);
-						if (pos < 0) break LOOP_INNER_END;
-						if (leftIndex + rightIndex + stripLen[index] > size) break LOOP_INNER_END;
-						if (!strPrep.substring( pos, pos + stripLen[index]).equals(stripStrings[index]))
-							break LOOP_INNER_END;
-						rightIndex += stripLen[index];
+						if (index_left + index_right >= size) return "";
+						final int pos = size - (index_right + strip_len[index]);
+						if (pos < 0) break LOOP_END;
+						if (index_left + index_right + strip_len[index] > size)
+							break LOOP_END;
+final String sub = SubString(str_prep, pos, strip_len[index]);
+//System.out.println(sub+" = "+strip_strings[index]);
+						if (!strip_strings[index].equals(sub))
+//						if (!strip_strings[index].equals(SubString(str_prep, pos, strip_len[index])))
+							break LOOP_END;
+						index_right += strip_len[index];
 						changed = true;
 					}
 				}
 			} // end LOOP_STRIP
 		} // end LOOP_CHANGE
-		return str.substring( leftIndex, size - rightIndex );
+		return SubString(str, index_left, size-(index_right+index_left));
 	}
 
 
@@ -505,54 +491,49 @@ public final class StringUtils {
 
 
 	public static String PadFront(final int width, final String text, final char padding) {
+		if (text == null)   return null;
+		if (text.isEmpty()) return Character.toString(padding);
 		if (width < 1) return null;
 		final int count = width - text.length();
 		if (count < 1) return text;
-		return
-			(new StringBuilder(width))
-				.append( Repeat(count, padding) )
-				.append( text                   )
-				.toString();
+		return (new StringBuilder(width))
+			.append(Repeat(count, padding))
+			.append(text)
+			.toString();
 	}
 	public static String PadEnd(final int width, final String text, final char padding) {
+		if (text == null)   return null;
+		if (text.isEmpty()) return Character.toString(padding);
 		if (width < 1) return null;
 		final int count = width - text.length();
 		if (count < 1) return text;
-		return
-			(new StringBuilder(width))
-				.append( text                   )
-				.append( Repeat(count, padding) )
-				.toString();
+		return (new StringBuilder(width))
+			.append(text)
+			.append(Repeat(count, padding))
+			.toString();
 	}
 	public static String PadCenter(final int width, final String text, final char padding) {
+		if (text == null)   return null;
+		if (text.isEmpty()) return Character.toString(padding);
 		if (width < 1) return null;
 		if (IsEmpty(text))
 			return Repeat(width, padding);
 		final double count = ( ((double) width) - ((double) text.length()) ) / 2.0;
 		if (Math.ceil(count) < 1.0) return text;
-		return
-			(new StringBuilder(width))
-				.append( Repeat( (int)Math.floor(count), padding) )
-				.append( text                                     )
-				.append( Repeat( (int)Math.ceil(count), padding)  )
-				.toString();
+		return (new StringBuilder(width))
+			.append(Repeat((int)Math.floor(count), padding))
+			.append(text)
+			.append(Repeat((int)Math.ceil(count), padding))
+			.toString();
 	}
 
 
 
-	public static String PadFront(final int width, final int value) {
-		return PadFront(  width, Integer.toString(value), '0' );
-	}
-	public static String PadEnd(final int width, final int value) {
-		return PadEnd(    width, Integer.toString(value), '0' );
-	}
+	public static String PadFront(final int width, final int value) { return PadFront(width, Integer.toString(value), '0'); }
+	public static String PadEnd  (final int width, final int value) { return PadEnd  (width, Integer.toString(value), '0'); }
 
-	public static String PadFront(final int width, final long value) {
-		return PadFront(  width, Long.toString(value), '0' );
-	}
-	public static String PadEnd(final int width, final long value) {
-		return PadEnd(    width, Long.toString(value), '0' );
-	}
+	public static String PadFront(final int width, final long value) { return PadFront(width, Long.toString(value), '0'); }
+	public static String PadEnd  (final int width, final long value) { return PadEnd  (width, Long.toString(value), '0'); }
 
 
 
@@ -584,7 +565,7 @@ public final class StringUtils {
 		if (data == null)            return null;
 		if (data.isEmpty())          return Character.toString(start);
 		if (data.charAt(0) == start) return data;
-		return (new StringBuilder( data.length() + 1 ))
+		return (new StringBuilder( data.length()+1 ))
 				.append(start).append(data).toString();
 	}
 	public static String ForceEnds(final char end, final String data) {
@@ -592,7 +573,7 @@ public final class StringUtils {
 		if (data.isEmpty()) return Character.toString(end);
 		final int len = data.length();
 		if (data.charAt(len-1) == end) return data;
-		return (new StringBuilder( data.length() + 1 ))
+		return (new StringBuilder( data.length()+1 ))
 				.append(data).append(end).toString();
 	}
 	public static String ForceStartsEnds(final char start, final char end, final String data) {
@@ -621,22 +602,18 @@ public final class StringUtils {
 	public static String UniqueKey(final Collection<String> collect, final String key) {
 		if (collect == null) throw new RequiredArgumentException("collect");
 		if (IsEmpty(key))    throw new RequiredArgumentException("key");
-		if (collect.isEmpty())
-			return key;
-		if ( ! collect.contains(key) )
-			return key;
+		if (collect.isEmpty())      return key;
+		if (!collect.contains(key)) return key;
 		int index = 0;
 		while (true) {
 			index++;
-			final String str =
-				(new StringBuilder())
-					.append( key   )
-					.append( "_"   )
-					.append( index )
-					.toString();
-			if (!collect.contains(str)) {
+			final String str = (new StringBuilder())
+				.append(key)
+				.append("_")
+				.append(index)
+				.toString();
+			if (!collect.contains(str))
 				return str;
-			}
 		}
 	}
 	// collection
@@ -647,19 +624,18 @@ public final class StringUtils {
 			collect.add(key);
 			return key;
 		}
-		if ( ! collect.contains(key) ) {
+		if (!collect.contains(key)) {
 			collect.add(key);
 			return key;
 		}
 		int index = 0;
 		while (true) {
 			index++;
-			final String str =
-				(new StringBuilder())
-					.append( key   )
-					.append( "_"   )
-					.append( index )
-					.toString();
+			final String str = (new StringBuilder())
+				.append(key)
+				.append("_")
+				.append(index)
+				.toString();
 			if (!collect.contains(str)) {
 				collect.add(str);
 				return str;
@@ -676,12 +652,11 @@ public final class StringUtils {
 		int index = 0;
 		while (true) {
 			index++;
-			final String str =
-				(new StringBuilder())
-					.append( key   )
-					.append( "_"   )
-					.append( index )
-					.toString();
+			final String str = (new StringBuilder())
+				.append(key)
+				.append("_")
+				.append(index)
+				.toString();
 			if (map.putIfAbsent(str, value) == null)
 				return str;
 		}
@@ -695,19 +670,18 @@ public final class StringUtils {
 			map.put(key, value);
 			return key;
 		}
-		if ( ! map.containsKey(key) ) {
+		if (!map.containsKey(key)) {
 			map.put(key, value);
 			return key;
 		}
 		int index = 0;
 		while (true) {
 			index++;
-			final String str =
-				(new StringBuilder())
-					.append( key   )
-					.append( "_"   )
-					.append( index )
-					.toString();
+			final String str = (new StringBuilder())
+				.append(key)
+				.append("_")
+				.append(index)
+				.toString();
 			if (!map.containsKey(str)) {
 				map.put(str, value);
 				return str;
@@ -922,7 +896,7 @@ public final class StringUtils {
 			}
 		}
 		if (str.length() > currentPos)
-			result.append( str.substring(currentPos) );
+			result.append(str.substring(currentPos));
 		return result.toString();
 	}
 	public static void ReplaceWith(final StringBuilder str,
@@ -959,12 +933,8 @@ public final class StringUtils {
 
 
 	// replace {} or {#} tags
-	public static String oReplaceTags(final String line, final Object...args) {
-		return o_ReplaceTags(DEFAULT_TAG_FORMAT, line, args);
-	}
-	public static String sReplaceTags(final String line, final String...args) {
-		return s_ReplaceTags(DEFAULT_TAG_FORMAT, line, args);
-	}
+	public static String oReplaceTags(final String line, final Object...args) { return o_ReplaceTags(DEFAULT_TAG_FORMAT, line, args); }
+	public static String sReplaceTags(final String line, final String...args) { return s_ReplaceTags(DEFAULT_TAG_FORMAT, line, args); }
 
 	public static String o_ReplaceTags(final String format,
 			final String line, final Object...args) {
@@ -1024,12 +994,8 @@ public final class StringUtils {
 
 
 	// replace {key} tags
-	public static String soReplaceTags(final String line, final Map<String, Object> args) {
-		return so_ReplaceTags(DEFAULT_TAG_FORMAT, line, args);
-	}
-	public static String ssReplaceTags(final String line, final Map<String, String> args) {
-		return ss_ReplaceTags(DEFAULT_TAG_FORMAT, line, args);
-	}
+	public static String soReplaceTags(final String line, final Map<String, Object> args) { return so_ReplaceTags(DEFAULT_TAG_FORMAT, line, args); }
+	public static String ssReplaceTags(final String line, final Map<String, String> args) { return ss_ReplaceTags(DEFAULT_TAG_FORMAT, line, args); }
 
 	public static String so_ReplaceTags(final String format,
 			final String line, final Map<String, Object> args) {
@@ -1109,72 +1075,68 @@ public final class StringUtils {
 
 
 	// add strings with delimiter
-	public static String MergeStrings(final String delim, final String...addThis) {
-		if (IsEmpty(addThis)) return "";
+	public static String MergeStrings(final String delim, final String...array) {
+		if (IsEmpty(array)) return "";
 		final String dlm = (IsEmpty(delim) ? null : delim);
 		final StringBuilder buf = new StringBuilder();
 		// no delim
 		if (dlm == null) {
-			for (final String part : addThis)
-				buf.append(part);
-			return buf.toString();
-		}
+			for (final String entry : array)
+				buf.append(entry);
 		// merge with delim
-		boolean first = true;
-		for (final String part : addThis) {
-			if (IsEmpty(part)) continue;
-			if (first) first = false;
-			else       buf.append(dlm);
-			buf.append(part);
+		} else {
+			for (final String entry : array) {
+				if (!IsEmpty(entry)) {
+					if (!buf.isEmpty())
+						buf.append(dlm);
+					buf.append(entry);
+				}
+			}
 		}
 		return buf.toString();
 	}
-	public static String MergeStrings(final char delim, final String...addThis) {
-		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
+	public static String MergeStrings(final char delim, final String...array) {
+		if (IsEmpty(array)) throw new RequiredArgumentException("add");
 		final StringBuilder buf = new StringBuilder();
-		boolean first = true;
-		for (final String line : addThis) {
-			if (IsEmpty(line)) continue;
-			if (!first)
-				buf.append(delim);
-			buf.append(line);
-			if (first && buf.length() > 0)
-				first = false;
+		for (final String entry : array) {
+			if (!IsEmpty(entry)) {
+				if (!buf.isEmpty())
+					buf.append(delim);
+				buf.append(entry);
+			}
 		}
 		return buf.toString();
 	}
 
-	public static String MergeStrings(final String delim, final char...addThis) {
-		if (IsEmpty(addThis)) return "";
+	public static String MergeStrings(final String delim, final char...array) {
+		if (IsEmpty(array)) return "";
 		final String dlm = (IsEmpty(delim) ? null : delim);
 		final StringBuilder buf = new StringBuilder();
 		// no delim
 		if (dlm == null) {
-			for (final char part : addThis)
-				buf.append(part);
-			return buf.toString();
-		}
+			for (final char entry : array)
+				buf.append(entry);
 		// merge with delim
-		boolean first = true;
-		for (final char part : addThis) {
-			if (IsEmpty(part)) continue;
-			if (first) first = false;
-			else       buf.append(dlm);
-			buf.append(part);
+		} else {
+			for (final char entry : array) {
+				if (!IsEmpty(entry)) {
+					if (!buf.isEmpty())
+						buf.append(dlm);
+					buf.append(entry);
+				}
+			}
 		}
 		return buf.toString();
 	}
-	public static String MergeStrings(final char delim, final char...addThis) {
-		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
+	public static String MergeStrings(final char delim, final char...array) {
+		if (IsEmpty(array)) throw new RequiredArgumentException("add");
 		final StringBuilder buf = new StringBuilder();
-		boolean first = true;
-		for (final char line : addThis) {
-			if (IsEmpty(line)) continue;
-			if (!first)
-				buf.append(delim);
-			buf.append(line);
-			if (first && buf.length() > 0)
-				first = false;
+		for (final char entry : array) {
+			if (!IsEmpty(entry)) {
+				if (!buf.isEmpty())
+					buf.append(delim);
+				buf.append(entry);
+			}
 		}
 		return buf.toString();
 	}
@@ -1182,25 +1144,25 @@ public final class StringUtils {
 
 
 	// add objects to string with delimiter
-	public static String MergeObjects(final String delim, final Object...addThis) {
-		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
-		String[] addStrings = new String[ addThis.length ];
+	public static String MergeObjects(final String delim, final Object...array) {
+		if (IsEmpty(array)) throw new RequiredArgumentException("add");
+		final String[] add_strings = new String[array.length];
 		int index = 0;
-		for (final Object obj : addThis) {
-			addStrings[index] = ToString(obj);
+		for (final Object entry : array) {
+			add_strings[index] = ToString(entry);
 			index++;
 		}
-		return MergeStrings(delim, addStrings);
+		return MergeStrings(delim, add_strings);
 	}
-	public static String MergeObjects(final char delim, final Object...addThis) {
-		if (IsEmpty(addThis)) throw new RequiredArgumentException("addThis");
-		String[] addStrings = new String[ addThis.length ];
+	public static String MergeObjects(final char delim, final Object...array) {
+		if (IsEmpty(array)) throw new RequiredArgumentException("add");
+		final String[] add_strings = new String[array.length];
 		int index = 0;
-		for (final Object obj : addThis) {
-			addStrings[index] = ToString(obj);
+		for (final Object entry : array) {
+			add_strings[index] = ToString(entry);
 			index++;
 		}
-		return MergeStrings(delim, addStrings);
+		return MergeStrings(delim, add_strings);
 	}
 
 
@@ -1347,15 +1309,9 @@ public final class StringUtils {
 
 
 	// decode string
-	public static String Decode(final String raw) {
-		return Decode(raw, null, null);
-	}
-	public static String DecodeDef(final String raw, final String defaultStr) {
-		return Decode(raw, defaultStr, null);
-	}
-	public static String DecodeCh(final String raw, final String charset) {
-		return Decode(raw, null, charset);
-	}
+	public static String Decode   (final String raw                         ) { return Decode(raw, null,       null); }
+	public static String DecodeDef(final String raw, final String defaultStr) { return Decode(raw, defaultStr, null); }
+	public static String DecodeCh (final String raw, final String charset   ) { return Decode(raw, null,    charset); }
 	public static String Decode(final String raw, final String defaultStr, final String charset) {
 		if (charset == null)
 			return Decode(raw, defaultStr, DEFAULT_CHARSET.name());
