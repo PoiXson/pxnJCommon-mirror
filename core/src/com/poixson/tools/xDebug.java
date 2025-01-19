@@ -61,19 +61,27 @@ public final class xDebug {
 
 
 
-	public static boolean IsDebug() {
+	public static boolean Debug() {
 		final Boolean value = debugValue.get();
 		if (value == null)
 			return DEFAULT_DEBUG;
 		return value.booleanValue();
 	}
+	@Deprecated
+	public static boolean IsDebug() {
+		return Debug();
+	}
 
 
 
 	public static void SetDebug() {
-		SetDebug(true);
+		Debug(true);
 	}
+	@Deprecated
 	public static void SetDebug(final boolean value) {
+		Debug(value);
+	}
+	public static void Debug(final boolean value) {
 		final Boolean current = debugValue.get();
 		if (current == null) {
 			if (debugValue.compareAndSet(null, Boolean.valueOf(value)))

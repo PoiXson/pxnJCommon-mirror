@@ -1,6 +1,6 @@
 package com.poixson.app;
 
-import static com.poixson.tools.xDebug.IsDebug;
+import static com.poixson.tools.xDebug.Debug;
 import static com.poixson.utils.ProcUtils.GetPid;
 import static com.poixson.utils.StringUtils.FindLongestLine;
 import static com.poixson.utils.StringUtils.MergeStrings;
@@ -83,7 +83,7 @@ public class xAppLogo {
 		result.put( "Java home",   System.getProperty("java.home")      );
 		final StringBuilder log_level = new StringBuilder();
 		log_level.append( xLog.Get().getLevel() );
-		if (IsDebug())
+		if (Debug())
 			log_level.append(" <debug>");
 		result.put("Log Level", log_level.toString());
 		final String[] args = app.getArgs();
