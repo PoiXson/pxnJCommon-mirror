@@ -17,6 +17,16 @@ public final class Utils {
 
 
 
+	public static String PrepDefinesNode(final String node, final String name) {
+		if (IsEmpty(node)) {
+			final String nod = name.toLowerCase();
+			return (nod.startsWith("lang_") ? nod.substring(5) : nod);
+		}
+		return node;
+	}
+
+
+
 	// -------------------------------------------------------------------------------
 	// is empty
 
