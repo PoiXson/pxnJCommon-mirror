@@ -1,11 +1,9 @@
-package com.poixson.utils;
+package com.poixson.tools;
 
 import static com.poixson.tools.Assertions.AssertFalse;
 import static com.poixson.tools.Assertions.AssertTrue;
 
 import org.junit.jupiter.api.Test;
-
-import com.poixson.tools.xRand;
 
 
 public class Test_xRand {
