@@ -8,8 +8,12 @@ import static com.poixson.utils.Utils.IsEmpty;
 import java.io.File;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import com.poixson.tools.Assertions;
 
 
+@ExtendWith(Assertions.class)
 public class Test_FileUtils {
 
 

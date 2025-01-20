@@ -14,8 +14,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import com.poixson.tools.Assertions;
 
 
+@ExtendWith(Assertions.class)
 public class Test_StringUtils {
 
 

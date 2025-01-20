@@ -31,8 +31,12 @@ import static com.poixson.utils.MathUtils.ToShort;
 import java.awt.Color;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import com.poixson.tools.Assertions;
 
 
+@ExtendWith(Assertions.class)
 public class Test_MathUtils {
 
 	private static final double DELTA = MathUtils.DELTA;

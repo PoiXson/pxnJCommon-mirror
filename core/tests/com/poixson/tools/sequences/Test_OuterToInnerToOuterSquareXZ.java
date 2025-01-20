@@ -5,10 +5,13 @@ import static com.poixson.tools.Assertions.AssertFalse;
 import static com.poixson.tools.Assertions.AssertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.poixson.tools.Assertions;
 import com.poixson.tools.dao.Iab;
 
 
+@ExtendWith(Assertions.class)
 public class Test_OuterToInnerToOuterSquareXZ {
 
 

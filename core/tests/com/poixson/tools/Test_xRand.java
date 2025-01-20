@@ -4,8 +4,10 @@ import static com.poixson.tools.Assertions.AssertFalse;
 import static com.poixson.tools.Assertions.AssertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 
+@ExtendWith(Assertions.class)
 public class Test_xRand {
 
 

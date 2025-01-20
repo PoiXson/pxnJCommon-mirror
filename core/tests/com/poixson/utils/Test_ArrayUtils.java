@@ -12,8 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import com.poixson.tools.Assertions;
 
 
+@ExtendWith(Assertions.class)
 public class Test_ArrayUtils {
 
 

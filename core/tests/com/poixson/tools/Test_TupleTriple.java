@@ -3,11 +3,13 @@ package com.poixson.tools;
 import static com.poixson.tools.Assertions.AssertEquals;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.poixson.tools.abstractions.Triple;
 import com.poixson.tools.abstractions.Tuple;
 
 
+@ExtendWith(Assertions.class)
 public class Test_TupleTriple {
 
 

@@ -4,12 +4,14 @@ import static com.poixson.tools.Assertions.AssertEquals;
 import static com.poixson.utils.MathUtils.DELTA;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.poixson.tools.atomic.AtomicModularDouble;
 import com.poixson.tools.atomic.AtomicModularInteger;
 import com.poixson.tools.atomic.AtomicModularLong;
 
 
+@ExtendWith(Assertions.class)
 public class Test_AtomicModular {
 
 

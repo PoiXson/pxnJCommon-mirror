@@ -5,10 +5,12 @@ import static com.poixson.tools.Assertions.AssertEquals;
 import java.util.LinkedList;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.poixson.tools.JsonChunker.ChunkProcessor;
 
 
+@ExtendWith(Assertions.class)
 public class Test_JsonChunker {
 
 	protected static final String JSON_A =

@@ -5,10 +5,12 @@ import static com.poixson.utils.FileUtils.MergePaths;
 import static com.poixson.utils.FileUtils.cwd;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.poixson.tools.localization.LangTable;
 
 
+@ExtendWith(Assertions.class)
 public class Test_LangTable {
 
 
