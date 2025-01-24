@@ -561,39 +561,39 @@ final String sub = SubString(str_prep, pos, strip_len[index]);
 
 
 
-	public static String ForceStarts(final char start, final String data) {
-		if (data == null)            return null;
-		if (data.isEmpty())          return Character.toString(start);
-		if (data.charAt(0) == start) return data;
-		return (new StringBuilder( data.length()+1 ))
-				.append(start).append(data).toString();
+	public static String ForceStarts(final char start, final String text) {
+		if (text == null)            return null;
+		if (text.isEmpty())          return Character.toString(start);
+		if (text.charAt(0) == start) return text;
+		return (new StringBuilder( text.length()+1 ))
+				.append(start).append(text).toString();
 	}
-	public static String ForceEnds(final char end, final String data) {
-		if (data == null)   return null;
-		if (data.isEmpty()) return Character.toString(end);
-		final int len = data.length();
-		if (data.charAt(len-1) == end) return data;
-		return (new StringBuilder( data.length()+1 ))
-				.append(data).append(end).toString();
+	public static String ForceEnds(final char end, final String text) {
+		if (text == null)   return null;
+		if (text.isEmpty()) return Character.toString(end);
+		final int len = text.length();
+		if (text.charAt(len-1) == end) return text;
+		return (new StringBuilder( text.length()+1 ))
+				.append(text).append(end).toString();
 	}
-	public static String ForceStartsEnds(final char start, final char end, final String data) {
-		return ForceStarts(start, ForceEnds(end, data));
+	public static String ForceStartsEnds(final char start, final char end, final String text) {
+		return ForceStarts(start, ForceEnds(end, text));
 	}
 
-	public static String ForceStarts(final String start, final String data) {
-		if (data == null)           return null;
-		if (data.startsWith(start)) return data;
-		return (new StringBuilder( start.length() + data.length() ))
-				.append(start).append(data).toString();
+	public static String ForceStarts(final String start, final String text) {
+		if (text == null)           return null;
+		if (text.startsWith(start)) return text;
+		return (new StringBuilder( start.length() + text.length() ))
+				.append(start).append(text).toString();
 	}
-	public static String ForceEnds(final String end, final String data) {
-		if (data == null)       return null;
-		if (data.endsWith(end)) return data;
-		return (new StringBuilder( data.length() + end.length() ))
-				.append(data).append(end).toString();
+	public static String ForceEnds(final String end, final String text) {
+		if (text == null)       return null;
+		if (text.endsWith(end)) return text;
+		return (new StringBuilder( text.length() + end.length() ))
+				.append(text).append(end).toString();
 	}
-	public static String ForceStartsEnds(final String start, final String end, final String data) {
-		return ForceStarts(start, ForceEnds(end, data));
+	public static String ForceStartsEnds(final String start, final String end, final String text) {
+		return ForceStarts(start, ForceEnds(end, text));
 	}
 
 
@@ -697,11 +697,11 @@ final String sub = SubString(str_prep, pos, strip_len[index]);
 
 
 	// index of (many delims)
-	public static int IndexOf(final String data, final int fromIndex, final char...delims) {
-		if (IsEmpty(data)) return -1;
+	public static int IndexOf(final String text, final int fromIndex, final char...delims) {
+		if (IsEmpty(text)) return -1;
 		int pos = Integer.MAX_VALUE;
 		for (final char delim : delims) {
-			final int p = data.indexOf(delim, fromIndex);
+			final int p = text.indexOf(delim, fromIndex);
 			// delim not found
 			if (p == -1) continue;
 			// earlier delim
@@ -712,18 +712,18 @@ final String sub = SubString(str_prep, pos, strip_len[index]);
 		}
 		return (pos == Integer.MAX_VALUE ? -1 : pos);
 	}
-	public static int IndexOf(final String data, final char...delims) {
-		return IndexOf(data, 0, delims);
+	public static int IndexOf(final String text, final char...delims) {
+		return IndexOf(text, 0, delims);
 	}
 
 
 
-	public static int IndexOf(final String data, final int fromIndex, final String...delims) {
-		if (IsEmpty(data)) return -1;
+	public static int IndexOf(final String text, final int fromIndex, final String...delims) {
+		if (IsEmpty(text)) return -1;
 		int pos = Integer.MAX_VALUE;
 		for (final String delim : delims) {
 			if (IsEmpty(delim)) continue;
-			final int p = data.indexOf(delim, fromIndex);
+			final int p = text.indexOf(delim, fromIndex);
 			// delim not found
 			if (p == -1) continue;
 			// earlier delim
@@ -734,18 +734,18 @@ final String sub = SubString(str_prep, pos, strip_len[index]);
 		}
 		return (pos == Integer.MAX_VALUE ? -1 : pos);
 	}
-	public static int IndexOf(final String data, final String...delims) {
-		return IndexOf(data, 0, delims);
+	public static int IndexOf(final String text, final String...delims) {
+		return IndexOf(text, 0, delims);
 	}
 
 
 
 	// last index of (many delims)
-	public static int IndexOfLast(final String data, final char...delims) {
-		if (IsEmpty(data)) return -1;
+	public static int IndexOfLast(final String text, final char...delims) {
+		if (IsEmpty(text)) return -1;
 		int pos = Integer.MIN_VALUE;
 		for (final char delim : delims) {
-			final int p = data.lastIndexOf(delim);
+			final int p = text.lastIndexOf(delim);
 			// delim not found
 			if (p == -1) continue;
 			// later delim
@@ -754,12 +754,12 @@ final String sub = SubString(str_prep, pos, strip_len[index]);
 		}
 		return (pos == Integer.MIN_VALUE ? -1 : pos);
 	}
-	public static int IndexOfLast(final String data, final String...delims) {
-		if (IsEmpty(data)) return -1;
+	public static int IndexOfLast(final String text, final String...delims) {
+		if (IsEmpty(text)) return -1;
 		int pos = Integer.MIN_VALUE;
 		for (final String delim : delims) {
 			if (IsEmpty(delim)) continue;
-			final int p = data.lastIndexOf(delim);
+			final int p = text.lastIndexOf(delim);
 			// delim not found
 			if (p == -1) continue;
 			// later delim
@@ -785,49 +785,49 @@ final String sub = SubString(str_prep, pos, strip_len[index]);
 
 
 
-	public static String FirstPart(final String data, final char...delims) {
-		if (IsEmpty(data)) return "";
+	public static String FirstPart(final String text, final char...delims) {
+		if (IsEmpty(text)) return "";
 		if (delims.length == 0) throw new RequiredArgumentException("delims");
-		final int pos = IndexOf(data, delims);
+		final int pos = IndexOf(text, delims);
 		if (pos == -1)
-			return data;
-		return data.substring(0, pos);
+			return text;
+		return text.substring(0, pos);
 	}
-	public static String FirstPart(final String data, final String...delims) {
-		if (IsEmpty(data)) return "";
+	public static String FirstPart(final String text, final String...delims) {
+		if (IsEmpty(text)) return "";
 		if (delims.length == 0) throw new RequiredArgumentException("delims");
-		final int pos = IndexOf(data, delims);
+		final int pos = IndexOf(text, delims);
 		if (pos == -1)
-			return data;
-		return data.substring(0, pos);
+			return text;
+		return text.substring(0, pos);
 	}
 
 
 
-	public static String LastPart(final String data, final char...delims) {
-		if (IsEmpty(data)) return "";
+	public static String LastPart(final String text, final char...delims) {
+		if (IsEmpty(text)) return "";
 		if (delims.length == 0) throw new RequiredArgumentException("delims");
-		final int pos = IndexOfLast(data, delims);
+		final int pos = IndexOfLast(text, delims);
 		if (pos == -1)
-			return data;
-		return data.substring(pos + 1);
+			return text;
+		return text.substring(pos + 1);
 	}
-	public static String LastPart(final String data, final String...delims) {
-		if (IsEmpty(data)) return "";
+	public static String LastPart(final String text, final String...delims) {
+		if (IsEmpty(text)) return "";
 		if (delims.length == 0) throw new RequiredArgumentException("delims");
-		final int pos = IndexOfLast(data, delims);
+		final int pos = IndexOfLast(text, delims);
 		if (pos == -1)
-			return data;
+			return text;
 		int delimLen = 0;
 		for (final String delim : delims) {
 			if (IsEmpty(delim)) continue;
 			final int len = delim.length();
 			if (len <= delimLen) continue;
-			if (data.substring(pos, len).equals(delim))
+			if (text.substring(pos, len).equals(delim))
 				delimLen = len;
 		}
 		if (delimLen == 0) throw new RuntimeException("delim not found second pass");
-		return data.substring(pos + delimLen);
+		return text.substring(pos + delimLen);
 	}
 
 
@@ -910,15 +910,15 @@ final String sub = SubString(str_prep, pos, strip_len[index]);
 
 
 
-	public static String ReplaceEnd(final String data,
+	public static String ReplaceEnd(final String text,
 			final char replaceWhat, final char replaceWith) {
-		if (IsEmpty(data)) return data;
-		final int size = data.length();
+		if (IsEmpty(text)) return text;
+		final int size = text.length();
 		int index = 0;
 		while (true) {
-			final char chr = data.charAt((size - index) - 1);
+			final char chr = text.charAt((size - index) - 1);
 			if (chr != replaceWhat)
-				return data.substring(0, size - index) + Repeat(index, replaceWith);
+				return text.substring(0, size - index) + Repeat(index, replaceWith);
 			index++;
 			if (size == index)
 				return Repeat(size, replaceWith);
