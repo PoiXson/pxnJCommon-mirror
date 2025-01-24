@@ -6,6 +6,7 @@ import static com.poixson.utils.FileUtils.OpenLocalOrResource;
 import static com.poixson.utils.FileUtils.SearchLocalOrResource;
 import static com.poixson.utils.StringUtils.ssReplaceTags;
 import static com.poixson.utils.Utils.IsEmpty;
+import static com.poixson.utils.Utils.SafeClose;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -167,13 +168,16 @@ public class LangShelf {
 			final String filename = (new StringBuilder()).append(lang).append(".json").toString();
 			final String file_loc = MergePaths(this.path_loc.get(), filename);
 			final String file_res = MergePaths(this.path_res.get(), filename);
-			final InputStream in = OpenLocalOrResource(file_loc, file_res);
+			InputStream in = null;
 			try {
+				in = OpenLocalOrResource(file_loc, file_res);
 				final LangBook book = new LangBook(lang, in);
 				this.books.put(lang, book);
 				return book;
 			} catch (IOException e) {
 				e.printStackTrace();
+			} finally {
+				SafeClose(in);
 			}
 		}
 		return null;
