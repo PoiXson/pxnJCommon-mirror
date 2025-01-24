@@ -30,6 +30,8 @@ public class LangShelf {
 
 	protected final LangShelf parent;
 
+	protected final AtomicReference<LangToken> lang_default = new AtomicReference<LangToken>(null);
+
 
 
 	public LangShelf(final LangShelf parent) {
@@ -93,6 +95,21 @@ public class LangShelf {
 
 
 
+	// default language
+	public LangShelf setDefLang(final String lang) {
+		return this.setDefLang(new LangToken(lang));
+	}
+	public LangShelf setDefLang(final LangToken lang) {
+		this.lang_default.set(lang);
+		return this;
+	}
+	public LangToken getDefLang() {
+		final LangToken lang = this.lang_default.get();
+		return (lang==null ? new LangToken(DEFAULT_GLOBAL_LANG) : lang);
+	}
+
+
+
 	// -------------------------------------------------------------------------------
 	// language phrases
 
@@ -139,13 +156,13 @@ public class LangShelf {
 
 	// default phrases
 	public Tuple<String[], IndexSelect> getDefaultPhrases(final String key) {
-		final String lang = DEFAULT_GLOBAL_LANG;
-		return (IsEmpty(lang) ? null : this.getPhrases(lang, key));
+		final LangToken lang_def = this.getDefLang();
+		return (lang_def==null ? null : this.getPhrases(lang_def, key));
 	}
 	public Tuple<String[], IndexSelect> getDefaultPhrasesIfNot(final String key, final LangToken lang) {
-		final String lang_def = DEFAULT_GLOBAL_LANG;
+		final LangToken lang_def = this.getDefLang();
 		return (
-			IsEmpty(lang_def) || lang.equalsIgnoreCase(lang_def)
+			lang_def==null || lang_def.equals(lang)
 			? null
 			: this.getPhrases(lang_def, key)
 		);
