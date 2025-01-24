@@ -1,53 +1,52 @@
 package com.poixson.tools;
 
 import static com.poixson.tools.Assertions.AssertEquals;
-import static com.poixson.utils.FileUtils.MergePaths;
-import static com.poixson.utils.FileUtils.cwd;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.poixson.tools.localization.LangTable;
+import com.poixson.logger.xLogRoot;
+import com.poixson.tools.localization.LangShelf;
 
 
 @ExtendWith(Assertions.class)
-public class Test_LangTable {
+public class Test_LangBookShelf {
 
 
 
 	@Test
-	public void testConstruct() {
-		final LangTable lang = LangTable.Create()
-			.path_loc(MergePaths(cwd(), "languages"))
-			.path_res("languages")
-			.lang("en");
+	public void testLangBookShelf() {
+		final LangShelf lang = xLogRoot.GetLangShelf()
+			.pathLocal("./testresources/local")
+			.pathResource("languages");
 		// resource file
 		for (int i=0; i<3; i++) {
-			AssertEquals("Hello, welcome to the server!",      lang.getPhrase("greeting"));
-			AssertEquals("Greetings, welcome to the server!",  lang.getPhrase("greeting"));
-			AssertEquals("Howdy, welcome to the server!",      lang.getPhrase("greeting"));
-			AssertEquals("Ahoy matey, welcome to the server!", lang.getPhrase("greeting"));
+			AssertEquals("Hello, welcome to the server!",      lang.getPhrase("en", "greeting"));
+			AssertEquals("Greetings, welcome to the server!",  lang.getPhrase("en", "greeting"));
+			AssertEquals("Howdy, welcome to the server!",      lang.getPhrase("en", "greeting"));
+			AssertEquals("Ahoy matey, welcome to the server!", lang.getDefaultPhrase("greeting"));
 		}
-		AssertEquals("Welcome back, user123!",                   lang.getPhrase("welcome_back", "player", "user123"));
-		AssertEquals("Goodbye, see you next time!",              lang.getPhrase("farewell"));
-		AssertEquals("Type /help for a list of commands.",       lang.getPhrase("help"    ));
-		AssertEquals("An error has occurred. Please try again.", lang.getPhrase("error"   ));
-		AssertEquals("You have joined the game.",                lang.getPhrase("join"    ));
-		AssertEquals("You have left the game.",                  lang.getPhrase("leave"   ));
-		// local file
-		lang.lang("es");
+		AssertEquals("Welcome back, user123!",                   lang.getDefaultPhrase("welcome_back", "player", "user123"));
+		AssertEquals("Goodbye, see you next time!",              lang.getDefaultPhrase("farewell"));
+		AssertEquals("Type /help for a list of commands.",       lang.getDefaultPhrase("help"    ));
+		AssertEquals("An error has occurred. Please try again.", lang.getDefaultPhrase("error"   ));
+		AssertEquals("You have joined the game.",                lang.getDefaultPhrase("join"    ));
+		AssertEquals("You have left the game.",                  lang.getDefaultPhrase("leave"   ));
+		// local file (es.json)
 		for (int i=0; i<3; i++) {
-			AssertEquals("Hola, bienvenido al servidor!",           lang.getPhrase("greeting"));
-			AssertEquals("Saludos, bienvenido al servidor!",        lang.getPhrase("greeting"));
-			AssertEquals("Hola, bienvenido al servidor!",           lang.getPhrase("greeting"));
-			AssertEquals("Ahoy compañero, bienvenido al servidor!", lang.getPhrase("greeting"));
+			AssertEquals("Hola, bienvenido al servidor!",           lang.getPhrase("es", "greeting"));
+			AssertEquals("Saludos, bienvenido al servidor!",        lang.getPhrase("es", "greeting"));
+			AssertEquals("Hola, bienvenido al servidor!",           lang.getPhrase("es", "greeting"));
+			AssertEquals("Ahoy compañero, bienvenido al servidor!", lang.getPhrase("es", "greeting"));
 		}
-		AssertEquals("Bienvenido de nuevo, user123!",                     lang.getPhrase("welcome_back", "player", "user123"));
-		AssertEquals("Adios, nos vemos la proxima!",                      lang.getPhrase("farewell"));
-		AssertEquals("Escriba /help para obtener una lista de comandos.", lang.getPhrase("help"    ));
-		AssertEquals("Se ha producido un error. Inténtalo de nuevo.",     lang.getPhrase("error"   ));
-		AssertEquals("Te has unido al juego.",                            lang.getPhrase("join"    ));
-		AssertEquals("Has abandonado el juego.",                          lang.getPhrase("leave"   ));
+		AssertEquals("Bienvenido de nuevo, user123!",                     lang.getPhrase("es", "welcome_back", "player", "user123"));
+		AssertEquals("Adios, nos vemos la proxima!",                      lang.getPhrase("es", "farewell"));
+		AssertEquals("Escriba /help para obtener una lista de comandos.", lang.getPhrase("es", "help"    ));
+		AssertEquals("Se ha producido un error. Inténtalo de nuevo.",     lang.getPhrase("es", "error"   ));
+		AssertEquals("Te has unido al juego.",                            lang.getPhrase("es", "join"    ));
+		AssertEquals("Has abandonado el juego.",                          lang.getPhrase("es", "leave"   ));
+		// local file overrides resource (fr.json
+		AssertEquals("Hello local", lang.getPhrase("fr", "greeting"));
 	}
 
 

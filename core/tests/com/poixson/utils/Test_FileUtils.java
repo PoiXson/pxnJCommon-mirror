@@ -3,6 +3,12 @@ package com.poixson.utils;
 import static com.poixson.tools.Assertions.AssertEquals;
 import static com.poixson.tools.Assertions.AssertFalse;
 import static com.poixson.tools.Assertions.AssertTrue;
+import static com.poixson.utils.FileUtils.CWD;
+import static com.poixson.utils.FileUtils.EXE;
+import static com.poixson.utils.FileUtils.IsDir;
+import static com.poixson.utils.FileUtils.ListDirContents;
+import static com.poixson.utils.FileUtils.MergePaths;
+import static com.poixson.utils.FileUtils.PWD;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.io.File;
@@ -20,18 +26,18 @@ public class Test_FileUtils {
 
 	@Test
 	public void testPaths() {
-		AssertFalse( IsEmpty(FileUtils.cwd()) );
-		AssertFalse( IsEmpty(FileUtils.pwd()) );
-		AssertFalse( null == FileUtils.exe()  );
-		AssertTrue(FileUtils.isDir("/"));
+		AssertFalse( IsEmpty(CWD()) );
+		AssertFalse( IsEmpty(PWD()) );
+		AssertFalse( null == EXE()  );
+		AssertTrue(IsDir("/"));
 	}
 
 
 
 	@Test
 	public void testListDirContents() {
-		final File path = new File( FileUtils.pwd() );
-		final File[] result = FileUtils.ListDirContents( path );
+		final File path = new File( PWD() );
+		final File[] result = ListDirContents( path );
 		AssertFalse( IsEmpty(result) );
 	}
 
@@ -39,17 +45,17 @@ public class Test_FileUtils {
 
 	@Test
 	public void testMergePaths() {
-		AssertEquals( "/var/log", FileUtils.MergePaths("/", "var", "log"  ) );
-		AssertEquals(  "var/log", FileUtils.MergePaths(     "var", "log"  ) );
-		AssertEquals( "/.debug",  FileUtils.MergePaths("/", ".debug"      ) );
-		AssertEquals( "/var",     FileUtils.MergePaths("/var", "log", "..") );
-		AssertEquals( "/var/log", FileUtils.MergePaths("/var/log/"        ) );
-		AssertEquals( "var/log",  FileUtils.MergePaths( "var", "/log"     ) );
-		AssertEquals( "/",        FileUtils.MergePaths("/", ".."          ) );
-		AssertEquals( null, FileUtils.MergePaths() );
-		AssertEquals( FileUtils.cwd()+"/abc", FileUtils.MergePaths(".", "abc") );
-		AssertEquals( FileUtils.pwd()+"/abc", FileUtils.MergePaths(",", "abc") );
-		AssertEquals( null, FileUtils.MergePaths((String[])null) );
+		AssertEquals( "/var/log",   MergePaths("/", "var", "log"  ) );
+		AssertEquals(  "var/log",   MergePaths(     "var", "log"  ) );
+		AssertEquals( "/.debug",    MergePaths("/", ".debug"      ) );
+		AssertEquals( "/var",       MergePaths("/var", "log", "..") );
+		AssertEquals( "/var/log",   MergePaths("/var/log/"        ) );
+		AssertEquals( "var/log",    MergePaths( "var", "/log"     ) );
+		AssertEquals( "/",          MergePaths("/", ".."          ) );
+		AssertEquals( null,         MergePaths(                   ) );
+		AssertEquals( CWD()+"/abc", MergePaths(".", "abc"         ) );
+		AssertEquals( PWD()+"/abc", MergePaths(",", "abc"         ) );
+		AssertEquals( null,         MergePaths( (String[]) null   ) );
 	}
 
 
