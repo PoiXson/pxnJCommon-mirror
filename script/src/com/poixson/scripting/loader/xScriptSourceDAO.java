@@ -47,7 +47,7 @@ public class xScriptSourceDAO {
 			if (path_resource != null) {
 				resFile = ForceStarts('/', ForceEnds('/', path_resource)) + filename;
 				if (in == null)
-					in = OpenResource(clss, resFile);
+					in = OpenResource(resFile);
 			}
 			if (in == null) throw new IOException(filename);
 			final String code = ReadInputStream(in);

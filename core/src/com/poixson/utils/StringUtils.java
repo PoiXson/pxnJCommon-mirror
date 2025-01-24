@@ -1096,7 +1096,7 @@ final String sub = SubString(str_prep, pos, strip_len[index]);
 		return buf.toString();
 	}
 	public static String MergeStrings(final char delim, final String...array) {
-		if (IsEmpty(array)) throw new RequiredArgumentException("add");
+		if (IsEmpty(array)) throw new RequiredArgumentException("array");
 		final StringBuilder buf = new StringBuilder();
 		for (final String entry : array) {
 			if (!IsEmpty(entry)) {
@@ -1129,7 +1129,7 @@ final String sub = SubString(str_prep, pos, strip_len[index]);
 		return buf.toString();
 	}
 	public static String MergeStrings(final char delim, final char...array) {
-		if (IsEmpty(array)) throw new RequiredArgumentException("add");
+		if (IsEmpty(array)) throw new RequiredArgumentException("array");
 		final StringBuilder buf = new StringBuilder();
 		for (final char entry : array) {
 			if (!IsEmpty(entry)) {
@@ -1145,7 +1145,7 @@ final String sub = SubString(str_prep, pos, strip_len[index]);
 
 	// add objects to string with delimiter
 	public static String MergeObjects(final String delim, final Object...array) {
-		if (IsEmpty(array)) throw new RequiredArgumentException("add");
+		if (IsEmpty(array)) throw new RequiredArgumentException("array");
 		final String[] add_strings = new String[array.length];
 		int index = 0;
 		for (final Object entry : array) {
@@ -1155,7 +1155,7 @@ final String sub = SubString(str_prep, pos, strip_len[index]);
 		return MergeStrings(delim, add_strings);
 	}
 	public static String MergeObjects(final char delim, final Object...array) {
-		if (IsEmpty(array)) throw new RequiredArgumentException("add");
+		if (IsEmpty(array)) throw new RequiredArgumentException("array");
 		final String[] add_strings = new String[array.length];
 		int index = 0;
 		for (final Object entry : array) {
