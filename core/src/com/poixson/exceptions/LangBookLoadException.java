@@ -1,21 +1,21 @@
 package com.poixson.exceptions;
 
 
-public class LangTableLoadException extends IORuntimeException {
+public class LangBookLoadException extends IORuntimeException {
 	private static final long serialVersionUID = 1L;
 
 
 
-	public LangTableLoadException() {
+	public LangBookLoadException() {
 		super();
 	}
-	public LangTableLoadException(final String msg) {
+	public LangBookLoadException(final String msg) {
 		super(msg);
 	}
-	public LangTableLoadException(final Throwable e) {
+	public LangBookLoadException(final Throwable e) {
 		super(e);
 	}
-	public LangTableLoadException(final String msg, final Throwable e) {
+	public LangBookLoadException(final String msg, final Throwable e) {
 		super(msg, e);
 	}
 
