@@ -337,8 +337,10 @@ public final class FileUtils {
 			}
 		}
 		// build path
-		final String path = MergeStrings(File.separatorChar, result.toArray(new String[0]));
-		return (isAbsolute ? ForceStarts(File.separatorChar, path) : path);
+		{
+			final String path = (IsEmpty(result) ? "" : MergeStrings(File.separatorChar, result.toArray(new String[0])));
+			return (isAbsolute ? ForceStarts(File.separatorChar, path) : path);
+		}
 	}
 
 
