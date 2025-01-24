@@ -1,6 +1,12 @@
 package com.poixson.utils;
 
 import static com.poixson.utils.StringUtils.DecodeDef;
+import static com.poixson.utils.StringUtils.ForceStarts;
+import static com.poixson.utils.StringUtils.MergeStrings;
+import static com.poixson.utils.StringUtils.Repeat;
+import static com.poixson.utils.StringUtils.ceTrim;
+import static com.poixson.utils.StringUtils.cfTrim;
+import static com.poixson.utils.StringUtils.sTrim;
 import static com.poixson.utils.Utils.IsEmpty;
 import static com.poixson.utils.Utils.SafeClose;
 
@@ -53,7 +59,7 @@ public final class FileUtils {
 					final String path =
 						FileUtils.MergePaths(
 							workPath,
-							StringUtils.Repeat(parentIndex, "../"),
+							Repeat(parentIndex, "../"),
 							fileName
 						);
 					final File file = new File(path);
@@ -83,6 +89,8 @@ public final class FileUtils {
 
 
 
+	// true  | local file
+	// false | resource file
 	public static boolean SearchLocalOrResource(
 			final String file_loc, final String file_res)
 			throws FileNotFoundException {
@@ -153,31 +161,31 @@ public final class FileUtils {
 		if (IsEmpty(path)) throw new RuntimeException("Failed to get pwd path");
 		final int pos = path.lastIndexOf('/');
 		if (pos < 0) throw new RuntimeException("Invalid pwd path: "+path);
-		pwd.compareAndSet(null, StringUtils.ceTrim( path.substring(0, pos),  '/' ));
-		exe.compareAndSet(null, StringUtils.cfTrim( path.substring(pos + 1), '/' ));
+		pwd.compareAndSet(null, ceTrim( path.substring(0, pos),  '/' ));
+		exe.compareAndSet(null, cfTrim( path.substring(pos + 1), '/' ));
 	}
 
 
 
-	public static boolean IsDir(final String pathStr) {
-		if (IsEmpty(pathStr)) return false;
-		final File path = new File(pathStr);
-		return ( path.exists() && path.isDirectory() );
+	public static boolean IsDir(final String path) {
+		if (IsEmpty(path)) return false;
+		final File p = new File(path);
+		return (p.exists() && p.isDirectory());
 	}
-	public static boolean IsFile(final String fileStr) {
-		if (IsEmpty(fileStr)) return false;
-		final File file = new File(fileStr);
-		return ( file.exists() && file.isFile() );
+	public static boolean IsFile(final String file) {
+		if (IsEmpty(file)) return false;
+		final File f = new File(file);
+		return (f.exists() && f.isFile());
 	}
-	public static boolean IsReadable(final String pathStr) {
-		if (IsEmpty(pathStr)) return false;
-		final File path = new File(pathStr);
-		return ( path.exists() && path.canRead() );
+	public static boolean IsReadable(final String path) {
+		if (IsEmpty(path)) return false;
+		final File p = new File(path);
+		return (p.exists() && p.canRead());
 	}
-	public static boolean IsWritable(final String pathStr) {
-		if (IsEmpty(pathStr)) return false;
-		final File path = new File(pathStr);
-		return ( path.exists() && path.canWrite() );
+	public static boolean IsWritable(final String path) {
+		if (IsEmpty(path)) return false;
+		final File p = new File(path);
+		return (p.exists() && p.canWrite());
 	}
 
 
@@ -204,16 +212,13 @@ public final class FileUtils {
 
 
 	public static long GetLastModified(final String file) throws IOException {
-		if (IsEmpty(file)) return 0;
-		return GetLastModified( Paths.get(file) );
+		return (IsEmpty(file) ? 0L : GetLastModified(Paths.get(file)));
 	}
 	public static long GetLastModified(final File file) throws IOException {
-		if (file == null) return 0;
-		return GetLastModified( file.toPath() );
+		return (file==null ? 0L : GetLastModified(file.toPath()));
 	}
 	public static long GetLastModified(final Path path) throws IOException {
-		BasicFileAttributes attr =
-			Files.readAttributes(path, BasicFileAttributes.class);
+		final BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
 		if (attr == null) throw new IOException("Failed to get file attributes: "+path.toString());
 		final FileTime time = attr.lastModifiedTime();
 		return time.to(TimeUnit.SECONDS);
@@ -284,7 +289,7 @@ public final class FileUtils {
 			for (final String str : array) {
 				if (IsEmpty(str)) continue PARTS_ARRAY;
 				final String s =
-					StringUtils.sTrim(
+					sTrim(
 						str,
 						" ", "\t", "\r", "\n"
 					);
@@ -333,18 +338,11 @@ public final class FileUtils {
 		}
 		// build path
 		final String path =
-			StringUtils.MergeStrings(
+			MergeStrings(
 				File.separator,
 				result.toArray(new String[0])
 			);
-		if (isAbsolute) {
-			return
-				StringUtils.ForceStarts(
-					File.separator,
-					path
-				);
-		}
-		return path;
+		return (isAbsolute ? ForceStarts(File.separator, path) : path);
 	}
 
 
@@ -357,7 +355,7 @@ public final class FileUtils {
 	 */
 	public static InputStream OpenResource(final String file) {
 		if (IsEmpty(file)) throw new RequiredArgumentException("file");
-		return FileUtils.class.getResourceAsStream( StringUtils.ForceStarts("/", file) );
+		return FileUtils.class.getResourceAsStream(ForceStarts("/", file));
 	}
 
 
