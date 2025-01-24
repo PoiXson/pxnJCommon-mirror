@@ -22,7 +22,7 @@ public class LangShelf {
 	public static final String DEFAULT_GLOBAL_LANG = "en";
 
 	protected final AtomicReference<String> path_loc = new AtomicReference<String>("./languages");
-	protected final AtomicReference<String> path_res = new AtomicReference<String>("languages");
+	protected final AtomicReference<String> path_res = new AtomicReference<String>("/languages");
 
 	protected final ConcurrentHashMap<LangToken, LangBook> books =
 			new ConcurrentHashMap<LangToken, LangBook>();
