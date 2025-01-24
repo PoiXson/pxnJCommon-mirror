@@ -81,7 +81,7 @@ public class AtomicModularDouble extends Number implements Serializable {
 
 	@Override
 	public String toString() {
-		return Double.toString(this.atomic.get());
+		return Double.toString(this.get());
 	}
 
 

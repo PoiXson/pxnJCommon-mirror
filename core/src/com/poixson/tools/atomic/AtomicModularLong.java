@@ -13,7 +13,7 @@ import com.poixson.tools.abstractions.Tuple;
 public class AtomicModularLong extends Number implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public final AtomicLong atomic;
+	public final AtomicLong atomic = new AtomicLong(0L);
 	public final AtomicReference<Tuple<Long, Long>> minmax =
 			new AtomicReference<Tuple<Long, Long>>(null);
 
@@ -27,7 +27,7 @@ public class AtomicModularLong extends Number implements Serializable {
 	}
 	public AtomicModularLong(final long value, final long min, final long max) {
 		super();
-		this.atomic = new AtomicLong(value);
+		this.atomic.set(value);
 		this.minmax.set(new Tuple<Long, Long>(Long.valueOf(min), Long.valueOf(max)));
 	}
 
@@ -83,7 +83,7 @@ public class AtomicModularLong extends Number implements Serializable {
 
 	@Override
 	public String toString() {
-		return Long.toString(this.atomic.get());
+		return Long.toString(this.get());
 	}
 
 

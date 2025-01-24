@@ -1,9 +1,10 @@
 package com.poixson.tools.atomic;
 
 import static com.poixson.utils.MathUtils.IsMinMax;
+import static com.poixson.utils.MathUtils.SafeLongToInt;
 
 import java.io.Serializable;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.tools.abstractions.Tuple;
@@ -12,7 +13,7 @@ import com.poixson.tools.abstractions.Tuple;
 public class AtomicModularInteger extends Number implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public final AtomicInteger atomic;
+	public final AtomicLong atomic = new AtomicLong(0L);
 	public final AtomicReference<Tuple<Integer, Integer>> minmax =
 			new AtomicReference<Tuple<Integer, Integer>>(null);
 
@@ -26,7 +27,7 @@ public class AtomicModularInteger extends Number implements Serializable {
 	}
 	public AtomicModularInteger(final int value, final int min, final int max) {
 		super();
-		this.atomic = new AtomicInteger(value);
+		this.atomic.set((long)value);
 		this.minmax.set(new Tuple<Integer, Integer>(Integer.valueOf(min), Integer.valueOf(max)));
 	}
 
@@ -82,13 +83,13 @@ public class AtomicModularInteger extends Number implements Serializable {
 
 	@Override
 	public String toString() {
-		return Integer.toString(this.atomic.get());
+		return Integer.toString(this.get());
 	}
 
 
 
 	public int get() {
-		return this.normalize(this.atomic.get());
+		return this.normalize(SafeLongToInt(this.atomic.get()));
 	}
 	public void set(final int value) {
 		this.atomic.set(value);
@@ -125,14 +126,14 @@ public class AtomicModularInteger extends Number implements Serializable {
 
 
 	public int getAndIncrement() {
-		final int result = this.atomic.getAndIncrement();
+		final int result = SafeLongToInt(this.atomic.getAndIncrement());
 		final int norm = this.normalize(result);
 		if (result != norm)
 			this.atomic.compareAndSet(result, norm+1);
 		return norm;
 	}
 	public int incrementAndGet() {
-		final int result = this.atomic.incrementAndGet();
+		final int result = SafeLongToInt(this.atomic.incrementAndGet());
 		final int norm = this.normalize(result);
 		if (result != norm)
 			this.atomic.compareAndSet(result, norm);
@@ -142,14 +143,14 @@ public class AtomicModularInteger extends Number implements Serializable {
 
 
 	public int getAndDecrement() {
-		final int result = this.atomic.getAndDecrement();
+		final int result = SafeLongToInt(this.atomic.getAndDecrement());
 		final int norm = this.normalize(result);
 		if (result != norm)
 			this.atomic.compareAndSet(result, norm-1);
 		return norm;
 	}
 	public int decrementAndGet() {
-		final int result = this.atomic.decrementAndGet();
+		final int result = SafeLongToInt(this.atomic.decrementAndGet());
 		final int norm = this.normalize(result);
 		if (result != norm)
 			this.atomic.compareAndSet(result, norm);
@@ -159,14 +160,14 @@ public class AtomicModularInteger extends Number implements Serializable {
 
 
 	public int getAndAdd(final int add) {
-		final int result = this.atomic.getAndAdd(add);
+		final int result = SafeLongToInt(this.atomic.getAndAdd(add));
 		final int norm = this.normalize(result);
 		if (result != norm)
 			this.atomic.compareAndSet(result, norm+add);
 		return norm;
 	}
 	public int addAndGet(final int add) {
-		final int result = this.atomic.addAndGet(add);
+		final int result = SafeLongToInt(this.atomic.addAndGet(add));
 		final int norm = this.normalize(result);
 		if (result != norm)
 			this.atomic.compareAndSet(result, norm);
