@@ -102,7 +102,7 @@ public final class FileUtils {
 		}
 		// resource file
 		if (!IsEmpty(file_res)) {
-			final URL url = FileUtils.class.getResource(file_res);
+			final URL url = FileUtils.class.getResource(ForceStarts(File.separatorChar, file_res));
 			if (url != null)
 				return false;
 		}
