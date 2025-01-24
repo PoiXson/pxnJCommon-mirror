@@ -8,14 +8,14 @@ import com.poixson.logger.handlers.xLogHandler;
 import com.poixson.logger.handlers.xLogHandler_StdIO;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.StdIO;
-import com.poixson.tools.localization.LangTable;
+import com.poixson.tools.localization.LangShelf;
 
 
 public class xLogRoot extends xLog {
 
 	protected static final AtomicBoolean inited = new AtomicBoolean(false);
 
-	protected static final AtomicReference<LangTable> lang = new AtomicReference<LangTable>(null);
+	protected static final AtomicReference<LangShelf> lang = new AtomicReference<LangShelf>(null);
 
 
 
@@ -55,23 +55,23 @@ public class xLogRoot extends xLog {
 
 
 
-	public static LangTable GetLangTable() {
+	public static LangShelf GetLangShelf() {
 		// existing
 		{
-			final LangTable table = lang.get();
-			if (table != null)
-				return table;
+			final LangShelf shelf = lang.get();
+			if (shelf != null)
+				return shelf;
 		}
 		// new instance
 		{
-			final LangTable table = LangTable.Create();
-			if (lang.compareAndSet(null, table))
-				return table;
+			final LangShelf shelf = new LangShelf(null);
+			if (lang.compareAndSet(null, shelf))
+				return shelf;
 		}
 		return lang.get();
 	}
-	public static void SetLangTable(final LangTable table) {
-		lang.set(table);
+	public static void SetLangShelf(final LangShelf shelf) {
+		lang.set(shelf);
 	}
 
 
