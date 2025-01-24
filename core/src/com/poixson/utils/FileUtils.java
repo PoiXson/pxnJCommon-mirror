@@ -4,9 +4,9 @@ import static com.poixson.utils.StringUtils.DecodeDef;
 import static com.poixson.utils.StringUtils.ForceStarts;
 import static com.poixson.utils.StringUtils.MergeStrings;
 import static com.poixson.utils.StringUtils.Repeat;
+import static com.poixson.utils.StringUtils.cTrim;
 import static com.poixson.utils.StringUtils.ceTrim;
 import static com.poixson.utils.StringUtils.cfTrim;
-import static com.poixson.utils.StringUtils.sTrim;
 import static com.poixson.utils.Utils.IsEmpty;
 import static com.poixson.utils.Utils.SafeClose;
 
@@ -272,10 +272,8 @@ public final class FileUtils {
 		// maintain absolute
 		for (int index=0; index<strings.length; index++) {
 			if (IsEmpty(strings[index])) continue;
-			if (strings[index].startsWith("/")
-			||  strings[index].startsWith("\\")) {
+			if (strings[index].startsWith(File.separator))
 				isAbsolute = true;
-			}
 			break;
 		}
 		// split further
@@ -283,16 +281,12 @@ public final class FileUtils {
 		int count = 0;
 		//LOOP_PARAMS:
 		for (int index=0; index<strings.length; index++) {
-			final String[] array = strings[index].split("/");
+			final String[] array = strings[index].split(File.separator);
 			// remove nulls/blanks
 			PARTS_ARRAY:
 			for (final String str : array) {
 				if (IsEmpty(str)) continue PARTS_ARRAY;
-				final String s =
-					sTrim(
-						str,
-						" ", "\t", "\r", "\n"
-					);
+				final String s = cTrim(str, ' ', '\t', '\r', '\n');
 				if (IsEmpty(s)) continue PARTS_ARRAY;
 				if (count > 0) {
 					if (".".equals(s)) continue PARTS_ARRAY;
@@ -309,7 +303,7 @@ public final class FileUtils {
 		if (".".equals(first)) {
 			result.removeFirst();
 			isAbsolute = true;
-			final String[] array = CWD().split("/");
+			final String[] array = CWD().split(File.separator);
 			for (int index=array.length-1; index>=0; index--) {
 				if (array[index].length() == 0) continue;
 				result.addFirst(array[index]);
@@ -319,7 +313,7 @@ public final class FileUtils {
 		if (",".equals(first)) {
 			result.removeFirst();
 			isAbsolute = true;
-			final String[] array = PWD().split("/");
+			final String[] array = PWD().split(File.separator);
 			for (int index=array.length-1; index>=0; index--) {
 				result.addFirst(array[index]);
 			}
@@ -353,7 +347,7 @@ public final class FileUtils {
 	 */
 	public static InputStream OpenResource(final String file) {
 		if (IsEmpty(file)) throw new RequiredArgumentException("file");
-		return FileUtils.class.getResourceAsStream(ForceStarts("/", file));
+		return FileUtils.class.getResourceAsStream(ForceStarts(File.separator, file));
 	}
 
 
