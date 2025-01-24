@@ -40,9 +40,9 @@ public final class FileUtils {
 	public static String SearchLocalFile(final String filenames[], final int parents) {
 		if (IsEmpty(filenames)) throw new RequiredArgumentException("filenames");
 		final String[] workingPaths = (
-			FileUtils.inRunDir()
-			? new String[] { FileUtils.cwd() }
-			: new String[] { FileUtils.cwd(), FileUtils.pwd() }
+			FileUtils.InRunDir()
+			? new String[] { FileUtils.CWD() }
+			: new String[] { FileUtils.CWD(), FileUtils.PWD() }
 		);
 		//LOOP_PARENTS:
 		for (int parentIndex=0; parentIndex<parents+1; parentIndex++) {
@@ -68,7 +68,7 @@ public final class FileUtils {
 
 
 
-	public static InputStream OpenLocalOrResource(final Class<?> clss,
+	public static InputStream OpenLocalOrResource(
 			final String file_loc, final String file_res) {
 		// local file
 		final File file = new File(file_loc);
@@ -78,12 +78,12 @@ public final class FileUtils {
 			} catch (FileNotFoundException ignore) {}
 		}
 		// resource file
-		return OpenResource(clss, file_res);
+		return OpenResource(file_res);
 	}
 
 
 
-	public static boolean SearchLocalOrResource(final Class<?> clss,
+	public static boolean SearchLocalOrResource(
 			final String file_loc, final String file_res)
 			throws FileNotFoundException {
 		// local file
@@ -94,32 +94,30 @@ public final class FileUtils {
 		}
 		// resource file
 		if (!IsEmpty(file_res)) {
-			final URL url = clss.getResource(file_res);
+			final URL url = FileUtils.class.getResource(file_res);
 			if (url != null)
 				return false;
 		}
-		throw new FileNotFoundException(String.format("Loc:%s or Res:%s in %s", file_loc, file_res, clss.getName()));
+		throw new FileNotFoundException(String.format("Loc:%s or Res:%s", file_loc, file_res));
 	}
 
 
 
-	public static boolean inRunDir() {
-		final String cwd = cwd();
-		if (cwd == null) return false;
-		final String pwd = pwd();
-		if (pwd == null) return false;
+	public static boolean InRunDir() {
+		final String cwd = CWD(); if (cwd == null) return false;
+		final String pwd = PWD(); if (pwd == null) return false;
 		return (cwd.equals(pwd));
 	}
 
 
 
 	// get current working directory
-	public static String cwd() {
+	public static String CWD() {
 		if (cwd.get() == null)
-			populateCwd();
+			PopulateCwd();
 		return cwd.get();
 	}
-	private static void populateCwd() {
+	private static void PopulateCwd() {
 		if (cwd.get() != null) return;
 		final String path = System.getProperty("user.dir");
 		if (!IsEmpty(path)) {
@@ -137,17 +135,17 @@ public final class FileUtils {
 
 
 	// get running directory
-	public static String pwd() {
+	public static String PWD() {
 		if (pwd.get() == null)
-			populatePwdExe();
+			PopulatePwdExe();
 		return pwd.get();
 	}
-	public static String exe() {
+	public static String EXE() {
 		if (exe.get() == null)
-			populatePwdExe();
+			PopulatePwdExe();
 		return exe.get();
 	}
-	private static void populatePwdExe() {
+	private static void PopulatePwdExe() {
 		if (pwd.get() != null && exe.get() != null) return;
 		final CodeSource source = FileUtils.class.getProtectionDomain().getCodeSource();
 		final String pathRaw = source.getLocation().getPath();
@@ -155,28 +153,28 @@ public final class FileUtils {
 		if (IsEmpty(path)) throw new RuntimeException("Failed to get pwd path");
 		final int pos = path.lastIndexOf('/');
 		if (pos < 0) throw new RuntimeException("Invalid pwd path: "+path);
-		pwd.compareAndSet(null, StringUtils.ceTrim(   path.substring(0, pos),  '/' ));
+		pwd.compareAndSet(null, StringUtils.ceTrim( path.substring(0, pos),  '/' ));
 		exe.compareAndSet(null, StringUtils.cfTrim( path.substring(pos + 1), '/' ));
 	}
 
 
 
-	public static boolean isDir(final String pathStr) {
+	public static boolean IsDir(final String pathStr) {
 		if (IsEmpty(pathStr)) return false;
 		final File path = new File(pathStr);
 		return ( path.exists() && path.isDirectory() );
 	}
-	public static boolean isFile(final String fileStr) {
+	public static boolean IsFile(final String fileStr) {
 		if (IsEmpty(fileStr)) return false;
 		final File file = new File(fileStr);
 		return ( file.exists() && file.isFile() );
 	}
-	public static boolean isReadable(final String pathStr) {
+	public static boolean IsReadable(final String pathStr) {
 		if (IsEmpty(pathStr)) return false;
 		final File path = new File(pathStr);
 		return ( path.exists() && path.canRead() );
 	}
-	public static boolean isWritable(final String pathStr) {
+	public static boolean IsWritable(final String pathStr) {
 		if (IsEmpty(pathStr)) return false;
 		final File path = new File(pathStr);
 		return ( path.exists() && path.canWrite() );
@@ -306,7 +304,7 @@ public final class FileUtils {
 		if (".".equals(first)) {
 			result.removeFirst();
 			isAbsolute = true;
-			final String[] array = cwd().split("/");
+			final String[] array = CWD().split("/");
 			for (int index=array.length-1; index>=0; index--) {
 				if (array[index].length() == 0) continue;
 				result.addFirst(array[index]);
@@ -316,7 +314,7 @@ public final class FileUtils {
 		if (",".equals(first)) {
 			result.removeFirst();
 			isAbsolute = true;
-			final String[] array = pwd().split("/");
+			final String[] array = PWD().split("/");
 			for (int index=array.length-1; index>=0; index--) {
 				result.addFirst(array[index]);
 			}
@@ -357,19 +355,18 @@ public final class FileUtils {
 	 * @param fileStr Package path to the file.
 	 * @return InputStream of the open file, or null on failure.
 	 */
-	public static InputStream OpenResource(final Class<? extends Object> clssRef, final String fileStr) {
-		if (IsEmpty(fileStr)) throw new RequiredArgumentException("fileStr");
-		final Class<? extends Object> clss = (clssRef==null ? FileUtils.class : clssRef);
-		return clss.getResourceAsStream( StringUtils.ForceStarts("/", fileStr) );
+	public static InputStream OpenResource(final String file) {
+		if (IsEmpty(file)) throw new RequiredArgumentException("file");
+		return FileUtils.class.getResourceAsStream( StringUtils.ForceStarts("/", file) );
 	}
 
 
 
 	// copy jar resource to file
-	public static void ExportResource(final String targetFileStr, final InputStream in) throws IOException {
-		if (IsEmpty(targetFileStr)) throw new RequiredArgumentException("targetFileStr");
-		if (in == null)             throw new RequiredArgumentException("in");
-		final File file = new File(targetFileStr);
+	public static void ExportResource(final String target, final InputStream in) throws IOException {
+		if (IsEmpty(target)) throw new RequiredArgumentException("target");
+		if (in == null)      throw new RequiredArgumentException("in");
+		final File file = new File(target);
 		try {
 			Files.copy(in, file.toPath());
 		} finally {
