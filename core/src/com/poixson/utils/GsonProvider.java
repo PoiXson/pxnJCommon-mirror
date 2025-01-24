@@ -34,8 +34,14 @@ public final class GsonProvider {
 			if (builder == null)
 				builder = GSON_Builder();
 			for (; index<args.length; index+=2) {
-				final Type           type    = (Type)           args[index  ];
-				final TypeAdapter<?> adapter = (TypeAdapter<?>) args[index+1];
+				final Type           type;
+				final TypeAdapter<?> adapter;
+				try {
+					type    = (Type)           args[index  ];
+					adapter = (TypeAdapter<?>) args[index+1];
+				} catch (ClassCastException e) {
+					throw new IllegalArgumentException("Invalid argument type/adapter pairs", e);
+				}
 				builder.registerTypeAdapter(type, adapter);
 			}
 			return builder.create();
