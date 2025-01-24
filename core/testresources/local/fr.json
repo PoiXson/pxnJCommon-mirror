@@ -1,0 +1,9 @@
+{
+	"greeting": "Hello local",
+	"welcome_back": "Welcome local",
+	"farewell":     "Goodbye local",
+	"help":         "Help local",
+	"error":        "ERROR local",
+	"join":         "Joined local",
+	"leave":        "Goodbye local"
+}
