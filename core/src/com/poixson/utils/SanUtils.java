@@ -1,6 +1,6 @@
 package com.poixson.utils;
 
-import static com.poixson.utils.Utils.IsEmpty;
+import static com.poixson.utils.MathUtils.IsMinMax;
 
 import com.poixson.tools.Keeper;
 
@@ -11,80 +11,85 @@ public final class SanUtils {
 
 
 
-	public static String AlphaNum(final String text) {
-		return AlphaNum(text, "");
+	// char
+	public static boolean IsAlpha(final char chr) {
+		return IsMinMax(chr, 'A', 'Z') || IsMinMax(chr, 'a', 'z');
 	}
-	public static String AlphaNum(final String text, final String replacement) {
-		if (text == null)   return null;
-		if (text.isEmpty()) return "";
-		return text.replaceAll(
-			"[^a-zA-Z0-9]+",
-			(replacement == null ? "" : replacement)
-		);
+	public static boolean IsAlphaNum(final char chr) {
+		return IsAlpha(chr) || IsMinMax(chr, '0', '9');
 	}
-	public static boolean SafeAlphaNum(final String text) {
-		if (text == null) return true;
-		final String safeText = AlphaNum(text, null);
-		return text.equals(safeText);
+	public static boolean IsAlphaNumSafe(final char chr) {
+		return IsAlphaNum(chr) ||
+			chr == '-' || chr == '_' || chr == '=' || chr == '+' ||
+			chr == '.' || chr == '(' || chr == ')';
 	}
 
 
 
-	public static String AlphaNumUnderscore(final String text) {
-		return AlphaNumUnderscore(text, "");
-	}
-	public static String AlphaNumUnderscore(final String text, final String replacement) {
-		if (text == null)   return null;
-		if (text.isEmpty()) return "";
-		return text.replaceAll(
-			"[^a-zA-Z0-9\\-\\_\\.]+",
-			(replacement == null ? "" : replacement)
-		);
-	}
-	public static boolean SafeAlphaNumUnderscore(final String text) {
-		if (text == null) return true;
-		final String safeText = AlphaNumUnderscore(text, null);
-		return text.equals(safeText);
-	}
-
-
-
-//TODO: is this useful?
-//	public static String AlphaNumPunc(final String text) {
-//		if (text == null)   return null;
-//		if (text.isEmpty()) return "";
-//		return text.replaceAll("[^a-zA-Z0-9\\.\\?\\!]+", "");
-//	}
-
-
-
-	public static String FileName(final String text) {
-		return FileName(text, "_");
-	}
-	public static String FileName(final String text, final String replacement) {
-		if (IsEmpty(text)) return null;
-		return text.replaceAll(
-			"[^a-zA-Z0-9\\._-]+",
-			(replacement == null ? "" : replacement)
-		);
-	}
-	public static boolean SafeFileName(final String text) {
-		if (text == null) return true;
-		final String safeText = FileName(text, null);
-		return text.equals(safeText);
-	}
-
-
-
-	public static String ValidateStringEnum(final String value, final String...valids) {
-		if (IsEmpty(value)) return null;
-		if (valids.length == 0)   return null;
-		for (final String v : valids) {
-			if (v == null || v.isEmpty()) continue;
-			if (v.equalsIgnoreCase(value))
-				return v;
+	// string
+	public static boolean IsAlpha(final String text) {
+		if (text == null) throw new NullPointerException();
+		final int len = text.length();
+		if (len == 1) return IsAlpha(text.charAt(0));
+		for (int i=0; i<len; i++) {
+			if (!IsAlpha(text.charAt(i)))
+				return false;
 		}
-		return null;
+		return true;
+	}
+	public static boolean IsAlphaNum(final String text) {
+		if (text == null) throw new NullPointerException();
+		final int len = text.length();
+		if (len == 1) return IsAlphaNum(text.charAt(0));
+		for (int i=0; i<len; i++) {
+			if (!IsAlphaNum(text.charAt(i)))
+				return false;
+		}
+		return true;
+	}
+	public static boolean IsAlphaNumSafe(final String text) {
+		if (text == null) throw new NullPointerException();
+		final int len = text.length();
+		if (len == 1) return IsAlphaNumSafe(text.charAt(0));
+		for (int i=0; i<len; i++) {
+			if (!IsAlphaNumSafe(text.charAt(i)))
+				return false;
+		}
+		return true;
+	}
+
+
+
+	// strip string
+	public static String Alpha(final String text) {
+		if (text == null) throw new NullPointerException();
+		final int len = text.length();
+		final StringBuilder result = new StringBuilder(len);
+		for (int i=0; i<len; i++) {
+			if (IsAlpha(text.charAt(i)))
+				result.append(text.charAt(i));
+		}
+		return result.toString();
+	}
+	public static String AlphaNum(final String text) {
+		if (text == null) throw new NullPointerException();
+		final int len = text.length();
+		final StringBuilder result = new StringBuilder(len);
+		for (int i=0; i<len; i++) {
+			if (IsAlphaNum(text.charAt(i)))
+				result.append(text.charAt(i));
+		}
+		return result.toString();
+	}
+	public static String AlphaNumSafe(final String text) {
+		if (text == null) throw new NullPointerException();
+		final int len = text.length();
+		final StringBuilder result = new StringBuilder(len);
+		for (int i=0; i<len; i++) {
+			if (IsAlphaNumSafe(text.charAt(i)))
+				result.append(text.charAt(i));
+		}
+		return result.toString();
 	}
 
 
