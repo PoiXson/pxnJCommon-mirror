@@ -1,6 +1,7 @@
 package com.poixson.tools;
 
 import static com.poixson.tools.Assertions.AssertEquals;
+import static com.poixson.tools.Assertions.AssertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +20,10 @@ public class Test_LangBookShelf {
 		final LangShelf lang = xLogRoot.GetLangShelf()
 			.pathLocal("./testresources/local")
 			.pathResource("languages");
+		// files exist
+		AssertTrue(lang.isLangExisting("en"), "en.json not found");
+		AssertTrue(lang.isLangExisting("es"), "es.json not found");
+		AssertTrue(lang.isLangExisting("fr"), "fr.json not found");
 		// resource file
 		for (int i=0; i<3; i++) {
 			AssertEquals("Hello, welcome to the server!",      lang.getPhrase("en", "greeting"));
