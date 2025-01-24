@@ -1,5 +1,7 @@
 package com.poixson.tools.gson;
 
+import static com.poixson.utils.Utils.IsEmpty;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,11 +15,11 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 
-public class GsonAdapter_LangTable extends TypeAdapter<Map<String, String[]>> {
+public class GsonAdapter_LangBook extends TypeAdapter<Map<String, String[]>> {
 
 
 
-	public GsonAdapter_LangTable() {
+	public GsonAdapter_LangBook() {
 		super();
 	}
 
@@ -49,7 +51,7 @@ public class GsonAdapter_LangTable extends TypeAdapter<Map<String, String[]>> {
 				list.addLast(in.nextString());
 				break SWITCH_TYPE;
 			default: throw new JsonSyntaxException("Invalid json structure for language file");
-			}
+			} // end SWITCH_TYPE
 		} // end LOOP_KEYS
 		in.endObject();
 		// convert to map of arrays
@@ -65,17 +67,21 @@ public class GsonAdapter_LangTable extends TypeAdapter<Map<String, String[]>> {
 	public void write(final JsonWriter out, final Map<String, String[]> map) throws IOException {
 		if (map == null) { out.nullValue(); return; }
 		out.beginObject();
+		LOOP_ENTRIES:
 		for (final Entry<String, String[]> entry : map.entrySet()) {
-			final String   key     = entry.getKey();
 			final String[] phrases = entry.getValue();
-			out.name(key);
+			if (IsEmpty(phrases)) continue LOOP_ENTRIES;
+			out.name(entry.getKey());
+			if (phrases.length == 1) {
+				out.value(phrases[0]);
+			} else
 			if (phrases.length > 1) {
+				out.beginArray();
 				for (final String phrase : phrases)
 					out.value(phrase);
-			} else {
-				out.value(phrases[0]);
+				out.endArray();
 			}
-		}
+		} // end LOOP_ENTRIES
 		out.endObject();
 	}
 
