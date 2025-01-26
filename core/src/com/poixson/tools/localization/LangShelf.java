@@ -11,9 +11,12 @@ import static com.poixson.utils.Utils.SafeClose;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.poixson.logger.xLogRoot;
 import com.poixson.tools.abstractions.Tuple;
 import com.poixson.tools.indexselect.IndexSelect;
 
@@ -25,8 +28,8 @@ public class LangShelf {
 	protected final AtomicReference<String> path_loc = new AtomicReference<String>("./languages");
 	protected final AtomicReference<String> path_res = new AtomicReference<String>("/languages");
 
-	protected final ConcurrentHashMap<LangToken, LangBook> books =
-			new ConcurrentHashMap<LangToken, LangBook>();
+	protected static final CopyOnWriteArraySet<WeakReference<LangShelf>> shelves = new CopyOnWriteArraySet<WeakReference<LangShelf>>();
+	protected final ConcurrentHashMap<LangToken, LangBook> books = new ConcurrentHashMap<LangToken, LangBook>();
 
 	protected final LangShelf parent;
 
@@ -34,12 +37,24 @@ public class LangShelf {
 
 
 
+	public LangShelf() {
+		this(xLogRoot.GetLangShelf());
+	}
 	public LangShelf(final LangShelf parent) {
 		this.parent = parent;
+		shelves.add(new WeakReference<LangShelf>(this));
+		shelves.removeIf(ref -> (ref.get()==null));
 	}
 
 
 
+	public static void ReloadAll() {
+		for (final WeakReference<LangShelf> lang_ref : shelves) {
+			final LangShelf lang = lang_ref.get();
+			if (lang != null)
+				lang.reloadAll();
+		}
+	}
 	public void reloadAll() {
 		this.books.clear();
 	}
