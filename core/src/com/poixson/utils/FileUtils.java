@@ -111,6 +111,49 @@ public final class FileUtils {
 
 
 
+	/**
+	 * Open a resource file which has been compiled into the app jar.
+	 * @param clss Reference class contained in the same jar.
+	 * @param fileStr Package path to the file.
+	 * @return InputStream of the open file, or null on failure.
+	 */
+	public static InputStream OpenResource(final String file) {
+		if (IsEmpty(file)) throw new RequiredArgumentException("file");
+		return FileUtils.class.getResourceAsStream(ForceStarts(File.separator, file));
+	}
+
+
+
+	// copy jar resource to file
+	public static void ExportResource(final String target, final InputStream in) throws IOException {
+		if (IsEmpty(target)) throw new RequiredArgumentException("target");
+		if (in == null)      throw new RequiredArgumentException("in");
+		final File file = new File(target);
+		try {
+			Files.copy(in, file.toPath());
+		} finally {
+			SafeClose(in);
+		}
+	}
+
+
+
+	public static String ReadInputStream(final InputStream in) throws IOException {
+		if (in == null) return null;
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		return ReadBufferedReader(reader);
+	}
+	public static String ReadBufferedReader(final BufferedReader reader) throws IOException {
+		if (reader == null) return null;
+		final StringBuilder result = new StringBuilder();
+		String line;
+		while ( (line=reader.readLine()) != null)
+			result.append(line).append('\n');
+		return result.toString();
+	}
+
+
+
 	public static boolean InRunDir() {
 		final String cwd = CWD(); if (cwd == null) return false;
 		final String pwd = PWD(); if (pwd == null) return false;
@@ -335,49 +378,6 @@ public final class FileUtils {
 			final String path = (IsEmpty(result) ? "" : MergeStrings(File.separatorChar, result.toArray(new String[0])));
 			return (isAbsolute ? ForceStarts(File.separatorChar, path) : path);
 		}
-	}
-
-
-
-	/**
-	 * Open a resource file which has been compiled into the app jar.
-	 * @param clss Reference class contained in the same jar.
-	 * @param fileStr Package path to the file.
-	 * @return InputStream of the open file, or null on failure.
-	 */
-	public static InputStream OpenResource(final String file) {
-		if (IsEmpty(file)) throw new RequiredArgumentException("file");
-		return FileUtils.class.getResourceAsStream(ForceStarts(File.separator, file));
-	}
-
-
-
-	// copy jar resource to file
-	public static void ExportResource(final String target, final InputStream in) throws IOException {
-		if (IsEmpty(target)) throw new RequiredArgumentException("target");
-		if (in == null)      throw new RequiredArgumentException("in");
-		final File file = new File(target);
-		try {
-			Files.copy(in, file.toPath());
-		} finally {
-			SafeClose(in);
-		}
-	}
-
-
-
-	public static String ReadInputStream(final InputStream in) throws IOException {
-		if (in == null) return null;
-		final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		return ReadBufferedReader(reader);
-	}
-	public static String ReadBufferedReader(final BufferedReader reader) throws IOException {
-		if (reader == null) return null;
-		final StringBuilder result = new StringBuilder();
-		String line;
-		while ( (line=reader.readLine()) != null)
-			result.append(line).append('\n');
-		return result.toString();
 	}
 
 
