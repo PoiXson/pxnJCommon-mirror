@@ -76,6 +76,14 @@ public final class FileUtils {
 
 	public static InputStream OpenLocalOrResource(
 			final String file_loc, final String file_res) {
+		return OpenLocalOrResource(FileUtils.class, file_loc, file_res);
+	}
+	public static InputStream OpenLocalOrResource(final Class<?> ref,
+			final String file_loc, final String file_res) {
+		return OpenLocalOrResource(ref.getClassLoader(), file_loc, file_res);
+	}
+	public static InputStream OpenLocalOrResource(final ClassLoader ldr,
+			final String file_loc, final String file_res) {
 		// local file
 		final File file = new File(file_loc);
 		if (file.isFile()) {
@@ -84,7 +92,7 @@ public final class FileUtils {
 			} catch (FileNotFoundException ignore) {}
 		}
 		// resource file
-		return OpenResource(file_res);
+		return OpenResource(ldr, file_res);
 	}
 
 
@@ -92,6 +100,16 @@ public final class FileUtils {
 	// true  | local file
 	// false | resource file
 	public static boolean SearchLocalOrResource(
+			final String file_loc, final String file_res)
+			throws FileNotFoundException {
+		return SearchLocalOrResource(FileUtils.class, file_loc, file_res);
+	}
+	public static boolean SearchLocalOrResource(final Class<?> ref,
+			final String file_loc, final String file_res)
+			throws FileNotFoundException {
+		return SearchLocalOrResource(ref.getClassLoader(), file_loc, file_res);
+	}
+	public static boolean SearchLocalOrResource(final ClassLoader ldr,
 			final String file_loc, final String file_res)
 			throws FileNotFoundException {
 		// local file
@@ -102,7 +120,7 @@ public final class FileUtils {
 		}
 		// resource file
 		if (!IsEmpty(file_res)) {
-			final URL url = FileUtils.class.getResource(ForceStarts(File.separatorChar, file_res));
+			final URL url = ldr.getResource(file_res);
 			if (url != null)
 				return false;
 		}
@@ -118,8 +136,15 @@ public final class FileUtils {
 	 * @return InputStream of the open file, or null on failure.
 	 */
 	public static InputStream OpenResource(final String file) {
+		return OpenResource(FileUtils.class, file);
+	}
+	public static InputStream OpenResource(final Class<?> ref, final String file) {
+		return OpenResource(ref.getClassLoader(), file);
+	}
+	public static InputStream OpenResource(final ClassLoader ldr, final String file) {
+		if (ldr == null) return null;
 		if (IsEmpty(file)) throw new RequiredArgumentException("file");
-		return FileUtils.class.getResourceAsStream(ForceStarts(File.separator, file));
+		return ldr.getResourceAsStream(file);
 	}
 
 
