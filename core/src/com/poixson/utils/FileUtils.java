@@ -43,6 +43,11 @@ public final class FileUtils {
 
 
 
+	// -------------------------------------------------------------------------------
+	// files and resources
+
+
+
 	public static String SearchLocalFile(final String filenames[], final int parents) {
 		if (IsEmpty(filenames)) throw new RequiredArgumentException("filenames");
 		final String[] workingPaths = (
@@ -149,7 +154,6 @@ public final class FileUtils {
 
 
 
-	// copy jar resource to file
 	public static void ExportInputStreamToFile(final String target, final InputStream in) throws IOException {
 		if (IsEmpty(target)) throw new RequiredArgumentException("target");
 		if (in == null)      throw new RequiredArgumentException("in");
@@ -176,6 +180,11 @@ public final class FileUtils {
 			result.append(line).append('\n');
 		return result.toString();
 	}
+
+
+
+	// -------------------------------------------------------------------------------
+	// paths
 
 
 

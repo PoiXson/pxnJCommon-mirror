@@ -42,14 +42,12 @@ public final class ReflectUtils {
 
 
 
-	@SuppressWarnings("unchecked")
 	public static <T> Class<T> GetClass(final String classStr) {
 		try {
 			final ClassLoader loader = ReflectUtils.class.getClassLoader();
-			return (Class<T>) loader.loadClass(classStr);
-//			@SuppressWarnings("unchecked")
-//			final Class<T> clss = (Class<T>) Class.forName(classStr);
-//			return clss;
+			@SuppressWarnings("unchecked")
+			final Class<T> clss = (Class<T>) loader.loadClass(classStr);
+			return clss;
 		} catch (ClassNotFoundException ignore) {}
 		return null;
 	}
