@@ -19,7 +19,8 @@ public class Test_LangBookShelf {
 	public void testLangBookShelf() {
 		final LangShelf lang = xLogRoot.GetLangShelf()
 			.pathLocal("./testresources/local")
-			.pathResource("/languages");
+			.pathResource("languages")
+			.ref(LangShelf.class);
 		// files exist
 		AssertTrue(lang.isLangExisting("en"), "en.json not found");
 		AssertTrue(lang.isLangExisting("es"), "es.json not found");

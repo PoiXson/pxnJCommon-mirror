@@ -35,6 +35,8 @@ public class LangShelf {
 
 	protected final AtomicReference<LangToken> lang_default = new AtomicReference<LangToken>(null);
 
+	protected final AtomicReference<ClassLoader> ldr = new AtomicReference<ClassLoader>(null);
+
 
 
 	public LangShelf() {
@@ -75,7 +77,7 @@ public class LangShelf {
 		final String file_loc = MergePaths(this.path_loc.get(), filename);
 		final String file_res = MergePaths(this.path_res.get(), filename);
 		try {
-			SearchLocalOrResource(file_loc, file_res);
+			SearchLocalOrResource(this.ldr.get(), file_loc, file_res);
 			return true;
 		} catch (FileNotFoundException ignore) {}
 		return false;
@@ -85,6 +87,19 @@ public class LangShelf {
 
 	// -------------------------------------------------------------------------------
 	// parameters
+
+
+
+	public LangShelf ref(final Class<?> ref) {
+		return this.ref(ref==null ? null : ref.getClassLoader());
+	}
+	public LangShelf ref(final ClassLoader ldr) {
+		this.ldr.set(ldr);
+		return this;
+	}
+	public ClassLoader getRef() {
+		return this.ldr.get();
+	}
 
 
 
@@ -202,7 +217,7 @@ public class LangShelf {
 			final String file_res = MergePaths(this.path_res.get(), filename);
 			InputStream in = null;
 			try {
-				in = OpenLocalOrResource(file_loc, file_res);
+				in = OpenLocalOrResource(this.ldr.get(), file_loc, file_res);
 				final LangBook book = new LangBook(lang, in);
 				this.books.put(lang, book);
 				return book;

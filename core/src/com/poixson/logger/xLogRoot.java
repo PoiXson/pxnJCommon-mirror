@@ -66,7 +66,7 @@ public class xLogRoot extends xLog {
 		{
 			final LangShelf shelf = new LangShelf(null);
 			if (lang.compareAndSet(null, shelf))
-				return shelf;
+				return shelf.ref(xLogRoot.class);
 		}
 		return lang.get();
 	}
