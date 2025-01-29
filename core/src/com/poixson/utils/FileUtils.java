@@ -150,7 +150,7 @@ public final class FileUtils {
 
 
 	// copy jar resource to file
-	public static void ExportResource(final String target, final InputStream in) throws IOException {
+	public static void ExportInputStreamToFile(final String target, final InputStream in) throws IOException {
 		if (IsEmpty(target)) throw new RequiredArgumentException("target");
 		if (in == null)      throw new RequiredArgumentException("in");
 		final File file = new File(target);
