@@ -15,6 +15,19 @@ public final class ReflectUtils {
 
 
 
+	public static String[] GetClassPaths() {
+		return System.getProperty("java.class.path").split(":");
+	}
+	public static void PrintClassPaths() {
+		final String[] paths = GetClassPaths();
+		final StringBuilder out = new StringBuilder();
+		for (final String path : paths)
+			out.append(path).append('\n');
+		System.out.println(out.toString());
+	}
+
+
+
 	// -------------------------------------------------------------------------------
 	// classes
 
