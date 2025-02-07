@@ -33,8 +33,11 @@ public class LoggerToXLog extends Handler {
 				}
 				logger.removeHandler(handler);
 			}
-			if (!found)
-				logger.addHandler(new LoggerToXLog());
+			if (!found) {
+				final LoggerToXLog log = new LoggerToXLog();
+				logger.addHandler(log);
+				Keeper.Add(log);
+			}
 			// default log levels
 			xLog.Get("mqtt" ).setLevel(xLevel.INFO);
 			xLog.Get("jline").setLevel(xLevel.INFO);
@@ -47,7 +50,6 @@ public class LoggerToXLog extends Handler {
 
 
 	protected LoggerToXLog() {
-		Keeper.add(this);
 	}
 
 
