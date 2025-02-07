@@ -5,6 +5,7 @@ import static com.poixson.utils.ReflectUtils.GetClassName;
 import static com.poixson.utils.Utils.IsEmpty;
 import static com.poixson.utils.Utils.SafeClose;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.logger.xLog;
 
 
-public class xLockFile {
+public class xLockFile implements Closeable {
 
 	private static final ConcurrentHashMap<String, xLockFile> instances = new ConcurrentHashMap<String, xLockFile>();
 
@@ -143,6 +144,7 @@ public class xLockFile {
 		this.log().fine("Locked file:", this.file.getName());
 		return true;
 	}
+
 	// release file lock
 	public boolean release() {
 		if (this.lock == null) return false;
@@ -161,6 +163,12 @@ public class xLockFile {
 		} catch (Exception ignore) {}
 		Keeper.Remove(this);
 		return true;
+	}
+
+	@Override
+	public void close() {
+		if (!this.release())
+			throw new IllegalStateException();
 	}
 
 
