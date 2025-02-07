@@ -12,7 +12,7 @@ import com.poixson.tools.Keeper;
 
 public final class ShellUtils {
 	private ShellUtils() {}
-	static { Keeper.add(new ShellUtils()); }
+	static { Keeper.Add(new ShellUtils()); }
 
 
 

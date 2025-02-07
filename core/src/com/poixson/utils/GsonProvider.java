@@ -10,7 +10,7 @@ import com.poixson.tools.Keeper;
 
 public final class GsonProvider {
 	private GsonProvider() {}
-	static { Keeper.add(new GsonProvider()); }
+	static { Keeper.Add(new GsonProvider()); }
 
 
 

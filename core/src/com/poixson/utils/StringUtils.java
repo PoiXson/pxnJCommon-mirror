@@ -26,7 +26,7 @@ import com.poixson.tools.Keeper;
 
 public final class StringUtils {
 	private StringUtils() {}
-	static { Keeper.add(new StringUtils()); }
+	static { Keeper.Add(new StringUtils()); }
 
 
 

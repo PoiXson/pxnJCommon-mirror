@@ -18,7 +18,7 @@ public class xScriptContextFactory extends ContextFactory {
 		if (inited.compareAndSet(false, true)) {
 			final xScriptContextFactory factory = new xScriptContextFactory();
 			ContextFactory.initGlobal(factory);
-			Keeper.add(factory);
+			Keeper.Add(factory);
 		}
 	}
 

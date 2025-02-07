@@ -46,7 +46,7 @@ public class xLockFile {
 			final xLockFile existing = instances.putIfAbsent(filename, lock);
 			if (existing != null)
 				return existing;
-			Keeper.add(lock);
+			Keeper.Add(lock);
 			return lock;
 		}
 	}
@@ -66,7 +66,7 @@ public class xLockFile {
 	public static boolean Release(final String filename) {
 		final xLockFile lock = Get(filename);
 		if (lock != null) {
-			Keeper.remove(lock);
+			Keeper.Remove(lock);
 			return lock.release();
 		}
 		return false;
@@ -159,7 +159,7 @@ public class xLockFile {
 		try {
 			this.file.delete();
 		} catch (Exception ignore) {}
-		Keeper.remove(this);
+		Keeper.Remove(this);
 		return true;
 	}
 

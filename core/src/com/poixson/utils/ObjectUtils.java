@@ -14,7 +14,7 @@ import com.poixson.tools.Keeper;
 
 public final class ObjectUtils {
 	private ObjectUtils() {}
-	static { Keeper.add(new ObjectUtils()); }
+	static { Keeper.Add(new ObjectUtils()); }
 
 
 

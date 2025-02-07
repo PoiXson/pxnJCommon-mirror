@@ -24,7 +24,7 @@ import com.poixson.tools.Keeper;
 
 public final class guiUtils {
 	private guiUtils() {}
-	static { Keeper.add(new guiUtils()); }
+	static { Keeper.Add(new guiUtils()); }
 	private static final String LOG_NAME = "GUI";
 
 

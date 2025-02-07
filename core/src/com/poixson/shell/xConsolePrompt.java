@@ -127,7 +127,7 @@ public class xConsolePrompt extends xConsole {
 		final xLogHandler handler = xLog.Get().getHandler(xLogHandler_StdIO.class);
 		if (handler != null)
 			((xLogHandler_StdIO)handler).setOut(this);
-		Keeper.add(this);
+		Keeper.Add(this);
 		Runtime.getRuntime().addShutdownHook(
 			new Thread() {
 				@Override
@@ -211,7 +211,7 @@ public class xConsolePrompt extends xConsole {
 			e.printStackTrace(this);
 		} finally {
 			this.log().fine("Console prompt stopped");
-			Keeper.remove(this);
+			Keeper.Remove(this);
 			try {
 				RestoreTerminal();
 			} catch (IOException e) {

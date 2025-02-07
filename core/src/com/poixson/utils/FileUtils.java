@@ -35,7 +35,7 @@ import com.poixson.tools.Keeper;
 
 public final class FileUtils {
 	private FileUtils() {}
-	static { Keeper.add(new FileUtils()); }
+	static { Keeper.Add(new FileUtils()); }
 
 	private static final AtomicReference<String> cwd = new AtomicReference<String>(null);
 	private static final AtomicReference<String> pwd = new AtomicReference<String>(null);

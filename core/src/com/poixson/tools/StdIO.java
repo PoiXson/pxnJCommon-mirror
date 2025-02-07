@@ -20,7 +20,7 @@ public final class StdIO {
 
 	public static void Init() {
 		if (inited.compareAndSet(false, true)) {
-			Keeper.add(new StdIO());
+			Keeper.Add(new StdIO());
 			OriginalOut.set(System.out);
 			OriginalErr.set(System.err);
 			OriginalIn .set(System.in );

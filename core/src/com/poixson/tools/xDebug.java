@@ -29,7 +29,7 @@ public final class xDebug {
 
 	public static void Init() {
 		if (inited.compareAndSet(false, true)) {
-			Keeper.add(new xDebug());
+			Keeper.Add(new xDebug());
 			// debug in ide
 			if (IsDebugWireEnabled()) {
 				SetDebug(true);

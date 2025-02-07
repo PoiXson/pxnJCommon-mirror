@@ -68,7 +68,7 @@ public class xThreadPool_Main extends xThreadPool_Single {
 	public void stopMain() {
 		if (this.stopping.compareAndSet(false, true))
 			this.stopWorkers();
-		Keeper.remove(this);
+		Keeper.Remove(this);
 	}
 
 

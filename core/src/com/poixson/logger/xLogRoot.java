@@ -34,7 +34,7 @@ public class xLogRoot extends xLog {
 		super();
 		if (root.get() != null)
 			throw new RuntimeException("Logger root already initialized");
-		Keeper.add(this);
+		Keeper.Add(this);
 	}
 
 

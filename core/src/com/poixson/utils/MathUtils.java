@@ -18,7 +18,7 @@ import com.poixson.tools.dao.Fabc;
 
 public final class MathUtils {
 	private MathUtils() {}
-	static { Keeper.add(new MathUtils()); }
+	static { Keeper.Add(new MathUtils()); }
 
 
 

@@ -13,7 +13,7 @@ import com.poixson.tools.Keeper;
 
 public final class ProcUtils {
 	private ProcUtils() {}
-	static { Keeper.add(new ProcUtils()); }
+	static { Keeper.Add(new ProcUtils()); }
 
 	private static final AtomicInteger pid = new AtomicInteger(Integer.MIN_VALUE);
 

@@ -18,7 +18,7 @@ import com.poixson.tools.Keeper;
 
 public final class ArrayUtils {
 	private ArrayUtils() {}
-	static { Keeper.add(new ArrayUtils()); }
+	static { Keeper.Add(new ArrayUtils()); }
 
 
 

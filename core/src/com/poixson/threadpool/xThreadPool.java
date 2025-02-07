@@ -72,7 +72,6 @@ public abstract class xThreadPool implements xStartable, Runnable {
 			throw new IllegalStateException("Cannot create new thread pool, already stopping all!");
 		this.pool_name = pool_name;
 		this.thread_group = new ThreadGroup(pool_name);
-		Keeper.add(this);
 	}
 
 
@@ -86,7 +85,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	public void start() {
 		if (!this.okStart()) return;
 		this.startNewWorkerIfNeededAndAble();
-		Keeper.add(this);
+		Keeper.Add(this);
 	}
 
 	@Override
@@ -116,7 +115,7 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	public void stop() {
 		if (this.stopping.compareAndSet(false, true))
 			this.stopWorkers();
-		Keeper.remove(this);
+		Keeper.Remove(this);
 	}
 	public static void StopAll() {
 		StoppingAll.set(true);

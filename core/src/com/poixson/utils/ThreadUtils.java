@@ -15,7 +15,7 @@ import com.poixson.tools.abstractions.xCallable;
 //TODO: cleanup
 public final class ThreadUtils {
 	private ThreadUtils() {}
-	static { Keeper.add(new ThreadUtils()); }
+	static { Keeper.Add(new ThreadUtils()); }
 
 	public static final String[] ignoreThreadNames = new String[] {
 		"EndThread",

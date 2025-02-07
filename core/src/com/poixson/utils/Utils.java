@@ -13,7 +13,7 @@ import com.poixson.tools.Keeper;
 
 public final class Utils {
 	private Utils() {}
-	static { Keeper.add(new Utils()); }
+	static { Keeper.Add(new Utils()); }
 
 
 

@@ -17,7 +17,7 @@ public class Keeper {
 
 
 
-	public static Keeper get() {
+	public static Keeper Get() {
 		if (instance.get() == null) {
 			// new instance
 			final Keeper keeper = new Keeper();
@@ -29,21 +29,23 @@ public class Keeper {
 
 
 
-	public static void add(final Object obj) {
+	public static void Add(final Object obj) {
 		if (obj == null) throw new RequiredArgumentException("obj");
 		holder.add(obj);
 	}
 
 
 
-	public static void remove(final Object obj) {
+	public static void Remove(final Object obj) {
 		if (obj == null) throw new RequiredArgumentException("obj");
 		holder.remove(obj);
 	}
-	public static void removeAll() {
+	@Deprecated
+	public static void RemoveAll() {
 		holder.clear();
 	}
-	public static int removeAll(final Class<? extends Object> clss) {
+	@Deprecated
+	public static int RemoveAll(final Class<? extends Object> clss) {
 		if (holder.isEmpty())
 			return 0;
 		int count = 0;
@@ -54,7 +56,7 @@ public class Keeper {
 			final String actual = obj.getClass().getName();
 			if (expect.equals(actual)) {
 				count++;
-				remove(obj);
+				Remove(obj);
 			}
 		}
 		return count;
