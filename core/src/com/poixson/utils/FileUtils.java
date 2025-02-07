@@ -31,6 +31,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
 import com.poixson.tools.Keeper;
+import com.poixson.tools.abstractions.Tuple;
 
 
 public final class FileUtils {
@@ -202,19 +203,30 @@ public final class FileUtils {
 			PopulateCwd();
 		return cwd.get();
 	}
-	private static void PopulateCwd() {
-		if (cwd.get() != null) return;
-		final String path = System.getProperty("user.dir");
-		if (!IsEmpty(path)) {
-			cwd.compareAndSet(null, path);
-			return;
+	private static String PopulateCwd() {
+		// cached
+		{
+			final String path = cwd.get();
+			if (!IsEmpty(path))
+				return path;
 		}
-		try {
-			final File dir = new File(".");
-			cwd.compareAndSet(null, dir.getCanonicalPath());
-		} catch (IOException ignore) {
-			cwd.set(null);
+		// user.dir property
+		{
+			final String path = System.getProperty("user.dir");
+			if (!IsEmpty(path)) {
+				if (cwd.compareAndSet(null, path))
+					return path;
+			}
 		}
+		// Paths.get()
+		{
+			final String path = Paths.get("").toAbsolutePath().toString();
+			if (!IsEmpty(path)) {
+				if (cwd.compareAndSet(null, path))
+					return path;
+			}
+		}
+		return cwd.get();
 	}
 
 
@@ -230,16 +242,31 @@ public final class FileUtils {
 			PopulatePwdExe();
 		return exe.get();
 	}
-	private static void PopulatePwdExe() {
-		if (pwd.get() != null && exe.get() != null) return;
-		final CodeSource source = FileUtils.class.getProtectionDomain().getCodeSource();
-		final String pathRaw = source.getLocation().getPath();
-		final String path = DecodeDef(pathRaw, pathRaw);
-		if (IsEmpty(path)) throw new RuntimeException("Failed to get pwd path");
-		final int pos = path.lastIndexOf('/');
-		if (pos < 0) throw new RuntimeException("Invalid pwd path: "+path);
-		pwd.compareAndSet(null, ceTrim( path.substring(0, pos),  '/' ));
-		exe.compareAndSet(null, cfTrim( path.substring(pos + 1), '/' ));
+	private static Tuple<String, String> PopulatePwdExe() {
+		{
+			final String path_pwd = pwd.get();
+			final String path_exe = exe.get();
+			if (!IsEmpty(path_pwd)
+			&&  !IsEmpty(path_exe))
+				return new Tuple<String, String>(path_pwd, path_exe);
+		}
+		{
+			final CodeSource source = FileUtils.class.getProtectionDomain().getCodeSource();
+			final String path_raw = source.getLocation().getPath();
+			final String path = DecodeDef(path_raw, path_raw);
+			if (IsEmpty(path)) throw new RuntimeException("Failed to get pwd path");
+			final int pos = path.lastIndexOf('/');
+			if (pos < 0) throw new RuntimeException("Invalid pwd path: "+path);
+			final String path_pwd = ceTrim( path.substring(0, pos),  '/' );
+			final String path_exe = cfTrim( path.substring(pos + 1), '/' );
+			if (!IsEmpty(path_pwd)) {
+				final boolean result_pwd = pwd.compareAndSet(null, (IsEmpty(path_pwd) ? "" : path_pwd));
+				final boolean result_exe = exe.compareAndSet(null, (IsEmpty(path_exe) ? "" : path_exe));
+				if (result_pwd && result_exe)
+					return new Tuple<String, String>(path_pwd, path_exe);
+			}
+		}
+		return new Tuple<String, String>(pwd.get(), exe.get());
 	}
 
 

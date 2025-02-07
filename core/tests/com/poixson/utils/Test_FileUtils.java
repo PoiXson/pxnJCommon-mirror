@@ -24,12 +24,11 @@ public class Test_FileUtils {
 
 
 
-	@Test
-	public void testPaths() {
+	public static void TestPaths() {
+		AssertTrue ( IsDir("/")     );
 		AssertFalse( IsEmpty(CWD()) );
 		AssertFalse( IsEmpty(PWD()) );
 		AssertFalse( null == EXE()  );
-		AssertTrue(IsDir("/"));
 	}
 
 
