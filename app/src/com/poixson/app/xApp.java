@@ -439,7 +439,6 @@ public abstract class xApp implements AppProperties, xStartable, Runnable, xFail
 	public void __STOP__garbage() {
 		StdIO.OriginalOut().flush();
 		StdIO.OriginalErr().flush();
-		Keeper.removeAll();
 		System.gc();
 	}
 
