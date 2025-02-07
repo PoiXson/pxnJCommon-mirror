@@ -24,6 +24,7 @@ import com.poixson.logger.xLog;
 public class xLockFile implements Closeable {
 
 	private static final ConcurrentHashMap<String, xLockFile> instances = new ConcurrentHashMap<String, xLockFile>();
+	static { Keeper.Add(new xLockFile(null)); }
 
 	public final File file;
 
@@ -47,7 +48,6 @@ public class xLockFile implements Closeable {
 			final xLockFile existing = instances.putIfAbsent(filename, lock);
 			if (existing != null)
 				return existing;
-			Keeper.Add(lock);
 			return lock;
 		}
 	}
@@ -66,18 +66,15 @@ public class xLockFile implements Closeable {
 	}
 	public static boolean Release(final String filename) {
 		final xLockFile lock = Get(filename);
-		if (lock != null) {
-			Keeper.Remove(lock);
+		if (lock != null)
 			return lock.release();
-		}
 		return false;
 	}
 
 
 
 	protected xLockFile(final String filename) {
-		if (IsEmpty(filename)) throw new RequiredArgumentException("filename");
-		this.file = new File(filename);
+		this.file = (filename==null ? null : new File(filename));
 		// register shutdown hook
 		Runtime.getRuntime().addShutdownHook(
 			new Thread() {
@@ -161,7 +158,6 @@ public class xLockFile implements Closeable {
 		try {
 			this.file.delete();
 		} catch (Exception ignore) {}
-		Keeper.Remove(this);
 		return true;
 	}
 
