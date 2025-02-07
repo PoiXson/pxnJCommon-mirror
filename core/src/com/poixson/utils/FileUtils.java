@@ -370,75 +370,149 @@ public final class FileUtils {
 
 
 
-	public static String MergePaths(final String...strings) {
-		if (IsEmpty(strings)) return null;
-		boolean isAbsolute = false;
-		// maintain absolute
-		for (int index=0; index<strings.length; index++) {
-			if (IsEmpty(strings[index])) continue;
-			if (strings[index].startsWith(File.separator))
-				isAbsolute = true;
-			break;
-		}
-		// split further
-		final LinkedList<String> result = new LinkedList<String>();
-		int count = 0;
-		//LOOP_PARAMS:
-		for (int index=0; index<strings.length; index++) {
-			final String[] array = strings[index].split(File.separator);
-			// remove nulls/blanks
-			PARTS_ARRAY:
-			for (final String str : array) {
-				if (IsEmpty(str)) continue PARTS_ARRAY;
-				final String s = cTrim(str, ' ', '\t', '\r', '\n');
-				if (IsEmpty(s)) continue PARTS_ARRAY;
-				if (count > 0) {
-					if (".".equals(s)) continue PARTS_ARRAY;
-					if (",".equals(s)) continue PARTS_ARRAY;
+	public static String MergePaths(final String...paths) {
+		if (IsEmpty(paths)) return null;
+		final LinkedList<String> parts = new LinkedList<String>();
+		boolean is_absolute = false;
+		// prep parts
+		{
+			boolean first = true;
+			LOOP_PATHS:
+			for (final String path : paths) {
+				if (IsEmpty(path))
+					continue LOOP_PATHS;
+				if (first) {
+					// cwd
+					if (".".equals(path)) {
+						is_absolute = true;
+						parts.addLast(".");
+					} else
+					// pwd
+					if (",".equals(path)) {
+						is_absolute = true;
+						parts.addLast(",");
+					} else
+					// absolute path
+					if (path.startsWith(File.separator)) {
+						is_absolute = true;
+					}
 				}
-				result.add(s);
-				count++;
-			} // end PARTS_ARRAY
-		} // end LOOP_PARAMS
-		if (result.isEmpty())
-			return null;
-		final String first = result.getFirst();
-		// prepend cwd
-		if (".".equals(first)) {
-			result.removeFirst();
-			isAbsolute = true;
-			final String[] array = CWD().split(File.separator);
-			for (int index=array.length-1; index>=0; index--) {
-				if (array[index].length() == 0) continue;
-				result.addFirst(array[index]);
-			}
-		} else
-		// prepend pwd
-		if (",".equals(first)) {
-			result.removeFirst();
-			isAbsolute = true;
-			final String[] array = PWD().split(File.separator);
-			for (int index=array.length-1; index>=0; index--) {
-				result.addFirst(array[index]);
-			}
+				final String pth = StringUtils.cTrim(path, File.separatorChar);
+				// multiple parts
+				if (pth.contains(File.separator)) {
+					final String[] array = pth.split(File.separator);
+					for (final String p : array) {
+						if (!IsEmpty(p)) {
+							final String add = cTrim(p, ' ', '\t', '\r', '\n');
+							if (!IsEmpty(add)
+							&& !".".equals(add)
+							&& !",".equals(add))
+								parts.addLast(add);
+						}
+					}
+				// single path part
+				} else {
+					final String add = cTrim(pth, ' ', '\t', '\r', '\n');
+					if (!IsEmpty(add)
+					&& !".".equals(add)
+					&& !",".equals(add))
+						parts.addLast(add);
+				}
+				first = false;
+			} // end LOOP_PATHS
 		}
-		// resolve ../
-		for (int index=0; index<result.size(); index++) {
-			final String entry = result.get(index);
-			if ("..".equals(entry)) {
-				result.remove(index);
-				if (index > 0) {
+		// resolve paths
+		{
+			final String first = parts.getFirst();
+			// cwd
+			if (".".equals(first)) {
+				parts.removeFirst();
+				final String[] array = CWD().split(File.separator);
+				for (int index=array.length-1; index>=0; index--) {
+					if (!IsEmpty(array[index]))
+						parts.addFirst(array[index]);
+				}
+			} else
+			// pwd
+			if (",".equals(first)) {
+				parts.removeFirst();
+				final String[] array = PWD().split(File.separator);
+				for (int index=array.length-1; index>=0; index--) {
+					if (!IsEmpty(array[index]))
+						parts.addFirst(array[index]);
+				}
+			}
+			// resolve ../
+			int num_parts = parts.size();
+			for (int index=0; index<num_parts; index++) {
+				final String entry = parts.get(index);
+				if ("..".equals(entry)) {
+					parts.remove(index);
+					if (index > 0)
+						parts.remove(--index);
 					index--;
-					result.remove(index);
+					num_parts -= 2;
 				}
-				index--;
 			}
 		}
 		// build path
 		{
-			final String path = (IsEmpty(result) ? "" : MergeStrings(File.separatorChar, result.toArray(new String[0])));
-			return (isAbsolute ? ForceStarts(File.separatorChar, path) : path);
+			final String path = (IsEmpty(parts) ? "" : MergeStrings(File.separatorChar, parts.toArray(new String[0])));
+			return (is_absolute ? ForceStarts(File.separatorChar, path) : path);
 		}
+	}
+
+	public static String MergPths(final String...paths) {
+		if (IsEmpty(paths)) return null;
+		final LinkedList<String> parts = new LinkedList<String>();
+		boolean is_absolute = false;
+		// prep parts
+		{
+			boolean first = true;
+			LOOP_PATHS:
+			for (final String path : paths) {
+				if (IsEmpty(path))
+					continue LOOP_PATHS;
+				if (first) {
+					// absolute path
+					if (path.startsWith(File.separator))
+						is_absolute = true;
+				}
+				final String pth = StringUtils.cTrim(path, File.separatorChar);
+				// multiple parts
+				if (pth.contains(File.separator)) {
+					final String[] array = pth.split(File.separator);
+					for (final String p : array) {
+						if (!IsEmpty(p)) {
+							final String add = cTrim(p, ' ', '\t', '\r', '\n');
+							if (!IsEmpty(add))
+								parts.addLast(add);
+						}
+					}
+				// single path part
+				} else {
+					final String add = cTrim(pth, ' ', '\t', '\r', '\n');
+					if (!IsEmpty(add))
+						parts.addLast(add);
+				}
+				first = false;
+			} // end LOOP_PATHS
+		}
+		// resolve ../
+		int num_parts = parts.size();
+		for (int index=0; index<num_parts; index++) {
+			final String entry = parts.get(index);
+			if ("..".equals(entry)) {
+				parts.remove(index);
+				if (index > 0)
+					parts.remove(--index);
+				index--;
+				num_parts -= 2;
+			}
+		}
+		// build path
+		final String path = (IsEmpty(parts) ? "" : MergeStrings(File.separatorChar, parts.toArray(new String[0])));
+		return (is_absolute ? ForceStarts(File.separatorChar, path) : path);
 	}
 
 
