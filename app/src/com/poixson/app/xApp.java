@@ -45,6 +45,7 @@ public abstract class xApp implements AppProperties, xStartable, Runnable, xFail
 
 	// app instances
 	protected static final CopyOnWriteArraySet<xApp> apps = new CopyOnWriteArraySet<xApp>();
+	protected final Keeper keeper;
 
 	protected final AppPropsDAO props = AppPropsDAO.LoadSafe(this.getClass());
 
@@ -77,6 +78,7 @@ public abstract class xApp implements AppProperties, xStartable, Runnable, xFail
 		// queue app->start()
 		xThreadPool_Main.Get()
 			.runTaskNow( new RunnableMethod<Object>(this, "start") );
+		this.keeper = Keeper.Get();
 	}
 
 
