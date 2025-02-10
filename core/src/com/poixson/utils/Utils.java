@@ -272,29 +272,24 @@ public final class Utils {
 	 * Close safely, ignoring errors.
 	 */
 	public static void SafeClose(final Closeable obj) {
-		if (obj == null) return;
-		try {
-			obj.close();
-		} catch (Exception ignore) {}
+		SafeClose((AutoCloseable)obj);
 	}
 	/**
 	 * Close safely, ignoring errors.
 	 */
 	public static void SafeClose(final AutoCloseable obj) {
-		if (obj == null) return;
-		try {
-			obj.close();
-		} catch (Exception ignore) {}
+		if (obj != null) {
+			try {
+				obj.close();
+			} catch (Exception ignore) {}
+		}
 	}
 
 
 
 	public static void SafeCloseMany(final Closeable...objects) {
-		for (final Closeable obj : objects) {
-			try {
-				obj.close();
-			} catch (Exception ignore) {}
-		}
+		for (final Closeable obj : objects)
+			SafeClose((AutoCloseable)obj);
 	}
 	public static void SafeCloseMany(final AutoCloseable...objects) {
 		for (final AutoCloseable obj : objects)
