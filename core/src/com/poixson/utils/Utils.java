@@ -296,12 +296,32 @@ public final class Utils {
 			} catch (Exception ignore) {}
 		}
 	}
+	public static void SafeCloseMany(final AutoCloseable...objects) {
+		for (final AutoCloseable obj : objects)
+			SafeClose(obj);
+	}
+
+
+
 	public static void CloseMany(final Closeable...objects) throws IOException {
 		IOException ex = null;
 		for (final Closeable obj : objects) {
 			try {
 				obj.close();
 			} catch (IOException e) {
+				if (ex == null) ex = e;
+				else            ex.addSuppressed(e);
+			}
+		}
+		if (ex != null)
+			throw ex;
+	}
+	public static void CloseMany(final AutoCloseable...objects) throws Exception {
+		Exception ex = null;
+		for (final AutoCloseable obj : objects) {
+			try {
+				obj.close();
+			} catch (Exception e) {
 				if (ex == null) ex = e;
 				else            ex.addSuppressed(e);
 			}
