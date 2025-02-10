@@ -1,4 +1,4 @@
-package com.poixson.tools.abstractions;
+package com.poixson.tools.abstractions.startstop;
 
 
 public interface xStart {
