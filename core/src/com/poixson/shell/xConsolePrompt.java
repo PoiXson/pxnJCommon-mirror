@@ -64,8 +64,8 @@ public class xConsolePrompt extends xConsole {
 
 
 	@Override
-	public void start() {
-		if (this.dumb) return;
+	public boolean start() {
+		if (this.dumb) return false;
 		if (this.stopping.get())
 			throw new IllegalStateException("Prompt thread already stopped");
 		final Thread thread = new Thread() {
@@ -80,21 +80,23 @@ public class xConsolePrompt extends xConsole {
 			throw new IllegalStateException("Prompt thread already started");
 		thread.start();
 		Sleep(50L);
+		return true;
 	}
 
 	@Override
-	public void stop() {
+	public boolean stop() {
 		this.stopping.set(true);
 		final Thread thread = this.thread.get();
-		if (thread != null) {
-			try {
-				thread.interrupt();
-			} catch (Exception ignore) {}
-			try {
-				thread.notifyAll();
-			} catch (Exception ignore) {}
-			Sleep(10L);
-		}
+		if (thread == null)
+			return false;
+		try {
+			thread.interrupt();
+		} catch (Exception ignore) {}
+		try {
+			thread.notifyAll();
+		} catch (Exception ignore) {}
+		Sleep(10L);
+		return true;
 	}
 
 

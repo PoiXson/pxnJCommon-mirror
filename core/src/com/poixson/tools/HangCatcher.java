@@ -7,10 +7,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.poixson.exceptions.RequiredArgumentException;
-import com.poixson.tools.abstractions.xStartable;
+import com.poixson.tools.abstractions.startstop.xStartStop;
 
 
-public class HangCatcher implements xStartable, Runnable {
+public class HangCatcher implements xStartStop, Runnable {
 
 	public static final long DEFAULT_TIMEOUT = 10000L; // 10s
 	public static final long DEFAULT_SLEEP   = 100L;   // 100ms
@@ -72,36 +72,35 @@ public class HangCatcher implements xStartable, Runnable {
 
 
 	@Override
-	public void start() {
-		if (this.hasCanceled())  return;
-		if (this.hasTriggered()) return;
+	public boolean start() {
+		if (this.hasCanceled())  return false;
+		if (this.hasTriggered()) return false;
 		this.resetTimeout();
-		// already started
-		if (this.thread.get() != null)
-			return;
-		// new thread
-		{
+		if (this.thread.get() == null) {
+			// new thread
 			final Thread thread = new Thread(this);
-			if (!this.thread.compareAndSet(null, thread))
-				return;
-			thread.setDaemon(true);
-			if (IsEmpty(this.name)) {
-				thread.setName("HangCatcher");
-			} else {
-				thread.setName(
-					(new StringBuilder())
-					.append("HangCatcher")
-					.append('-')
-					.append(this.name)
-					.toString()
-				);
+			if (this.thread.compareAndSet(null, thread)) {
+				thread.setDaemon(true);
+				if (IsEmpty(this.name)) {
+					thread.setName("HangCatcher");
+				} else {
+					thread.setName(
+						(new StringBuilder())
+						.append("HangCatcher")
+						.append('-')
+						.append(this.name)
+						.toString()
+					);
+				}
+				thread.start();
+				return true;
 			}
-			thread.start();
 		}
+		return false;
 	}
 	@Override
-	public void stop() {
-		this.canceled.set(true);
+	public boolean stop() {
+		return !this.canceled.getAndSet(true);
 	}
 
 

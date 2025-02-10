@@ -49,20 +49,28 @@ public class xScriptThreadSafe extends xScript {
 
 
 	@Override
-	public void start() {
-		if (this.stopping.get()) return;
-		if (this.thread.get() == null) {
-			final Thread thread = new Thread(this);
-			if (this.thread.compareAndSet(null, thread))
-				thread.start();
+	public boolean start() {
+		if (!this.stopping.get()) {
+			if (this.thread.get() == null) {
+				final Thread thread = new Thread(this);
+				if (this.thread.compareAndSet(null, thread)) {
+					thread.start();
+					return true;
+				}
+			}
 		}
+		return false;
 	}
 	@Override
-	public void stop() {
-		final xScript script = this.script.get();
-		if (script != null)
-			script.stop();
+	public boolean stop() {
 		this.stopping.set(true);
+		final xScript script = this.script.get();
+		if (script != null) {
+//TODO: what thread does this run as?
+			if (script.stop())
+				return true;
+		}
+		return false;
 	}
 
 

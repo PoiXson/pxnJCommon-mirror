@@ -48,7 +48,7 @@ public class xThreadPool_GUI extends xThreadPool_Single {
 
 
 	@Override
-	public void start() {
+	public boolean start() {
 		throw new UnsupportedOperationException();
 	}
 	@Override
@@ -56,7 +56,7 @@ public class xThreadPool_GUI extends xThreadPool_Single {
 		throw new UnsupportedOperationException();
 	}
 	@Override
-	public void stop() {
+	public boolean stop() {
 		throw new UnsupportedOperationException();
 	}
 

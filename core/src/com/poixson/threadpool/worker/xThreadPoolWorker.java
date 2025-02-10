@@ -15,10 +15,10 @@ import com.poixson.logger.xLog;
 import com.poixson.threadpool.xThreadPool;
 import com.poixson.threadpool.task.xThreadPoolTask;
 import com.poixson.tools.CoolDown;
-import com.poixson.tools.abstractions.xStartable;
+import com.poixson.tools.abstractions.startstop.xStartStop;
 
 
-public class xThreadPoolWorker implements xStartable, Runnable {
+public class xThreadPoolWorker implements xStartStop, Runnable {
 
 	protected final xThreadPool pool;
 	protected final AtomicReference<Thread> thread = new AtomicReference<Thread>(null);
@@ -58,12 +58,20 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 
 
 	@Override
-	public void start() {
-		if (this.isRunning()) return;
-		try {
-			final Thread thread = this.getThread();
-			thread.start();
-		} catch (IllegalThreadStateException ignore) {}
+	public boolean start() {
+		if (!this.isRunning()) {
+			try {
+				final Thread thread = this.getThread();
+				thread.start();
+				return true;
+			} catch (IllegalThreadStateException ignore) {}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean stop() {
+		return !this.stopping.getAndSet(true);
 	}
 
 
@@ -92,13 +100,6 @@ public class xThreadPoolWorker implements xStartable, Runnable {
 			sleep += 5L;
 			Sleep(sleep);
 		} // end LOOP_WAIT
-	}
-
-
-
-	@Override
-	public void stop() {
-		this.stopping.set(true);
 	}
 
 

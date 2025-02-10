@@ -21,10 +21,10 @@ import com.poixson.threadpool.worker.xThreadPoolWorker;
 import com.poixson.tools.Keeper;
 import com.poixson.tools.xTime;
 import com.poixson.tools.abstractions.RunnableMethod;
-import com.poixson.tools.abstractions.xStartable;
+import com.poixson.tools.abstractions.startstop.xStartStop;
 
 
-public abstract class xThreadPool implements xStartable, Runnable {
+public abstract class xThreadPool implements xStartStop, Runnable {
 	public static final boolean DEBUG_EXTRA = false;
 
 	public static final int  HARD_MAX_WORKERS = 100;
@@ -82,10 +82,13 @@ public abstract class xThreadPool implements xStartable, Runnable {
 
 
 	@Override
-	public void start() {
-		if (!this.okStart()) return;
-		this.startNewWorkerIfNeededAndAble();
-		Keeper.Add(this);
+	public boolean start() {
+		if (this.okStart()) {
+			this.startNewWorkerIfNeededAndAble();
+			Keeper.Add(this);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -112,10 +115,13 @@ public abstract class xThreadPool implements xStartable, Runnable {
 	}
 
 	@Override
-	public void stop() {
-		if (this.stopping.compareAndSet(false, true))
-			this.stopWorkers();
+	public boolean stop() {
 		Keeper.Remove(this);
+		if (this.stopping.compareAndSet(false, true)) {
+			this.stopWorkers();
+			return true;
+		}
+		return false;
 	}
 	public static void StopAll() {
 		StoppingAll.set(true);

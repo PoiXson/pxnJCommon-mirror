@@ -3,11 +3,11 @@ package com.poixson.shell;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import com.poixson.tools.abstractions.xStartable;
+import com.poixson.tools.abstractions.startstop.xStartStop;
 import com.poixson.tools.commands.xCommandProcessor;
 
 
-public abstract class xConsole extends PrintStream implements xStartable, Runnable {
+public abstract class xConsole extends PrintStream implements xStartStop, Runnable {
 
 
 
@@ -19,8 +19,6 @@ public abstract class xConsole extends PrintStream implements xStartable, Runnab
 
 	public abstract xCommandProcessor getProcessor();
 	public abstract xCommandProcessor setProcessor(final xCommandProcessor processor);
-
-
 
 	public abstract String getPrompt();
 	public abstract String setPrompt(final String prompt);

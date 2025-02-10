@@ -26,7 +26,8 @@ import com.poixson.tools.xDebug;
 import com.poixson.tools.xTime;
 import com.poixson.tools.abstractions.RunnableMethod;
 import com.poixson.tools.abstractions.xFailableApp;
-import com.poixson.tools.abstractions.xStartable;
+import com.poixson.tools.abstractions.startstop.xStartStop;
+import com.poixson.tools.abstractions.startstop.xStop;
 
 
 /*
@@ -39,7 +40,7 @@ import com.poixson.tools.abstractions.xStartable;
  *  10 | garbage collect
  *   1 | exit
  */
-public abstract class xApp implements AppProperties, xStartable, Runnable, xFailableApp {
+public abstract class xApp implements AppProperties, xStartStop, Runnable, xFailableApp {
 
 	public static final int EXIT_HUNG = 3;
 
@@ -124,15 +125,15 @@ public abstract class xApp implements AppProperties, xStartable, Runnable, xFail
 
 
 	@Override
-	public void start() {
-		if (this.isFailed()) return;
+	public boolean start() {
+		if (this.isFailed()) return false;
 		// only run in main thread
 		if (xThreadPool_Main.Get().proper(this, "start"))
-			return;
+			return false;
 		// check state
 		final xAppState state = xAppState.FromInt(this.state.get());
 		switch (state) {
-		case RUNNING: return;
+		case RUNNING: return false;
 		case STOPPING: throw new RuntimeException("Cannot start app, currently stopping");
 		default: break;
 		}
@@ -145,12 +146,12 @@ public abstract class xApp implements AppProperties, xStartable, Runnable, xFail
 		final xAppStepLoader loader = new xAppStepLoader(this, xAppStepType.STARTUP);
 		if (!this.step_loader.compareAndSet(null, loader))
 			throw new RuntimeException("App is already starting or stopping");
-		if (this.isFailed()) return;
+		if (this.isFailed()) return false;
 		loader.scan(this);
-		if (this.isFailed()) return;
+		if (this.isFailed()) return false;
 		if (loader.isEmpty()) {
 			this.fail("No startup steps were found!");
-			return;
+			return false;
 		}
 		this.step_count.set(0);
 		this.log().title("Starting %s..", this.getTitle());
@@ -160,25 +161,28 @@ public abstract class xApp implements AppProperties, xStartable, Runnable, xFail
 		this.nextStepDAO.set(null);
 		this.queueNextStep();
 		this.queueNextTask();
+		return true;
 	}
 
 	@Override
-	public void stop() {
-		if (this.isFailed()) return;
+	public boolean stop() {
+		if (this.isFailed()) return false;
 		// only run in main thread
 		if (xThreadPool_Main.Get().proper(this, "stop"))
-			return;
+			return false;
 		// check state
 		final int state = this.state.get();
+		SWITCH_STATE:
 		switch (xAppState.FromInt(state)) {
-		case OFF:      return;
-		case STOPPING: return;
-		default: break;
+		case OFF:
+		case STOPPING:
+			return false;
+		default: break SWITCH_STATE;
 		}
 		// set stopping state
 		if (!this.state.compareAndSet(state, xAppState.STOPPING.value)) {
 			this.stop();
-			return;
+			return false;
 		}
 		// load steps
 		if (this.step_loader.get() != null)
@@ -186,12 +190,12 @@ public abstract class xApp implements AppProperties, xStartable, Runnable, xFail
 		final xAppStepLoader loader = new xAppStepLoader(this, xAppStepType.SHUTDOWN);
 		if (!this.step_loader.compareAndSet(null, loader))
 			throw new RuntimeException("App is already starting or stopping");
-		if (this.isFailed()) return;
+		if (this.isFailed()) return false;
 		loader.scan(this);
-		if (this.isFailed()) return;
+		if (this.isFailed()) return false;
 		if (loader.isEmpty()) {
 			this.fail("No shutdown steps were found!");
-			return;
+			return false;
 		}
 		this.step_count.set(0);
 		this.log().title("Stopping %s..", this.getTitle());
@@ -201,6 +205,7 @@ public abstract class xApp implements AppProperties, xStartable, Runnable, xFail
 		this.nextStepDAO.set(null);
 		this.queueNextStep();
 		this.queueNextTask();
+		return true;
 	}
 
 
@@ -308,9 +313,8 @@ public abstract class xApp implements AppProperties, xStartable, Runnable, xFail
 		log.flush();
 		final xLogHandler[] handlers = log.getHandlersOrDefault();
 		for (final xLogHandler handler : handlers) {
-			if (handler instanceof xStartable) {
-				((xStartable) handler).stop();
-			}
+			if (handler instanceof xStop stoppable)
+				stoppable.stop();
 		}
 		System.exit(1);
 	}

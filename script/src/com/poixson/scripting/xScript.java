@@ -5,7 +5,7 @@ import static com.poixson.utils.Utils.GetMS;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.poixson.tools.abstractions.xStartStop;
+import com.poixson.tools.abstractions.startstop.xStartStop;
 
 
 public abstract class xScript implements xStartStop, Runnable {
@@ -22,14 +22,21 @@ public abstract class xScript implements xStartStop, Runnable {
 
 
 	@Override
-	public void start() {
-		if (this.stopping.get()) return;
-		this.compile();
+	public boolean start() {
+		if (!this.stopping.get()) {
+			this.compile();
+			return true;
+		}
+		return false;
 	}
 	@Override
-	public void stop() {
-		if (this.stopping.compareAndSet(false, true))
+	public boolean stop() {
+		if (this.stopping.compareAndSet(false, true)) {
+//TODO: what thread does this run as?
 			this.call("stop");
+			return true;
+		}
+		return false;
 	}
 
 
@@ -45,6 +52,7 @@ public abstract class xScript implements xStartStop, Runnable {
 
 
 
+	@Override
 	public boolean isStopping() {
 		return this.stopping.get();
 	}
