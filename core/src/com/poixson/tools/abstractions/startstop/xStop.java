@@ -1,12 +1,12 @@
 package com.poixson.tools.abstractions.startstop;
 
 
-public interface xStart {
+public interface xStop {
 
 
-	public boolean start();
+	public boolean stop();
 
-	public default boolean isRunning() {
+	public default boolean isStopping() {
 		throw new UnsupportedOperationException();
 	}
 
