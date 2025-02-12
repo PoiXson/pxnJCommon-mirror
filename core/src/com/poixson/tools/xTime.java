@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.poixson.exceptions.RequiredArgumentException;
+import com.poixson.utils.MathUtils;
 
 
 public class xTime {
@@ -239,6 +240,24 @@ public class xTime {
 			);
 		}
 		return value;
+	}
+
+
+
+	@Override
+	public int hashCode() {
+		return MathUtils.SafeLongToInt(this.ms());
+	}
+
+
+
+	@Override
+	public boolean equals(final Object match) {
+		if (match != null) {
+			if (match instanceof xTime time)
+				return (this.ms() == time.ms());
+		}
+		return false;
 	}
 
 
