@@ -6,21 +6,21 @@ package com.poixson.exceptions;
 public class DevIdiotException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
-	public static final String IDIOT_MSG = "WHOEVER WROTE THAT CODE IS AN IDIOT";
+	public static final String MSG_IDIOT = "WHOEVER WROTE THAT CODE IS AN IDIOT";
 
 
 
 	public DevIdiotException() {
-		super(IDIOT_MSG);
+		super(MSG_IDIOT);
 	}
 	public DevIdiotException(final String msg) {
-		super(IDIOT_MSG+" "+msg);
+		super(MSG_IDIOT+" "+msg);
 	}
 	public DevIdiotException(final Throwable e) {
-		super(IDIOT_MSG, e);
+		super(MSG_IDIOT, e);
 	}
 	public DevIdiotException(final String msg, final Throwable e) {
-		super(IDIOT_MSG+" "+msg, e);
+		super(MSG_IDIOT+" "+msg, e);
 	}
 
 

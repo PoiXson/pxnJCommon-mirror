@@ -10,6 +10,8 @@ import java.util.Iterator;
 public class UnmodifiableObjectException extends UnsupportedOperationException {
 	private static final long serialVersionUID = 1L;
 
+	public static final String MSG = "Object cannot be modified! %s->%s()";
+
 
 
 	protected static String BuildMessage() {
@@ -18,14 +20,13 @@ public class UnmodifiableObjectException extends UnsupportedOperationException {
 		// find calling class
 		while (it.hasNext()) {
 			final StackTraceElement e = it.next();
-			final String className = e.getClassName();
-			if (!className.endsWith("UnmodifiableObjectException")) {
-				return
-					String.format(
-						"Object cannot be modified! %s->%s()",
-						LastPart(className, '.'),
-						cTrim(e.getMethodName(), '<', '>')
-					);
+			final String class_name = e.getClassName();
+			if (!class_name.endsWith("UnmodifiableObjectException")) {
+				return String.format(
+					MSG,
+					LastPart(class_name, '.'),
+					cTrim(e.getMethodName(), '<', '>')
+				);
 			}
 		}
 		return null;
