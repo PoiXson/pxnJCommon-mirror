@@ -271,58 +271,78 @@ public final class Utils {
 	/**
 	 * Close safely, ignoring errors.
 	 */
-	public static void SafeClose(final Closeable obj) {
-		SafeClose((AutoCloseable)obj);
+	public static boolean SafeClose(final Closeable obj) {
+		return SafeClose((AutoCloseable)obj);
 	}
 	/**
 	 * Close safely, ignoring errors.
 	 */
-	public static void SafeClose(final AutoCloseable obj) {
+	public static boolean SafeClose(final AutoCloseable obj) {
 		if (obj != null) {
 			try {
 				obj.close();
+				return true;
 			} catch (Exception ignore) {}
 		}
+		return false;
 	}
 
 
 
-	public static void SafeCloseMany(final Closeable...objects) {
-		for (final Closeable obj : objects)
-			SafeClose((AutoCloseable)obj);
+	public static boolean SafeCloseMany(final Closeable...objects) {
+		boolean result = false;
+		for (final Closeable obj : objects) {
+			if (SafeClose((AutoCloseable)obj))
+				result = true;
+		}
+		return result;
 	}
-	public static void SafeCloseMany(final AutoCloseable...objects) {
-		for (final AutoCloseable obj : objects)
-			SafeClose(obj);
+	public static boolean SafeCloseMany(final AutoCloseable...objects) {
+		boolean result = false;
+		for (final AutoCloseable obj : objects) {
+			if (SafeClose(obj))
+				result = true;
+		}
+		return result;
 	}
 
 
 
-	public static void CloseMany(final Closeable...objects) throws IOException {
+	public static boolean CloseMany(final Closeable...objects) throws IOException {
+		boolean result = false;
 		IOException ex = null;
 		for (final Closeable obj : objects) {
-			try {
-				obj.close();
-			} catch (IOException e) {
-				if (ex == null) ex = e;
-				else            ex.addSuppressed(e);
+			if (obj != null) {
+				try {
+					obj.close();
+					result = true;
+				} catch (IOException e) {
+					if (ex == null) ex = e;
+					else            ex.addSuppressed(e);
+				}
 			}
 		}
 		if (ex != null)
 			throw ex;
+		return result;
 	}
-	public static void CloseMany(final AutoCloseable...objects) throws Exception {
+	public static boolean CloseMany(final AutoCloseable...objects) throws Exception {
+		boolean result = false;
 		Exception ex = null;
 		for (final AutoCloseable obj : objects) {
-			try {
-				obj.close();
-			} catch (Exception e) {
-				if (ex == null) ex = e;
-				else            ex.addSuppressed(e);
+			if (obj != null) {
+				try {
+					obj.close();
+					result = true;
+				} catch (Exception e) {
+					if (ex == null) ex = e;
+					else            ex.addSuppressed(e);
+				}
 			}
 		}
 		if (ex != null)
 			throw ex;
+		return result;
 	}
 
 
@@ -332,12 +352,14 @@ public final class Utils {
 
 
 
-	public static void SafeInterrupt(final Thread thread) {
+	public static boolean SafeInterrupt(final Thread thread) {
 		if (thread != null) {
 			try {
 				thread.interrupt();
+				return true;
 			} catch (Exception ignore) {}
 		}
+		return false;
 	}
 
 
