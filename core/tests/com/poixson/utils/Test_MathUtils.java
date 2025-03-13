@@ -34,6 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.poixson.tools.Assertions;
+import com.poixson.tools.dao.Yab;
 
 
 @ExtendWith(Assertions.class)
@@ -191,6 +192,15 @@ public class Test_MathUtils {
 		AssertEquals( Float.valueOf( 12.3f),      CastFloat(   (Object) Float.valueOf(12.3f)       ) );
 		AssertEquals( Boolean.TRUE,               CastBoolean( (Object) Boolean.valueOf(true)      ) );
 		AssertEquals( Boolean.FALSE,              CastBoolean( (Object) Boolean.valueOf(false)     ) );
+	}
+
+
+
+	@Test
+	public void testCharToBytes() {
+		final Yab tup = MathUtils.CharToBytes((char)9001);
+		AssertEquals(35, tup.a);
+		AssertEquals(41, tup.b);
 	}
 
 
