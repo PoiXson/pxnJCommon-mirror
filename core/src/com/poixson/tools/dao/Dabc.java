@@ -37,6 +37,8 @@ public class Dabc implements Serializable, Cloneable {
 		return new Dabc(this.a, this.b, this.c);
 	}
 
+
+
 	public static Dabc From(final Iabc dao) {
 		return new Dabc(
 			(double) dao.a,
@@ -64,8 +66,7 @@ public class Dabc implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Dabc) {
-			final Dabc dao = (Dabc) obj;
+		if (obj instanceof Dabc dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b &&

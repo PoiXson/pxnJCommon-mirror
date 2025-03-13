@@ -45,6 +45,8 @@ public class Fabcde implements Serializable, Cloneable {
 		return new Fabcde(this.a, this.b, this.c, this.d, this.e);
 	}
 
+
+
 	public static Fabcde From(final Iabcde dao) {
 		return new Fabcde(
 			(float) dao.a,
@@ -78,8 +80,7 @@ public class Fabcde implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Fabcde) {
-			final Fabcde dao = (Fabcde) obj;
+		if (obj instanceof Fabcde dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b &&

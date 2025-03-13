@@ -43,8 +43,7 @@ public class Babc implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Babc) {
-			final Babc dao = (Babc) obj;
+		if (obj instanceof Babc dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b &&

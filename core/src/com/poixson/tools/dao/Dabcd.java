@@ -41,6 +41,8 @@ public class Dabcd implements Serializable, Cloneable {
 		return new Dabcd(this.a, this.b, this.c, this.d);
 	}
 
+
+
 	public static Dabcd From(final Iabcd dao) {
 		return new Dabcd(
 			(double) dao.a,
@@ -71,8 +73,7 @@ public class Dabcd implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Dabcd) {
-			final Dabcd dao = (Dabcd) obj;
+		if (obj instanceof Dabcd dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b &&

@@ -41,6 +41,8 @@ public class Fabcd implements Serializable, Cloneable {
 		return new Fabcd(this.a, this.b, this.c, this.d);
 	}
 
+
+
 	public static Fabcd From(final Iabcd dao) {
 		return new Fabcd(
 			(float) dao.a,
@@ -71,8 +73,7 @@ public class Fabcd implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Fabcd) {
-			final Fabcd dao = (Fabcd) obj;
+		if (obj instanceof Fabcd dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b &&

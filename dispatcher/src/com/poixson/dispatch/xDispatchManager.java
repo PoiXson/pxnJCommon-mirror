@@ -293,8 +293,7 @@ public abstract class xThreadPool implements xStartStop, Runnable {
 	}
 	public xThreadPoolTask addTask(final xThreadTaskPriority priority,
 			final String taskName, final Runnable run) {
-		if (run instanceof xThreadPoolTask) {
-			final xThreadPoolTask task = (xThreadPoolTask) run;
+		if (run instanceof xThreadPoolTask task) {
 			if (!IsEmpty(taskName))
 				task.setTaskName(taskName);
 			this.addTask(priority, task);

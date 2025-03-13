@@ -85,20 +85,20 @@ public abstract class xScript implements xStartStop, Runnable {
 	}
 	public int getVarInt(final String key) {
 		final Object val = this.getVariable(key);
-		if (val instanceof Integer)
-			return ((Integer)val).intValue();
+		if (val instanceof Integer v)
+			return v.intValue();
 		return Integer.parseInt(val.toString());
 	}
 	public long getVarLong(final String key) {
 		final Object val = this.getVariable(key);
-		if (val instanceof Long)
-			return ((Long)val).longValue();
+		if (val instanceof Long v)
+			return v.longValue();
 		return Long.parseLong(val.toString());
 	}
 	public double getVarDouble(final String key) {
 		final Object val = this.getVariable(key);
-		if (val instanceof Double)
-			return ((Double)val).doubleValue();
+		if (val instanceof Double v)
+			return v.doubleValue();
 		return Double.parseDouble(val.toString());
 	}
 

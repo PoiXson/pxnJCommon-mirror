@@ -33,6 +33,8 @@ public class Iab implements Serializable, Cloneable {
 		return new Iab(this.a, this.b);
 	}
 
+
+
 	public static Iab From(final Lab dao) {
 		return new Iab(
 			(int) dao.a,
@@ -57,8 +59,7 @@ public class Iab implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Iab) {
-			final Iab dao = (Iab) obj;
+		if (obj instanceof Iab dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b

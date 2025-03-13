@@ -37,6 +37,8 @@ public class Labc implements Serializable, Cloneable {
 		return new Labc(this.a, this.b, this.c);
 	}
 
+
+
 	public static Labc From(final Iabc dao) {
 		return new Labc(
 			(long) dao.a,
@@ -64,8 +66,7 @@ public class Labc implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Labc) {
-			final Labc dao = (Labc) obj;
+		if (obj instanceof Labc dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b &&

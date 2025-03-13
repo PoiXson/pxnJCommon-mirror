@@ -41,6 +41,8 @@ public class Iabcd implements Serializable, Cloneable {
 		return new Iabcd(this.a, this.b, this.c, this.d);
 	}
 
+
+
 	public static Iabcd From(final Labcd dao) {
 		return new Iabcd(
 			(int) dao.a,
@@ -71,8 +73,7 @@ public class Iabcd implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Iabcd) {
-			final Iabcd dao = (Iabcd) obj;
+		if (obj instanceof Iabcd dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b &&

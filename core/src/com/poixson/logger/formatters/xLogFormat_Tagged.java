@@ -49,8 +49,8 @@ public class xLogFormat_Tagged implements xLogFormat {
 	public String format(final xLogRecord record) {
 		if (record == null)
 			return "\n";
-		if (record instanceof xLogRecord_Msg)
-			return this.format((xLogRecord_Msg)record );
+		if (record instanceof xLogRecord_Msg rec)
+			return this.format(rec);
 		return record.toString();
 	}
 	public String format(final xLogRecord_Msg record) {

@@ -40,10 +40,8 @@ public class xRunnable implements RunnableNamed {
 		if (!IsEmpty(taskName)) {
 			this.taskName.set(taskName);
 		} else
-		if (run instanceof RunnableNamed) {
-			this.taskName.set(
-				((RunnableNamed) run).getTaskName()
-			);
+		if (run instanceof RunnableNamed r) {
+			this.taskName.set(r.getTaskName());
 		}
 		this.task = run;
 	}
@@ -59,16 +57,11 @@ public class xRunnable implements RunnableNamed {
 		if (run == null)
 			return null;
 		// already correct type
-		if (run instanceof xRunnable)
-			return (xRunnable) run;
+		if (run instanceof xRunnable r)
+			return r;
 		// get name from interface
-		if (run instanceof RunnableNamed) {
-			return
-				new xRunnable(
-					((RunnableNamed) run).getTaskName(),
-					run
-				);
-		}
+		if (run instanceof RunnableNamed r)
+			return new xRunnable(r.getTaskName(), r);
 		return new xRunnable(run);
 	}
 
@@ -119,8 +112,8 @@ public class xRunnable implements RunnableNamed {
 	@Override
 	public String getTaskName() {
 		if (this.task != null) {
-			if (this.task instanceof RunnableNamed) {
-				final String taskName = ((RunnableNamed) this.task).getTaskName();
+			if (this.task instanceof RunnableNamed r) {
+				final String taskName = r.getTaskName();
 				if (!IsEmpty(taskName))
 					return taskName;
 			}

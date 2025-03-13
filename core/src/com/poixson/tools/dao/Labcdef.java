@@ -49,6 +49,8 @@ public class Labcdef implements Serializable, Cloneable {
 		return new Labcdef(this.a, this.b, this.c, this.d, this.e, this.f);
 	}
 
+
+
 	public static Labcdef From(final Iabcdef dao) {
 		return new Labcdef(
 			(long) dao.a,
@@ -85,8 +87,7 @@ public class Labcdef implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Labcdef) {
-			final Labcdef dao = (Labcdef) obj;
+		if (obj instanceof Labcdef dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b &&

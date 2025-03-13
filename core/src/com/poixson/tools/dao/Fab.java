@@ -33,6 +33,8 @@ public class Fab implements Serializable, Cloneable {
 		return new Fab(this.a, this.b);
 	}
 
+
+
 	public static Fab From(final Iab dao) {
 		return new Fab(
 			(float) dao.a,
@@ -57,8 +59,7 @@ public class Fab implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Fab) {
-			final Fab dao = (Fab) obj;
+		if (obj instanceof Fab dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b
