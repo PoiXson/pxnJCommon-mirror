@@ -53,6 +53,13 @@ public class Dabc implements Serializable, Cloneable {
 			(double) dao.c
 		);
 	}
+	public static Dabc From(final Yabc dao) {
+		return new Dabc(
+			(double) dao.a,
+			(double) dao.b,
+			(double) dao.c
+		);
+	}
 	public static Dabc From(final Fabc dao) {
 		return new Dabc(
 			(double) dao.a,

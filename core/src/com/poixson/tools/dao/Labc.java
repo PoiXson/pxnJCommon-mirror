@@ -46,6 +46,13 @@ public class Labc implements Serializable, Cloneable {
 			(long) dao.c
 		);
 	}
+	public static Labc From(final Yabc dao) {
+		return new Labc(
+			(long) dao.a,
+			(long) dao.b,
+			(long) dao.c
+		);
+	}
 	public static Labc From(final Fabc dao) {
 		return new Labc(
 			(long) dao.a,

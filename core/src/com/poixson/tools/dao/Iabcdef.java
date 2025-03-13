@@ -61,6 +61,16 @@ public class Iabcdef implements Serializable, Cloneable {
 			(int) dao.f
 		);
 	}
+	public static Iabcdef From(final Yabcdef dao) {
+		return new Iabcdef(
+			(int) dao.a,
+			(int) dao.b,
+			(int) dao.c,
+			(int) dao.d,
+			(int) dao.e,
+			(int) dao.f
+		);
+	}
 	public static Iabcdef From(final Fabcdef dao) {
 		return new Iabcdef(
 			(int) dao.a,

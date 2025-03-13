@@ -41,6 +41,12 @@ public class Lab implements Serializable, Cloneable {
 			(long) dao.b
 		);
 	}
+	public static Lab From(final Yab dao) {
+		return new Lab(
+			(long) dao.a,
+			(long) dao.b
+		);
+	}
 	public static Lab From(final Fab dao) {
 		return new Lab(
 			(long) dao.a,

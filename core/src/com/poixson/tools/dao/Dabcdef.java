@@ -71,6 +71,16 @@ public class Dabcdef implements Serializable, Cloneable {
 			(double) dao.f
 		);
 	}
+	public static Dabcdef From(final Yabcdef dao) {
+		return new Dabcdef(
+			(double) dao.a,
+			(double) dao.b,
+			(double) dao.c,
+			(double) dao.d,
+			(double) dao.e,
+			(double) dao.f
+		);
+	}
 	public static Dabcdef From(final Fabcdef dao) {
 		return new Dabcdef(
 			(double) dao.a,

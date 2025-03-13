@@ -47,6 +47,12 @@ public class Dab implements Serializable, Cloneable {
 			(double) dao.b
 		);
 	}
+	public static Dab From(final Yab dao) {
+		return new Dab(
+			(double) dao.a,
+			(double) dao.b
+		);
+	}
 	public static Dab From(final Fab dao) {
 		return new Dab(
 			(double) dao.a,

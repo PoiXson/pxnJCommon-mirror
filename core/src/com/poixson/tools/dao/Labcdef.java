@@ -61,6 +61,16 @@ public class Labcdef implements Serializable, Cloneable {
 			(long) dao.f
 		);
 	}
+	public static Labcdef From(final Yabcdef dao) {
+		return new Labcdef(
+			(long) dao.a,
+			(long) dao.b,
+			(long) dao.c,
+			(long) dao.d,
+			(long) dao.e,
+			(long) dao.f
+		);
+	}
 	public static Labcdef From(final Fabcdef dao) {
 		return new Labcdef(
 			(long) dao.a,

@@ -51,6 +51,14 @@ public class Iabcd implements Serializable, Cloneable {
 			(int) dao.d
 		);
 	}
+	public static Iabcd From(final Yabcd dao) {
+		return new Iabcd(
+			(int) dao.a,
+			(int) dao.b,
+			(int) dao.c,
+			(int) dao.d
+		);
+	}
 	public static Iabcd From(final Fabcd dao) {
 		return new Iabcd(
 			(int) dao.a,

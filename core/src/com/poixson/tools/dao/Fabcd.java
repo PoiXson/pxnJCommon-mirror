@@ -59,6 +59,14 @@ public class Fabcd implements Serializable, Cloneable {
 			(float) dao.d
 		);
 	}
+	public static Fabcd From(final Yabcd dao) {
+		return new Fabcd(
+			(float) dao.a,
+			(float) dao.b,
+			(float) dao.c,
+			(float) dao.d
+		);
+	}
 	public static Fabcd From(final Dabcd dao) {
 		return new Fabcd(
 			(float) dao.a,
