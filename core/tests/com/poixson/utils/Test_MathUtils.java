@@ -1,5 +1,6 @@
 package com.poixson.utils;
 
+import static com.poixson.tools.Assertions.AssertArrayEquals;
 import static com.poixson.tools.Assertions.AssertEquals;
 import static com.poixson.tools.Assertions.AssertFalse;
 import static com.poixson.tools.Assertions.AssertTrue;
@@ -10,6 +11,7 @@ import static com.poixson.utils.MathUtils.CastFloat;
 import static com.poixson.utils.MathUtils.CastInteger;
 import static com.poixson.utils.MathUtils.CastLong;
 import static com.poixson.utils.MathUtils.CastShort;
+import static com.poixson.utils.MathUtils.CharToBytes;
 import static com.poixson.utils.MathUtils.DistanceAxial;
 import static com.poixson.utils.MathUtils.DistanceHybrid2D;
 import static com.poixson.utils.MathUtils.DistanceHybrid3D;
@@ -191,6 +193,16 @@ public class Test_MathUtils {
 		AssertEquals( Float.valueOf( 12.3f),      CastFloat(   (Object) Float.valueOf(12.3f)       ) );
 		AssertEquals( Boolean.TRUE,               CastBoolean( (Object) Boolean.valueOf(true)      ) );
 		AssertEquals( Boolean.FALSE,              CastBoolean( (Object) Boolean.valueOf(false)     ) );
+	}
+
+
+
+	@Test
+	public void testCharToBytes() {
+		AssertEquals(0x100,  MathUtils.BYTE_SIZE);
+		AssertEquals(0x100,  (Byte.MAX_VALUE-Byte.MIN_VALUE)+1);
+		AssertEquals(0xffff, Character.MAX_VALUE);
+		AssertArrayEquals(new byte[] { 35, 41 }, CharToBytes((char)9001));
 	}
 
 

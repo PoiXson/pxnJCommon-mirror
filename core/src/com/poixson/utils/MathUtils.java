@@ -22,6 +22,10 @@ public final class MathUtils {
 
 
 
+	public static final int BYTE_SIZE = 0x100;
+
+
+
 	/**
 	 * Max valid tcp/udp port number.
 	 */
@@ -117,6 +121,16 @@ public final class MathUtils {
 		for (int i=0; i<bit; i++)
 			result *= 2;
 		return result;
+	}
+
+
+
+	public static byte[] CharToBytes(final char chr) {
+		final int byte_max = 0x100;
+		final int value = (int) chr;
+		final int value_high = value / byte_max;
+		final int value_low  = value - (value_high * byte_max);
+		return new byte[] { (byte)value_high, (byte)value_low };
 	}
 
 
