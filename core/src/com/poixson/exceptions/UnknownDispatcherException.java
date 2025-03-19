@@ -1,15 +1,15 @@
 package com.poixson.exceptions;
 
 
-public class UnknownThreadPoolException extends RuntimeException {
+public class UnknownDispatcherException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
-	public static final String MSG = "Unknown xThreadPool: %s";
+	public static final String MSG = "Unknown xDispatcher: %s";
 
 
 
-	public UnknownThreadPoolException(final String pool_name) {
-		super(String.format(MSG, pool_name));
+	public UnknownDispatcherException(final String key) {
+		super(String.format(MSG, key));
 	}
 
 
