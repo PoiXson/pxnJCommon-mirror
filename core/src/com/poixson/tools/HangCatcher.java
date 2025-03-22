@@ -12,8 +12,8 @@ import com.poixson.tools.abstractions.startstop.xStartStop;
 
 public class HangCatcher implements xStartStop, Runnable {
 
-	public static final long DEFAULT_TIMEOUT = 10000L; // 10s
-	public static final long DEFAULT_SLEEP   = 100L;   // 100ms
+	public static final long DEFAULT_TIMEOUT = xTime.ParseToLong(  "10s");
+	public static final long DEFAULT_SLEEP   = xTime.ParseToLong("100ms");
 
 	protected final AtomicReference<Thread> thread = new AtomicReference<Thread>(null);
 

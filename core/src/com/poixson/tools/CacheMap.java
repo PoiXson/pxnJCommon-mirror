@@ -17,9 +17,9 @@ import com.poixson.tools.abstractions.Triple;
 public class CacheMap<K, V> implements Map<K, V> {
 
 	public static final String SECONDS_PER_CYCLE = "10s";
-	protected static final long DEFAULT_CYCLES_TIMEOUT  = (int) xTime.Parse( "2m").get(SECONDS_PER_CYCLE);
-	protected static final long DEFAULT_CYCLES_SAVE     = (int) xTime.Parse("20s").get(SECONDS_PER_CYCLE);
-	protected static final long DEFAULT_CYCLES_SAVE_MAX = (int) xTime.Parse( "1m").get(SECONDS_PER_CYCLE);
+	protected static final long DEFAULT_CYCLES_TIMEOUT  = xTime.Parse( "2m").get(SECONDS_PER_CYCLE);
+	protected static final long DEFAULT_CYCLES_SAVE     = xTime.Parse("20s").get(SECONDS_PER_CYCLE);
+	protected static final long DEFAULT_CYCLES_SAVE_MAX = xTime.Parse( "1m").get(SECONDS_PER_CYCLE);
 
 	protected final AtomicBoolean inited = new AtomicBoolean(false);
 

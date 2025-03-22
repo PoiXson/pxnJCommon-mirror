@@ -133,7 +133,7 @@ public final class ThreadUtils {
 		} catch (InterruptedException ignore) {}
 	}
 	public static void Sleep(final String time) {
-		Sleep( new xTime(time) );
+		Sleep(xTime.Parse(time));
 	}
 	public static void Sleep(final xTime time) {
 		if (time == null) return;
