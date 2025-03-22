@@ -1,5 +1,6 @@
 package com.poixson.tools;
 
+import static com.poixson.utils.MathUtils.SafeLongToInt
 import static com.poixson.utils.StringUtils.IsWhiteSpace;
 import static com.poixson.utils.StringUtils.MergeStrings;
 import static com.poixson.utils.Utils.GetMS;
@@ -238,6 +239,24 @@ public class xTime {
 			);
 		}
 		return value;
+	}
+
+
+
+	@Override
+	public int hashCode() {
+		return SafeLongToInt(this.ms());
+	}
+
+
+
+	@Override
+	public boolean equals(final Object match) {
+		if (match != null) {
+			if (match instanceof xTime time)
+				return (this.ms() == time.ms());
+		}
+		return false;
 	}
 
 
