@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated: Sun Feb  2 12:09:17 AM EST 2025 -->
+<!-- Generated: Sat Mar 22 03:41:03 AM EDT 2025 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -70,6 +70,7 @@
 			<url>https://dl.poixson.com/ADD-PXN-V1.txt</url>
 		</license>
 	</licenses>
+
 	<build>
 		<directory>target/</directory>
 		<sourceDirectory>src/</sourceDirectory>
@@ -91,8 +92,55 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 					<nonFilteredFileExtensions>
 						<nonFilteredFileExtension>png</nonFilteredFileExtension>
+						<nonFilteredFileExtension>jpg</nonFilteredFileExtension>
+						<nonFilteredFileExtension>gif</nonFilteredFileExtension>
+						<nonFilteredFileExtension>ico</nonFilteredFileExtension>
+						<nonFilteredFileExtension>pdf</nonFilteredFileExtension>
+						<nonFilteredFileExtension>bin</nonFilteredFileExtension>
+						<nonFilteredFileExtension>jar</nonFilteredFileExtension>
+						<nonFilteredFileExtension>zip</nonFilteredFileExtension>
+						<nonFilteredFileExtension>gz</nonFilteredFileExtension>
+						<nonFilteredFileExtension>tar</nonFilteredFileExtension>
+						<nonFilteredFileExtension>tgz</nonFilteredFileExtension>
+						<nonFilteredFileExtension>rar</nonFilteredFileExtension>
+						<nonFilteredFileExtension>rpm</nonFilteredFileExtension>
+						<nonFilteredFileExtension>deb</nonFilteredFileExtension>
+						<nonFilteredFileExtension>app</nonFilteredFileExtension>
 						<nonFilteredFileExtension>so</nonFilteredFileExtension>
 						<nonFilteredFileExtension>dll</nonFilteredFileExtension>
+						<nonFilteredFileExtension>phar</nonFilteredFileExtension>
+						<nonFilteredFileExtension>bin</nonFilteredFileExtension>
+						<nonFilteredFileExtension>hex</nonFilteredFileExtension>
+						<nonFilteredFileExtension>so</nonFilteredFileExtension>
+						<nonFilteredFileExtension>exe</nonFilteredFileExtension>
+						<nonFilteredFileExtension>cmd</nonFilteredFileExtension>
+						<nonFilteredFileExtension>scr</nonFilteredFileExtension>
+						<nonFilteredFileExtension>iso</nonFilteredFileExtension>
+						<nonFilteredFileExtension>class</nonFilteredFileExtension>
+						<nonFilteredFileExtension>o</nonFilteredFileExtension>
+						<nonFilteredFileExtension>a</nonFilteredFileExtension>
+						<nonFilteredFileExtension>obj</nonFilteredFileExtension>
+						<nonFilteredFileExtension>dll</nonFilteredFileExtension>
+						<nonFilteredFileExtension>lib</nonFilteredFileExtension>
+						<nonFilteredFileExtension>dylib</nonFilteredFileExtension>
+						<nonFilteredFileExtension>apk</nonFilteredFileExtension>
+						<nonFilteredFileExtension>war</nonFilteredFileExtension>
+						<nonFilteredFileExtension>ear</nonFilteredFileExtension>
+						<nonFilteredFileExtension>dump</nonFilteredFileExtension>
+						<nonFilteredFileExtension>db</nonFilteredFileExtension>
+						<nonFilteredFileExtension>out</nonFilteredFileExtension>
+						<nonFilteredFileExtension>output</nonFilteredFileExtension>
+						<nonFilteredFileExtension>swp</nonFilteredFileExtension>
+						<nonFilteredFileExtension>map</nonFilteredFileExtension>
+						<nonFilteredFileExtension>woff</nonFilteredFileExtension>
+						<nonFilteredFileExtension>woff2</nonFilteredFileExtension>
+						<nonFilteredFileExtension>mp3</nonFilteredFileExtension>
+						<nonFilteredFileExtension>mp4</nonFilteredFileExtension>
+						<nonFilteredFileExtension>ogg</nonFilteredFileExtension>
+						<nonFilteredFileExtension>avi</nonFilteredFileExtension>
+						<nonFilteredFileExtension>mkv</nonFilteredFileExtension>
+						<nonFilteredFileExtension>wav</nonFilteredFileExtension>
+						<nonFilteredFileExtension>ttf</nonFilteredFileExtension>
 					</nonFilteredFileExtensions>
 				</configuration>
 			</plugin>
@@ -112,6 +160,13 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>${maven-jar-plugin-version}</version>
+				<executions>
+					<execution>
+						<id>test-jar</id>
+						<phase>package</phase>
+						<goals><goal>test-jar</goal></goals>
+					</execution>
+				</executions>
 			</plugin>
 			<!-- Maven Version Enforcer Plugin -->
 			<plugin>
@@ -122,15 +177,9 @@
 				<executions>
 					<execution>
 						<id>enforce-maven-version</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
+						<goals><goal>enforce</goal></goals>
 						<configuration>
-							<rules>
-								<requireMavenVersion>
-									<version>3.8.5</version>
-								</requireMavenVersion>
-							</rules>
+							<rules><requireMavenVersion><version>3.8.5</version></requireMavenVersion></rules>
 							<fail>true</fail>
 						</configuration>
 					</execution>
@@ -154,9 +203,7 @@
 				<executions>
 					<execution>
 						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
+						<goals><goal>jar</goal></goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -168,10 +215,8 @@
 				<executions>
 					<execution>
 						<id>get-the-git-infos</id>
-						<goals>
-							<goal>revision</goal>
-						</goals>
 						<phase>validate</phase>
+						<goals><goal>revision</goal></goals>
 					</execution>
 				</executions>
 				<configuration>
@@ -197,16 +242,12 @@
 				<version>${jacoco-version}</version>
 				<executions>
 					<execution>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
+						<goals><goal>prepare-agent</goal></goals>
 					</execution>
 					<execution>
 						<id>report</id>
 						<phase>test</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
+						<goals><goal>report</goal></goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -224,6 +265,7 @@
 			</plugin>
 		</plugins>
 	</build>
+
 	<dependencies>
 		<dependency>
 			<artifactId>jansi</artifactId>
@@ -250,6 +292,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
 	<reporting>
 		<plugins>
 			<!-- JaCoCo - Code Coverage -->
@@ -257,13 +300,7 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>${jacoco-version}</version>
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>report</report>
-						</reports>
-					</reportSet>
-				</reportSets>
+				<reportSets><reportSet><reports><report>report</report></reports></reportSet></reportSets>
 			</plugin>
 			<!-- Reports Plugin -->
 			<plugin>
@@ -282,4 +319,5 @@
 			</plugin>
 		</plugins>
 	</reporting>
+
 </project>
