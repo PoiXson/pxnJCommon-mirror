@@ -177,7 +177,8 @@ public class xTime {
 		final StringBuilder buf_unit = new StringBuilder();
 		boolean moreNumbers = true;
 		boolean decimal = false;
-		for (char chr : (str+"  ").toCharArray()) {
+		final char[] chars = (str+"  ").toCharArray();
+		for (char chr : chars) {
 			if (moreNumbers) {
 				if (chr == '.') {
 					decimal = true;

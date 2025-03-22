@@ -19,16 +19,16 @@ public class CoolDown {
 	public CoolDown(final String duration) {
 		this(xTime.Parse(duration));
 	}
-	public CoolDown(final xTime timeDuration) {
-		this(timeDuration.ms(), 0L);
+	public CoolDown(final xTime duration) {
+		this(duration.ms(), 0L);
 	}
-	public CoolDown(final long msDuration) {
-		this(msDuration, 0L);
+	public CoolDown(final long duration) {
+		this(duration, 0L);
 	}
 
-	public CoolDown(final long msDuration, final long msLast) {
-		this.duration.set(msDuration);
-		this.last.set(msLast);
+	public CoolDown(final long duration, final long last) {
+		this.duration.set(duration);
+		this.last.set(last);
 	}
 
 
@@ -134,7 +134,7 @@ public class CoolDown {
 		// disabled
 		if (duration <= 0L)
 			return -1L;
-		return ( (last + duration) - this.getCurrent() );
+		return (last + duration) - this.getCurrent();
 	}
 
 

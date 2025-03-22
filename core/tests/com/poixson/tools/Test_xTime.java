@@ -17,46 +17,34 @@ public class Test_xTime {
 
 	@Test
 	public void testConstruct() {
-		// ()
-		{
-			final xTime time = new xTime();
-			AssertEquals( 0L, time.ms() );
-		}
-		// (ms)
-		{
-			final xTime time = new xTime(123L);
-			AssertEquals( 123L, time.ms() );
-		}
-		// (value, xunit)
-		{
-			final xTime time = new xTime(123L, xTimeU.S);
-			AssertEquals( 123000L, time.ms() );
-		}
-		// (value, unit)
-		{
-			final xTime time = new xTime(123L, TimeUnit.SECONDS);
-			AssertEquals( 123000L, time.ms() );
-		}
-		// (string)
-		{
-			final xTime time = new xTime("123s");
-			AssertEquals( 123000L, time.ms() );
-		}
+		AssertEquals(     0L, (new xTime(                       )).ms() ); // ()
+		AssertEquals(   123L, (new xTime( 123L                  )).ms() ); // (ms)
+		AssertEquals(123000L, (new xTime( 123L, xTimeU.S        )).ms() ); // (value, xunit)
+		AssertEquals(123000L, (new xTime( 123L, TimeUnit.SECONDS)).ms() ); // (value, unit)
+		AssertEquals(123000L, (new xTime("123s"                 )).ms() ); // (string)
 		// (xtime)
 		{
 			final xTime timeA = new xTime(123L);
 			final xTime timeB = new xTime(timeA);
-			AssertNotEquals( timeA, timeB );
-			AssertEquals( 123L, timeA.ms() );
-			AssertEquals( 123L, timeB.ms() );
+			AssertEquals(timeA, timeB);
+			AssertEquals(123L, timeA.ms());
+			AssertEquals(123L, timeB.ms());
+			timeB.add("1ms");
+			AssertNotEquals(timeA, timeB);
+			AssertEquals(123L, timeA.ms());
+			AssertEquals(124L, timeB.ms());
 		}
 		// clone()
 		{
 			final xTime timeA = new xTime(123L);
 			final xTime timeB = timeA.clone();
+			AssertEquals(timeA, timeB);
+			AssertEquals(123L, timeA.ms());
+			AssertEquals(123L, timeB.ms());
+			timeB.add("1ms");
 			AssertNotEquals( timeA, timeB );
-			AssertEquals( 123L, timeA.ms() );
-			AssertEquals( 123L, timeB.ms() );
+			AssertEquals(123L, timeA.ms());
+			AssertEquals(124L, timeB.ms());
 		}
 	}
 
