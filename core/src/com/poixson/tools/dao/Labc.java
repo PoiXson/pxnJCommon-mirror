@@ -64,8 +64,7 @@ public class Labc implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Labc) {
-			final Labc dao = (Labc) obj;
+		if (obj instanceof Labc dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b &&

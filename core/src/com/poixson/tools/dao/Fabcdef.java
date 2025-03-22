@@ -85,8 +85,7 @@ public class Fabcdef implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Fabcdef) {
-			final Fabcdef dao = (Fabcdef) obj;
+		if (obj instanceof Fabcdef dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b &&

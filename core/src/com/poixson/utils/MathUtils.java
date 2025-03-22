@@ -157,12 +157,12 @@ public final class MathUtils {
 	}
 	public static Integer CastInteger(final Object obj) {
 		if (obj == null) return null;
-		if (obj instanceof Integer) return (Integer) obj;
-		if (obj instanceof Long   ) return Integer.valueOf( (int)Math.round( ((Long  )obj).longValue()   ) );
-		if (obj instanceof Double ) return Integer.valueOf( (int)Math.round( ((Double)obj).doubleValue() ) );
-		if (obj instanceof Float  ) return Integer.valueOf( (int)Math.round( ((Float )obj).floatValue()  ) );
-		if (obj instanceof Short  ) return Integer.valueOf( (int)Math.round( ((Short )obj).shortValue()  ) );
-		if (obj instanceof Byte   ) return Integer.valueOf( (int)Math.round( ((Byte  )obj).byteValue()   ) );
+		if (obj instanceof Integer v) return v;
+		if (obj instanceof Long    v) return Integer.valueOf((int)Math.round(v.longValue()  ));
+		if (obj instanceof Double  v) return Integer.valueOf((int)Math.round(v.doubleValue()));
+		if (obj instanceof Float   v) return Integer.valueOf((int)Math.round(v.floatValue() ));
+		if (obj instanceof Short   v) return Integer.valueOf((int)Math.round(v.shortValue() ));
+		if (obj instanceof Byte    v) return Integer.valueOf((int)Math.round(v.byteValue()  ));
 		throw new IllegalArgumentException("Invalid integer value: "+obj.toString());
 	}
 	public static int CastInt(final Object obj, final int def) {
@@ -197,12 +197,12 @@ public final class MathUtils {
 	}
 	public static Byte CastByte(final Object obj) {
 		if (obj == null) return null;
-		if (obj instanceof Byte   ) return (Byte) obj;
-		if (obj instanceof Integer) return Byte.valueOf( (byte)Math.round( ((Integer)obj).intValue()    ) );
-		if (obj instanceof Long   ) return Byte.valueOf( (byte)Math.round( ((Long   )obj).longValue()   ) );
-		if (obj instanceof Double ) return Byte.valueOf( (byte)Math.round( ((Double )obj).doubleValue() ) );
-		if (obj instanceof Float  ) return Byte.valueOf( (byte)Math.round( ((Float  )obj).floatValue()  ) );
-		if (obj instanceof Short  ) return Byte.valueOf( (byte)Math.round( ((Short  )obj).shortValue()  ) );
+		if (obj instanceof Byte    v) return v;
+		if (obj instanceof Integer v) return Byte.valueOf((byte)Math.round(v.intValue()   ));
+		if (obj instanceof Long    v) return Byte.valueOf((byte)Math.round(v.longValue()  ));
+		if (obj instanceof Double  v) return Byte.valueOf((byte)Math.round(v.doubleValue()));
+		if (obj instanceof Float   v) return Byte.valueOf((byte)Math.round(v.floatValue() ));
+		if (obj instanceof Short   v) return Byte.valueOf((byte)Math.round(v.shortValue() ));
 		throw new IllegalArgumentException("Invalid byte value: "+obj.toString());
 	}
 	public static byte CastByt(final Object obj, final byte def) {
@@ -237,12 +237,12 @@ public final class MathUtils {
 	}
 	public static Short CastShort(final Object obj) {
 		if (obj == null) return null;
-		if (obj instanceof Short  ) return (Short) obj;
-		if (obj instanceof Integer) return Short.valueOf( (short)Math.round( ((Integer)obj).intValue()    ) );
-		if (obj instanceof Long   ) return Short.valueOf( (short)Math.round( ((Long   )obj).longValue()   ) );
-		if (obj instanceof Double ) return Short.valueOf( (short)Math.round( ((Double )obj).doubleValue() ) );
-		if (obj instanceof Float  ) return Short.valueOf( (short)Math.round( ((Float  )obj).floatValue()  ) );
-		if (obj instanceof Byte   ) return Short.valueOf( (short)Math.round( ((Byte   )obj).byteValue()   ) );
+		if (obj instanceof Short   v) return v;
+		if (obj instanceof Integer v) return Short.valueOf((short)Math.round(v.intValue()   ));
+		if (obj instanceof Long    v) return Short.valueOf((short)Math.round(v.longValue()  ));
+		if (obj instanceof Double  v) return Short.valueOf((short)Math.round(v.doubleValue()));
+		if (obj instanceof Float   v) return Short.valueOf((short)Math.round(v.floatValue() ));
+		if (obj instanceof Byte    v) return Short.valueOf((short)Math.round(v.byteValue()  ));
 		throw new IllegalArgumentException("Invalid short value: "+obj.toString());
 	}
 	public static short CastShrt(final Object obj, final short def) {
@@ -277,12 +277,12 @@ public final class MathUtils {
 	}
 	public static Long CastLong(final Object obj) {
 		if (obj == null) return null;
-		if (obj instanceof Long) return (Long) obj;
-		if (obj instanceof Integer) return Long.valueOf( (long)Math.round( ((Integer)obj).intValue()    ) );
-		if (obj instanceof Double ) return Long.valueOf( (long)Math.round( ((Double )obj).doubleValue() ) );
-		if (obj instanceof Float  ) return Long.valueOf( (long)Math.round( ((Float  )obj).floatValue()  ) );
-		if (obj instanceof Short  ) return Long.valueOf( (long)Math.round( ((Short  )obj).shortValue()  ) );
-		if (obj instanceof Byte   ) return Long.valueOf( (long)Math.round( ((Byte   )obj).byteValue()   ) );
+		if (obj instanceof Long    v) return v;
+		if (obj instanceof Integer v) return Long.valueOf((long)Math.round(v.intValue()   ));
+		if (obj instanceof Double  v) return Long.valueOf((long)Math.round(v.doubleValue()));
+		if (obj instanceof Float   v) return Long.valueOf((long)Math.round(v.floatValue() ));
+		if (obj instanceof Short   v) return Long.valueOf((long)Math.round(v.shortValue() ));
+		if (obj instanceof Byte    v) return Long.valueOf((long)Math.round(v.byteValue()  ));
 		throw new IllegalArgumentException("Invalid long value: "+obj.toString());
 	}
 	public static long CastLng(final Object obj, final long def) {
@@ -317,12 +317,12 @@ public final class MathUtils {
 	}
 	public static Double CastDouble(final Object obj) {
 		if (obj == null) return null;
-		if (obj instanceof Double ) return (Double) obj;
-		if (obj instanceof Integer) return Double.valueOf( (double)Math.round( ((Integer)obj).intValue()    ) );
-		if (obj instanceof Long   ) return Double.valueOf( (double)Math.round( ((Long   )obj).longValue()   ) );
-		if (obj instanceof Float  ) return Double.valueOf( (double)Math.round( ((Float  )obj).floatValue()  ) );
-		if (obj instanceof Short  ) return Double.valueOf( (double)Math.round( ((Short  )obj).shortValue()  ) );
-		if (obj instanceof Byte   ) return Double.valueOf( (double)Math.round( ((Byte   )obj).byteValue()   ) );
+		if (obj instanceof Double  v) return v;
+		if (obj instanceof Integer v) return Double.valueOf((double)Math.round(v.intValue()  ));
+		if (obj instanceof Long    v) return Double.valueOf((double)Math.round(v.longValue() ));
+		if (obj instanceof Float   v) return Double.valueOf((double)Math.round(v.floatValue()));
+		if (obj instanceof Short   v) return Double.valueOf((double)Math.round(v.shortValue()));
+		if (obj instanceof Byte    v) return Double.valueOf((double)Math.round(v.byteValue() ));
 		throw new IllegalArgumentException("Invalid double value: "+obj.toString());
 	}
 	public static double CastDbl(final Object obj, final double def) {
@@ -357,12 +357,12 @@ public final class MathUtils {
 	}
 	public static Float CastFloat(final Object obj) {
 		if (obj == null) return null;
-		if (obj instanceof Float) return (Float) obj;
-		if (obj instanceof Integer) return Float.valueOf( (float)Math.round( ((Integer)obj).intValue()    ) );
-		if (obj instanceof Long   ) return Float.valueOf( (float)Math.round( ((Long   )obj).longValue()   ) );
-		if (obj instanceof Double ) return Float.valueOf( (float)Math.round( ((Double )obj).doubleValue() ) );
-		if (obj instanceof Short  ) return Float.valueOf( (float)Math.round( ((Short  )obj).shortValue()  ) );
-		if (obj instanceof Byte   ) return Float.valueOf( (float)Math.round( ((Byte   )obj).byteValue()   ) );
+		if (obj instanceof Float   v) return v;
+		if (obj instanceof Integer v) return Float.valueOf((float)Math.round(v.intValue()   ));
+		if (obj instanceof Long    v) return Float.valueOf((float)Math.round(v.longValue()  ));
+		if (obj instanceof Double  v) return Float.valueOf((float)Math.round(v.doubleValue()));
+		if (obj instanceof Short   v) return Float.valueOf((float)Math.round(v.shortValue() ));
+		if (obj instanceof Byte    v) return Float.valueOf((float)Math.round(v.byteValue()  ));
 		throw new IllegalArgumentException("Invalid float value: "+obj.toString());
 	}
 	public static float CastFlt(final Object obj, final float def) {
@@ -411,12 +411,9 @@ public final class MathUtils {
 	public static Boolean CastBoolean(final Object obj) {
 		if (obj == null)
 			return null;
-		if (obj instanceof Boolean)
-			return (Boolean) obj;
-		if (obj instanceof Integer)
-			return Boolean.valueOf( ((Integer)obj).intValue() != 0 );
-		if (obj instanceof String) {
-			final String str = (String) obj;
+		if (obj instanceof Boolean v) return v;
+		if (obj instanceof Integer v) return Boolean.valueOf(v.intValue() != 0);
+		if (obj instanceof String str) {
 			for (final String entry : TRUE_VALUES) {
 				if (entry.equalsIgnoreCase(str))
 					return Boolean.TRUE;

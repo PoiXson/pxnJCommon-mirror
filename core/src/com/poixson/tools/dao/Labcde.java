@@ -78,8 +78,7 @@ public class Labcde implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Labcde) {
-			final Labcde dao = (Labcde) obj;
+		if (obj instanceof Labcde dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b &&

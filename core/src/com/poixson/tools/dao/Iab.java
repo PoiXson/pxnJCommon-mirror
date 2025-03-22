@@ -57,8 +57,7 @@ public class Iab implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Iab) {
-			final Iab dao = (Iab) obj;
+		if (obj instanceof Iab dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b

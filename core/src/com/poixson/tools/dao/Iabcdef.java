@@ -85,8 +85,7 @@ public class Iabcdef implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Iabcdef) {
-			final Iabcdef dao = (Iabcdef) obj;
+		if (obj instanceof Iabcdef dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b &&

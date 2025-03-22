@@ -27,8 +27,8 @@ public final class GsonProvider {
 		{
 			GsonBuilder builder = null;
 			int index = 0;
-			if (args[index] instanceof GsonBuilder) {
-				builder = (GsonBuilder) args[index];
+			if (args[index] instanceof GsonBuilder b) {
+				builder = b;
 				index++;
 			}
 			if (builder == null)

@@ -39,8 +39,7 @@ public class Bab implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Bab) {
-			final Bab dao = (Bab) obj;
+		if (obj instanceof Bab dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b

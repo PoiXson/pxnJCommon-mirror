@@ -35,8 +35,8 @@ public final class ReflectUtils {
 
 	public static String GetClassName(final Object obj) {
 		if (obj == null) return null;
-		if (obj instanceof Class)
-			return ((Class<?>) obj).getSimpleName();
+		if (obj instanceof Class clss)
+			return clss.getSimpleName();
 		return obj.getClass().getSimpleName();
 	}
 
@@ -106,7 +106,9 @@ public final class ReflectUtils {
 			final String methodName, final Class<?>...args) {
 		if (container == null)   throw new RequiredArgumentException("container");
 		if (IsEmpty(methodName)) throw new RequiredArgumentException("methodName");
-		final Class<?> clss = ( container instanceof Class ? (Class<?>) container : container.getClass() );
+		final Class<?> clss;
+		if (container instanceof Class c) clss = c;
+		else                              clss = container.getClass();
 		if (clss == null) return null;
 		try {
 			return clss.getMethod( methodName, args);
@@ -166,7 +168,8 @@ public final class ReflectUtils {
 		if (IsEmpty(args)) return null;
 		final Class<?>[] classes = new Class[args.length];
 		for (int i=0; i<args.length; i++) {
-			classes[i] = ( args[i] instanceof Class ? (Class<?>) args[i] : args[i].getClass() );
+			if (args[i] instanceof Class clss) classes[i] = clss;
+			else                               classes[i] = args[i].getClass();
 		}
 		return classes;
 	}

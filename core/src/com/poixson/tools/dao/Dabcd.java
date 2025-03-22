@@ -71,8 +71,7 @@ public class Dabcd implements Serializable, Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (obj instanceof Dabcd) {
-			final Dabcd dao = (Dabcd) obj;
+		if (obj instanceof Dabcd dao) {
 			return (
 				this.a == dao.a &&
 				this.b == dao.b &&

@@ -60,13 +60,13 @@ public final class StringUtils {
 			}
 			return result.toString();
 		}
-		if (obj instanceof Boolean  ) return ( ((Boolean)obj).booleanValue() ? "<TRUE>" : "<false>" );
-		if (obj instanceof String   ) return (String) obj;
-		if (obj instanceof Integer  ) return ((Integer) obj).toString();
-		if (obj instanceof Long     ) return ((Long)    obj).toString();
-		if (obj instanceof Double   ) return ((Double)  obj).toString();
-		if (obj instanceof Float    ) return ((Float)   obj).toString();
-		if (obj instanceof Exception) return ExceptionToString((Exception) obj);
+		if (obj instanceof Boolean   v) return (v.booleanValue() ? "<TRUE>" : "<false>" );
+		if (obj instanceof String    v) return v;
+		if (obj instanceof Integer   v) return v.toString();
+		if (obj instanceof Long      v) return v.toString();
+		if (obj instanceof Double    v) return v.toString();
+		if (obj instanceof Float     v) return v.toString();
+		if (obj instanceof Exception e) return ExceptionToString(e);
 		// unknown object
 		return obj.toString();
 	}
