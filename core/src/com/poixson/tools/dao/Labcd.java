@@ -41,7 +41,17 @@ public class Labcd implements Serializable, Cloneable {
 		return new Labcd(this.a, this.b, this.c, this.d);
 	}
 
+
+
 	public static Labcd From(final Iabcd dao) {
+		return new Labcd(
+			(long) dao.a,
+			(long) dao.b,
+			(long) dao.c,
+			(long) dao.d
+		);
+	}
+	public static Labcd From(final Yabcd dao) {
 		return new Labcd(
 			(long) dao.a,
 			(long) dao.b,

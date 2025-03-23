@@ -37,6 +37,8 @@ public class Dabc implements Serializable, Cloneable {
 		return new Dabc(this.a, this.b, this.c);
 	}
 
+
+
 	public static Dabc From(final Iabc dao) {
 		return new Dabc(
 			(double) dao.a,
@@ -45,6 +47,13 @@ public class Dabc implements Serializable, Cloneable {
 		);
 	}
 	public static Dabc From(final Labc dao) {
+		return new Dabc(
+			(double) dao.a,
+			(double) dao.b,
+			(double) dao.c
+		);
+	}
+	public static Dabc From(final Yabc dao) {
 		return new Dabc(
 			(double) dao.a,
 			(double) dao.b,

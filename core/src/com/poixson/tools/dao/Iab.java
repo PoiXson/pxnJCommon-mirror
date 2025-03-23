@@ -33,7 +33,15 @@ public class Iab implements Serializable, Cloneable {
 		return new Iab(this.a, this.b);
 	}
 
+
+
 	public static Iab From(final Lab dao) {
+		return new Iab(
+			(int) dao.a,
+			(int) dao.b
+		);
+	}
+	public static Iab From(final Yab dao) {
 		return new Iab(
 			(int) dao.a,
 			(int) dao.b

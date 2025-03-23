@@ -45,7 +45,18 @@ public class Iabcde implements Serializable, Cloneable {
 		return new Iabcde(this.a, this.b, this.c, this.d, this.e);
 	}
 
+
+
 	public static Iabcde From(final Labcde dao) {
+		return new Iabcde(
+			(int) dao.a,
+			(int) dao.b,
+			(int) dao.c,
+			(int) dao.d,
+			(int) dao.e
+		);
+	}
+	public static Iabcde From(final Yabcde dao) {
 		return new Iabcde(
 			(int) dao.a,
 			(int) dao.b,

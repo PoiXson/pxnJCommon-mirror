@@ -49,7 +49,19 @@ public class Iabcdef implements Serializable, Cloneable {
 		return new Iabcdef(this.a, this.b, this.c, this.d, this.e, this.f);
 	}
 
+
+
 	public static Iabcdef From(final Labcdef dao) {
+		return new Iabcdef(
+			(int) dao.a,
+			(int) dao.b,
+			(int) dao.c,
+			(int) dao.d,
+			(int) dao.e,
+			(int) dao.f
+		);
+	}
+	public static Iabcdef From(final Yabcdef dao) {
 		return new Iabcdef(
 			(int) dao.a,
 			(int) dao.b,

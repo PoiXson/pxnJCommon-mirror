@@ -45,6 +45,8 @@ public class Fabcde implements Serializable, Cloneable {
 		return new Fabcde(this.a, this.b, this.c, this.d, this.e);
 	}
 
+
+
 	public static Fabcde From(final Iabcde dao) {
 		return new Fabcde(
 			(float) dao.a,
@@ -55,6 +57,15 @@ public class Fabcde implements Serializable, Cloneable {
 		);
 	}
 	public static Fabcde From(final Labcde dao) {
+		return new Fabcde(
+			(float) dao.a,
+			(float) dao.b,
+			(float) dao.c,
+			(float) dao.d,
+			(float) dao.e
+		);
+	}
+	public static Fabcde From(final Yabcde dao) {
 		return new Fabcde(
 			(float) dao.a,
 			(float) dao.b,

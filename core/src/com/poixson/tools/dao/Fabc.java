@@ -37,6 +37,8 @@ public class Fabc implements Serializable, Cloneable {
 		return new Fabc(this.a, this.b, this.c);
 	}
 
+
+
 	public static Fabc From(final Iabc dao) {
 		return new Fabc(
 			(float) dao.a,
@@ -45,6 +47,13 @@ public class Fabc implements Serializable, Cloneable {
 		);
 	}
 	public static Fabc From(final Labc dao) {
+		return new Fabc(
+			(float) dao.a,
+			(float) dao.b,
+			(float) dao.c
+		);
+	}
+	public static Fabc From(final Yabc dao) {
 		return new Fabc(
 			(float) dao.a,
 			(float) dao.b,

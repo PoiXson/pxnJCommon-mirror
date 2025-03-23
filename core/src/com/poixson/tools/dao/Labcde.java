@@ -45,7 +45,18 @@ public class Labcde implements Serializable, Cloneable {
 		return new Labcde(this.a, this.b, this.c, this.d, this.e);
 	}
 
+
+
 	public static Labcde From(final Iabcde dao) {
+		return new Labcde(
+			(long) dao.a,
+			(long) dao.b,
+			(long) dao.c,
+			(long) dao.d,
+			(long) dao.e
+		);
+	}
+	public static Labcde From(final Yabcde dao) {
 		return new Labcde(
 			(long) dao.a,
 			(long) dao.b,

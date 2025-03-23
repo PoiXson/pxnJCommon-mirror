@@ -33,6 +33,8 @@ public class Fab implements Serializable, Cloneable {
 		return new Fab(this.a, this.b);
 	}
 
+
+
 	public static Fab From(final Iab dao) {
 		return new Fab(
 			(float) dao.a,
@@ -40,6 +42,12 @@ public class Fab implements Serializable, Cloneable {
 		);
 	}
 	public static Fab From(final Lab dao) {
+		return new Fab(
+			(float) dao.a,
+			(float) dao.b
+		);
+	}
+	public static Fab From(final Yab dao) {
 		return new Fab(
 			(float) dao.a,
 			(float) dao.b

@@ -41,6 +41,8 @@ public class Dabcd implements Serializable, Cloneable {
 		return new Dabcd(this.a, this.b, this.c, this.d);
 	}
 
+
+
 	public static Dabcd From(final Iabcd dao) {
 		return new Dabcd(
 			(double) dao.a,
@@ -50,6 +52,14 @@ public class Dabcd implements Serializable, Cloneable {
 		);
 	}
 	public static Dabcd From(final Labcd dao) {
+		return new Dabcd(
+			(double) dao.a,
+			(double) dao.b,
+			(double) dao.c,
+			(double) dao.d
+		);
+	}
+	public static Dabcd From(final Yabcd dao) {
 		return new Dabcd(
 			(double) dao.a,
 			(double) dao.b,
