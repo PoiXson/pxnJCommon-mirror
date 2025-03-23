@@ -336,6 +336,21 @@ public final class Utils {
 
 
 	// -------------------------------------------------------------------------------
+	// interrupt
+
+
+
+	public static void SafeInterrupt(final Thread thread) {
+		if (thread != null) {
+			try {
+				thread.interrupt();
+			} catch (Exception ignore) {}
+		}
+	}
+
+
+
+	// -------------------------------------------------------------------------------
 	// exceptions
 
 
