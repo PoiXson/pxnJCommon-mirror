@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -1308,13 +1309,28 @@ final String sub = SubString(str_prep, pos, strip_len[index]);
 
 
 
-	// decode string
-	public static String Decode   (final String raw                         ) { return Decode(raw, null,       null); }
-	public static String DecodeDef(final String raw, final String defaultStr) { return Decode(raw, defaultStr, null); }
-	public static String DecodeCh (final String raw, final String charset   ) { return Decode(raw, null,    charset); }
-	public static String Decode(final String raw, final String defaultStr, final String charset) {
+	// encode string
+	public static String UrlEncode   (final String raw                         ) { return UrlEncode(raw, null,       null); }
+	public static String UrlEncodeDef(final String raw, final String defaultStr) { return UrlEncode(raw, defaultStr, null); }
+	public static String UrlEncodeCh (final String raw, final String charset   ) { return UrlEncode(raw, null,    charset); }
+	public static String UrlEncode(final String raw, final String defaultStr, final String charset) {
 		if (charset == null)
-			return Decode(raw, defaultStr, DEFAULT_CHARSET.name());
+			return UrlEncode(raw, defaultStr, DEFAULT_CHARSET.name());
+		try {
+			return URLEncoder.encode(raw, charset);
+		} catch (UnsupportedEncodingException ignore) {}
+		return defaultStr;
+	}
+
+
+
+	// decode string
+	public static String UrlDecode   (final String raw                         ) { return UrlDecode(raw, null,       null); }
+	public static String UrlDecodeDef(final String raw, final String defaultStr) { return UrlDecode(raw, defaultStr, null); }
+	public static String UrlDecodeCh (final String raw, final String charset   ) { return UrlDecode(raw, null,    charset); }
+	public static String UrlDecode(final String raw, final String defaultStr, final String charset) {
+		if (charset == null)
+			return UrlDecode(raw, defaultStr, DEFAULT_CHARSET.name());
 		try {
 			return URLDecoder.decode(raw, charset);
 		} catch (UnsupportedEncodingException ignore) {}
