@@ -1,8 +1,11 @@
 package com.poixson.utils;
 
+import static com.poixson.utils.StringUtils.PadFront;
+import static com.poixson.utils.StringUtils.Repeat;
 import static com.poixson.utils.Utils.IsEmpty;
 
 import java.awt.Color;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalTime;
@@ -65,6 +68,27 @@ public final class MathUtils {
 		'd',
 		'n'
 	};
+
+
+
+	// -------------------------------------------------------------------------------
+	// hex
+
+
+
+	public static String ToHex(final int  value ) { return Integer.toHexString(value).toUpperCase(); }
+	public static String ToHex(final long value ) { return Long   .toHexString(value).toUpperCase(); }
+	public static String ToHex(final String data) { return ToHex(data.getBytes());                 }
+	public static String ToHex(final byte[] data) { return (new BigInteger(1, data)).toString(16); }
+
+	public static String ToHexPad(final int  value ) { return String.format("%016X", Integer.valueOf(value)); }
+	public static String ToHexPad(final long value ) { return String.format("%016X", Long   .valueOf(value)); }
+	public static String ToHexPad(final String data) { return PadFront(data.length()*2, ToHex(data ), '0');   }
+	public static String ToHexPad(final byte[] data) { return PadFront(data.length  *2, ToHex(data ), '0');   }
+
+	public static byte HexToByte(final String hex) { return Byte.parseByte  (hex, 16); }
+	public static long HexToInt (final String hex) { return Integer.parseInt(hex, 16); }
+	public static long HexToLong(final String hex) { return Long.parseLong  (hex, 16); }
 
 
 
@@ -486,7 +510,7 @@ public final class MathUtils {
 		final int zeros = len - str.length();
 		if (zeros < 1)
 			return str;
-		return StringUtils.Repeat(zeros, '0');
+		return Repeat(zeros, '0');
 	}
 
 

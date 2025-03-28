@@ -26,6 +26,8 @@ import static com.poixson.utils.MathUtils.ToBoolean;
 import static com.poixson.utils.MathUtils.ToByte;
 import static com.poixson.utils.MathUtils.ToDouble;
 import static com.poixson.utils.MathUtils.ToFloat;
+import static com.poixson.utils.MathUtils.ToHex;
+import static com.poixson.utils.MathUtils.ToHexPad;
 import static com.poixson.utils.MathUtils.ToInteger;
 import static com.poixson.utils.MathUtils.ToLong;
 import static com.poixson.utils.MathUtils.ToShort;
@@ -42,6 +44,32 @@ import com.poixson.tools.Assertions;
 public class Test_MathUtils {
 
 	private static final double DELTA = MathUtils.DELTA;
+
+
+
+	// -------------------------------------------------------------------------------
+	// hex
+
+
+
+	@Test
+	public void testHex() {
+		// long to hex
+		AssertEquals("0",   ToHex(  0L)); AssertEquals("0000000000000000", ToHexPad(  0L));
+		AssertEquals("1",   ToHex(  1L)); AssertEquals("0000000000000001", ToHexPad(  1L));
+		AssertEquals("A",   ToHex( 10L)); AssertEquals("000000000000000A", ToHexPad( 10L));
+		AssertEquals("10",  ToHex( 16L)); AssertEquals("0000000000000010", ToHexPad( 16L));
+		AssertEquals("FF",  ToHex(255L)); AssertEquals("00000000000000FF", ToHexPad(255L));
+		AssertEquals("100", ToHex(256L)); AssertEquals("0000000000000100", ToHexPad(256L));
+		AssertEquals("7FFFFFFFFFFFFFFF", ToHex(   Long.MAX_VALUE));
+		AssertEquals("7FFFFFFFFFFFFFFF", ToHexPad(Long.MAX_VALUE));
+//TODO
+		// string to hex
+		// bytes to hex
+		// hex to byte
+		// hex to int
+		// hex to long
+	}
 
 
 
