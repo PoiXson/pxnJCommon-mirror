@@ -1,3 +1,4 @@
+/*
 package com.poixson.scripting;
 
 import static com.poixson.utils.Utils.IsEmpty;
@@ -160,3 +161,4 @@ public class xScriptInstance extends xScript {
 
 
 }
+*/

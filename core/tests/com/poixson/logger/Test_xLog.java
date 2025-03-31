@@ -1,3 +1,4 @@
+/*
 package com.poixson.commonjava.xLogger;
 
 import org.junit.Assert;
@@ -78,3 +79,4 @@ public class xLogTest {
 
 
 }
+*/

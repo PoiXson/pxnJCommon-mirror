@@ -1,3 +1,4 @@
+/*
 package com.poixson.shell;
 
 import java.io.OutputStream;
@@ -32,3 +33,4 @@ public abstract class xConsole extends PrintStream implements xStartStop, Runnab
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.localization;
 
 import static com.poixson.tools.localization.LangShelf.GetPhrase;
@@ -112,3 +113,4 @@ public class LangBook extends ConcurrentHashMap<String, String> {
 
 
 }
+*/

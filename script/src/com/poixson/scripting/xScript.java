@@ -1,3 +1,4 @@
+/*
 package com.poixson.scripting;
 
 import static com.poixson.utils.Utils.GetMS;
@@ -105,3 +106,4 @@ public abstract class xScript implements xStartStop, Runnable {
 
 
 }
+*/

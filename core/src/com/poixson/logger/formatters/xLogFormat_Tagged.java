@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger.formatters;
 
 import static com.poixson.utils.StringUtils.FindLongestLine;
@@ -163,3 +164,4 @@ public class xLogFormat_Tagged implements xLogFormat {
 
 
 }
+*/

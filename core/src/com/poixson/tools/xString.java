@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools;
 
 import static com.poixson.utils.StringUtils.ForceEnds;
@@ -215,3 +216,4 @@ public class xString {
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.sequences;
 
 import static com.poixson.utils.MathUtils.CeilNormal;
@@ -62,3 +63,4 @@ public class OuterToInnerSquareXYZ implements Iterator<Iabc> {
 
 
 }
+*/

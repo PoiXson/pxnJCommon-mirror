@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.atomic;
 
 import static com.poixson.utils.MathUtils.IsMinMax;
@@ -177,3 +178,4 @@ public class AtomicModularLong extends Number implements Serializable {
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.indexselect;
 
 
@@ -10,3 +11,4 @@ public interface IndexSelect {
 
 
 }
+*/

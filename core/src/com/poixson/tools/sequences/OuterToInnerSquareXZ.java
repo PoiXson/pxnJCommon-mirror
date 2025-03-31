@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.sequences;
 
 import java.util.Iterator;
@@ -81,3 +82,4 @@ public class OuterToInnerSquareXZ implements Iterator<Iab> {
 
 
 }
+*/

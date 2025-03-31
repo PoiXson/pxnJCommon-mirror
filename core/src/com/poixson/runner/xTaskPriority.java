@@ -1,3 +1,4 @@
+/*
 package com.poixson.threadpool;
 
 
@@ -8,3 +9,4 @@ public enum xThreadTaskPriority {
 	LAZY,
 
 }
+*/

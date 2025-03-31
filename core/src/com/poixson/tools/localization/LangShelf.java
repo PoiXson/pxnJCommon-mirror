@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.localization;
 
 import static com.poixson.utils.ArrayUtils.ssArrayToMap;
@@ -262,3 +263,4 @@ public class LangShelf {
 
 
 }
+*/

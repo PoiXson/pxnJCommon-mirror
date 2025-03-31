@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.gson;
 
 import static com.poixson.utils.Utils.IsEmpty;
@@ -88,3 +89,4 @@ public class GsonAdapter_LangBook extends TypeAdapter<Map<String, String[]>> {
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.poixson.commonapp.config;
 
 import java.util.Iterator;
@@ -76,3 +77,4 @@ public class xConfigTest {
 
 
 }
+*/

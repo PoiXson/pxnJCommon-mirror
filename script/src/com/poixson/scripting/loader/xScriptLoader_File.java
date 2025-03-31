@@ -1,3 +1,4 @@
+/*
 package com.poixson.scripting.loader;
 
 import static com.poixson.utils.FileUtils.MergePaths;
@@ -128,3 +129,4 @@ public class xScriptLoader_File extends xScriptLoader {
 
 
 }
+*/

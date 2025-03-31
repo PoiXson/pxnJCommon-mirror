@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.indexselect;
 
 import com.poixson.tools.xRand;
@@ -40,3 +41,4 @@ public class IndexSelectRandom implements IndexSelect {
 
 
 }
+*/

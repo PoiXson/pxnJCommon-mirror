@@ -1,3 +1,4 @@
+/*
 package com.poixson.shell;
 
 import static com.poixson.utils.ShellUtils.RawTerminal;
@@ -396,3 +397,4 @@ public class xConsolePrompt extends xConsole {
 
 
 }
+*/

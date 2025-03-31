@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger.handlers;
 
 import static com.poixson.utils.ShellUtils.RenderAnsi;
@@ -146,3 +147,4 @@ public class xLogHandler_StdIO extends xLogHandler {
 //	public void beep() {
 //		this.getReaderImpl().beep();
 //	}
+*/

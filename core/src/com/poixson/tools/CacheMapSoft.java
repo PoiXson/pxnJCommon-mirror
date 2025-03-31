@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools;
 
 import java.lang.ref.SoftReference;
@@ -66,3 +67,4 @@ public class CacheMapSoft<K, V> extends CacheMap<K, SoftReference<V>> {
 
 
 }
+*/

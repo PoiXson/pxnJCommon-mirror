@@ -1,3 +1,4 @@
+/*
 package com.poixson.app;
 
 import static com.poixson.tools.xDebug.Debug;
@@ -248,3 +249,4 @@ public class xAppLogo {
 
 
 }
+*/

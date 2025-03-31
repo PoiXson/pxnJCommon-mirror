@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.localization;
 
 import static com.poixson.utils.SanUtils.IsAlpha;
@@ -65,3 +66,4 @@ public class LangToken {
 
 
 }
+*/

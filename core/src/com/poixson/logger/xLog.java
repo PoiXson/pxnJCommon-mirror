@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger;
 
 import static com.poixson.utils.ReflectUtils.InvokeMethod;
@@ -22,15 +23,15 @@ import com.poixson.tools.StdIO;
 
 
 //simplest - uncached
-/*
+/ *
 	public static xLog log() {
 		return xLog.Get();
 	}
-*/
+* /
 
 
 //local cached
-/*
+/ *
 	private final AtomicReference<SoftReference<xLog>> _log = new AtomicReference<SoftReference<xLog>>(null);
 	public xLog log() {
 		// cached
@@ -54,7 +55,7 @@ import com.poixson.tools.StdIO;
 	protected xLog _log() {
 		return xLog.Get(this.type.toString());
 	}
-*/
+* /
 
 
 public class xLog {
@@ -527,3 +528,4 @@ public class xLog {
 
 
 }
+*/

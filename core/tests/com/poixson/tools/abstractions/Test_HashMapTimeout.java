@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.abstractions;
 
 import static com.poixson.tools.Assertions.AssertEquals;
@@ -33,3 +34,4 @@ public class Test_HashMapTimeout {
 
 
 }
+*/

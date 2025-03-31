@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger.records;
 
 import static com.poixson.utils.Utils.GetMS;
@@ -77,3 +78,4 @@ public class xLogRecord_Msg implements xLogRecord {
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.poixson.utils;
 
 import java.util.ArrayList;
@@ -33,12 +34,12 @@ public final class ObjectUtils {
 
 
 
-	/**
+	/ **
 	 * Cast a collection object to a set.
 	 * @param data
 	 * @param clss
 	 * @return
-	 */
+	 * /
 	public static <T> Set<T> CastSet(final Collection<?> data,
 			final Class<? extends T> clss) {
 		if (data == null) return null;
@@ -53,12 +54,12 @@ public final class ObjectUtils {
 		} catch (Exception ignore) {}
 		return null;
 	}
-	/**
+	/ **
 	 * Cast an object to a set.
 	 * @param data
 	 * @param clss
 	 * @return
-	 */
+	 * /
 	@SuppressWarnings("unchecked")
 	public static <T> Set<T> CastSet(final Object data,
 			final Class<? extends T> clss) {
@@ -71,12 +72,12 @@ public final class ObjectUtils {
 
 
 
-	/**
+	/ **
 	 * Cast a collection object to a list.
 	 * @param data
 	 * @param clss
 	 * @return
-	 */
+	 * /
 	public static <T> List<T> CastList(final Collection<?> data,
 			final Class<? extends T> clss) {
 		if (data == null) return null;
@@ -91,12 +92,12 @@ public final class ObjectUtils {
 		} catch (Exception ignore) {}
 		return null;
 	}
-	/**
+	/ **
 	 * Cast an object to a list.
 	 * @param clss
 	 * @param c
 	 * @return
-	 */
+	 * /
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> CastList(final Object data,
 			final Class<? extends T> clss) {
@@ -109,13 +110,13 @@ public final class ObjectUtils {
 
 
 
-	/**
+	/ **
 	 * Cast a map object to a typed map.
 	 * @param keyClss
 	 * @param valClss
 	 * @param m
 	 * @return
-	 */
+	 * /
 	public static <K, V> Map<K, V> CastMap(final Map<?, ?> data,
 			final Class<? extends K> keyClss, final Class<? extends V> valClss) {
 		if (data    == null) return null;
@@ -133,13 +134,13 @@ public final class ObjectUtils {
 		} catch (Exception ignore) {}
 		return null;
 	}
-	/**
+	/ **
 	 * Cast an object to a typed map.
 	 * @param keyClss
 	 * @param valClss
 	 * @param m
 	 * @return
-	 */
+	 * /
 	@SuppressWarnings("unchecked")
 	public static <K, V> Map<K, V> CastMap(final Object data,
 			final Class<? extends K> keyClss, final Class<? extends V> valClss) {
@@ -153,3 +154,4 @@ public final class ObjectUtils {
 
 
 }
+*/

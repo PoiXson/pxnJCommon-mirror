@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.comparators;
 
 import java.util.Comparator;
@@ -32,3 +33,4 @@ public class IntComparator implements Comparator<Integer> {
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.abstractions;
 
 import java.util.Iterator;
@@ -44,3 +45,4 @@ public class RunnableMultiplier implements Runnable {
 
 
 }
+*/

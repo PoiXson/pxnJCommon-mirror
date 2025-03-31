@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger.records;
 
 import com.poixson.exceptions.RequiredArgumentException;
@@ -51,3 +52,4 @@ public class xLogRecord_Special implements xLogRecord {
 
 
 }
+*/

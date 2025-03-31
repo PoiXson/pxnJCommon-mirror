@@ -1,3 +1,4 @@
+/*
 package com.poixson.scripting.exceptions;
 
 
@@ -28,3 +29,4 @@ public class JSFunctionNotFoundException extends NullPointerException {
 
 
 }
+*/

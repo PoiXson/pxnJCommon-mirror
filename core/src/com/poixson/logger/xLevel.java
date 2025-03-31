@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger;
 
 import static com.poixson.utils.MathUtils.IsNumeric;
@@ -106,3 +107,4 @@ public enum xLevel {
 
 
 }
+*/

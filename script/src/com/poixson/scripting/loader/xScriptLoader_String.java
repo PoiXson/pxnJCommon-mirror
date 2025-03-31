@@ -1,3 +1,4 @@
+/*
 package com.poixson.scripting.loader;
 
 import java.io.IOException;
@@ -63,3 +64,4 @@ public class xScriptLoader_String extends xScriptLoader_File {
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools;
 
 import static com.poixson.utils.ReflectUtils.GetClassName;
@@ -92,7 +93,7 @@ public abstract class xWindow extends JFrame implements xCloseable {
 
 
 
-/*
+/ *
 	public void autoHeight(final int width) {
 		if (xThreadPool_GUI.Get().proper(this, "autoHeight", Integer.valueOf(width))) return;
 		this.pack();
@@ -102,7 +103,7 @@ public abstract class xWindow extends JFrame implements xCloseable {
 		if (width == null) throw new RequiredArgumentException("width");
 		this.autoHeight(width.intValue());
 	}
-*/
+* /
 
 
 
@@ -177,3 +178,4 @@ public abstract class xWindow extends JFrame implements xCloseable {
 
 
 }
+*/

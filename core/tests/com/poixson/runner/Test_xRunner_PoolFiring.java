@@ -1,3 +1,4 @@
+/*
 package com.poixson.commonjava.utils.xThreadPool;
 
 import org.junit.Test;
@@ -70,3 +71,4 @@ public class xThreadPoolFiringTest {
 
 
 }
+*/

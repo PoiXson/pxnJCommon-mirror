@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools;
 
 import java.util.LinkedList;
@@ -49,3 +50,4 @@ public class RollingList<E> extends LinkedList<E> {
 
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.poixson.utils.pxdb.tables;
 
 import java.sql.SQLException;
@@ -73,3 +74,4 @@ public abstract class dbTableManager {
 
 
 }
+*/

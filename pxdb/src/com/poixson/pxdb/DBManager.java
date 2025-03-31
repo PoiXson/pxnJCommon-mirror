@@ -1,3 +1,4 @@
+/*
 package com.poixson.utils.pxdb;
 
 import java.lang.ref.SoftReference;
@@ -83,21 +84,21 @@ public final class dbManager {
 
 
 
-	/**
+	/ **
 	 * Register a new db config as a new pool.
 	 * @param config
 	 * @return null if successful; on failure, returns an instance of the existing pool.
-	 */
+	 * /
 	// new db connection pool and initial connection
 	protected static dbPool register(final dbConfig config) {
 		final dbManager manager = get();
 		return manager.reg(config);
 	}
-	/**
+	/ **
 	 * Register a new db config as a new pool.
 	 * @param config
 	 * @return null if successful; on failure, returns an instance of the existing pool.
-	 */
+	 * /
 	protected dbPool reg(final dbConfig config) {
 		if (config == null) throw RequiredArgumentException.getNew("config");
 		final String key = config.dbKey();
@@ -163,3 +164,4 @@ public final class dbManager {
 
 
 }
+*/

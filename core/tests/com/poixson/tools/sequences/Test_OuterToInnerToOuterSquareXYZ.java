@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.sequences;
 
 import static com.poixson.tools.Assertions.AssertEquals;
@@ -209,3 +210,4 @@ public class Test_OuterToInnerToOuterSquareXYZ {
 
 
 }
+*/

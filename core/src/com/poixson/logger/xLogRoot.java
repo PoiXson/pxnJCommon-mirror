@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -77,7 +78,7 @@ public class xLogRoot extends xLog {
 
 
 }
-/*
+/ *
 		// capture std-out
 		System.setOut(
 			OutputStreamLineRemapper.toPrintStream(

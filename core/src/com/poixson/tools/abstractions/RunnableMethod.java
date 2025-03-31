@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.abstractions;
 
 import static com.poixson.utils.ReflectUtils.ArgsToClasses;
@@ -113,3 +114,4 @@ public class RunnableMethod<V> extends xRunnable {
 
 
 }
+*/

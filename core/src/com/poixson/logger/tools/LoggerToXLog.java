@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger.tools;
 
 import static com.poixson.utils.Utils.IsEmpty;
@@ -106,3 +107,4 @@ public class LoggerToXLog extends Handler {
 
 
 }
+*/

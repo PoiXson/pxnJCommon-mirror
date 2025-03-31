@@ -1,3 +1,4 @@
+/*
 package com.poixson.app.steps;
 
 import static com.poixson.utils.Utils.IsEmpty;
@@ -6,10 +7,10 @@ import com.poixson.app.xAppStep;
 import com.poixson.app.xAppStepType;
 
 
-/*
+/ *
  * Startup sequence
  *  5 | check user
- */
+ * /
 public class xAppSteps_UserNotRoot {
 
 
@@ -37,3 +38,4 @@ public class xAppSteps_UserNotRoot {
 
 
 }
+*/

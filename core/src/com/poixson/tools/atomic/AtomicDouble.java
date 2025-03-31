@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.atomic;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -138,3 +139,4 @@ public class AtomicDouble {
 
 
 }
+*/

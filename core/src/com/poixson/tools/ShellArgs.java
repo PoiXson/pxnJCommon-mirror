@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools;
 
 import static com.poixson.utils.StringUtils.TrimToNull;
@@ -140,7 +141,7 @@ public class ShellArgs {
 
 
 }
-/*
+/ *
 	public static ShellArgs Init(final String[] argsArray) {
 		final ShellArgs argsTool = new ShellArgs(argsArray);
 		// debug flag

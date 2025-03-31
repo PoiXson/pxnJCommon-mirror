@@ -1,3 +1,4 @@
+/*
 package com.poixson.commonjava.utils;
 
 import org.junit.Assert;
@@ -62,3 +63,4 @@ public class CoolDownTest {
 
 
 }
+*/

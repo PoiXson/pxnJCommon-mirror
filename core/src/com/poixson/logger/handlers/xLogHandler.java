@@ -1,3 +1,4 @@
+/*
 package com.poixson.logger.handlers;
 
 import static com.poixson.utils.ShellUtils.StripColorTags;
@@ -129,7 +130,7 @@ public abstract class xLogHandler {
 
 
 }
-/*
+/ *
 	protected abstract void publish(final String[] lines);
 
 

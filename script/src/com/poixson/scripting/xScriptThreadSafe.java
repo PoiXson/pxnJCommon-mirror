@@ -1,3 +1,4 @@
+/*
 package com.poixson.scripting;
 
 import java.util.Iterator;
@@ -185,3 +186,4 @@ public class xScriptThreadSafe extends xScript {
 
 
 }
+*/

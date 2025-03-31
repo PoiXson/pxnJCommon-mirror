@@ -1,3 +1,4 @@
+/*
 package com.poixson.app.steps;
 
 import com.poixson.app.xAppStep;
@@ -5,13 +6,13 @@ import com.poixson.app.xAppStepType;
 import com.poixson.tools.xLockFile;
 
 
-/*
+/ *
  * Startup sequence
  *  15 | lock file
  *
  * Shutdown sequence
  *  15 | release lock file
- */
+ * /
 public class xAppSteps_LockFile {
 
 	protected final String filename;
@@ -53,3 +54,4 @@ public class xAppSteps_LockFile {
 
 
 }
+*/

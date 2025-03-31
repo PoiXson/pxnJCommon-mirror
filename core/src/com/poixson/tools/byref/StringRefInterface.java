@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.byref;
 
 
@@ -84,3 +85,4 @@ public interface StringRefInterface {
 
 
 }
+*/

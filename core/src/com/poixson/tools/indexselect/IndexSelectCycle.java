@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.indexselect;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -42,3 +43,4 @@ public class IndexSelectCycle implements IndexSelect {
 
 
 }
+*/

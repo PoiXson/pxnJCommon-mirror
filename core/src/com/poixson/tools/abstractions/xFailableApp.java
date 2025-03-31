@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.abstractions;
 
 
@@ -9,3 +10,4 @@ public interface xFailableApp extends xFailable {
 
 
 }
+*/

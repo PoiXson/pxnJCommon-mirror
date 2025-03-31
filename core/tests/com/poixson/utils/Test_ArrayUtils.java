@@ -1,3 +1,4 @@
+/*
 package com.poixson.utils;
 
 import static com.poixson.tools.Assertions.AssertArrayEquals;
@@ -137,3 +138,4 @@ public class Test_ArrayUtils {
 
 
 }
+*/

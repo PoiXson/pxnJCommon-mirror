@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools;
 
 import java.lang.reflect.Constructor;
@@ -42,3 +43,4 @@ public class InstanceFactoryEncapsulated {
 
 
 }
+*/

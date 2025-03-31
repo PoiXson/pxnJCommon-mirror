@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.byref;
 
 import static com.poixson.utils.StringUtils.IndexOf;
@@ -152,7 +153,7 @@ public class StringRef implements StringRefInterface {
 
 
 //TODO: remove this
-/*
+/ *
 	// get first part (single delim)
 	@Override
 	public String peekFirstPart(final char delim) {
@@ -178,7 +179,7 @@ public class StringRef implements StringRefInterface {
 			: val.substring(0, pos)
 		);
 	}
-*/
+* /
 
 	// cut first part (single delim)
 	@Override
@@ -213,7 +214,7 @@ public class StringRef implements StringRefInterface {
 
 
 //TODO: remove this
-/*
+/ *
 	// get first part (many delims)
 	@Override
 	public String peekFirstPart(final char...delims) {
@@ -237,7 +238,7 @@ public class StringRef implements StringRefInterface {
 				delims
 			);
 	}
-*/
+* /
 
 	// cut first part (many delims)
 	@Override
@@ -312,7 +313,7 @@ public class StringRef implements StringRefInterface {
 
 
 //TODO: remove this
-/*
+/ *
 	// get last part (single delim)
 	@Override
 	public String peekLastPart(final char delim) {
@@ -338,7 +339,7 @@ public class StringRef implements StringRefInterface {
 			: val.substring(pos + delim.length())
 		);
 	}
-*/
+* /
 
 	// cut last part (single delim)
 	@Override
@@ -373,7 +374,7 @@ public class StringRef implements StringRefInterface {
 
 
 //TODO: remove this
-/*
+/ *
 	// get last part (many delims)
 	@Override
 	public String peekLastPart(final char...delims) {
@@ -397,7 +398,7 @@ public class StringRef implements StringRefInterface {
 				delims
 			);
 	}
-*/
+* /
 
 	// cut last part (many delims)
 	@Override
@@ -467,3 +468,4 @@ public class StringRef implements StringRefInterface {
 
 
 }
+*/

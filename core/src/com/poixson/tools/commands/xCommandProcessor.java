@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools.commands;
 
 import static com.poixson.utils.StringUtils.FirstPart;
@@ -77,7 +78,7 @@ public class xCommandProcessor {
 
 
 //TODO: remove this?
-/*
+/ *
 	public static xCommandProcessor GetProcessor() {
 		final xLog log = xLog.Get();
 		final xConsole console = log.getConsole();
@@ -101,7 +102,7 @@ public class xCommandProcessor {
 		final xConsole console = log.getConsole();
 		return console.setPrompt(prompt);
 	}
-*/
+* /
 
 
 
@@ -117,3 +118,4 @@ public class xCommandProcessor {
 
 
 }
+*/

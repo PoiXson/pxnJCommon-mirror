@@ -1,3 +1,4 @@
+/*
 package com.poixson.utils.pxdb;
 
 import java.lang.ref.SoftReference;
@@ -107,10 +108,10 @@ public class dbWorker implements xCloseable {
 		}
 	}
 //TODO:
-//	/**
+//	/ **
 //	 * Get the time connection has been locked for
 //	 * @return time in milliseconds
-//	 */
+//	 * /
 //	@Override
 //	public long getLockTime() {
 //TODO: this isn't being used yet
@@ -159,3 +160,4 @@ public class dbWorker implements xCloseable {
 
 
 }
+*/

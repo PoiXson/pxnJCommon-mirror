@@ -1,3 +1,4 @@
+/*
 package com.poixson.tools;
 
 import java.io.InputStream;
@@ -45,3 +46,4 @@ public final class StdIO {
 
 
 }
+*/
